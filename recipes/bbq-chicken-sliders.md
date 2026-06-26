@@ -1,7 +1,7 @@
 +++
 id = "FDP-0002"
 name = "BBQ Chicken Sliders"
-revision = 2
+revision = 3
 status = "candidate"
 servings = 4
 created = "2026-06-26"
@@ -32,7 +32,7 @@ tags = ["summer", "poultry", "slow-cooker", "tuesday"]
 - 2 (15-ounce) cans vegetarian baked beans
 - 1 (14-ounce) bag coleslaw mix
 - 1 apple, cored and thinly sliced
-- 1/2 cup mayonnaise
+- 1 tablespoon olive oil
 - 2 tablespoons apple cider vinegar
 - 1 tablespoon honey
 
@@ -53,7 +53,7 @@ tags = ["summer", "poultry", "slow-cooker", "tuesday"]
 2. Cover and cook on low for 5-6 hours or high for 3-4 hours, until the chicken
    reaches 165 F and shreds easily.
 3. Shred the chicken in the sauce.
-4. Whisk the mayonnaise, apple cider vinegar, honey, and celery seed. Toss with
+4. Whisk the olive oil, apple cider vinegar, honey, and celery seed. Toss with
    the coleslaw mix and apple.
 5. Warm the baked beans. Fill each bun with BBQ chicken and serve two sliders
    per person with slaw and beans.
@@ -66,8 +66,8 @@ tags = ["summer", "poultry", "slow-cooker", "tuesday"]
 ## Family Notes
 
 - **Verdict:** Awaiting first test
-- **Keep:** Use a familiar mayonnaise-based slaw
-- **Change next time:** Do not substitute Greek yogurt in the slaw
+- **Keep:** Use a light apple-cider vinegar slaw
+- **Change next time:** Do not use mayonnaise or Greek yogurt in the slaw
 
 ## Ratings
 
@@ -80,3 +80,4 @@ tags = ["summer", "poultry", "slow-cooker", "tuesday"]
 | ---: | --- | --- | --- |
 | 1 | 2026-06-26 | candidate | Seeded from the migration dry run; awaiting family review |
 | 2 | 2026-06-26 | candidate | Replaced Greek yogurt slaw with mayonnaise-based slaw based on household preference |
+| 3 | 2026-06-26 | candidate | Replaced mayonnaise with an olive-oil and apple-cider vinegar dressing |

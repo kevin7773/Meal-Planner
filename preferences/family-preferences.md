@@ -53,5 +53,5 @@ the directions instead of using vague instructions such as "season chicken."
 
 ## Sauces and Dressings
 
-Use a familiar mayonnaise-based dressing for coleslaw. Do not use Greek yogurt
-as the coleslaw base.
+Do not use mayonnaise in recipes. For coleslaw, use a light apple-cider vinegar
+dressing rather than mayonnaise or Greek yogurt.
