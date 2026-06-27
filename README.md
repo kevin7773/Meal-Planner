@@ -22,12 +22,14 @@ upcoming Monday through Sunday.
 ## Repository Layout
 
 - `prompts/`: weekly generation instructions
+- `planner/`: dry-run planning, assignment, scoring, reporting, and commit logic
 - `recipes/`: version-controlled recipe runbooks and library index
 - `preferences/`: family rules, seasonal rules, and meal history
 - `templates/`: required output formats
 - `menus/`: completed weekly menus
 - `grocery-lists/`: consolidated weekly shopping lists
 - `email-outputs/`: three email-ready messages per week
+- `docs/architecture.md`: component boundaries and end-to-end data flow
 - `docs/planning-lifecycle.md`: weekly planning states and transition rules
 - `inventory/`: ingredient catalog, stock lots, and normalized recipe requirements
 
@@ -52,6 +54,10 @@ and meal history but writes nothing. Each option reports estimated cost,
 average fiber, recipe rotation score, blocking errors, and warnings. Only
 `Commit Selected` creates a file, and that file begins at planning status
 `draft`.
+
+Every proposed meal also includes a **Why selected** block with its own
+inventory coverage, expiring refrigerated ingredients, day-rule fit, recent
+rotation result, weather fit, and kid score.
 
 Each pair of options shares at most two recipe or idea IDs, and no protein
 appears more than three times in a proposed week. Fiber remains a comparison

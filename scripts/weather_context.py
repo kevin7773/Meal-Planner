@@ -5,6 +5,11 @@ import datetime as dt
 import json
 from pathlib import Path
 
+try:
+    from scripts.schema_version import CURRENT_SCHEMA_VERSION, schema_version_errors
+except ModuleNotFoundError:
+    from schema_version import CURRENT_SCHEMA_VERSION, schema_version_errors
+
 
 ROOT = Path(__file__).resolve().parents[1]
 VALID_CATEGORIES = {"normal", "warm", "hot", "extreme-heat"}
@@ -24,7 +29,7 @@ def load_weather_context(week_of: dt.date, root: Path = ROOT) -> dict:
     path = weather_path(week_of, root)
     if not path.exists():
         return {
-            "schema_version": 1,
+            "schema_version": CURRENT_SCHEMA_VERSION,
             "week_of": week_of.isoformat(),
             "category": "normal",
             "forecast_high_f": None,
@@ -49,6 +54,11 @@ def validate_weather(root: Path = ROOT) -> list[str]:
         rules = load_weather_rules(root)
     except (OSError, KeyError, json.JSONDecodeError) as exc:
         return [f"Unable to load weather rules: {exc}"]
+    errors.extend(
+        schema_version_errors(rules, "preferences/weather-rules.json")
+    )
+    if errors:
+        return errors
     categories = rules.get("categories", {})
     if set(categories) != VALID_CATEGORIES:
         errors.append("weather rules must define normal, warm, hot, and extreme-heat")
@@ -65,8 +75,19 @@ def validate_weather(root: Path = ROOT) -> list[str]:
     for path in sorted((root / "weather").glob("**/*.json")):
         try:
             context = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as exc:
+            errors.append(f"{path}: invalid weather context: {exc}")
+            continue
+        version_errors = schema_version_errors(
+            context,
+            str(path.relative_to(root)).replace("\\", "/"),
+        )
+        if version_errors:
+            errors.extend(version_errors)
+            continue
+        try:
             week = dt.date.fromisoformat(context.get("week_of", ""))
-        except (OSError, ValueError, json.JSONDecodeError) as exc:
+        except (TypeError, ValueError) as exc:
             errors.append(f"{path}: invalid weather context: {exc}")
             continue
         if path.stem != week.isoformat():

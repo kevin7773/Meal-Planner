@@ -6,6 +6,11 @@ import json
 import sys
 from pathlib import Path
 
+try:
+    from scripts.schema_version import schema_version_errors
+except ModuleNotFoundError:
+    from schema_version import schema_version_errors
+
 
 ROOT = Path(__file__).resolve().parents[1]
 VALID_STATUSES = {"queued", "selected", "converted", "retired"}
@@ -45,8 +50,9 @@ def validate_ideas(root: Path = ROOT) -> list[str]:
         document = load_ideas(root)
     except (OSError, json.JSONDecodeError) as exc:
         return [f"unable to load recipe ideas: {exc}"]
-    if document.get("schema_version") != 1:
-        errors.append("recipe idea schema_version must be 1")
+    errors.extend(schema_version_errors(document, "ideas/recipe-ideas.json"))
+    if errors:
+        return errors
     if not isinstance(document.get("next_id"), int) or document["next_id"] < 1:
         errors.append("recipe idea next_id must be a positive integer")
     ideas = document.get("ideas")

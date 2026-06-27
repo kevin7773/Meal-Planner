@@ -118,6 +118,10 @@ function Format-Proposal {
         $lines.Add("$($meal.day): $($meal.recipe_id) rev $($meal.revision) - $($meal.name)")
         $lines.Add("  $($meal.cooking_method), $($meal.fiber_grams)g fiber, `$$($meal.estimated_cost_usd)")
         $lines.Add("  Kid-friendly: $($meal.kid_friendly_reason)")
+        $lines.Add('  Why selected:')
+        foreach ($reason in @($meal.selection_explanation.reasons)) {
+            $lines.Add("    - $reason")
+        }
         if (@($meal.side_suggestions).Count -gt 0) {
             $sideNames = @($meal.side_suggestions | ForEach-Object {
                 "$($_.name) ($($_.fiber_grams)g fiber)"

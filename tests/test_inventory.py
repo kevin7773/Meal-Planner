@@ -43,6 +43,18 @@ class InventoryTests(unittest.TestCase):
     def test_inventory_documents_are_valid(self) -> None:
         self.assertEqual(validate_inventory(self.root), [])
 
+    def test_inventory_rejects_unsupported_schema_version(self) -> None:
+        path = self.root / "inventory" / "catalog.json"
+        document = json.loads(path.read_text(encoding="utf-8"))
+        document["schema_version"] = 2
+        path.write_text(json.dumps(document), encoding="utf-8")
+
+        self.assertIn(
+            "inventory/catalog.json: unsupported schema_version 2; "
+            "supported version(s): 1",
+            validate_inventory(self.root),
+        )
+
     def test_frozen_fifo_uses_oldest_lot_first(self) -> None:
         self.write_stock(
             [

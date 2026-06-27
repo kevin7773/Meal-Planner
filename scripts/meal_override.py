@@ -12,11 +12,13 @@ try:
     from scripts.build_week_artifacts import load_recipe, recipe_week_section
     from scripts.inventory import load_inventory
     from scripts.menu_status import MenuStatusError, split_menu, transition_menu
+    from scripts.schema_version import CURRENT_SCHEMA_VERSION, schema_version_errors
     from scripts.side_dishes import suggest_sides
 except ModuleNotFoundError:
     from build_week_artifacts import load_recipe, recipe_week_section
     from inventory import load_inventory
     from menu_status import MenuStatusError, split_menu, transition_menu
+    from schema_version import CURRENT_SCHEMA_VERSION, schema_version_errors
     from side_dishes import suggest_sides
 
 
@@ -277,7 +279,7 @@ def apply_override(
     sidecar.write_text(
         json.dumps(
             {
-                "schema_version": 1,
+                "schema_version": CURRENT_SCHEMA_VERSION,
                 "week_of": week_of.isoformat(),
                 "overrides": sorted(records, key=lambda item: DAYS.index(item["day"])),
             },
@@ -340,6 +342,13 @@ def validate_overrides(root: Path = ROOT) -> list[str]:
             document = json.loads(path.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError) as exc:
             errors.append(f"{path}: invalid JSON: {exc}")
+            continue
+        version_errors = schema_version_errors(
+            document,
+            str(path.relative_to(root)).replace("\\", "/"),
+        )
+        if version_errors:
+            errors.extend(version_errors)
             continue
         seen_days: set[str] = set()
         for record in document.get("overrides", []):

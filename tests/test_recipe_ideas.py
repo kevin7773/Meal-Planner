@@ -57,6 +57,17 @@ class RecipeIdeaTests(unittest.TestCase):
         )
         self.assertEqual(idea["status"], "queued")
 
+    def test_ideas_require_schema_version(self) -> None:
+        path = self.root / "ideas" / "recipe-ideas.json"
+        document = json.loads(path.read_text(encoding="utf-8"))
+        del document["schema_version"]
+        path.write_text(json.dumps(document), encoding="utf-8")
+
+        self.assertIn(
+            "ideas/recipe-ideas.json: schema_version is required",
+            validate_ideas(self.root),
+        )
+
     def test_queued_idea_is_surfaced_in_dry_runs(self) -> None:
         idea_id = self.add_stir_fry_idea()
         proposals = generate_proposals(dt.date(2026, 7, 6), 3, root=self.root)

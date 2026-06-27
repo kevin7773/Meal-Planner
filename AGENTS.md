@@ -42,6 +42,12 @@ at most two recipe or idea IDs. No protein may appear more than three times in
 one week. Prefer fiber-rich choices, but treat weekly fiber as a comparative
 metric rather than sacrificing protein and option variety to maximize it.
 
+Every dry-run meal must include a per-recipe selection explanation. Report
+inventory coverage, any required refrigerated ingredients expiring during the
+week, day-rule or override fit, recent-repeat status, weather fit when
+applicable, and kid score. Derive these claims from proposal inputs rather than
+inventing generic rationale.
+
 Read `preferences/weather-rules.json` and the target week's file under
 `weather/` before generating proposals. When a forecast location is configured,
 refresh the weekly context from a current forecast. A user-confirmed context

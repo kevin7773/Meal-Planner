@@ -6,6 +6,11 @@ import datetime as dt
 import json
 from pathlib import Path
 
+try:
+    from scripts.schema_version import schema_version_errors
+except ModuleNotFoundError:
+    from schema_version import schema_version_errors
+
 
 ROOT = Path(__file__).resolve().parents[1]
 VALID_CLASSES = {
@@ -54,6 +59,19 @@ def validate_inventory(root: Path = ROOT) -> list[str]:
         )
     except (OSError, json.JSONDecodeError, KeyError) as exc:
         return [f"unable to load inventory data: {exc}"]
+
+    errors.extend(
+        schema_version_errors(catalog_document, "inventory/catalog.json")
+    )
+    errors.extend(schema_version_errors(stock, "inventory/stock.json"))
+    errors.extend(
+        schema_version_errors(
+            requirements_document,
+            "inventory/recipe-requirements.json",
+        )
+    )
+    if errors:
+        return errors
 
     catalog_items = catalog_document.get("items")
     if not isinstance(catalog_items, list):

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import datetime as dt
+import json
 import shutil
 import tempfile
 import unittest
@@ -29,6 +30,29 @@ class WeatherContextTests(unittest.TestCase):
 
     def test_weather_configuration_is_valid(self) -> None:
         self.assertEqual(validate_weather(self.root), [])
+
+    def test_weather_rules_reject_unsupported_schema_version(self) -> None:
+        path = self.root / "preferences" / "weather-rules.json"
+        document = json.loads(path.read_text(encoding="utf-8"))
+        document["schema_version"] = 2
+        path.write_text(json.dumps(document), encoding="utf-8")
+
+        self.assertIn(
+            "preferences/weather-rules.json: unsupported schema_version 2; "
+            "supported version(s): 1",
+            validate_weather(self.root),
+        )
+
+    def test_weekly_weather_context_requires_schema_version(self) -> None:
+        path = self.root / "weather" / "2026" / "2026-06-29.json"
+        document = json.loads(path.read_text(encoding="utf-8"))
+        del document["schema_version"]
+        path.write_text(json.dumps(document), encoding="utf-8")
+
+        self.assertIn(
+            "weather/2026/2026-06-29.json: schema_version is required",
+            validate_weather(self.root),
+        )
 
     def test_weekly_extreme_heat_context_loads(self) -> None:
         context = load_weather_context(dt.date(2026, 6, 29), self.root)

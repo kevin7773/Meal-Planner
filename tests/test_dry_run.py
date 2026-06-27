@@ -13,9 +13,11 @@ from scripts.dry_run import (
     evaluate_proposal,
     generate_proposals,
     load_recipes,
+    selection_explanation,
 )
 from scripts.menu_status import validate_menu
 from scripts.quick_meals import PARENTS_ONLY_REASON
+from scripts.weather_context import load_weather_rules
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -96,6 +98,39 @@ class DryRunTests(unittest.TestCase):
         self.assertTrue(
             all(meal["kid_friendly_reason"] for meal in proposal["meals"])
         )
+        self.assertTrue(
+            all(
+                meal["selection_explanation"]["reasons"]
+                for meal in proposal["meals"]
+            )
+        )
+        self.assertTrue(
+            all(
+                any(
+                    reason.startswith("Inventory coverage:")
+                    for reason in meal["selection_explanation"]["reasons"]
+                )
+                for meal in proposal["meals"]
+            )
+        )
+
+    def test_selection_explanation_reports_expiring_refrigerated_stock(self) -> None:
+        recipe = load_recipes(self.root)["FDP-0041"]
+        explanation = selection_explanation(
+            recipe,
+            day="Friday",
+            day_index=4,
+            week_of=self.week,
+            requirements=recipe["inventory_requirements"],
+            recent_ids=set(),
+            fixed_assignments={},
+            weather_rules=load_weather_rules(self.root),
+            weather_category="normal",
+            root=self.root,
+        )
+        self.assertIn("Eggs", explanation["expiring_refrigerated_items"])
+        self.assertIn("Recent rotation: no recent repeat", explanation["reasons"])
+        self.assertIn("Kid score: 5/5", explanation["reasons"])
 
     def test_tuesday_method_violation_is_blocking(self) -> None:
         recipes = load_recipes(self.root)

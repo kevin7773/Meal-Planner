@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import datetime as dt
+import json
 import shutil
 import tempfile
 import unittest
@@ -28,6 +29,17 @@ class QuickMealTests(unittest.TestCase):
 
     def test_quick_meal_library_is_valid(self) -> None:
         self.assertEqual(validate_quick_meals(self.root), [])
+
+    def test_quick_meals_require_schema_version(self) -> None:
+        path = self.root / "quick-meals" / "kids-quick-meals.json"
+        document = json.loads(path.read_text(encoding="utf-8"))
+        del document["schema_version"]
+        path.write_text(json.dumps(document), encoding="utf-8")
+
+        self.assertIn(
+            "quick-meals/kids-quick-meals.json: schema_version is required",
+            validate_quick_meals(self.root),
+        )
 
     def test_parents_only_recipe_gets_a_rotating_kid_meal(self) -> None:
         recipe = {

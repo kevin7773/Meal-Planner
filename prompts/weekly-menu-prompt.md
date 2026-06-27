@@ -21,6 +21,11 @@ exclude soups, stews, chili, and heavy casseroles when the category forbids
 them. Report the weather category and heat-friendly meal count in every dry
 run.
 
+For every proposed meal, show a **Why selected** block containing recipe-level
+inventory coverage, expiring refrigerated ingredients it uses, day-rule or
+human-override fit, recent-repeat status, weather fit when applicable, and kid
+score. Use the structured explanation emitted by the dry-run engine.
+
 Validate and read kitchen inventory before scoring. Report inventory coverage,
 estimated savings, shopping cost after inventory, fresh weekly purchases, and
 stock warnings. Prefer otherwise comparable plans that use existing pantry,

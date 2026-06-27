@@ -6,24 +6,35 @@ from pathlib import Path
 
 try:
     from scripts.inventory import assess_inventory, load_inventory
+    from scripts.schema_version import schema_version_errors
 except ModuleNotFoundError:
     from inventory import assess_inventory, load_inventory
+    from schema_version import schema_version_errors
 
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def load_sides(root: Path = ROOT) -> list[dict]:
-    document = json.loads(
+def load_side_document(root: Path = ROOT) -> dict:
+    return json.loads(
         (root / "sides" / "side-dishes.json").read_text(encoding="utf-8")
     )
-    return document["sides"]
+
+
+def load_sides(root: Path = ROOT) -> list[dict]:
+    return load_side_document(root)["sides"]
 
 
 def validate_sides(root: Path = ROOT) -> list[str]:
-    errors: list[str] = []
     try:
-        sides = load_sides(root)
+        document = load_side_document(root)
+    except (OSError, json.JSONDecodeError) as exc:
+        return [f"unable to load side dishes: {exc}"]
+    errors = schema_version_errors(document, "sides/side-dishes.json")
+    if errors:
+        return errors
+    try:
+        sides = document["sides"]
         catalog, _, _ = load_inventory(root)
     except (OSError, json.JSONDecodeError, KeyError) as exc:
         return [f"unable to load side dishes: {exc}"]

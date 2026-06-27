@@ -5,20 +5,37 @@ import datetime as dt
 import json
 from pathlib import Path
 
+try:
+    from scripts.schema_version import schema_version_errors
+except ModuleNotFoundError:
+    from schema_version import schema_version_errors
+
 
 ROOT = Path(__file__).resolve().parents[1]
 PARENTS_ONLY_REASON = "Not kid friendly - for the parents only"
 
 
-def load_quick_meals(root: Path = ROOT) -> list[dict]:
+def load_quick_meal_document(root: Path = ROOT) -> dict:
     path = root / "quick-meals" / "kids-quick-meals.json"
-    return json.loads(path.read_text(encoding="utf-8"))["quick_meals"]
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def load_quick_meals(root: Path = ROOT) -> list[dict]:
+    return load_quick_meal_document(root)["quick_meals"]
 
 
 def validate_quick_meals(root: Path = ROOT) -> list[str]:
-    errors: list[str] = []
     try:
-        meals = load_quick_meals(root)
+        document = load_quick_meal_document(root)
+    except (OSError, json.JSONDecodeError) as exc:
+        return [f"Unable to load quick-meal data: {exc}"]
+    errors = (
+        schema_version_errors(document, "quick-meals/kids-quick-meals.json")
+    )
+    if errors:
+        return errors
+    try:
+        meals = document["quick_meals"]
         catalog = json.loads(
             (root / "inventory" / "catalog.json").read_text(encoding="utf-8")
         )

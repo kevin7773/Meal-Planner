@@ -8,7 +8,7 @@ import unittest
 from pathlib import Path
 
 from scripts.dry_run import generate_proposals
-from scripts.meal_override import apply_override, menu_days
+from scripts.meal_override import apply_override, menu_days, validate_overrides
 from scripts.menu_status import split_menu, transition_menu, validate_menu
 
 
@@ -114,6 +114,26 @@ class MealOverrideTests(unittest.TestCase):
         )
         self.assertTrue(
             all(proposal["meals"][3]["status"] == "override" for proposal in proposals)
+        )
+
+    def test_override_sidecar_rejects_unsupported_schema_version(self) -> None:
+        sidecar = apply_override(
+            self.menu,
+            day="Thursday",
+            override_type="dining-out",
+            title="Dinner Out",
+            note="Schema validation fixture",
+            actor="Kevin",
+            root=self.root,
+        )
+        document = json.loads(sidecar.read_text(encoding="utf-8"))
+        document["schema_version"] = 2
+        sidecar.write_text(json.dumps(document), encoding="utf-8")
+
+        relative = sidecar.relative_to(self.root).as_posix()
+        self.assertIn(
+            f"{relative}: unsupported schema_version 2; supported version(s): 1",
+            validate_overrides(self.root),
         )
 
     def test_alternate_recipe_is_expanded_into_menu_and_email(self) -> None:

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import datetime as dt
+import json
 import shutil
 import tempfile
 import unittest
@@ -24,6 +25,17 @@ class SideDishTests(unittest.TestCase):
 
     def test_side_library_is_valid(self) -> None:
         self.assertEqual(validate_sides(self.root), [])
+
+    def test_side_library_rejects_non_integer_schema_version(self) -> None:
+        path = self.root / "sides" / "side-dishes.json"
+        document = json.loads(path.read_text(encoding="utf-8"))
+        document["schema_version"] = "1"
+        path.write_text(json.dumps(document), encoding="utf-8")
+
+        self.assertIn(
+            "sides/side-dishes.json: schema_version must be an integer",
+            validate_sides(self.root),
+        )
 
     def test_entree_receives_two_compatible_suggestions(self) -> None:
         recipe = {
