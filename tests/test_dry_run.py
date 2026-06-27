@@ -41,6 +41,10 @@ class DryRunTests(unittest.TestCase):
             ROOT / "preferences" / "meal-history.md",
             self.root / "preferences" / "meal-history.md",
         )
+        shutil.copy2(
+            ROOT / "preferences" / "weather-rules.json",
+            self.root / "preferences" / "weather-rules.json",
+        )
         (self.root / "menus").mkdir()
         self.week = dt.date(2026, 6, 29)
 

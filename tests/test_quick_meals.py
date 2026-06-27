@@ -59,3 +59,16 @@ class QuickMealTests(unittest.TestCase):
             )
         )
 
+    def test_flagged_one_child_meal_uses_preferred_quick_meal(self) -> None:
+        suggestion = suggest_quick_meal(
+            {
+                "id": "FDP-0040",
+                "kid_friendly_reason": "Gray Loves It",
+                "kid_alternative_required": True,
+                "preferred_kids_quick_meal_id": "KQM-012",
+            },
+            week_of=dt.date(2026, 6, 29),
+            day_index=0,
+            root=self.root,
+        )
+        self.assertEqual(suggestion["id"], "KQM-012")

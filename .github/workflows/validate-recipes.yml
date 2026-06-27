@@ -48,5 +48,8 @@ jobs:
       - name: Validate kid quick-meal library
         run: python scripts/quick_meals.py validate
 
+      - name: Validate weather planning context
+        run: python scripts/weather_context.py validate
+
       - name: Validate weekly planning statuses
         run: python scripts/menu_status.py check-all

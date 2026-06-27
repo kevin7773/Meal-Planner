@@ -54,6 +54,14 @@ Tuesday and Thursday must be slow-cooker, minimal-cook, or no-cook meals.
 Thursday must be included in the second weekly email, which covers Wednesday
 through Friday.
 
+## Weather
+
+Read the weekly weather context before choosing meals. During hot weather,
+prefer cold meals, no-cook dinners, outdoor cooking, and short minimal-cook
+recipes. A salad may include a hot component such as freshly grilled chicken.
+During extreme heat, avoid soups, stews, chili, and heavy casseroles and plan
+at least four heat-friendly dinners.
+
 ## Seasoning
 
 List exact quantities for every seasoning. Explicitly name each seasoning in

@@ -70,6 +70,12 @@
 
 | FDP-0039 | [Hot Dogs with Macaroni and Cheese and Baked Beans](hot-dogs-with-macaroni-and-cheese-and-baked-beans.md) | 1 | candidate | Unrated | Never |
 
-**Next recipe ID:** `FDP-0040`
+| FDP-0040 | [Grilled Chicken Caesar Salad](grilled-chicken-caesar-salad.md) | 1 | candidate | Unrated | Never |
+
+| FDP-0041 | [Blackstone Breakfast for Dinner](blackstone-breakfast-for-dinner.md) | 1 | candidate | Unrated | Never |
+
+| FDP-0042 | [Turkey and Cheese Deli Sandwich Night](turkey-and-cheese-deli-sandwich-night.md) | 1 | candidate | Unrated | Never |
+
+**Next recipe ID:** `FDP-0043`
 
 The index is a planning aid. Recipe files remain the source of truth.

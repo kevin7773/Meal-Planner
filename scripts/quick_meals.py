@@ -56,9 +56,19 @@ def suggest_quick_meal(
     day_index: int,
     root: Path = ROOT,
 ) -> dict | None:
-    if recipe.get("kid_friendly_reason") != PARENTS_ONLY_REASON:
+    preferred_id = recipe.get("preferred_kids_quick_meal_id")
+    needs_alternative = (
+        recipe.get("kid_friendly_reason") == PARENTS_ONLY_REASON
+        or recipe.get("kid_alternative_required") is True
+    )
+    if not needs_alternative:
         return None
     meals = load_quick_meals(root)
+    if preferred_id:
+        return next(
+            (dict(meal) for meal in meals if meal["id"] == preferred_id),
+            None,
+        )
     seed = sum(ord(character) for character in str(recipe.get("id", "")))
     return dict(meals[(seed + week_of.toordinal() + day_index) % len(meals)])
 

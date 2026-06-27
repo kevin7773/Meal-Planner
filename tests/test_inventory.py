@@ -20,6 +20,11 @@ class InventoryTests(unittest.TestCase):
         self.root = Path(self.temporary_directory.name)
         shutil.copytree(ROOT / "inventory", self.root / "inventory")
         shutil.copytree(ROOT / "recipes", self.root / "recipes")
+        (self.root / "preferences").mkdir()
+        shutil.copy2(
+            ROOT / "preferences" / "weather-rules.json",
+            self.root / "preferences" / "weather-rules.json",
+        )
 
     def tearDown(self) -> None:
         self.temporary_directory.cleanup()

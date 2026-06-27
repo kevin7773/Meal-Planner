@@ -57,6 +57,11 @@ Each pair of options shares at most two recipe or idea IDs, and no protein
 appears more than three times in a proposed week. Fiber remains a comparison
 metric and preference rather than overriding those variety constraints.
 
+Dry runs also read `preferences/weather-rules.json` and an optional weekly
+context under `weather/<year>/`. Hot-weather rules favor cold, no-cook,
+minimal-cook, and outdoor-cooked meals while excluding seasonally inappropriate
+soups and heavy dishes.
+
 When the approved library is not large enough, options contain temporary
 `IDEA-*` recipes generated from the family and seasonal rules. Unselected ideas
 disappear. Selected ideas are expanded into full `FDP-*` candidate recipes

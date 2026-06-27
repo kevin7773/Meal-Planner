@@ -4,7 +4,63 @@ Subject: Weekly Dinner Menu: Monday-Tuesday, 2026-06-29
 
 
 
-## Monday, June 29 - Ground Turkey Hard Shell Tacos with Pinto Beans and Rice
+## Monday, June 29 - Grilled Chicken Caesar Salad
+
+**Recipe:** FDP-0040 rev 1 (candidate)
+**Planned Diners:** 4
+
+## Recipe Card
+
+- **Active prep:** 20 minutes
+- **Cook time:** 15 minutes
+- **Cooking method:** Grill
+- **Estimated fiber:** 5 grams per serving
+- **Kid-friendly design:** Gray Loves It
+- **Best seasons:** Spring, Summer, Fall
+- **Schedule fit:** Extreme-heat meal; serve one Kid's Cuisine for the son
+
+## Ingredients
+
+### Main Ingredients
+
+- 1 1/2 pounds boneless, skinless chicken breasts
+- 2 large romaine hearts, chopped
+- 1 cup whole-grain croutons
+- 1/2 cup grated Parmesan cheese
+- 1/3 cup olive oil
+- 3 tablespoons fresh lemon juice
+- 2 teaspoons Dijon mustard
+- 1 teaspoon Worcestershire sauce
+- 1 garlic clove, finely minced
+
+### Seasonings
+
+- 1 teaspoon garlic powder
+- 3/4 teaspoon kosher salt, divided
+- 1/2 teaspoon black pepper, divided
+
+## Directions
+
+1. Heat the grill to medium-high.
+2. Season the chicken with the garlic powder, 1/2 teaspoon kosher salt, and 1/4 teaspoon black pepper.
+3. Grill the chicken for 5 to 7 minutes per side until it reaches 165 F. Rest for 5 minutes, then slice.
+4. Whisk the olive oil, lemon juice, Dijon mustard, Worcestershire sauce, minced garlic, remaining 1/4 teaspoon kosher salt, and remaining 1/4 teaspoon black pepper.
+5. Toss the romaine with enough dressing to coat lightly. Add the croutons and Parmesan.
+6. Top the salad with sliced grilled chicken. Serve the remaining dressing on the side and prepare one Kid's Cuisine for the son.
+
+## Leftover Plan
+
+- Refrigerate chicken and dressing separately for up to 3 days. Do not store dressed romaine.
+
+### Kids' Quick Meal
+
+- **Single Kid's Cuisine (KQM-012):** $3.00; 2 grams fiber per serving
+
+**Meal Override:** alternate-recipe
+**Original Recipe:** FDP-0038
+**Override Note:** Extreme-heat substitution: grilled chicken Caesar salad; son receives one Kid's Cuisine.
+
+## Tuesday, June 30 - Ground Turkey Hard Shell Tacos with Pinto Beans and Rice
 
 **Recipe:** FDP-0038 rev 1 (candidate)
 **Planned Diners:** 4
@@ -59,56 +115,6 @@ Subject: Weekly Dinner Menu: Monday-Tuesday, 2026-06-29
 
 - Refrigerate extra turkey, rice, beans, and toppings separately for up to 3 days. Use them for taco bowls at lunch.
 
-## Tuesday, June 30 - Slow-Cooker BBQ Chicken Baked Potato Bar
-
-**Recipe:** FDP-0006 rev 1 (candidate)
-**Planned Diners:** 4
-
-## Recipe Card
-
-- **Active prep:** 15 minutes
-- **Cook time:** 4-6 hours
-- **Cooking method:** Slow cooker
-- **Estimated fiber:** 11 grams per serving
-- **Kid-friendly design:** Familiar barbecue chicken with customizable potato toppings
-- **Best seasons:** Year-round
-- **Schedule fit:** Tuesday or Thursday
-
-## Ingredients
-
-### Main Ingredients
-
-- 2 pounds boneless, skinless chicken breasts
-- 1 cup barbecue sauce
-- 4 large russet potatoes
-- 1 (15-ounce) can vegetarian baked beans
-- 2 cups broccoli florets
-
-### Seasonings
-
-- 1 1/2 teaspoons smoked paprika
-- 1 teaspoon garlic powder
-- 1 teaspoon onion powder
-- 3/4 teaspoon kosher salt
-- 1/2 teaspoon black pepper
-
-### Toppings and Sides
-
-- 1 cup shredded cheddar cheese
-
-## Directions
-
-1. Put the chicken in the slow cooker. Mix the barbecue sauce, smoked paprika,
-   garlic powder, onion powder, kosher salt, and black pepper and pour it over
-   the chicken.
-2. Cover and cook on low for 5-6 hours or high for 4 hours, until the chicken
-   reaches 165 F and shreds easily.
-3. During the final 20 minutes, pierce the potatoes and microwave them for
-   12-16 minutes, turning halfway, until fork-tender.
-4. Steam the broccoli for 5-6 minutes and warm the baked beans.
-5. Shred the chicken. Split each potato and let everyone add BBQ chicken,
-   cheddar, broccoli, and baked beans as desired.
-
-## Leftover Plan
-
-- Extra BBQ chicken can be used in lunch wraps or quesadillas.
+**Meal Override:** alternate-recipe
+**Original Recipe:** FDP-0006
+**Override Note:** Ground turkey taco dinner moved from Monday.

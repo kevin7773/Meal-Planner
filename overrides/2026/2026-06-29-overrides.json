@@ -3,24 +3,54 @@
   "week_of": "2026-06-29",
   "overrides": [
     {
-      "day": "Thursday",
+      "day": "Monday",
       "type": "alternate-recipe",
       "title": "",
-      "note": "Daughter away starting Thursday; plan for 3 diners. Familiar no-cook meal selected for son.",
+      "note": "Extreme-heat substitution: grilled chicken Caesar salad; son receives one Kid's Cuisine.",
       "actor": "kevsm",
-      "applied_at": "2026-06-27T13:55:24.746817+00:00",
-      "original_recipe_id": "FDP-0027",
-      "replacement_recipe_id": "FDP-0008"
+      "applied_at": "2026-06-27T14:50:02.279651+00:00",
+      "original_recipe_id": "FDP-0038",
+      "replacement_recipe_id": "FDP-0040"
+    },
+    {
+      "day": "Tuesday",
+      "type": "alternate-recipe",
+      "title": "",
+      "note": "Ground turkey taco dinner moved from Monday.",
+      "actor": "kevsm",
+      "applied_at": "2026-06-27T14:50:02.588074+00:00",
+      "original_recipe_id": "FDP-0006",
+      "replacement_recipe_id": "FDP-0038"
+    },
+    {
+      "day": "Thursday",
+      "type": "custom",
+      "title": "Chinese Carryout",
+      "note": "Extreme-heat carryout night; likely Chinese. Plan for 3 diners.",
+      "actor": "kevsm",
+      "applied_at": "2026-06-27T14:50:03.027864+00:00",
+      "original_recipe_id": "FDP-0008",
+      "replacement_recipe_id": null
     },
     {
       "day": "Friday",
       "type": "alternate-recipe",
       "title": "",
-      "note": "Daughter away starting Thursday; plan for 3 diners Thursday-Sunday. Son does not like salmon.",
+      "note": "Blackstone breakfast for dinner; outdoor cooking for the heat. Plan for 3 diners.",
       "actor": "kevsm",
-      "applied_at": "2026-06-27T13:47:46.908123+00:00",
-      "original_recipe_id": "FDP-0011",
-      "replacement_recipe_id": "FDP-0015"
+      "applied_at": "2026-06-27T14:50:03.454680+00:00",
+      "original_recipe_id": "FDP-0015",
+      "replacement_recipe_id": "FDP-0041"
+    },
+    {
+      "day": "Sunday",
+      "type": "alternate-recipe",
+      "title": "",
+      "note": "No-cook deli sandwich night with chips and garden salad. Plan for 3 diners.",
+      "actor": "kevsm",
+      "applied_at": "2026-06-27T14:50:04.121185+00:00",
+      "original_recipe_id": "FDP-0031",
+      "replacement_recipe_id": "FDP-0042"
     }
   ]
 }

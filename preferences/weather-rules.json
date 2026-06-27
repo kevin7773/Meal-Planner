@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "forecast_location": "21617",
+  "categories": {
+    "normal": {
+      "minimum_high_f": null,
+      "minimum_heat_friendly_meals": 0,
+      "exclude_tags": []
+    },
+    "warm": {
+      "minimum_high_f": 80,
+      "minimum_heat_friendly_meals": 2,
+      "exclude_tags": []
+    },
+    "hot": {
+      "minimum_high_f": 85,
+      "minimum_heat_friendly_meals": 3,
+      "exclude_tags": ["soup", "stew", "chili"]
+    },
+    "extreme-heat": {
+      "minimum_high_f": 95,
+      "minimum_heat_friendly_meals": 4,
+      "exclude_tags": ["soup", "stew", "chili", "heavy-casserole"]
+    }
+  },
+  "heat_friendly_methods": [
+    "no-cook",
+    "minimal-cook",
+    "grill",
+    "blackstone",
+    "smoker"
+  ]
+}

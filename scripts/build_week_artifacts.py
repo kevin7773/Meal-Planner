@@ -13,11 +13,17 @@ try:
     from scripts.validate_recipes import split_recipe
     from scripts.side_dishes import suggest_sides
     from scripts.quick_meals import suggest_quick_meal
+    from scripts.weather_context import (
+        is_heat_friendly,
+        load_weather_context,
+        load_weather_rules,
+    )
 except ModuleNotFoundError:
     from inventory import assess_inventory, load_inventory
     from validate_recipes import split_recipe
     from side_dishes import suggest_sides
     from quick_meals import suggest_quick_meal
+    from weather_context import is_heat_friendly, load_weather_context, load_weather_rules
 
 
 DAYS = ("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
@@ -71,7 +77,7 @@ def recipe_week_section(
         lines.extend(
             [
                 "",
-                "**Meal Override:** alternate-recipe",
+                f"**Meal Override:** {override.get('type', 'alternate-recipe')}",
                 f"**Original Recipe:** {override.get('original_recipe_id') or 'None'}",
                 f"**Override Note:** {override.get('note') or 'Alternate recipe selected'}",
             ]
@@ -89,6 +95,44 @@ def load_recipe(root: Path, recipe_id: str) -> tuple[dict, str]:
         if metadata.get("id") == recipe_id:
             return metadata, body
     raise ValueError(f"Unknown recipe ID: {recipe_id}")
+
+
+def custom_override_recipe(
+    record: dict,
+    week_of: dt.date,
+    day: str,
+    planned_diners: int,
+) -> tuple[dict, str]:
+    title = record.get("title") or record["type"].replace("-", " ").title()
+    override_id = f"OVERRIDE-{week_of.strftime('%Y%m%d')}-{day[:3].upper()}"
+    metadata = {
+        "id": override_id,
+        "name": title,
+        "revision": 0,
+        "status": "override",
+        "servings": planned_diners,
+        "protein": "other",
+        "meal_scope": "complete-meal",
+        "fiber_grams": 0,
+        "estimated_cost_usd": 45 if "carryout" in title.lower() else 0,
+        "kid_friendly_score": 5,
+        "kid_friendly_reason": "Human-specified weekly meal override",
+        "cooking_method": "no-cook",
+        "cook_time_minutes": 0,
+        "seasons": ["spring", "summer", "fall", "winter"],
+        "tags": ["heat-friendly", "override"],
+    }
+    body = "\n".join(
+        [
+            f"# {title}",
+            "",
+            "## Meal Plan",
+            "",
+            f"- {record.get('note') or 'Human-specified weekly meal override'}",
+            f"- Planned diners: {planned_diners}",
+        ]
+    )
+    return metadata, body
 
 
 def extract_section(body: str, heading: str) -> str:
@@ -120,6 +164,7 @@ def grocery_document(
     quick_meals: list[dict | None],
 ) -> tuple[str, dict, float]:
     catalog, _, requirement_sets = load_inventory(root)
+    weather = load_weather_context(week_of, root)
     requirements: list[dict] = []
     estimated_cost = 0.0
     for index, (metadata, _) in enumerate(recipes):
@@ -171,6 +216,7 @@ def grocery_document(
         "",
         f"**Week of:** {week_of.isoformat()}",
         "**Diner Schedule:** Monday-Wednesday: 4; Thursday-Sunday: 3",
+        f"**Weather:** {weather['category']}",
         f"**Inventory Coverage:** {assessment['coverage_score']}/100",
         f"**Estimated Inventory Savings:** ${assessment['estimated_savings_usd']:.2f}",
         "",
@@ -221,7 +267,6 @@ def build_artifacts(
     if not history_match:
         raise ValueError("Menu is missing Planning Status History")
 
-    recipes = [load_recipe(root, recipe_id) for recipe_id in recipe_ids]
     override_path = (
         root
         / "overrides"
@@ -236,6 +281,23 @@ def build_artifacts(
                 override_path.read_text(encoding="utf-8")
             ).get("overrides", [])
         }
+    recipes = []
+    for index, recipe_id in enumerate(recipe_ids):
+        day = DAYS[index]
+        record = overrides.get(day)
+        if recipe_id == "OVERRIDE":
+            if not record or record.get("type") == "alternate-recipe":
+                raise ValueError(f"{day} does not have a custom override")
+            recipes.append(
+                custom_override_recipe(
+                    record,
+                    week_of,
+                    day,
+                    planned_diners[index],
+                )
+            )
+        else:
+            recipes.append(load_recipe(root, recipe_id))
     season = (
         "summer"
         if week_of.month in {6, 7, 8}
@@ -245,6 +307,8 @@ def build_artifacts(
         if week_of.month in {12, 1, 2}
         else "spring"
     )
+    weather = load_weather_context(week_of, root)
+    weather_rules = load_weather_rules(root)
     used_side_ids: set[str] = set()
     sections = []
     side_sets: list[list[dict]] = []
@@ -320,10 +384,15 @@ def build_artifacts(
         0.0,
         estimated_cost - float(inventory["estimated_savings_usd"]),
     )
+    heat_friendly_count = sum(
+        is_heat_friendly(metadata, weather_rules) for metadata, _ in recipes
+    )
     dry_run_section = "\n".join(
         [
             "## Dry Run Summary",
             "",
+            f"- Weather category: {weather['category']}",
+            f"- Heat-friendly meals: {heat_friendly_count}/7",
             f"- Estimated weekly cost: ${estimated_cost:.2f}",
             f"- Estimated shopping cost after inventory: ${shopping_cost:.2f}",
             f"- Inventory coverage score: {inventory['coverage_score']}/100",
@@ -349,7 +418,8 @@ def build_artifacts(
             "",
             f"**Week of:** {week_of.isoformat()}",
             "**Diner Schedule:** Monday-Wednesday: 4; Thursday-Sunday: 3",
-            "**Season:** Summer",
+            f"**Season:** {season.title()}",
+            f"**Weather:** {weather['category']}; {weather.get('note', '')}",
             "",
             "\n\n".join(sections),
             "",

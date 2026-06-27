@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "next_id": 7,
+  "next_id": 17,
   "ideas": [
     {
       "id": "IDEA-USER-0001",
@@ -156,16 +156,16 @@
     },
     {
       "id": "IDEA-USER-0006",
-      "status": "queued",
+      "status": "converted",
       "idea": "Breakfast for Dinner (on Blackstone in the summer, stovetop otherwise)",
       "name": "Breakfast for Dinner",
-      "protein": "chicken",
+      "protein": "turkey",
       "meal_scope": "complete-meal",
-      "cooking_method": "stovetop",
-      "fiber_grams": 8.0,
+      "cooking_method": "blackstone",
+      "fiber_grams": 6.0,
       "estimated_cost_usd": 20.0,
       "kid_friendly_score": 4,
-      "kid_friendly_reason": "Breakfast for Dinner",
+      "kid_friendly_reason": "Both children like/love it",
       "seasons": [
         "spring",
         "summer",
@@ -173,15 +173,312 @@
         "winter"
       ],
       "tags": [
-        "chicken",
+        "blackstone",
         "fall",
         "spring",
-        "stovetop",
+        "heat-friendly",
         "summer",
         "user-idea",
         "winter"
       ],
       "created_at": "2026-06-27T13:19:30.660262+00:00",
+      "converted_recipe_id": "FDP-0041"
+    },
+    {
+      "id": "IDEA-USER-0007",
+      "status": "converted",
+      "idea": "Grilled chicken Caesar salad with crisp romaine, Parmesan, croutons, and Caesar dressing; offer a separate quick meal for the son",
+      "name": "Grilled Chicken Caesar Salad",
+      "protein": "chicken",
+      "meal_scope": "complete-meal",
+      "cooking_method": "grill",
+      "fiber_grams": 5.0,
+      "estimated_cost_usd": 24.0,
+      "kid_friendly_score": 4,
+      "kid_friendly_reason": "Gray Loves It",
+      "seasons": [
+        "spring",
+        "summer",
+        "fall"
+      ],
+      "tags": [
+        "chicken",
+        "cold-meal",
+        "fall",
+        "grill",
+        "heat-friendly",
+        "spring",
+        "summer",
+        "user-idea"
+      ],
+      "created_at": "2026-06-27T14:46:57.906129+00:00",
+      "converted_recipe_id": "FDP-0040"
+    },
+    {
+      "id": "IDEA-USER-0008",
+      "status": "converted",
+      "idea": "Turkey and cheese deli sandwich night with chips, garden salad, and condiments served separately; no mayonnaise",
+      "name": "Turkey and Cheese Deli Sandwich Night",
+      "protein": "turkey",
+      "meal_scope": "complete-meal",
+      "cooking_method": "no-cook",
+      "fiber_grams": 8.0,
+      "estimated_cost_usd": 20.0,
+      "kid_friendly_score": 5,
+      "kid_friendly_reason": "Both children like/love it",
+      "seasons": [
+        "spring",
+        "summer",
+        "fall",
+        "winter"
+      ],
+      "tags": [
+        "cold-meal",
+        "fall",
+        "heat-friendly",
+        "no-cook",
+        "spring",
+        "summer",
+        "turkey",
+        "user-idea",
+        "winter"
+      ],
+      "created_at": "2026-06-27T14:46:58.419046+00:00",
+      "converted_recipe_id": "FDP-0042"
+    },
+    {
+      "id": "IDEA-USER-0009",
+      "status": "queued",
+      "idea": "Cold Italian tortellini pasta salad with mozzarella, tomatoes, cucumbers, and red-wine vinaigrette",
+      "name": "Cold Italian Tortellini Pasta Salad",
+      "protein": "vegetarian",
+      "meal_scope": "complete-meal",
+      "cooking_method": "minimal-cook",
+      "fiber_grams": 8.0,
+      "estimated_cost_usd": 20.0,
+      "kid_friendly_score": 1,
+      "kid_friendly_reason": "Not kid friendly - for the parents only",
+      "seasons": [
+        "spring",
+        "summer"
+      ],
+      "tags": [
+        "cold-meal",
+        "heat-friendly",
+        "minimal-cook",
+        "spring",
+        "summer",
+        "user-idea",
+        "vegetarian"
+      ],
+      "created_at": "2026-06-27T14:46:58.903816+00:00",
+      "converted_recipe_id": null
+    },
+    {
+      "id": "IDEA-USER-0010",
+      "status": "queued",
+      "idea": "No-cook rotisserie chicken Caesar wraps with fruit and crunchy vegetables served separately",
+      "name": "Rotisserie Chicken Caesar Wraps with Fruit",
+      "protein": "chicken",
+      "meal_scope": "complete-meal",
+      "cooking_method": "no-cook",
+      "fiber_grams": 9.0,
+      "estimated_cost_usd": 21.0,
+      "kid_friendly_score": 5,
+      "kid_friendly_reason": "Both children like/love it",
+      "seasons": [
+        "spring",
+        "summer",
+        "fall"
+      ],
+      "tags": [
+        "chicken",
+        "cold-meal",
+        "fall",
+        "heat-friendly",
+        "no-cook",
+        "spring",
+        "summer",
+        "user-idea"
+      ],
+      "created_at": "2026-06-27T14:46:59.714895+00:00",
+      "converted_recipe_id": null
+    },
+    {
+      "id": "IDEA-USER-0011",
+      "status": "queued",
+      "idea": "Cold sesame noodle bowls with edamame, cucumbers, carrots, and sauce served on the side",
+      "name": "Cold Sesame Noodle Bowls with Edamame",
+      "protein": "vegetarian",
+      "meal_scope": "complete-meal",
+      "cooking_method": "minimal-cook",
+      "fiber_grams": 10.0,
+      "estimated_cost_usd": 18.0,
+      "kid_friendly_score": 1,
+      "kid_friendly_reason": "Not kid friendly - for the parents only",
+      "seasons": [
+        "spring",
+        "summer"
+      ],
+      "tags": [
+        "cold-meal",
+        "heat-friendly",
+        "minimal-cook",
+        "spring",
+        "summer",
+        "user-idea",
+        "vegetarian"
+      ],
+      "created_at": "2026-06-27T14:47:00.592435+00:00",
+      "converted_recipe_id": null
+    },
+    {
+      "id": "IDEA-USER-0012",
+      "status": "queued",
+      "idea": "Turkey taco salad bar with briefly cooked seasoned turkey and cold toppings arranged separately",
+      "name": "Turkey Taco Salad Bar",
+      "protein": "turkey",
+      "meal_scope": "complete-meal",
+      "cooking_method": "minimal-cook",
+      "fiber_grams": 12.0,
+      "estimated_cost_usd": 22.0,
+      "kid_friendly_score": 5,
+      "kid_friendly_reason": "Both children like/love it",
+      "seasons": [
+        "spring",
+        "summer",
+        "fall"
+      ],
+      "tags": [
+        "cold-meal",
+        "fall",
+        "heat-friendly",
+        "mexican-monday",
+        "minimal-cook",
+        "spring",
+        "summer",
+        "turkey",
+        "user-idea"
+      ],
+      "created_at": "2026-06-27T14:47:01.070222+00:00",
+      "converted_recipe_id": null
+    },
+    {
+      "id": "IDEA-USER-0013",
+      "status": "queued",
+      "idea": "Mediterranean hummus pita plates with deli turkey, cucumbers, tomatoes, olives on the side, and fruit",
+      "name": "Mediterranean Hummus Pita Plates",
+      "protein": "turkey",
+      "meal_scope": "complete-meal",
+      "cooking_method": "no-cook",
+      "fiber_grams": 11.0,
+      "estimated_cost_usd": 21.0,
+      "kid_friendly_score": 4,
+      "kid_friendly_reason": "Both children like/love it",
+      "seasons": [
+        "spring",
+        "summer",
+        "fall"
+      ],
+      "tags": [
+        "cold-meal",
+        "fall",
+        "heat-friendly",
+        "no-cook",
+        "spring",
+        "summer",
+        "turkey",
+        "user-idea"
+      ],
+      "created_at": "2026-06-27T14:47:01.376557+00:00",
+      "converted_recipe_id": null
+    },
+    {
+      "id": "IDEA-USER-0014",
+      "status": "queued",
+      "idea": "Cold caprese tortellini salad topped with freshly grilled chicken and balsamic vinaigrette",
+      "name": "Grilled Chicken Caprese Tortellini Salad",
+      "protein": "chicken",
+      "meal_scope": "complete-meal",
+      "cooking_method": "grill",
+      "fiber_grams": 8.0,
+      "estimated_cost_usd": 24.0,
+      "kid_friendly_score": 1,
+      "kid_friendly_reason": "Not kid friendly - for the parents only",
+      "seasons": [
+        "spring",
+        "summer"
+      ],
+      "tags": [
+        "chicken",
+        "cold-meal",
+        "grill",
+        "heat-friendly",
+        "spring",
+        "summer",
+        "user-idea"
+      ],
+      "created_at": "2026-06-27T14:47:01.730485+00:00",
+      "converted_recipe_id": null
+    },
+    {
+      "id": "IDEA-USER-0015",
+      "status": "queued",
+      "idea": "No-cook turkey, cheese, cracker, and fruit snack-board dinner with raw vegetables",
+      "name": "Turkey and Cheese Snack-Board Dinner",
+      "protein": "turkey",
+      "meal_scope": "complete-meal",
+      "cooking_method": "no-cook",
+      "fiber_grams": 9.0,
+      "estimated_cost_usd": 20.0,
+      "kid_friendly_score": 5,
+      "kid_friendly_reason": "Both children like/love it",
+      "seasons": [
+        "spring",
+        "summer",
+        "fall",
+        "winter"
+      ],
+      "tags": [
+        "cold-meal",
+        "fall",
+        "heat-friendly",
+        "no-cook",
+        "spring",
+        "summer",
+        "turkey",
+        "user-idea",
+        "winter"
+      ],
+      "created_at": "2026-06-27T14:47:02.072264+00:00",
+      "converted_recipe_id": null
+    },
+    {
+      "id": "IDEA-USER-0016",
+      "status": "queued",
+      "idea": "Chilled shrimp and orzo salad with cucumbers, tomatoes, herbs, and lemon vinaigrette",
+      "name": "Chilled Shrimp and Orzo Salad",
+      "protein": "seafood",
+      "meal_scope": "complete-meal",
+      "cooking_method": "minimal-cook",
+      "fiber_grams": 8.0,
+      "estimated_cost_usd": 27.0,
+      "kid_friendly_score": 1,
+      "kid_friendly_reason": "Not kid friendly - for the parents only",
+      "seasons": [
+        "spring",
+        "summer"
+      ],
+      "tags": [
+        "cold-meal",
+        "heat-friendly",
+        "minimal-cook",
+        "seafood",
+        "spring",
+        "summer",
+        "user-idea"
+      ],
+      "created_at": "2026-06-27T14:47:02.587605+00:00",
       "converted_recipe_id": null
     }
   ]

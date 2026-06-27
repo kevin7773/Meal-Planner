@@ -42,6 +42,13 @@ at most two recipe or idea IDs. No protein may appear more than three times in
 one week. Prefer fiber-rich choices, but treat weekly fiber as a comparative
 metric rather than sacrificing protein and option variety to maximize it.
 
+Read `preferences/weather-rules.json` and the target week's file under
+`weather/` before generating proposals. When a forecast location is configured,
+refresh the weekly context from a current forecast. A user-confirmed context
+may be used without a numeric temperature. Enforce the category's minimum
+heat-friendly meal count and excluded tags. Human overrides remain fixed and
+do not count as overlap between dry-run options.
+
 Kid-friendly is a validated requirement. Every active recipe and dry-run idea
 must score at least 4 out of 5 and state a concrete acceptance rationale based
 on familiar format, mild flavor, customization, or separately served

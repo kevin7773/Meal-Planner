@@ -121,6 +121,14 @@
         {"item_id": "cheddar", "quantity": 4},
         {"item_id": "grapes", "quantity": 2}
       ]
+    },
+    {
+      "id": "KQM-012",
+      "name": "Single Kid's Cuisine",
+      "estimated_cost_usd": 3,
+      "fiber_grams": 2,
+      "kid_friendly_score": 5,
+      "requirements": [{"item_id": "microwave-kids-meal", "quantity": 1}]
     }
   ]
 }

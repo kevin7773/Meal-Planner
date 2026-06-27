@@ -118,6 +118,18 @@ def add_idea(
     document = load_ideas(root)
     number = int(document["next_id"])
     idea_id = f"IDEA-USER-{number:04d}"
+    lowered_idea = f"{idea} {name}".lower()
+    heat_friendly = cooking_method in {
+        "no-cook",
+        "minimal-cook",
+        "grill",
+        "blackstone",
+        "smoker",
+    }
+    cold_meal = cooking_method == "no-cook" or any(
+        term in lowered_idea
+        for term in ("cold ", "chilled ", "salad", "deli ", "snack board")
+    )
     tags = sorted(
         {
             *seasons,
@@ -125,6 +137,8 @@ def add_idea(
             cooking_method,
             "user-idea",
             *(["mexican-monday"] if mexican_monday else []),
+            *(["heat-friendly"] if heat_friendly else []),
+            *(["cold-meal"] if cold_meal else []),
         }
     )
     now = dt.datetime.now(dt.timezone.utc).isoformat()

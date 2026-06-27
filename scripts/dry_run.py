@@ -15,6 +15,11 @@ try:
     from scripts.menu_status import split_menu
     from scripts.side_dishes import suggest_sides
     from scripts.quick_meals import PARENTS_ONLY_REASON, suggest_quick_meal
+    from scripts.weather_context import (
+        is_heat_friendly,
+        load_weather_context,
+        load_weather_rules,
+    )
 except ModuleNotFoundError:
     from validate_recipes import split_recipe
     from inventory import assess_inventory, load_inventory
@@ -22,6 +27,7 @@ except ModuleNotFoundError:
     from menu_status import split_menu
     from side_dishes import suggest_sides
     from quick_meals import PARENTS_ONLY_REASON, suggest_quick_meal
+    from weather_context import is_heat_friendly, load_weather_context, load_weather_rules
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -330,8 +336,23 @@ def constrained_assignments(
     root: Path,
 ) -> list[str] | None:
     season = season_for(week_of)
+    weather = load_weather_context(week_of, root)
+    weather_rules = load_weather_rules(root)
+    category_rule = weather_rules["categories"][weather["category"]]
+    excluded_tags = set(category_rule["exclude_tags"])
+    minimum_heat_friendly = category_rule["minimum_heat_friendly_meals"]
     pools = {
-        day: eligible_recipes(recipes, day, season)
+        day: [
+            recipe
+            for recipe in eligible_recipes(recipes, day, season)
+            if not (
+                excluded_tags
+                & (
+                    set(recipe.get("tags", []))
+                    | set(re.findall(r"[a-z]+", recipe["name"].lower()))
+                )
+            )
+        ]
         for day in DAYS
         if day not in fixed_assignments
     }
@@ -342,12 +363,14 @@ def constrained_assignments(
     used_ids = set(fixed_assignments.values())
     protein_counts: collections.Counter[str] = collections.Counter()
     user_idea_count = 0
+    heat_friendly_count = 0
     for recipe_id in fixed_assignments.values():
         recipe = recipes.get(recipe_id)
         if recipe is None:
             return None
         protein_counts[recipe["protein"]] += 1
         user_idea_count += recipe.get("source") == "user-idea"
+        heat_friendly_count += is_heat_friendly(recipe, weather_rules)
     if any(count > MAX_PROTEIN_PER_WEEK for count in protein_counts.values()):
         return None
 
@@ -376,6 +399,7 @@ def constrained_assignments(
         ) % max(1, len(recipes))
         return (
             global_usage[recipe["id"]],
+            0 if is_heat_friendly(recipe, weather_rules) else 1,
             source_rank,
             protein_counts[recipe["protein"]],
             -inventory_match_score(recipe, week_of, root),
@@ -383,9 +407,11 @@ def constrained_assignments(
             recipe["id"],
         )
 
-    def search(position: int, idea_count: int) -> bool:
+    def search(position: int, idea_count: int, heat_count: int) -> bool:
         if position == len(search_days):
-            return True
+            return heat_count >= minimum_heat_friendly
+        if heat_count + (len(search_days) - position) < minimum_heat_friendly:
+            return False
         day = search_days[position]
         for recipe in sorted(pools[day], key=candidate_key):
             recipe_id = recipe["id"]
@@ -409,7 +435,11 @@ def constrained_assignments(
             protein_counts[protein] += 1
             old_overlaps = overlap_counts[:]
             overlap_counts[:] = next_overlaps
-            if search(position + 1, idea_count + int(is_user_idea)):
+            if search(
+                position + 1,
+                idea_count + int(is_user_idea),
+                heat_count + int(is_heat_friendly(recipe, weather_rules)),
+            ):
                 return True
             overlap_counts[:] = old_overlaps
             protein_counts[protein] -= 1
@@ -417,7 +447,7 @@ def constrained_assignments(
             del assignments[day]
         return False
 
-    if not search(0, user_idea_count):
+    if not search(0, user_idea_count, heat_friendly_count):
         return None
     return [assignments[day] for day in DAYS]
 
@@ -483,7 +513,9 @@ def generate_proposals(
         proposals.append(
             evaluate_proposal(week_of, assignments, proposal_recipes, root=root)
         )
-        previous_options.append(set(assignments))
+        previous_options.append(
+            set(assignments) - set(fixed_assignments.values())
+        )
         global_usage.update(assignments)
 
     return proposals
@@ -500,6 +532,10 @@ def evaluate_proposal(
     errors: list[str] = []
     warnings: list[str] = []
     season = season_for(week_of)
+    weather = load_weather_context(week_of, root)
+    weather_rules = load_weather_rules(root)
+    category_rule = weather_rules["categories"][weather["category"]]
+    fixed_assignments, _ = override_constraints(week_of, root)
 
     if week_of.weekday() != 0:
         errors.append("Week must start on Monday.")
@@ -513,7 +549,10 @@ def evaluate_proposal(
             errors.append(f"{DAYS[index]} references unknown recipe {recipe_id}.")
             continue
         selected.append(recipe)
-        is_override = recipe.get("status") == "override"
+        is_override = (
+            recipe.get("status") == "override"
+            or fixed_assignments.get(DAYS[index]) == recipe_id
+        )
         if not is_override and season not in recipe["seasons"]:
             errors.append(f"{recipe_id} is not approved for {season}.")
         if (
@@ -560,6 +599,28 @@ def evaluate_proposal(
             errors.append(
                 f"Protein {protein} appears {protein_count} times; "
                 f"the weekly maximum is {MAX_PROTEIN_PER_WEEK}."
+            )
+
+    heat_friendly_count = sum(
+        is_heat_friendly(recipe, weather_rules) for recipe in selected
+    )
+    minimum_heat_friendly = category_rule["minimum_heat_friendly_meals"]
+    if heat_friendly_count < minimum_heat_friendly:
+        errors.append(
+            f"{weather['category']} week requires at least "
+            f"{minimum_heat_friendly} heat-friendly meals; found "
+            f"{heat_friendly_count}."
+        )
+    excluded_tags = set(category_rule["exclude_tags"])
+    for recipe in selected:
+        recipe_terms = set(recipe.get("tags", [])) | set(
+            re.findall(r"[a-z]+", recipe["name"].lower())
+        )
+        conflict = sorted(excluded_tags & recipe_terms)
+        if conflict:
+            errors.append(
+                f"{recipe['id']} conflicts with {weather['category']} weather: "
+                + ", ".join(conflict)
             )
 
     candidate_ids = sorted(
@@ -735,6 +796,9 @@ def evaluate_proposal(
     return {
         "week_of": week_of.isoformat(),
         "season": season,
+        "weather_category": weather["category"],
+        "weather_note": weather.get("note", ""),
+        "heat_friendly_meals": heat_friendly_count,
         "assignments": assignments,
         "meals": meals,
         "estimated_cost_usd": estimated_cost,
@@ -763,6 +827,10 @@ def proposal_report(proposal: dict, number: int | None = None) -> str:
         f"Average fiber: {proposal['average_fiber_grams']:.1f} g/serving",
         f"Kid-friendly score: {proposal['average_kid_friendly_score']:.1f}/5",
         f"Recipe rotation score: {proposal['rotation_score']}/100",
+        (
+            f"Weather: {proposal['weather_category']} "
+            f"({proposal['heat_friendly_meals']} heat-friendly meals)"
+        ),
         "",
     ]
     for meal in proposal["meals"]:

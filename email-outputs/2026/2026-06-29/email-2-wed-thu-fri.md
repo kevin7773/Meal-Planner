@@ -46,80 +46,47 @@ Subject: Weekly Dinner Menu: Wednesday-Friday, 2026-06-29
 
 - Refrigerate leftover macaroni, beans, and hot dogs separately for up to 3 days.
 
-## Thursday, July 02 - No-Cook Chicken and Cheese Roll-Up Plates
+## Thursday, July 02 - Chinese Carryout
 
-**Recipe:** FDP-0008 rev 1 (candidate)
+**Recipe:** OVERRIDE-20260629-THU rev 0 (override)
+**Planned Diners:** 3
+
+## Meal Plan
+
+- Extreme-heat carryout night; likely Chinese. Plan for 3 diners.
+- Planned diners: 3
+
+**Meal Override:** custom
+**Original Recipe:** FDP-0008
+**Override Note:** Extreme-heat carryout night; likely Chinese. Plan for 3 diners.
+
+## Friday, July 03 - Blackstone Breakfast for Dinner
+
+**Recipe:** FDP-0041 rev 1 (candidate)
 **Planned Diners:** 3
 
 ## Recipe Card
 
 - **Active prep:** 15 minutes
-- **Cook time:** 0 minutes
-- **Cooking method:** No-cook
-- **Estimated fiber:** 9 grams per serving
-- **Kid-friendly design:** Snack-plate format with simple roll-ups, whole-grain crackers, and fruit
-- **Best seasons:** Spring and summer
-- **Schedule fit:** Tuesday or Thursday
-
-## Ingredients
-
-### Main Ingredients
-
-- 3 cups shredded rotisserie chicken
-- 8 small high-fiber whole-wheat tortillas
-- 8 slices cheddar cheese
-- 8 ounces whole-grain crackers
-- 1 cucumber, sliced
-- 2 cups baby carrots
-- 4 apples, sliced
-- 2 cups seedless grapes
-
-### Seasonings
-
-- No additional seasonings
-
-## Directions
-
-1. Lay out the tortillas and divide the rotisserie chicken and cheddar among
-   them.
-2. Roll each tortilla tightly and cut it into pinwheels.
-3. Build four plates with two roll-ups, whole-grain crackers, cucumber, baby
-   carrots, apple, and grapes. Serve every component separately.
-
-## Leftover Plan
-
-- Extra chicken and produce can be packed in lunch boxes.
-
-**Meal Override:** alternate-recipe  
-**Original Recipe:** FDP-0027  
-**Override Note:** Daughter away starting Thursday; plan for 3 diners. Familiar no-cook meal selected for son.
-
-## Friday, July 03 - Chicken Enchilada
-
-**Recipe:** FDP-0015 rev 2 (candidate)
-**Planned Diners:** 3
-
-## Recipe Card
-
-- **Active prep:** 15 minutes
-- **Cook time:** 20 minutes
-- **Cooking method:** Oven
-- **Estimated fiber:** 8 grams per serving
+- **Cook time:** 25 minutes
+- **Cooking method:** Blackstone
+- **Estimated fiber:** 6 grams per serving
 - **Kid-friendly design:** Both children like/love it
-- **Best seasons:** Spring, Summer, Fall, Winter
-- **Schedule fit:** Complete meal; suitable for a standard weeknight
+- **Best seasons:** Spring, Summer, Fall
+- **Schedule fit:** Outdoor-cooked dinner for a hot evening
 
 ## Ingredients
 
 ### Main Ingredients
 
-- 2 cups cooked chicken, shredded
-- 1 cup enchilada sauce
-- 8 corn tortillas
-- 1 cup shredded cheddar cheese
-- 1/2 cup sour cream
-- 1/4 cup chopped green onions
-- 1/4 cup chopped fresh cilantro
+- 2 cups whole-grain pancake mix
+- 1 1/2 cups milk
+- 10 large eggs
+- 12 turkey sausage links
+- 2 cups seasonal fresh fruit
+- 4 tablespoons butter, divided
+- 1/2 cup maple syrup
+
 ### Seasonings
 
 - 1/2 teaspoon kosher salt
@@ -127,18 +94,17 @@ Subject: Weekly Dinner Menu: Wednesday-Friday, 2026-06-29
 
 ## Directions
 
-1. Preheat the oven to 375 F.
-2. In a bowl, mix the shredded chicken with 1/2 cup enchilada sauce, 1/2 teaspoon kosher salt, and 1/4 teaspoon black pepper.
-3. Warm tortillas in a microwave or on a skillet to make them pliable.
-4. Fill each tortilla with the chicken mixture, roll them up, and place seam-side down in a baking dish.
-5. Pour the remaining enchilada sauce over the rolled tortillas and sprinkle with cheese.
-6. Bake in the preheated oven for 20 minutes, or until the cheese is melted and bubbly.
-7. Serve topped with sour cream, green onions, and cilantro.
+1. Prepare the pancake batter with the pancake mix and milk according to the package consistency.
+2. Heat the Blackstone to medium. Cook the turkey sausage for 10 to 12 minutes, turning often, until it reaches 165 F.
+3. Melt 2 tablespoons butter on a clean section of the griddle. Cook eight pancakes, turning when bubbles form and the bottoms are golden.
+4. Whisk the eggs with the kosher salt and black pepper.
+5. Melt the remaining 2 tablespoons butter on the griddle. Scramble the eggs for 3 to 5 minutes until set.
+6. Serve two pancakes, scrambled eggs, and three sausage links per person with fruit and maple syrup.
 
 ## Leftover Plan
 
-- Decide after the first family test.
+- Refrigerate pancakes and sausage separately for up to 3 days. Reheat for breakfast.
 
-**Meal Override:** alternate-recipe  
-**Original Recipe:** FDP-0011  
-**Override Note:** Daughter away starting Thursday; plan for 3 diners Thursday-Sunday. Son does not like salmon.
+**Meal Override:** alternate-recipe
+**Original Recipe:** FDP-0015
+**Override Note:** Blackstone breakfast for dinner; outdoor cooking for the heat. Plan for 3 diners.

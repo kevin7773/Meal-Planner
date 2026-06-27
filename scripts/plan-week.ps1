@@ -112,6 +112,7 @@ function Format-Proposal {
     $lines.Add(('Average fiber: {0:N1} g/serving' -f [double]$Proposal.average_fiber_grams))
     $lines.Add(('Kid-friendly score: {0:N1}/5' -f [double]$Proposal.average_kid_friendly_score))
     $lines.Add("Recipe rotation score: $($Proposal.rotation_score)/100")
+    $lines.Add("Weather: $($Proposal.weather_category) ($($Proposal.heat_friendly_meals) heat-friendly meals)")
     $lines.Add('')
     foreach ($meal in $Proposal.meals) {
         $lines.Add("$($meal.day): $($meal.recipe_id) rev $($meal.revision) - $($meal.name)")

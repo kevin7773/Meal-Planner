@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "week_of": "2026-06-29",
+  "category": "extreme-heat",
+  "forecast_high_f": 101,
+  "daily_highs_f": {
+    "Monday": 88,
+    "Tuesday": 90,
+    "Wednesday": 95,
+    "Thursday": 98,
+    "Friday": 101,
+    "Saturday": 96,
+    "Sunday": 89
+  },
+  "source": "Forecast lookup for ZIP 21617 on 2026-06-27",
+  "note": "Highs of 95-101 F Wednesday-Saturday; prioritize cold, no-cook, grilled, and outdoor-cooked meals."
+}

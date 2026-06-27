@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "week_of": "2026-06-29",
+  "overrides": [
+    {
+      "day": "Thursday",
+      "type": "alternate-recipe",
+      "title": "",
+      "note": "Daughter away starting Thursday; plan for 3 diners. Familiar no-cook meal selected for son.",
+      "actor": "kevsm",
+      "applied_at": "2026-06-27T13:55:24.746817+00:00",
+      "original_recipe_id": "FDP-0027",
+      "replacement_recipe_id": "FDP-0008"
+    },
+    {
+      "day": "Friday",
+      "type": "alternate-recipe",
+      "title": "",
+      "note": "Daughter away starting Thursday; plan for 3 diners Thursday-Sunday. Son does not like salmon.",
+      "actor": "kevsm",
+      "applied_at": "2026-06-27T13:47:46.908123+00:00",
+      "original_recipe_id": "FDP-0011",
+      "replacement_recipe_id": "FDP-0015"
+    }
+  ]
+}

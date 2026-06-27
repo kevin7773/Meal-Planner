@@ -13,6 +13,14 @@ appear more than three times in one proposal. Prefer higher fiber when choices
 are otherwise comparable; protein variety and distinct options take
 precedence over maximizing fiber.
 
+Read the weekly weather context before planning. For hot and extreme-heat
+weeks, prioritize `cold-meal` and `heat-friendly` recipes, no-cook meals,
+minimal indoor cooking, grills, smokers, Blackstone meals, and carryout
+overrides. Enforce the configured minimum number of heat-friendly meals and
+exclude soups, stews, chili, and heavy casseroles when the category forbids
+them. Report the weather category and heat-friendly meal count in every dry
+run.
+
 Validate and read kitchen inventory before scoring. Report inventory coverage,
 estimated savings, shopping cost after inventory, fresh weekly purchases, and
 stock warnings. Prefer otherwise comparable plans that use existing pantry,

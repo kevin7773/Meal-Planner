@@ -2,7 +2,7 @@
 
 ## Week of 2026-06-29
 
-**Planning status:** Validated hot-weather replan; revised emails unsent
+**Planning status:** Completed; approved emails sent
 **Updated:** 2026-06-27
 
 The user manually selected and committed a replacement dry-run option after
@@ -24,27 +24,12 @@ The completed menu, grocery list, and sent email artifacts were preserved at:
 
 `archive/2026/2026-06-29/completed-2026-06-27/`
 
-The user explicitly reopened the completed week after checking an extremely
-hot forecast. The previously sent package is preserved at:
-
-`archive/2026/2026-06-29/completed-2026-06-27-before-heat-replan/`
-
-The active schedule is now:
-
-- Monday: `FDP-0040` Grilled Chicken Caesar Salad; one Kid's Cuisine for son
-- Tuesday: `FDP-0038` Ground Turkey Hard Shell Tacos
-- Wednesday: `FDP-0039` Hot Dogs with Macaroni and Cheese and Baked Beans
-- Thursday: Chinese carryout
-- Friday: `FDP-0041` Blackstone Breakfast for Dinner
-- Saturday: `FDP-0012` 10 Minute Pasta
-- Sunday: `FDP-0042` Turkey and Cheese Deli Sandwich Night
-
-The menu, grocery list, and all three revised email files are validated. The
-revised emails have not been sent.
+The user explicitly reviewed and approved the package. All three weekly emails
+were sent successfully to `klsmallwood73@gmail.com`, and the active menu was
+advanced to `completed`. Do not regenerate or resend this week without another
+explicit request.
 
 ## Delivery Record
-
-The IDs below belong to the superseded package preserved in the archive:
 
 - Monday-Tuesday Gmail message: `19f096c22565f5eb`
 - Wednesday-Friday Gmail message: `19f096c3efc19e97`
@@ -52,18 +37,9 @@ The IDs below belong to the superseded package preserved in the archive:
 
 ## Next Steps
 
-1. Review the validated hot-weather menu and grocery list.
-2. Send revised emails only after another explicit approval.
-3. Collect meal feedback and ratings after the week.
-
-## Weather Planning
-
-The forecast location is ZIP `21617` (Centreville, Maryland). The week of
-2026-06-29 is classified as `extreme-heat`, with a forecast maximum of 101 F
-and highs of 95-101 F Wednesday-Saturday. Four of seven dinners are
-heat-friendly. Ten cold or heat-friendly ideas were added as
-`IDEA-USER-0007` through `IDEA-USER-0016`; ideas 0007 and 0008 were converted
-to FDP-0040 and FDP-0042. Breakfast idea 0006 became FDP-0041.
+1. Collect meal feedback and ratings.
+2. Update canonical recipes when family feedback warrants a revision.
+3. Archive the week after feedback is complete.
 
 ## Variety Requirements
 
