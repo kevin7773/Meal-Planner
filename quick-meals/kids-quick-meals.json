@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "quick_meals": [
+    {
+      "id": "KQM-001",
+      "name": "Frozen Cheese Pizza",
+      "estimated_cost_usd": 7,
+      "fiber_grams": 3,
+      "kid_friendly_score": 5,
+      "requirements": [{"item_id": "frozen-cheese-pizza", "quantity": 1}]
+    },
+    {
+      "id": "KQM-002",
+      "name": "Microwave Kids' Meals",
+      "estimated_cost_usd": 6,
+      "fiber_grams": 3,
+      "kid_friendly_score": 5,
+      "requirements": [{"item_id": "microwave-kids-meal", "quantity": 2}]
+    },
+    {
+      "id": "KQM-003",
+      "name": "Hot Dogs with Fresh Fruit",
+      "estimated_cost_usd": 7,
+      "fiber_grams": 4,
+      "kid_friendly_score": 5,
+      "requirements": [
+        {"item_id": "hot-dog", "quantity": 4},
+        {"item_id": "hot-dog-bun", "quantity": 4},
+        {"item_id": "seasonal-fruit", "quantity": 2}
+      ]
+    },
+    {
+      "id": "KQM-004",
+      "name": "Quick Pasta with Parmesan and Peas",
+      "estimated_cost_usd": 5,
+      "fiber_grams": 5,
+      "kid_friendly_score": 5,
+      "requirements": [
+        {"item_id": "dry-pasta", "quantity": 8},
+        {"item_id": "peas-carrots", "quantity": 1}
+      ]
+    },
+    {
+      "id": "KQM-005",
+      "name": "Chicken Nuggets with Apple Slices",
+      "estimated_cost_usd": 7,
+      "fiber_grams": 4,
+      "kid_friendly_score": 5,
+      "requirements": [
+        {"item_id": "frozen-chicken-nuggets", "quantity": 12},
+        {"item_id": "apple", "quantity": 2}
+      ]
+    },
+    {
+      "id": "KQM-006",
+      "name": "Pizza Rolls with Baby Carrots",
+      "estimated_cost_usd": 6,
+      "fiber_grams": 4,
+      "kid_friendly_score": 5,
+      "requirements": [
+        {"item_id": "frozen-pizza-rolls", "quantity": 16},
+        {"item_id": "baby-carrots", "quantity": 1}
+      ]
+    },
+    {
+      "id": "KQM-007",
+      "name": "Turkey and Cheese Deli Sandwiches",
+      "estimated_cost_usd": 7,
+      "fiber_grams": 3,
+      "kid_friendly_score": 5,
+      "requirements": [
+        {"item_id": "deli-turkey", "quantity": 6},
+        {"item_id": "cheddar", "quantity": 4},
+        {"item_id": "sandwich-bread", "quantity": 4}
+      ]
+    },
+    {
+      "id": "KQM-008",
+      "name": "Favorite Cereal with Milk and Fruit",
+      "estimated_cost_usd": 5,
+      "fiber_grams": 4,
+      "kid_friendly_score": 5,
+      "requirements": [
+        {"item_id": "breakfast-cereal", "quantity": 4},
+        {"item_id": "milk", "quantity": 2},
+        {"item_id": "seasonal-fruit", "quantity": 2}
+      ]
+    },
+    {
+      "id": "KQM-009",
+      "name": "Cheese Quesadillas with Fruit",
+      "estimated_cost_usd": 5,
+      "fiber_grams": 4,
+      "kid_friendly_score": 5,
+      "requirements": [
+        {"item_id": "whole-wheat-tortilla", "quantity": 4},
+        {"item_id": "cheddar", "quantity": 4},
+        {"item_id": "seasonal-fruit", "quantity": 2}
+      ]
+    },
+    {
+      "id": "KQM-010",
+      "name": "Scrambled Eggs, Toast, and Fruit",
+      "estimated_cost_usd": 5,
+      "fiber_grams": 4,
+      "kid_friendly_score": 5,
+      "requirements": [
+        {"item_id": "eggs", "quantity": 4},
+        {"item_id": "sandwich-bread", "quantity": 4},
+        {"item_id": "seasonal-fruit", "quantity": 2}
+      ]
+    },
+    {
+      "id": "KQM-011",
+      "name": "Cheese, Cracker, and Fruit Snack Plates",
+      "estimated_cost_usd": 6,
+      "fiber_grams": 4,
+      "kid_friendly_score": 5,
+      "requirements": [
+        {"item_id": "whole-grain-crackers", "quantity": 6},
+        {"item_id": "cheddar", "quantity": 4},
+        {"item_id": "grapes", "quantity": 2}
+      ]
+    }
+  ]
+}

@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "sides": [
+    {
+      "id": "SIDE-001",
+      "name": "Grilled Corn on the Cob",
+      "seasons": ["summer"],
+      "fiber_grams": 3,
+      "estimated_cost_usd": 4,
+      "kid_friendly_score": 5,
+      "kid_friendly_reason": "Familiar handheld summer vegetable with seasoning served lightly",
+      "cooking_method": "grill",
+      "requirements": [{"item_id": "fresh-corn", "quantity": 4}],
+      "tags": ["vegetable", "summer", "grill"]
+    },
+    {
+      "id": "SIDE-002",
+      "name": "Seasonal Fresh Fruit Plate",
+      "seasons": ["spring", "summer", "fall", "winter"],
+      "fiber_grams": 3,
+      "estimated_cost_usd": 6,
+      "kid_friendly_score": 5,
+      "kid_friendly_reason": "Familiar fruit served separately so everyone can choose",
+      "cooking_method": "no-cook",
+      "requirements": [{"item_id": "seasonal-fruit", "quantity": 4}],
+      "tags": ["fruit", "no-cook"]
+    },
+    {
+      "id": "SIDE-003",
+      "name": "Roasted Broccoli and Carrots",
+      "seasons": ["spring", "fall", "winter"],
+      "fiber_grams": 5,
+      "estimated_cost_usd": 5,
+      "kid_friendly_score": 4,
+      "kid_friendly_reason": "Mild roasted vegetables served separately with crisp edges",
+      "cooking_method": "oven",
+      "requirements": [{"item_id": "broccoli", "quantity": 2}, {"item_id": "baby-carrots", "quantity": 2}, {"item_id": "olive-oil", "quantity": 1}],
+      "tags": ["vegetable", "roasted"]
+    },
+    {
+      "id": "SIDE-004",
+      "name": "Garlic Green Beans",
+      "seasons": ["spring", "summer", "fall", "winter"],
+      "fiber_grams": 4,
+      "estimated_cost_usd": 4,
+      "kid_friendly_score": 4,
+      "kid_friendly_reason": "Simple familiar vegetable with mild garlic seasoning",
+      "cooking_method": "stovetop",
+      "requirements": [{"item_id": "green-beans", "quantity": 1}, {"item_id": "olive-oil", "quantity": 1}, {"item_id": "garlic-powder", "quantity": 1}],
+      "tags": ["vegetable"]
+    },
+    {
+      "id": "SIDE-005",
+      "name": "Pinto Beans and Corn",
+      "seasons": ["spring", "summer", "fall", "winter"],
+      "fiber_grams": 7,
+      "estimated_cost_usd": 4,
+      "kid_friendly_score": 4,
+      "kid_friendly_reason": "Familiar mild ingredients that can be served in separate scoops",
+      "cooking_method": "stovetop",
+      "requirements": [{"item_id": "pinto-beans", "quantity": 1}, {"item_id": "frozen-corn", "quantity": 1}],
+      "tags": ["beans", "vegetable", "high-fiber"]
+    },
+    {
+      "id": "SIDE-006",
+      "name": "Simple Brown Rice",
+      "seasons": ["spring", "summer", "fall", "winter"],
+      "fiber_grams": 4,
+      "estimated_cost_usd": 3,
+      "kid_friendly_score": 5,
+      "kid_friendly_reason": "Plain familiar grain that balances saucy or strongly flavored entrees",
+      "cooking_method": "stovetop",
+      "requirements": [{"item_id": "brown-rice", "quantity": 1.5}],
+      "tags": ["whole-grain", "staple"]
+    },
+    {
+      "id": "SIDE-007",
+      "name": "Cucumber Tomato Salad",
+      "seasons": ["spring", "summer"],
+      "fiber_grams": 3,
+      "estimated_cost_usd": 5,
+      "kid_friendly_score": 4,
+      "kid_friendly_reason": "Fresh vegetables and dressing served separately for easy customization",
+      "cooking_method": "no-cook",
+      "requirements": [{"item_id": "cucumber", "quantity": 1}, {"item_id": "tomato", "quantity": 2}, {"item_id": "olive-oil", "quantity": 1}],
+      "tags": ["vegetable", "no-cook", "summer"]
+    },
+    {
+      "id": "SIDE-008",
+      "name": "Grilled Sweet Potato Wedges",
+      "seasons": ["spring", "summer", "fall"],
+      "fiber_grams": 5,
+      "estimated_cost_usd": 5,
+      "kid_friendly_score": 5,
+      "kid_friendly_reason": "Familiar finger-food shape with naturally sweet flavor",
+      "cooking_method": "grill",
+      "requirements": [{"item_id": "sweet-potato", "quantity": 4}, {"item_id": "olive-oil", "quantity": 1}],
+      "tags": ["vegetable", "grill", "finger-food"]
+    }
+  ]
+}

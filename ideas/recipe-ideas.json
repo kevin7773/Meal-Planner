@@ -1,0 +1,188 @@
+{
+  "schema_version": 1,
+  "next_id": 7,
+  "ideas": [
+    {
+      "id": "IDEA-USER-0001",
+      "status": "queued",
+      "idea": "Chicken quesadillas with beans and rice",
+      "name": "Chicken quesadillas",
+      "protein": "chicken",
+      "cooking_method": "stovetop",
+      "fiber_grams": 8.0,
+      "estimated_cost_usd": 20.0,
+      "kid_friendly_score": 5,
+      "kid_friendly_reason": "a kid favorite in this house!",
+      "seasons": [
+        "spring",
+        "summer",
+        "fall",
+        "winter"
+      ],
+      "tags": [
+        "chicken",
+        "fall",
+        "mexican-monday",
+        "spring",
+        "stovetop",
+        "summer",
+        "user-idea",
+        "winter"
+      ],
+      "created_at": "2026-06-27T12:34:10.060052+00:00",
+      "converted_recipe_id": null
+    },
+    {
+      "id": "IDEA-USER-0002",
+      "status": "queued",
+      "idea": "ground turkey hard shell tacos with mexican pinto beans and mexican rice",
+      "name": "ground turkey hard shell tacos with mexican pinto beans and mexican rice",
+      "protein": "chicken",
+      "meal_scope": "complete-meal",
+      "cooking_method": "stovetop",
+      "fiber_grams": 8.0,
+      "estimated_cost_usd": 20.0,
+      "kid_friendly_score": 5,
+      "kid_friendly_reason": "TACOS!",
+      "seasons": [
+        "spring",
+        "summer",
+        "fall",
+        "winter"
+      ],
+      "tags": [
+        "chicken",
+        "fall",
+        "mexican-monday",
+        "spring",
+        "stovetop",
+        "summer",
+        "user-idea",
+        "winter"
+      ],
+      "created_at": "2026-06-27T12:55:41.018861+00:00",
+      "converted_recipe_id": null
+    },
+    {
+      "id": "IDEA-USER-0003",
+      "status": "queued",
+      "idea": "Hot Dogs with Macaroni and Cheese and Baked Beans",
+      "name": "Hot Dogs w/ Mac n Cheese and Baked Beans",
+      "protein": "pork",
+      "meal_scope": "complete-meal",
+      "cooking_method": "stovetop",
+      "fiber_grams": 8.0,
+      "estimated_cost_usd": 20.0,
+      "kid_friendly_score": 5,
+      "kid_friendly_reason": "family favorite",
+      "seasons": [
+        "spring",
+        "summer",
+        "fall",
+        "winter"
+      ],
+      "tags": [
+        "fall",
+        "pork",
+        "spring",
+        "stovetop",
+        "summer",
+        "user-idea",
+        "winter"
+      ],
+      "created_at": "2026-06-27T13:00:04.015510+00:00",
+      "converted_recipe_id": null
+    },
+    {
+      "id": "IDEA-USER-0004",
+      "status": "queued",
+      "idea": "meatloaf with mashed potatoes and green beans",
+      "name": "meatloaf with mashed potatoes and green beans",
+      "protein": "chicken",
+      "meal_scope": "complete-meal",
+      "cooking_method": "oven",
+      "fiber_grams": 8.0,
+      "estimated_cost_usd": 20.0,
+      "kid_friendly_score": 4,
+      "kid_friendly_reason": "kids like the loaf",
+      "seasons": [
+        "spring",
+        "summer",
+        "fall",
+        "winter"
+      ],
+      "tags": [
+        "chicken",
+        "fall",
+        "oven",
+        "spring",
+        "summer",
+        "user-idea",
+        "winter"
+      ],
+      "created_at": "2026-06-27T13:06:19.141121+00:00",
+      "converted_recipe_id": null
+    },
+    {
+      "id": "IDEA-USER-0005",
+      "status": "queued",
+      "idea": "One Pot Cheesy Taco Pasta",
+      "name": "One Pot Cheesy Taco Pasta",
+      "protein": "chicken",
+      "meal_scope": "complete-meal",
+      "cooking_method": "stovetop",
+      "fiber_grams": 8.0,
+      "estimated_cost_usd": 20.0,
+      "kid_friendly_score": 4,
+      "kid_friendly_reason": "its tacos! its pasta! What's not to love?",
+      "seasons": [
+        "spring",
+        "summer",
+        "fall",
+        "winter"
+      ],
+      "tags": [
+        "chicken",
+        "fall",
+        "mexican-monday",
+        "spring",
+        "stovetop",
+        "summer",
+        "user-idea",
+        "winter"
+      ],
+      "created_at": "2026-06-27T13:18:37.747591+00:00",
+      "converted_recipe_id": null
+    },
+    {
+      "id": "IDEA-USER-0006",
+      "status": "queued",
+      "idea": "Breakfast for Dinner (on Blackstone in the summer, stovetop otherwise)",
+      "name": "Breakfast for Dinner",
+      "protein": "chicken",
+      "meal_scope": "complete-meal",
+      "cooking_method": "stovetop",
+      "fiber_grams": 8.0,
+      "estimated_cost_usd": 20.0,
+      "kid_friendly_score": 4,
+      "kid_friendly_reason": "Breakfast for Dinner",
+      "seasons": [
+        "spring",
+        "summer",
+        "fall",
+        "winter"
+      ],
+      "tags": [
+        "chicken",
+        "fall",
+        "spring",
+        "stovetop",
+        "summer",
+        "user-idea",
+        "winter"
+      ],
+      "created_at": "2026-06-27T13:19:30.660262+00:00",
+      "converted_recipe_id": null
+    }
+  ]
+}

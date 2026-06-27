@@ -8,6 +8,15 @@ created = "2026-06-26"
 updated = "2026-06-26"
 rating_average = 0.0
 ratings_count = 0
+protein = "chicken"
+fiber_grams = 12
+estimated_cost_usd = 24.0
+kid_friendly_score = 5
+kid_friendly_reason = "Familiar soft tacos with mild seasoning and toppings served separately"
+cooking_method = "blackstone"
+cook_time_minutes = 12
+seasons = ["spring", "summer"]
+leftover_recipe_ids = []
 tags = ["summer", "poultry", "mexican-monday", "blackstone"]
 +++
 
@@ -19,6 +28,7 @@ tags = ["summer", "poultry", "mexican-monday", "blackstone"]
 - **Cook time:** 12 minutes
 - **Cooking method:** Blackstone
 - **Estimated fiber:** 12 grams per serving with listed sides
+- **Kid-friendly design:** Familiar soft tacos with mild seasoning and toppings served separately
 - **Best seasons:** Spring and summer
 - **Schedule fit:** Mexican Monday
 

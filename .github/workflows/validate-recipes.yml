@@ -1,4 +1,4 @@
-name: Validate recipes
+name: Validate planner
 
 on:
   push:
@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   validate:
-    name: Recipe library
+    name: Planner checks
     runs-on: ubuntu-latest
     timeout-minutes: 5
 
@@ -27,5 +27,26 @@ jobs:
         with:
           python-version: "3.13"
 
+      - name: Test semantic validation rules
+        run: python -m unittest discover -s tests -p "test_*.py"
+
       - name: Validate recipe library
         run: python scripts/validate_recipes.py
+
+      - name: Validate inventory model
+        run: python scripts/inventory.py validate
+
+      - name: Validate meal overrides
+        run: python scripts/meal_override.py validate
+
+      - name: Validate recipe idea backlog
+        run: python scripts/recipe_ideas.py validate
+
+      - name: Validate side-dish library
+        run: python scripts/side_dishes.py validate
+
+      - name: Validate kid quick-meal library
+        run: python scripts/quick_meals.py validate
+
+      - name: Validate weekly planning statuses
+        run: python scripts/menu_status.py check-all

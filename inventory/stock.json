@@ -1,0 +1,270 @@
+{
+    "schema_version":  1,
+    "updated_at":  "2026-06-27T10:48:24.5221418Z",
+    "items":  [
+                  {
+                      "lot_id":  "0479e797df4548ea9885ae59e9877c4d",
+                      "item_id":  "apple",
+                      "quantity":  6,
+                      "level":  null,
+                      "acquired_on":  "2026-06-27",
+                      "expires_on":  null
+                  },
+                  {
+                      "lot_id":  "15229176acdc450c9f0db88ba9832766",
+                      "item_id":  "apple-cider-vinegar",
+                      "quantity":  null,
+                      "level":  "full",
+                      "acquired_on":  null,
+                      "expires_on":  null
+                  },
+                  {
+                      "lot_id":  "d9cae12b7055497e80010aed68ad8dc7",
+                      "item_id":  "barbecue-sauce",
+                      "quantity":  null,
+                      "level":  "half",
+                      "acquired_on":  "2026-06-27",
+                      "expires_on":  null
+                  },
+                  {
+                      "lot_id":  "06a06fd18efb4fb5a466f405bfa1031b",
+                      "item_id":  "bell-pepper",
+                      "quantity":  2,
+                      "level":  null,
+                      "acquired_on":  "2026-06-27",
+                      "expires_on":  null
+                  },
+                  {
+                      "lot_id":  "60f05bc655e2485081e754a6d2016e57",
+                      "item_id":  "black-pepper",
+                      "quantity":  null,
+                      "level":  "full",
+                      "acquired_on":  "2026-06-27",
+                      "expires_on":  null
+                  },
+                  {
+                      "lot_id":  "f2810e55b6f74e468887cbef8716ff67",
+                      "item_id":  "brown-rice",
+                      "quantity":  4,
+                      "level":  null,
+                      "acquired_on":  "2026-06-27",
+                      "expires_on":  null
+                  },
+                  {
+                      "lot_id":  "5bee74e0b432450ea5cbeadbbba7266b",
+                      "item_id":  "canola-oil",
+                      "quantity":  32,
+                      "level":  null,
+                      "acquired_on":  "2026-06-27",
+                      "expires_on":  null
+                  },
+                  {
+                      "lot_id":  "8275a1b5738a4caca856c225df0a8779",
+                      "item_id":  "celery-seed",
+                      "quantity":  null,
+                      "level":  "full",
+                      "acquired_on":  "2026-06-27",
+                      "expires_on":  null
+                  },
+                  {
+                      "lot_id":  "5b2873447f5541c493f3a4b5a2b7e6fa",
+                      "item_id":  "chicken-breast",
+                      "quantity":  6,
+                      "level":  null,
+                      "acquired_on":  "2026-06-27",
+                      "expires_on":  null
+                  },
+                  {
+                      "lot_id":  "99c636648ca84f86a7f7e19c1403fcfa",
+                      "item_id":  "chili-powder",
+                      "quantity":  null,
+                      "level":  "half",
+                      "acquired_on":  "2026-06-27",
+                      "expires_on":  null
+                  },
+                  {
+                      "lot_id":  "3e9e1f032a6b4fba8d2b0cf50c8b9a0f",
+                      "item_id":  "cucumber",
+                      "quantity":  3,
+                      "level":  null,
+                      "acquired_on":  "2026-06-27",
+                      "expires_on":  null
+                  },
+                  {
+                      "lot_id":  "009a341137ae401a8548df3a3c814b53",
+                      "item_id":  "dried-dill",
+                      "quantity":  null,
+                      "level":  "full",
+                      "acquired_on":  "2026-06-27",
+                      "expires_on":  null
+                  },
+                  {
+                      "lot_id":  "1452e98b3b1f494ab32c4e21fbd90f69",
+                      "item_id":  "eggs",
+                      "quantity":  12,
+                      "level":  null,
+                      "acquired_on":  "2026-06-27",
+                      "expires_on":  "2026-07-04"
+                  },
+                  {
+                      "lot_id":  "e8f9f1bf6c1144ddb5733bd4ecf2d228",
+                      "item_id":  "frozen-corn",
+                      "quantity":  2,
+                      "level":  null,
+                      "acquired_on":  "2026-06-27",
+                      "expires_on":  null
+                  },
+                  {
+                      "lot_id":  "71ba27fd14664eeba1a6fd985b5fb212",
+                      "item_id":  "garlic-powder",
+                      "quantity":  null,
+                      "level":  "full",
+                      "acquired_on":  "2026-06-27",
+                      "expires_on":  null
+                  },
+                  {
+                      "lot_id":  "7ffb8d777fe244858c02fad2f1801181",
+                      "item_id":  "ground-chicken",
+                      "quantity":  1,
+                      "level":  null,
+                      "acquired_on":  "2026-06-27",
+                      "expires_on":  null
+                  },
+                  {
+                      "lot_id":  "f99a37aa576a4bbda1bbbf463ccfc2a3",
+                      "item_id":  "ground-cumin",
+                      "quantity":  null,
+                      "level":  "low",
+                      "acquired_on":  "2026-06-27",
+                      "expires_on":  null
+                  },
+                  {
+                      "lot_id":  "372088f994b84b88af50d7f165cc69a1",
+                      "item_id":  "ground-ginger",
+                      "quantity":  null,
+                      "level":  "half",
+                      "acquired_on":  "2026-06-27",
+                      "expires_on":  null
+                  },
+                  {
+                      "lot_id":  "25085e2f87cc4d89ac543c5e35655ec9",
+                      "item_id":  "ground-turkey",
+                      "quantity":  4,
+                      "level":  null,
+                      "acquired_on":  "2026-06-27",
+                      "expires_on":  null
+                  },
+                  {
+                      "lot_id":  "8f7d18a6edfa4a5bae5908517d599882",
+                      "item_id":  "honey",
+                      "quantity":  null,
+                      "level":  "full",
+                      "acquired_on":  "2026-06-27",
+                      "expires_on":  null
+                  },
+                  {
+                      "lot_id":  "e2538a005cd14990a553af4af2fa6889",
+                      "item_id":  "kosher-salt",
+                      "quantity":  null,
+                      "level":  "full",
+                      "acquired_on":  "2026-06-27",
+                      "expires_on":  null
+                  },
+                  {
+                      "lot_id":  "83ac302139e141adb1de6c1ec8e2c6a5",
+                      "item_id":  "soy-sauce",
+                      "quantity":  1,
+                      "level":  null,
+                      "acquired_on":  "2026-06-27",
+                      "expires_on":  null
+                  },
+                  {
+                      "lot_id":  "0879fbbd91624326bde3790c208ae27c",
+                      "item_id":  "olive-oil",
+                      "quantity":  72,
+                      "level":  null,
+                      "acquired_on":  "2026-06-27",
+                      "expires_on":  null
+                  },
+                  {
+                      "lot_id":  "c34855f7a8244ef0b34a8f3fa4439ef6",
+                      "item_id":  "onion-powder",
+                      "quantity":  null,
+                      "level":  "full",
+                      "acquired_on":  "2026-06-27",
+                      "expires_on":  null
+                  },
+                  {
+                      "lot_id":  "3b0c1e3a0fe64dd78a7bbdeaab041eb7",
+                      "item_id":  "pinto-beans",
+                      "quantity":  2,
+                      "level":  null,
+                      "acquired_on":  "2026-06-27",
+                      "expires_on":  null
+                  },
+                  {
+                      "lot_id":  "f6a571af07ee42e5b06b9aff20b95cb5",
+                      "item_id":  "provolone",
+                      "quantity":  8,
+                      "level":  null,
+                      "acquired_on":  "2026-06-27",
+                      "expires_on":  "2026-07-04"
+                  },
+                  {
+                      "lot_id":  "0878a71898bd40ac8ae45d2f6a9e9f50",
+                      "item_id":  "romaine",
+                      "quantity":  16,
+                      "level":  null,
+                      "acquired_on":  "2026-06-27",
+                      "expires_on":  null
+                  },
+                  {
+                      "lot_id":  "b051afedd08f412ebaf33b3c54a5dc48",
+                      "item_id":  "salmon",
+                      "quantity":  2,
+                      "level":  null,
+                      "acquired_on":  "2026-06-27",
+                      "expires_on":  null
+                  },
+                  {
+                      "lot_id":  "70865400c04b4036873170816eec552a",
+                      "item_id":  "smoked-paprika",
+                      "quantity":  null,
+                      "level":  "low",
+                      "acquired_on":  "2026-06-27",
+                      "expires_on":  null
+                  },
+                  {
+                      "lot_id":  "347312e9cfdf40659800f71c7a933fb4",
+                      "item_id":  "sour-cream",
+                      "quantity":  1,
+                      "level":  null,
+                      "acquired_on":  "2026-06-27",
+                      "expires_on":  "2026-07-04"
+                  },
+                  {
+                      "lot_id":  "aac50a203bdc42b68832c0aec753f73b",
+                      "item_id":  "watermelon",
+                      "quantity":  2,
+                      "level":  null,
+                      "acquired_on":  "2026-06-27",
+                      "expires_on":  null
+                  },
+                  {
+                      "lot_id":  "3de2f3137d4d411c95627857b61bfee0",
+                      "item_id":  "whole-grain-crackers",
+                      "quantity":  12,
+                      "level":  null,
+                      "acquired_on":  "2026-06-27",
+                      "expires_on":  null
+                  },
+                  {
+                      "lot_id":  "f1485a70f2a44896a7adf4cc473cb096",
+                      "item_id":  "yellow-onion",
+                      "quantity":  3,
+                      "level":  null,
+                      "acquired_on":  "2026-06-27",
+                      "expires_on":  null
+                  }
+              ]
+}

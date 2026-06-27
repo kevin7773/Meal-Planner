@@ -30,3 +30,14 @@ but should still be noted in Git history.
 
 Ratings use a 1-5 scale. `rating_average` and `ratings_count` summarize only
 recorded ratings in the Ratings table.
+
+Structured metadata also records `protein`, `fiber_grams`,
+`estimated_cost_usd`, `cooking_method`, `cook_time_minutes`, `seasons`, and
+`leftover_recipe_ids`. These fields drive dry-run scoring and semantic
+validation. Cost is a rough family-of-four estimate before sales, pantry
+inventory, and intentional ingredient reuse.
+
+Every active recipe also requires `kid_friendly_score` of at least 4 out of 5
+and a visible `kid_friendly_reason`. Familiar format, mild seasoning,
+customizable toppings, and the ability to serve components separately are
+strong kid-friendly signals.

@@ -8,6 +8,15 @@ created = "2026-06-26"
 updated = "2026-06-26"
 rating_average = 0.0
 ratings_count = 0
+protein = "chicken"
+fiber_grams = 11
+estimated_cost_usd = 23.0
+kid_friendly_score = 5
+kid_friendly_reason = "Familiar sliders with mild sweet barbecue flavor and slaw served on the side"
+cooking_method = "slow-cooker"
+cook_time_minutes = 240
+seasons = ["spring", "summer", "fall", "winter"]
+leftover_recipe_ids = []
 tags = ["summer", "poultry", "slow-cooker", "tuesday"]
 +++
 
@@ -19,6 +28,7 @@ tags = ["summer", "poultry", "slow-cooker", "tuesday"]
 - **Cook time:** 4-6 hours
 - **Cooking method:** Slow cooker
 - **Estimated fiber:** 11 grams per serving
+- **Kid-friendly design:** Familiar sliders with mild sweet barbecue flavor and slaw served on the side
 - **Best seasons:** Year-round
 - **Schedule fit:** Tuesday or Thursday
 

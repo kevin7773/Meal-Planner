@@ -1,0 +1,665 @@
+{
+  "schema_version": 1,
+  "recipes": {
+    "FDP-0001": [
+      {
+        "item_id": "chicken-breast",
+        "quantity": 1.5
+      },
+      {
+        "item_id": "bell-pepper",
+        "quantity": 3
+      },
+      {
+        "item_id": "yellow-onion",
+        "quantity": 1
+      },
+      {
+        "item_id": "olive-oil",
+        "quantity": 1
+      },
+      {
+        "item_id": "whole-wheat-tortilla",
+        "quantity": 8
+      },
+      {
+        "item_id": "pinto-beans",
+        "quantity": 1
+      },
+      {
+        "item_id": "salsa",
+        "quantity": 1
+      },
+      {
+        "item_id": "greek-yogurt",
+        "quantity": 0.5
+      },
+      {
+        "item_id": "lime",
+        "quantity": 1
+      },
+      {
+        "item_id": "watermelon",
+        "quantity": 4
+      },
+      {
+        "item_id": "chili-powder",
+        "quantity": 1
+      },
+      {
+        "item_id": "ground-cumin",
+        "quantity": 1
+      },
+      {
+        "item_id": "smoked-paprika",
+        "quantity": 1
+      },
+      {
+        "item_id": "garlic-powder",
+        "quantity": 1
+      },
+      {
+        "item_id": "onion-powder",
+        "quantity": 1
+      },
+      {
+        "item_id": "kosher-salt",
+        "quantity": 1
+      },
+      {
+        "item_id": "black-pepper",
+        "quantity": 1
+      }
+    ],
+    "FDP-0002": [
+      {
+        "item_id": "chicken-breast",
+        "quantity": 2
+      },
+      {
+        "item_id": "barbecue-sauce",
+        "quantity": 1
+      },
+      {
+        "item_id": "slider-bun",
+        "quantity": 8
+      },
+      {
+        "item_id": "vegetarian-baked-beans",
+        "quantity": 2
+      },
+      {
+        "item_id": "coleslaw-mix",
+        "quantity": 1
+      },
+      {
+        "item_id": "apple",
+        "quantity": 1
+      },
+      {
+        "item_id": "olive-oil",
+        "quantity": 1
+      },
+      {
+        "item_id": "apple-cider-vinegar",
+        "quantity": 1
+      },
+      {
+        "item_id": "honey",
+        "quantity": 1
+      },
+      {
+        "item_id": "smoked-paprika",
+        "quantity": 1
+      },
+      {
+        "item_id": "garlic-powder",
+        "quantity": 1
+      },
+      {
+        "item_id": "onion-powder",
+        "quantity": 1
+      },
+      {
+        "item_id": "kosher-salt",
+        "quantity": 1
+      },
+      {
+        "item_id": "black-pepper",
+        "quantity": 1
+      },
+      {
+        "item_id": "celery-seed",
+        "quantity": 1
+      }
+    ],
+    "FDP-0003": [
+      {
+        "item_id": "ground-turkey",
+        "quantity": 1.5
+      },
+      {
+        "item_id": "farro",
+        "quantity": 1
+      },
+      {
+        "item_id": "bell-pepper",
+        "quantity": 2
+      },
+      {
+        "item_id": "yellow-onion",
+        "quantity": 1
+      },
+      {
+        "item_id": "mushrooms",
+        "quantity": 8
+      },
+      {
+        "item_id": "olive-oil",
+        "quantity": 1
+      },
+      {
+        "item_id": "provolone",
+        "quantity": 4
+      },
+      {
+        "item_id": "mixed-berries",
+        "quantity": 2
+      },
+      {
+        "item_id": "smoked-paprika",
+        "quantity": 1
+      },
+      {
+        "item_id": "garlic-powder",
+        "quantity": 1
+      },
+      {
+        "item_id": "onion-powder",
+        "quantity": 1
+      },
+      {
+        "item_id": "kosher-salt",
+        "quantity": 1
+      },
+      {
+        "item_id": "black-pepper",
+        "quantity": 1
+      }
+    ],
+    "FDP-0004": [
+      {
+        "item_id": "ground-chicken",
+        "quantity": 1.5
+      },
+      {
+        "item_id": "whole-wheat-tortilla",
+        "quantity": 8
+      },
+      {
+        "item_id": "refried-pinto-beans",
+        "quantity": 1
+      },
+      {
+        "item_id": "cheddar",
+        "quantity": 4
+      },
+      {
+        "item_id": "romaine",
+        "quantity": 2
+      },
+      {
+        "item_id": "tomato",
+        "quantity": 1
+      },
+      {
+        "item_id": "salsa",
+        "quantity": 1
+      },
+      {
+        "item_id": "avocado",
+        "quantity": 1
+      },
+      {
+        "item_id": "lime",
+        "quantity": 1
+      },
+      {
+        "item_id": "watermelon",
+        "quantity": 4
+      },
+      {
+        "item_id": "chili-powder",
+        "quantity": 1
+      },
+      {
+        "item_id": "ground-cumin",
+        "quantity": 1
+      },
+      {
+        "item_id": "smoked-paprika",
+        "quantity": 1
+      },
+      {
+        "item_id": "garlic-powder",
+        "quantity": 1
+      },
+      {
+        "item_id": "onion-powder",
+        "quantity": 1
+      },
+      {
+        "item_id": "kosher-salt",
+        "quantity": 1
+      },
+      {
+        "item_id": "black-pepper",
+        "quantity": 1
+      }
+    ],
+    "FDP-0005": [
+      {
+        "item_id": "chicken-breast",
+        "quantity": 1.5
+      },
+      {
+        "item_id": "bell-pepper",
+        "quantity": 3
+      },
+      {
+        "item_id": "yellow-onion",
+        "quantity": 1
+      },
+      {
+        "item_id": "olive-oil",
+        "quantity": 1
+      },
+      {
+        "item_id": "whole-wheat-tortilla",
+        "quantity": 8
+      },
+      {
+        "item_id": "pinto-beans",
+        "quantity": 1
+      },
+      {
+        "item_id": "frozen-corn",
+        "quantity": 1
+      },
+      {
+        "item_id": "cheddar",
+        "quantity": 4
+      },
+      {
+        "item_id": "salsa",
+        "quantity": 1
+      },
+      {
+        "item_id": "sour-cream",
+        "quantity": 0.5
+      },
+      {
+        "item_id": "lime",
+        "quantity": 1
+      },
+      {
+        "item_id": "watermelon",
+        "quantity": 4
+      },
+      {
+        "item_id": "chili-powder",
+        "quantity": 1
+      },
+      {
+        "item_id": "ground-cumin",
+        "quantity": 1
+      },
+      {
+        "item_id": "smoked-paprika",
+        "quantity": 1
+      },
+      {
+        "item_id": "garlic-powder",
+        "quantity": 1
+      },
+      {
+        "item_id": "onion-powder",
+        "quantity": 1
+      },
+      {
+        "item_id": "kosher-salt",
+        "quantity": 1
+      },
+      {
+        "item_id": "black-pepper",
+        "quantity": 1
+      }
+    ],
+    "FDP-0006": [
+      {
+        "item_id": "chicken-breast",
+        "quantity": 2
+      },
+      {
+        "item_id": "barbecue-sauce",
+        "quantity": 1
+      },
+      {
+        "item_id": "russet-potato",
+        "quantity": 4
+      },
+      {
+        "item_id": "vegetarian-baked-beans",
+        "quantity": 1
+      },
+      {
+        "item_id": "broccoli",
+        "quantity": 2
+      },
+      {
+        "item_id": "cheddar",
+        "quantity": 4
+      },
+      {
+        "item_id": "smoked-paprika",
+        "quantity": 1
+      },
+      {
+        "item_id": "garlic-powder",
+        "quantity": 1
+      },
+      {
+        "item_id": "onion-powder",
+        "quantity": 1
+      },
+      {
+        "item_id": "kosher-salt",
+        "quantity": 1
+      },
+      {
+        "item_id": "black-pepper",
+        "quantity": 1
+      }
+    ],
+    "FDP-0007": [
+      {
+        "item_id": "ground-turkey",
+        "quantity": 1.5
+      },
+      {
+        "item_id": "brown-rice",
+        "quantity": 1.5
+      },
+      {
+        "item_id": "bell-pepper",
+        "quantity": 2
+      },
+      {
+        "item_id": "yellow-onion",
+        "quantity": 1
+      },
+      {
+        "item_id": "mushrooms",
+        "quantity": 8
+      },
+      {
+        "item_id": "olive-oil",
+        "quantity": 1
+      },
+      {
+        "item_id": "green-beans",
+        "quantity": 1
+      },
+      {
+        "item_id": "provolone",
+        "quantity": 4
+      },
+      {
+        "item_id": "mixed-berries",
+        "quantity": 2
+      },
+      {
+        "item_id": "smoked-paprika",
+        "quantity": 1
+      },
+      {
+        "item_id": "garlic-powder",
+        "quantity": 1
+      },
+      {
+        "item_id": "onion-powder",
+        "quantity": 1
+      },
+      {
+        "item_id": "kosher-salt",
+        "quantity": 1
+      },
+      {
+        "item_id": "black-pepper",
+        "quantity": 1
+      }
+    ],
+    "FDP-0008": [
+      {
+        "item_id": "rotisserie-chicken",
+        "quantity": 3
+      },
+      {
+        "item_id": "whole-wheat-tortilla",
+        "quantity": 8
+      },
+      {
+        "item_id": "cheddar",
+        "quantity": 8
+      },
+      {
+        "item_id": "whole-grain-crackers",
+        "quantity": 8
+      },
+      {
+        "item_id": "cucumber",
+        "quantity": 1
+      },
+      {
+        "item_id": "baby-carrots",
+        "quantity": 2
+      },
+      {
+        "item_id": "apple",
+        "quantity": 4
+      },
+      {
+        "item_id": "grapes",
+        "quantity": 2
+      }
+    ],
+    "FDP-0009": [
+      {
+        "item_id": "chicken-breast",
+        "quantity": 1.5
+      },
+      {
+        "item_id": "brown-rice",
+        "quantity": 2
+      },
+      {
+        "item_id": "eggs",
+        "quantity": 2
+      },
+      {
+        "item_id": "peas-carrots",
+        "quantity": 2
+      },
+      {
+        "item_id": "zucchini",
+        "quantity": 1
+      },
+      {
+        "item_id": "canola-oil",
+        "quantity": 1
+      },
+      {
+        "item_id": "soy-sauce",
+        "quantity": 0.25
+      },
+      {
+        "item_id": "sesame-oil",
+        "quantity": 1
+      },
+      {
+        "item_id": "honey",
+        "quantity": 1
+      },
+      {
+        "item_id": "garlic-powder",
+        "quantity": 1
+      },
+      {
+        "item_id": "ground-ginger",
+        "quantity": 1
+      },
+      {
+        "item_id": "kosher-salt",
+        "quantity": 1
+      },
+      {
+        "item_id": "black-pepper",
+        "quantity": 1
+      }
+    ],
+    "FDP-0010": [
+      {
+        "item_id": "chicken-breast",
+        "quantity": 1.5
+      },
+      {
+        "item_id": "russet-potato",
+        "quantity": 4
+      },
+      {
+        "item_id": "bell-pepper",
+        "quantity": 2
+      },
+      {
+        "item_id": "yellow-onion",
+        "quantity": 1
+      },
+      {
+        "item_id": "mushrooms",
+        "quantity": 8
+      },
+      {
+        "item_id": "olive-oil",
+        "quantity": 1
+      },
+      {
+        "item_id": "green-beans",
+        "quantity": 1
+      },
+      {
+        "item_id": "provolone",
+        "quantity": 4
+      },
+      {
+        "item_id": "mixed-berries",
+        "quantity": 2
+      },
+      {
+        "item_id": "smoked-paprika",
+        "quantity": 1
+      },
+      {
+        "item_id": "garlic-powder",
+        "quantity": 1
+      },
+      {
+        "item_id": "onion-powder",
+        "quantity": 1
+      },
+      {
+        "item_id": "kosher-salt",
+        "quantity": 1
+      },
+      {
+        "item_id": "black-pepper",
+        "quantity": 1
+      }
+    ],
+    "FDP-0011": [
+      {
+        "item_id": "salmon",
+        "quantity": 1.5
+      },
+      {
+        "item_id": "brown-rice",
+        "quantity": 1.5
+      },
+      {
+        "item_id": "pinto-beans",
+        "quantity": 1
+      },
+      {
+        "item_id": "frozen-corn",
+        "quantity": 1.5
+      },
+      {
+        "item_id": "olive-oil",
+        "quantity": 1
+      },
+      {
+        "item_id": "garlic-powder",
+        "quantity": 1
+      },
+      {
+        "item_id": "dried-dill",
+        "quantity": 1
+      },
+      {
+        "item_id": "kosher-salt",
+        "quantity": 1
+      },
+      {
+        "item_id": "black-pepper",
+        "quantity": 1
+      },
+      {
+        "item_id": "lemon",
+        "quantity": 1
+      },
+      {
+        "item_id": "mixed-berries",
+        "quantity": 2
+      },
+      {
+        "item_id": "watermelon",
+        "quantity": 2
+      }
+    ],
+    "FDP-0012": [],
+    "FDP-0013": [],
+    "FDP-0014": [],
+    "FDP-0015": [],
+    "FDP-0016": [],
+    "FDP-0017": [],
+    "FDP-0018": [],
+    "FDP-0019": [],
+    "FDP-0020": [],
+    "FDP-0021": [],
+    "FDP-0022": [],
+    "FDP-0023": [],
+    "FDP-0024": [],
+    "FDP-0025": [],
+    "FDP-0026": [],
+    "FDP-0027": [],
+    "FDP-0028": [],
+    "FDP-0029": [],
+    "FDP-0030": [],
+    "FDP-0031": [],
+    "FDP-0032": [],
+    "FDP-0033": [],
+    "FDP-0034": [],
+    "FDP-0035": [],
+    "FDP-0036": [],
+    "FDP-0037": []
+  }
+}

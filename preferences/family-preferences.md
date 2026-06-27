@@ -8,6 +8,12 @@
 - Favor fiber from beans, vegetables, fruit, whole grains, and legumes.
 - Monday is always Mexican Monday.
 
+Kid-friendly means more than meeting nutrition targets. Favor familiar formats
+such as tacos, quesadillas, sliders, burgers, pizza, sandwiches, rice bowls,
+baked potatoes, breakfast-for-dinner, and simple salmon plates. Keep spice mild,
+make toppings optional, and serve unfamiliar vegetables or sauces separately.
+Every proposed recipe must explain why children are likely to accept it.
+
 ## Beans
 
 Prefer, in order:

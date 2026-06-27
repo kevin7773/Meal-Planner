@@ -1,3 +1,9 @@
++++
+week_of = "YYYY-MM-DD"
+status = "draft"
+status_updated_at = "YYYY-MM-DDTHH:MM:SSZ"
++++
+
 # Weekly Dinner Menu
 
 **Week of:** YYYY-MM-DD  
@@ -15,3 +21,9 @@ included in the second weekly email, which covers Wednesday through Friday.
 ## Rotation Notes
 
 -
+
+## Planning Status History
+
+| Status | Timestamp | Actor | Note |
+| --- | --- | --- | --- |
+| draft | YYYY-MM-DDTHH:MM:SSZ | Codex | Weekly planning started |

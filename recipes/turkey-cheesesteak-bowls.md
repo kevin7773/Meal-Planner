@@ -8,6 +8,15 @@ created = "2026-06-26"
 updated = "2026-06-26"
 rating_average = 0.0
 ratings_count = 0
+protein = "turkey"
+fiber_grams = 10
+estimated_cost_usd = 22.0
+kid_friendly_score = 4
+kid_friendly_reason = "Cheesy turkey and rice-style bowl with vegetables that can be served separately"
+cooking_method = "blackstone"
+cook_time_minutes = 30
+seasons = ["spring", "summer"]
+leftover_recipe_ids = []
 tags = ["summer", "poultry", "blackstone", "whole-grain"]
 +++
 
@@ -19,6 +28,7 @@ tags = ["summer", "poultry", "blackstone", "whole-grain"]
 - **Cook time:** 30 minutes
 - **Cooking method:** Blackstone and stovetop
 - **Estimated fiber:** 10 grams per serving
+- **Kid-friendly design:** Cheesy turkey and rice-style bowl with vegetables that can be served separately
 - **Best seasons:** Spring and summer
 - **Schedule fit:** Any day except Mexican Monday
 
