@@ -10,7 +10,7 @@
 
 Kid-friendly means more than meeting nutrition targets. Favor familiar formats
 such as tacos, quesadillas, sliders, burgers, pizza, sandwiches, rice bowls,
-baked potatoes, breakfast-for-dinner, and simple salmon plates. Keep spice mild,
+baked potatoes, and breakfast-for-dinner. Keep spice mild,
 make toppings optional, and serve unfamiliar vegetables or sauces separately.
 Every proposed recipe must explain why children are likely to accept it.
 
@@ -28,7 +28,9 @@ Avoid black beans unless they are clearly better for the recipe.
 
 Prefer poultry, then beef, then seafood. Use chicken or turkey for tacos,
 bowls, burgers, sliders, and pasta when appropriate. Limit beef-centered meals
-to roughly every other week. Salmon is welcome occasionally.
+to roughly every other week. Salmon is a daughter-specific preference; the son
+does not like it. If salmon is scheduled while he is dining, provide a separate
+non-salmon quick meal. Do not choose salmon when he is the only child dining.
 
 Avoid pork as a centerpiece except for bacon, sausage, ham, ham steaks, or
 occasional slow-cooker pulled pork.
@@ -41,7 +43,7 @@ occasional slow-cooker pulled pork.
 - Pizza-style pasta and calzones
 - Chicken Alfredo tortellini
 - Chili
-- Salmon
+- Salmon for the daughter, with a non-salmon alternative for the son
 - Spaghetti bake
 
 Reserve chili, soups, spaghetti bake, and heavy casseroles for cooler weather.

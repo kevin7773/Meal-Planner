@@ -63,6 +63,17 @@ class DryRunTests(unittest.TestCase):
         self.assertTrue(all(len(proposal["meals"]) == 7 for proposal in proposals))
         signatures = {tuple(proposal["assignments"]) for proposal in proposals}
         self.assertEqual(len(signatures), 3)
+        for first_index, first in enumerate(proposals):
+            protein_counts = {
+                protein: sum(
+                    meal["protein"] == protein for meal in first["meals"]
+                )
+                for protein in {meal["protein"] for meal in first["meals"]}
+            }
+            self.assertLessEqual(max(protein_counts.values()), 3)
+            for second in proposals[first_index + 1 :]:
+                overlap = set(first["assignments"]) & set(second["assignments"])
+                self.assertLessEqual(len(overlap), 2)
         self.assertTrue(
             all(
                 all(recipe_id.startswith("IDEA-") for recipe_id in proposal["assignments"])
@@ -73,7 +84,7 @@ class DryRunTests(unittest.TestCase):
     def test_proposal_reports_cost_fiber_rotation_and_warnings(self) -> None:
         proposal = generate_proposals(self.week, 1, root=self.root)[0]
         self.assertGreater(proposal["estimated_cost_usd"], 0)
-        self.assertGreaterEqual(proposal["average_fiber_grams"], 8)
+        self.assertGreater(proposal["average_fiber_grams"], 0)
         self.assertGreaterEqual(proposal["average_kid_friendly_score"], 4)
         self.assertGreaterEqual(proposal["rotation_score"], 0)
         self.assertTrue(proposal["warnings"])
@@ -95,34 +106,59 @@ class DryRunTests(unittest.TestCase):
         self.assertFalse(proposal["ready_to_commit"])
 
     def test_parents_only_recipe_gets_a_kids_quick_meal(self) -> None:
-        parent_recipe = {
-            "id": "FDP-9998",
-            "name": "Parents' Dinner",
-            "revision": 1,
-            "status": "candidate",
-            "protein": "other",
-            "meal_scope": "complete-meal",
-            "fiber_grams": 8,
-            "estimated_cost_usd": 25,
-            "kid_friendly_score": 1,
-            "kid_friendly_reason": PARENTS_ONLY_REASON,
-            "cooking_method": "slow-cooker",
-            "cook_time_minutes": 240,
-            "seasons": ["summer"],
-            "tags": ["summer", "other", "slow-cooker", "mexican-monday"],
-            "inventory_requirements": [],
-        }
+        proteins = ["other", "chicken", "chicken", "turkey", "turkey", "beef", "seafood"]
+        recipes = {}
+        for index, protein in enumerate(proteins):
+            recipe_id = f"FDP-99{index:02d}"
+            recipes[recipe_id] = {
+                "id": recipe_id,
+                "name": f"Test Dinner {index}",
+                "revision": 1,
+                "status": "candidate",
+                "protein": protein,
+                "meal_scope": "complete-meal",
+                "fiber_grams": 8,
+                "estimated_cost_usd": 20,
+                "kid_friendly_score": 1 if index == 0 else 5,
+                "kid_friendly_reason": (
+                    PARENTS_ONLY_REASON if index == 0 else "Both children like/love it"
+                ),
+                "cooking_method": "slow-cooker",
+                "cook_time_minutes": 240,
+                "seasons": ["summer"],
+                "tags": ["summer", protein, "slow-cooker", "mexican-monday"],
+                "inventory_requirements": [],
+            }
         proposal = evaluate_proposal(
             self.week,
-            [parent_recipe["id"]] * 7,
-            {parent_recipe["id"]: parent_recipe},
+            list(recipes),
+            recipes,
             root=self.root,
         )
         self.assertTrue(proposal["ready_to_commit"])
+        self.assertIsNotNone(proposal["meals"][0]["kids_quick_meal"])
         self.assertTrue(
-            all(meal["kids_quick_meal"] for meal in proposal["meals"])
+            all(meal["kids_quick_meal"] is None for meal in proposal["meals"][1:])
         )
         self.assertEqual(proposal["average_kid_friendly_score"], 5)
+
+    def test_more_than_three_of_one_protein_is_blocking(self) -> None:
+        recipes = load_recipes(self.root)
+        chicken_ids = [
+            recipe["id"]
+            for recipe in recipes.values()
+            if recipe["protein"] == "chicken"
+        ][:4]
+        assignments = chicken_ids + ["FDP-0003", "FDP-0007", "FDP-0011"]
+        proposal = evaluate_proposal(
+            self.week,
+            assignments,
+            recipes,
+            root=self.root,
+        )
+        self.assertTrue(
+            any("Protein chicken appears 4 times" in error for error in proposal["errors"])
+        )
 
     def test_apply_requires_warning_acceptance_then_creates_draft(self) -> None:
         self.keep_only_original_four_recipes()

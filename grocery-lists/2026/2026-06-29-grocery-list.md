@@ -70,3 +70,25 @@ the replacement dry-run selection is committed.
 ## Optional Toppings
 
 - None beyond the listed recipe toppings and sides
+
+## Meal Override Grocery Adjustments
+
+Apply these deltas to the original consolidated list before shopping:
+
+- Reduce by 1.5 cup Brown rice
+- Add 4 ounce Cheddar cheese
+- Add 0.25 bunch Fresh cilantro
+- Add 8 count Corn tortillas
+- Recheck Dried dill after overrides
+- Add 1 cup Enchilada sauce
+- Reduce by 1.5 cup Frozen corn
+- Recheck Garlic powder after overrides
+- Add 2 count Green onions
+- Reduce by 1 count Lemons
+- Reduce by 2 cup Mixed berries
+- Reduce by 1 tablespoon Olive oil
+- Reduce by 1 can Pinto beans
+- Add 2 cup Shredded rotisserie chicken
+- Reduce by 1.5 pound Salmon
+- Add 0.5 cup Sour cream
+- Reduce by 2 cup Watermelon

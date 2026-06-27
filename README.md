@@ -53,6 +53,10 @@ average fiber, recipe rotation score, blocking errors, and warnings. Only
 `Commit Selected` creates a file, and that file begins at planning status
 `draft`.
 
+Each pair of options shares at most two recipe or idea IDs, and no protein
+appears more than three times in a proposed week. Fiber remains a comparison
+metric and preference rather than overriding those variety constraints.
+
 When the approved library is not large enough, options contain temporary
 `IDEA-*` recipes generated from the family and seasonal rules. Unselected ideas
 disappear. Selected ideas are expanded into full `FDP-*` candidate recipes

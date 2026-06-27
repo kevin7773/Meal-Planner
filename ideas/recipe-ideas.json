@@ -37,7 +37,7 @@
       "status": "queued",
       "idea": "ground turkey hard shell tacos with mexican pinto beans and mexican rice",
       "name": "ground turkey hard shell tacos with mexican pinto beans and mexican rice",
-      "protein": "chicken",
+      "protein": "turkey",
       "meal_scope": "complete-meal",
       "cooking_method": "stovetop",
       "fiber_grams": 8.0,
@@ -51,7 +51,7 @@
         "winter"
       ],
       "tags": [
-        "chicken",
+        "turkey",
         "fall",
         "mexican-monday",
         "spring",

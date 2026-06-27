@@ -27,6 +27,9 @@ except ModuleNotFoundError:
 ROOT = Path(__file__).resolve().parents[1]
 DAYS = ("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
 LOW_EFFORT_METHODS = {"slow-cooker", "minimal-cook", "no-cook"}
+MAX_PROTEIN_PER_WEEK = 3
+MAX_OPTION_OVERLAP = 2
+MAX_USER_IDEAS_PER_WEEK = 2
 IDEA_POOLS = {
     "Monday": [
         ("Chicken and Cheese Quesadillas with Pinto Beans", "chicken", "blackstone", 12, 22.0, ["mexican-monday"], "Familiar cheesy quesadillas with beans and toppings served separately"),
@@ -286,7 +289,14 @@ def eligible_recipes(
     eligible = [
         recipe
         for recipe in recipes.values()
-        if recipe["status"] != "retired" and season in recipe["seasons"]
+        if (
+            recipe["status"] != "retired"
+            and season in recipe["seasons"]
+            and (
+                recipe.get("source") != "generated-idea"
+                or recipe.get("day") == day
+            )
+        )
     ]
     if day == "Monday":
         eligible = [recipe for recipe in eligible if "mexican-monday" in recipe["tags"]]
@@ -309,6 +319,109 @@ def inventory_match_score(recipe: dict, week_of: dt.date, root: Path) -> int:
     return int(assessment["coverage_score"])
 
 
+def constrained_assignments(
+    week_of: dt.date,
+    recipes: dict[str, dict],
+    fixed_assignments: dict[str, str],
+    previous_options: list[set[str]],
+    global_usage: collections.Counter[str],
+    variant: int,
+    *,
+    root: Path,
+) -> list[str] | None:
+    season = season_for(week_of)
+    pools = {
+        day: eligible_recipes(recipes, day, season)
+        for day in DAYS
+        if day not in fixed_assignments
+    }
+    if any(not pool for pool in pools.values()):
+        return None
+
+    assignments: dict[str, str] = dict(fixed_assignments)
+    used_ids = set(fixed_assignments.values())
+    protein_counts: collections.Counter[str] = collections.Counter()
+    user_idea_count = 0
+    for recipe_id in fixed_assignments.values():
+        recipe = recipes.get(recipe_id)
+        if recipe is None:
+            return None
+        protein_counts[recipe["protein"]] += 1
+        user_idea_count += recipe.get("source") == "user-idea"
+    if any(count > MAX_PROTEIN_PER_WEEK for count in protein_counts.values()):
+        return None
+
+    overlap_counts = [
+        len(used_ids & previous)
+        for previous in previous_options
+    ]
+    if any(count > MAX_OPTION_OVERLAP for count in overlap_counts):
+        return None
+
+    search_days = sorted(
+        pools,
+        key=lambda day: (len(pools[day]), DAYS.index(day)),
+    )
+
+    def candidate_key(recipe: dict) -> tuple:
+        source_rank = (
+            0
+            if recipe.get("source") == "user-idea"
+            else 1
+            if recipe.get("status") == "candidate"
+            else 2
+        )
+        rotation = (
+            sum(ord(character) for character in recipe["id"]) + variant
+        ) % max(1, len(recipes))
+        return (
+            global_usage[recipe["id"]],
+            source_rank,
+            protein_counts[recipe["protein"]],
+            -inventory_match_score(recipe, week_of, root),
+            rotation,
+            recipe["id"],
+        )
+
+    def search(position: int, idea_count: int) -> bool:
+        if position == len(search_days):
+            return True
+        day = search_days[position]
+        for recipe in sorted(pools[day], key=candidate_key):
+            recipe_id = recipe["id"]
+            protein = recipe["protein"]
+            is_user_idea = recipe.get("source") == "user-idea"
+            if recipe_id in used_ids:
+                continue
+            if protein_counts[protein] >= MAX_PROTEIN_PER_WEEK:
+                continue
+            if is_user_idea and idea_count >= MAX_USER_IDEAS_PER_WEEK:
+                continue
+            next_overlaps = [
+                overlap_counts[index] + int(recipe_id in previous)
+                for index, previous in enumerate(previous_options)
+            ]
+            if any(count > MAX_OPTION_OVERLAP for count in next_overlaps):
+                continue
+
+            assignments[day] = recipe_id
+            used_ids.add(recipe_id)
+            protein_counts[protein] += 1
+            old_overlaps = overlap_counts[:]
+            overlap_counts[:] = next_overlaps
+            if search(position + 1, idea_count + int(is_user_idea)):
+                return True
+            overlap_counts[:] = old_overlaps
+            protein_counts[protein] -= 1
+            used_ids.remove(recipe_id)
+            del assignments[day]
+        return False
+
+    if not search(0, user_idea_count):
+        return None
+    return [assignments[day] for day in DAYS]
+
+
 def generate_proposals(
     week_of: dt.date,
     count: int = 3,
@@ -325,66 +438,53 @@ def generate_proposals(
     proposals: list[dict] = []
     active_library = [recipe for recipe in recipes.values() if recipe["status"] != "retired"]
     use_generated_ideas = len(active_library) < 7
+    previous_options: list[set[str]] = []
+    global_usage: collections.Counter[str] = collections.Counter()
 
     for variant in range(count):
         if use_generated_ideas:
-            assignments = []
-            for day_index, day in enumerate(DAYS):
-                pool = [idea for idea in ideas.values() if idea["day"] == day]
-                pool.sort(
-                    key=lambda idea: (
-                        -inventory_match_score(idea, week_of, root),
-                        idea["id"],
-                    )
-                )
-                assignments.append(pool[(variant + day_index) % len(pool)]["id"])
+            proposal_recipes = {
+                **ideas,
+                **user_ideas,
+                **override_recipes,
+            }
+        else:
+            proposal_recipes = {**recipes, **user_ideas, **override_recipes}
+        assignments = constrained_assignments(
+            week_of,
+            proposal_recipes,
+            fixed_assignments,
+            previous_options,
+            global_usage,
+            variant,
+            root=root,
+        )
+        if assignments is None and not use_generated_ideas:
             proposal_recipes = {
                 **recipes,
                 **ideas,
                 **user_ideas,
                 **override_recipes,
             }
-        else:
-            assignments = []
-            usage: collections.Counter[str] = collections.Counter()
-            for day_index, day in enumerate(DAYS):
-                pool = eligible_recipes({**recipes, **user_ideas}, day, season)
-                if not pool:
-                    pool = sorted(recipes.values(), key=lambda recipe: recipe["id"])
-                lowest_usage = min(usage[recipe["id"]] for recipe in pool)
-                least_used = [
-                    recipe for recipe in pool if usage[recipe["id"]] == lowest_usage
-                ]
-                least_used.sort(
-                    key=lambda recipe: (
-                        0 if recipe.get("source") == "user-idea" else 1,
-                        -inventory_match_score(recipe, week_of, root),
-                        recipe["id"],
-                    )
-                )
-                selected = least_used[(variant + day_index) % len(least_used)]
-                assignments.append(selected["id"])
-                usage[selected["id"]] += 1
-            proposal_recipes = {**recipes, **user_ideas, **override_recipes}
-        used_idea_days: set[str] = set()
-        for idea_index, idea in enumerate(user_ideas.values()):
-            compatible_days = [
-                day
-                for day in DAYS
-                if eligible_recipes({idea["id"]: idea}, day, season)
-                and day not in fixed_assignments
-                and day not in used_idea_days
-            ]
-            if compatible_days:
-                chosen_day = compatible_days[(variant + idea_index) % len(compatible_days)]
-                assignments[DAYS.index(chosen_day)] = idea["id"]
-                used_idea_days.add(chosen_day)
-        for day_index, day in enumerate(DAYS):
-            if day in fixed_assignments:
-                assignments[day_index] = fixed_assignments[day]
+            assignments = constrained_assignments(
+                week_of,
+                proposal_recipes,
+                fixed_assignments,
+                previous_options,
+                global_usage,
+                variant,
+                root=root,
+            )
+        if assignments is None:
+            raise ValueError(
+                "Unable to build distinct weekly options with the current "
+                "day, protein, override, and overlap constraints."
+            )
         proposals.append(
             evaluate_proposal(week_of, assignments, proposal_recipes, root=root)
         )
+        previous_options.append(set(assignments))
+        global_usage.update(assignments)
 
     return proposals
 
@@ -449,6 +549,18 @@ def evaluate_proposal(
     repeated = {recipe_id: count for recipe_id, count in counts.items() if count > 1}
     for recipe_id, repeat_count in sorted(repeated.items()):
         warnings.append(f"{recipe_id} appears {repeat_count} times this week.")
+
+    protein_counts = collections.Counter(
+        recipe["protein"]
+        for recipe in selected
+        if recipe.get("status") != "override"
+    )
+    for protein, protein_count in sorted(protein_counts.items()):
+        if protein_count > MAX_PROTEIN_PER_WEEK:
+            errors.append(
+                f"Protein {protein} appears {protein_count} times; "
+                f"the weekly maximum is {MAX_PROTEIN_PER_WEEK}."
+            )
 
     candidate_ids = sorted(
         {recipe["id"] for recipe in selected if recipe["status"] == "candidate"}
@@ -575,7 +687,7 @@ def evaluate_proposal(
     method_counts = collections.Counter(recipe["cooking_method"] for recipe in scored_meals)
     protein_counts = collections.Counter(recipe["protein"] for recipe in scored_meals)
     rotation_score -= sum(max(0, count - 3) * 3 for count in method_counts.values())
-    rotation_score -= sum(max(0, count - 4) * 3 for count in protein_counts.values())
+    rotation_score -= sum(max(0, count - MAX_PROTEIN_PER_WEEK) * 3 for count in protein_counts.values())
     rotation_score = max(0, rotation_score)
 
     meals = []

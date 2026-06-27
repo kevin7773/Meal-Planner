@@ -61,7 +61,7 @@ class RecipeIdeaTests(unittest.TestCase):
         idea_id = self.add_stir_fry_idea()
         proposals = generate_proposals(dt.date(2026, 7, 6), 3, root=self.root)
         self.assertTrue(
-            all(idea_id in proposal["assignments"] for proposal in proposals)
+            any(idea_id in proposal["assignments"] for proposal in proposals)
         )
 
     def test_parents_only_idea_is_valid_but_not_family_friendly(self) -> None:

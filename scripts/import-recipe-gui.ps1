@@ -75,7 +75,16 @@ $proteinCombo = New-Object System.Windows.Forms.ComboBox
 $proteinCombo.Location = New-Object System.Drawing.Point(600, 325)
 $proteinCombo.Size = New-Object System.Drawing.Size(180, 28)
 $proteinCombo.DropDownStyle = 'DropDownList'
-@('chicken','turkey','beef','seafood','pork','vegetarian','other') | ForEach-Object { [void]$proteinCombo.Items.Add($_) }
+@(
+    'Select protein...',
+    'chicken',
+    'turkey',
+    'beef',
+    'seafood',
+    'pork',
+    'vegetarian',
+    'other'
+) | ForEach-Object { [void]$proteinCombo.Items.Add($_) }
 $proteinCombo.SelectedIndex = 0
 $form.Controls.Add($proteinCombo)
 
@@ -336,6 +345,7 @@ $previewButton.Add_Click({
 $importButton.Add_Click({
     try {
         if ([string]::IsNullOrWhiteSpace($nameText.Text)) { throw 'Recipe name is required.' }
+        if ($proteinCombo.SelectedIndex -eq 0) { throw 'Select a protein.' }
         if ([string]::IsNullOrWhiteSpace($kidReason.Text)) { throw 'Kid-friendly reason is required.' }
         $arguments = @($importer,'apply')
         $usingPastedText = (
@@ -379,6 +389,7 @@ $saveIdeaButton.Add_Click({
     try {
         if ([string]::IsNullOrWhiteSpace($ideaText.Text)) { throw 'Enter a recipe idea.' }
         if ([string]::IsNullOrWhiteSpace($nameText.Text)) { throw 'Enter a short recipe name.' }
+        if ($proteinCombo.SelectedIndex -eq 0) { throw 'Select a protein.' }
         if ([string]::IsNullOrWhiteSpace($kidReason.Text)) { throw 'Kid-friendly reason is required.' }
         $arguments = @(
             $ideaManager,'add',

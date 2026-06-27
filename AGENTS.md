@@ -37,10 +37,18 @@ must not enter the recipe library during dry run. After selection, replace each
 selected idea with a complete, validated `FDP-*` candidate recipe before the
 weekly menu can advance from `draft` to `generated`.
 
+The three dry-run options must be meaningfully different: any pair may share
+at most two recipe or idea IDs. No protein may appear more than three times in
+one week. Prefer fiber-rich choices, but treat weekly fiber as a comparative
+metric rather than sacrificing protein and option variety to maximize it.
+
 Kid-friendly is a validated requirement. Every active recipe and dry-run idea
 must score at least 4 out of 5 and state a concrete acceptance rationale based
 on familiar format, mild flavor, customization, or separately served
-components.
+components. The sole exception is an explicitly classified parents-only meal,
+which must score 1 and use `Not kid friendly - for the parents only`. Whenever
+one is scheduled, assign a rotating option from
+`quick-meals/kids-quick-meals.json` and include its cost and inventory needs.
 
 Imported recipes are always candidates. Preserve their source and do not
 silently infer family approval. Review imported quantities, directions,
@@ -55,6 +63,10 @@ Respect recipe `meal_scope`. A `complete-meal` needs no automatic sides. An
 `entree` must receive compatible suggestions from `sides/side-dishes.json`.
 Include selected sides in fiber, cost, inventory, grocery, menu, and email
 calculations; do not merely mention them in prose.
+
+Parents-only recipes are never presented as kid-friendly. Their paired quick
+meal must appear in the dry run, committed menu, grocery planning, and email
+content.
 
 Meal overrides in `overrides/` are requirements, not suggestions. Preserve the
 original meal in the audit record, return an in-progress week to `draft`,

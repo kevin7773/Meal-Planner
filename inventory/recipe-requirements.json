@@ -638,7 +638,44 @@
     "FDP-0012": [],
     "FDP-0013": [],
     "FDP-0014": [],
-    "FDP-0015": [],
+    "FDP-0015": [
+      {
+        "item_id": "rotisserie-chicken",
+        "quantity": 2
+      },
+      {
+        "item_id": "enchilada-sauce",
+        "quantity": 1
+      },
+      {
+        "item_id": "corn-tortilla",
+        "quantity": 8
+      },
+      {
+        "item_id": "cheddar",
+        "quantity": 4
+      },
+      {
+        "item_id": "sour-cream",
+        "quantity": 0.5
+      },
+      {
+        "item_id": "green-onion",
+        "quantity": 2
+      },
+      {
+        "item_id": "cilantro",
+        "quantity": 0.25
+      },
+      {
+        "item_id": "kosher-salt",
+        "quantity": 1
+      },
+      {
+        "item_id": "black-pepper",
+        "quantity": 1
+      }
+    ],
     "FDP-0016": [],
     "FDP-0017": [],
     "FDP-0018": [],

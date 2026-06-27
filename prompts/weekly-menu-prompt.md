@@ -8,6 +8,11 @@ estimated cost, average fiber, recipe rotation score, blocking errors, and
 warnings. Present all three and wait for a human selection. Dry run must not
 write menus, grocery lists, email drafts, history, or feedback.
 
+Any two proposals may share at most two recipe or idea IDs. No protein may
+appear more than three times in one proposal. Prefer higher fiber when choices
+are otherwise comparable; protein variety and distinct options take
+precedence over maximizing fiber.
+
 Validate and read kitchen inventory before scoring. Report inventory coverage,
 estimated savings, shopping cost after inventory, fresh weekly purchases, and
 stock warnings. Prefer otherwise comparable plans that use existing pantry,
@@ -34,6 +39,12 @@ kid-friendliness and include a concrete rationale. Reject ideas that are merely
 nutritious but rely on unfamiliar composed salads, strongly flavored sauces,
 or adult-oriented formats. Prefer familiar, mild, customizable meals with
 components that can be served separately.
+
+An explicitly classified parents-only recipe is allowed with score 1 and the
+reason `Not kid friendly - for the parents only`. If selected, pair it with a
+rotating option from `quick-meals/kids-quick-meals.json`. Show the children's
+meal in the proposal and include its cost, inventory, grocery, menu, and email
+impact.
 
 For every selected recipe or idea with `meal_scope = "entree"`, propose two
 validated side dishes. Prefer seasonal produce, fruit, whole grains, beans, and

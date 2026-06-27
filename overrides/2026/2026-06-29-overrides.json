@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "week_of": "2026-06-29",
+  "overrides": [
+    {
+      "day": "Friday",
+      "type": "alternate-recipe",
+      "title": "",
+      "note": "Daughter away starting Thursday; plan for 3 diners Thursday-Sunday. Son does not like salmon.",
+      "actor": "kevsm",
+      "applied_at": "2026-06-27T13:47:46.908123+00:00",
+      "original_recipe_id": "FDP-0011",
+      "replacement_recipe_id": "FDP-0015"
+    }
+  ]
+}

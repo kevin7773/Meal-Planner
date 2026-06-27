@@ -43,3 +43,11 @@ the proposal's cost and shopping calculations.
 
 Use protein `other` for specialty ingredients such as pancetta or kielbasa
 that do not fit the standard primary-protein choices.
+
+## Kid-Friendly Classification
+
+The importer uses a fixed kid-friendly reason list. Choosing
+`Not kid friendly - for the parents only` automatically assigns score 1.
+Dry runs may schedule that meal with a separate rotating children's option
+from `quick-meals/kids-quick-meals.json`; its cost and inventory requirements
+are included in the weekly proposal.
