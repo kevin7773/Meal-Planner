@@ -20,7 +20,7 @@
 
 | FDP-0014 | [Copycat Chick-Fil-A Tortilla Soup](copycat-chick-fil-a-tortilla-soup.md) | 1 | candidate | Unrated | Never |
 
-| FDP-0015 | [Chicken Enchilada](chicken-enchilada.md) | 1 | candidate | Unrated | Never |
+| FDP-0015 | [Chicken Enchilada](chicken-enchilada.md) | 2 | candidate | Unrated | Never |
 
 | FDP-0016 | [Chicken Pot Pie Casserole with Biscuits](chicken-pot-pie-casserole-with-biscuits.md) | 1 | candidate | Unrated | Never |
 
@@ -66,6 +66,10 @@
 
 | FDP-0037 | [Beef Stroganoff](beef-stroganoff.md) | 1 | candidate | Unrated | Never |
 
-**Next recipe ID:** `FDP-0038`
+| FDP-0038 | [Ground Turkey Hard Shell Tacos with Pinto Beans and Rice](ground-turkey-hard-shell-tacos-with-pinto-beans-and-rice.md) | 1 | candidate | Unrated | Never |
+
+| FDP-0039 | [Hot Dogs with Macaroni and Cheese and Baked Beans](hot-dogs-with-macaroni-and-cheese-and-baked-beans.md) | 1 | candidate | Unrated | Never |
+
+**Next recipe ID:** `FDP-0040`
 
 The index is a planning aid. Recipe files remain the source of truth.

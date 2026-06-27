@@ -34,7 +34,7 @@
     },
     {
       "id": "IDEA-USER-0002",
-      "status": "queued",
+      "status": "converted",
       "idea": "ground turkey hard shell tacos with mexican pinto beans and mexican rice",
       "name": "ground turkey hard shell tacos with mexican pinto beans and mexican rice",
       "protein": "turkey",
@@ -61,11 +61,11 @@
         "winter"
       ],
       "created_at": "2026-06-27T12:55:41.018861+00:00",
-      "converted_recipe_id": null
+      "converted_recipe_id": "FDP-0038"
     },
     {
       "id": "IDEA-USER-0003",
-      "status": "queued",
+      "status": "converted",
       "idea": "Hot Dogs with Macaroni and Cheese and Baked Beans",
       "name": "Hot Dogs w/ Mac n Cheese and Baked Beans",
       "protein": "pork",
@@ -91,7 +91,7 @@
         "winter"
       ],
       "created_at": "2026-06-27T13:00:04.015510+00:00",
-      "converted_recipe_id": null
+      "converted_recipe_id": "FDP-0039"
     },
     {
       "id": "IDEA-USER-0004",

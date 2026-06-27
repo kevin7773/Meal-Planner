@@ -1,94 +1,56 @@
 +++
 week_of = "2026-06-29"
-status = "draft"
-rebuild_pending = true
+status = "generated"
 +++
 
 # Grocery List
 
 **Week of:** 2026-06-29  
-**Family Size:** 4
+**Diner Schedule:** Monday-Wednesday: 4; Thursday-Sunday: 3  
+**Inventory Coverage:** 21/100  
+**Estimated Inventory Savings:** $20.11
 
-**Rebuild Notice:** Do not shop from this superseded list. Regenerate it after
-the replacement dry-run selection is committed.
+## Fresh Produce
 
-## Produce
+- 3 count Apples
+- 1.5 cup Baby carrots
+- 2 cup Broccoli florets
+- 1 count Cucumbers
+- 1 bunch Fresh cilantro
+- 2 count Green onions
+- 1 cup Romaine lettuce
+- 4 count Russet potatoes
+- 1.5 cup Seedless grapes
+- 1 count Tomatoes
 
-- 4 apples
-- 2 cups baby carrots
-- 8 bell peppers
-- 2 cups broccoli florets
-- 1 cucumber
-- 2 cups seedless grapes
-- 1 lemon
-- 2 limes
-- 8 ounces mushrooms
-- 4 russet potatoes
-- 10 cups watermelon
-- 3 yellow onions
-- 1 zucchini
+## Refrigerated
 
-## Meat & Seafood
-
-- 1/2 pound boneless, skinless chicken breasts
-- 1 large rotisserie chicken, yielding at least 3 cups shredded meat
-
-## Dairy
-
-- 16 ounces cheddar cheese
-- 1/2 cup plain Greek yogurt
-
-## Bakery
-
-- 24 whole-wheat tortillas
-
-## Grains & Pasta
-
-- 1 cup dry farro
-
-## Canned & Jarred Goods
-
-- 1 (15-ounce) can pinto beans
-- 1 (15-ounce) can vegetarian baked beans
+- 4 tablespoon Butter
+- 17 ounce Cheddar cheese
+- 8 count Hot dogs
+- 0.5 cup Milk
+- 3.75 cup Shredded rotisserie chicken
 
 ## Frozen
 
-- 1/2 cup frozen corn
-- 4 cups mixed berries
-- 2 cups frozen peas and carrots
+- Nothing needed after current inventory
 
-## Condiments & Sauces
+## Pantry
 
-- 2 cups salsa
-- Verify 1 tablespoon toasted sesame oil on hand; inventory not recorded
+- 2 box Boxed macaroni and cheese
+- 6 count Corn tortillas
+- 0.75 cup Enchilada sauce
+- 12 count Hard corn taco shells
+- 8 count Hot dog buns
+- 0.5 cup Salsa
+- 3 can Vegetarian baked beans
+- 6 count Whole-wheat tortillas
 
-## Seasonings & Spices
+## Staples
 
-- Verify at least 2 teaspoons ground cumin on hand; inventory marked low
-- Verify at least 4 teaspoons smoked paprika on hand; inventory marked low
+- Nothing needed after current inventory
 
-## Optional Toppings
+## Stock Checks
 
-- None beyond the listed recipe toppings and sides
-
-## Meal Override Grocery Adjustments
-
-Apply these deltas to the original consolidated list before shopping:
-
-- Reduce by 1.5 cup Brown rice
-- Add 4 ounce Cheddar cheese
-- Add 0.25 bunch Fresh cilantro
-- Add 8 count Corn tortillas
-- Recheck Dried dill after overrides
-- Add 1 cup Enchilada sauce
-- Reduce by 1.5 cup Frozen corn
-- Recheck Garlic powder after overrides
-- Add 2 count Green onions
-- Reduce by 1 count Lemons
-- Reduce by 2 cup Mixed berries
-- Reduce by 1 tablespoon Olive oil
-- Reduce by 1 can Pinto beans
-- Add 2 cup Shredded rotisserie chicken
-- Reduce by 1.5 pound Salmon
-- Add 0.5 cup Sour cream
-- Reduce by 2 cup Watermelon
+- Ground cumin is low
+- Smoked paprika is low

@@ -2,15 +2,14 @@ from __future__ import annotations
 
 import datetime as dt
 import json
-import re
 import shutil
 import tempfile
 import unittest
 from pathlib import Path
 
 from scripts.dry_run import generate_proposals
-from scripts.meal_override import apply_override
-from scripts.menu_status import split_menu, validate_menu
+from scripts.meal_override import apply_override, menu_days
+from scripts.menu_status import split_menu, transition_menu, validate_menu
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -26,6 +25,10 @@ class MealOverrideTests(unittest.TestCase):
             "menus",
             "email-outputs",
             "grocery-lists",
+            "ideas",
+            "preferences",
+            "quick-meals",
+            "sides",
         ):
             shutil.copytree(ROOT / directory, self.root / directory)
         active_email_week = (
@@ -42,25 +45,30 @@ class MealOverrideTests(unittest.TestCase):
             )
             shutil.copytree(archived_emails, active_email_week)
         self.menu = self.root / "menus" / "2026" / "2026-06-29.md"
-        text = self.menu.read_text(encoding="utf-8")
-        validated_rows = list(
-            re.finditer(
-                r"(?m)^\| validated \| ([^|]+) \|[^|]+\|[^|]+\|$",
-                text,
+        self.original_by_day = {
+            entry["day"]: entry.get("recipe_id")
+            for entry in menu_days(self.menu)
+        }
+        status = split_menu(self.menu)[0]["status"]
+        if status == "draft":
+            transition_menu(
+                self.menu,
+                "generated",
+                "Codex",
+                "Test fixture artifacts generated",
+                run_validators=False,
             )
-        )
-        self.assertTrue(validated_rows)
-        latest_validated = validated_rows[-1]
-        timestamp = latest_validated.group(1).strip()
-        text = text[: latest_validated.end()] + "\n"
-        text = re.sub(r'(?m)^status = ".*"$', 'status = "validated"', text, count=1)
-        text = re.sub(
-            r'(?m)^status_updated_at = ".*"$',
-            f'status_updated_at = "{timestamp}"',
-            text,
-            count=1,
-        )
-        self.menu.write_text(text, encoding="utf-8")
+            status = "generated"
+        if status == "generated":
+            transition_menu(
+                self.menu,
+                "validated",
+                "Codex",
+                "Test fixture validation passed",
+                run_validators=False,
+            )
+            status = "validated"
+        self.assertEqual(status, "validated")
 
     def tearDown(self) -> None:
         self.temporary_directory.cleanup()
@@ -88,7 +96,10 @@ class MealOverrideTests(unittest.TestCase):
         )
         self.assertIn("Birthday dinner", email.read_text(encoding="utf-8"))
         records = json.loads(sidecar.read_text(encoding="utf-8"))["overrides"]
-        self.assertEqual(records[0]["original_recipe_id"], "FDP-0006")
+        self.assertEqual(
+            records[0]["original_recipe_id"],
+            self.original_by_day["Thursday"],
+        )
         grocery = (
             self.root
             / "grocery-lists"
@@ -118,7 +129,10 @@ class MealOverrideTests(unittest.TestCase):
         )
         text = self.menu.read_text(encoding="utf-8")
         self.assertIn("**Recipe:** FDP-0002 rev 3 (candidate)", text)
-        self.assertIn("**Original Recipe:** FDP-0008", text)
+        self.assertIn(
+            f"**Original Recipe:** {self.original_by_day['Tuesday']}",
+            text,
+        )
 
     def test_completed_week_cannot_be_overridden(self) -> None:
         text = self.menu.read_text(encoding="utf-8").replace(
