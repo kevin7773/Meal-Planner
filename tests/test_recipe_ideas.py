@@ -18,7 +18,14 @@ class RecipeIdeaTests(unittest.TestCase):
     def setUp(self) -> None:
         self.temporary_directory = tempfile.TemporaryDirectory()
         self.root = Path(self.temporary_directory.name)
-        for directory in ("recipes", "inventory", "preferences", "quick-meals", "sides"):
+        for directory in (
+            "recipes",
+            "inventory",
+            "planner-data",
+            "preferences",
+            "quick-meals",
+            "sides",
+        ):
             shutil.copytree(ROOT / directory, self.root / directory)
         (self.root / "ideas").mkdir()
         (self.root / "ideas" / "recipe-ideas.json").write_text(

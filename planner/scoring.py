@@ -7,112 +7,31 @@ from pathlib import Path
 
 from planner.constants import DAYS, LOW_EFFORT_METHODS, MAX_PROTEIN_PER_WEEK, ROOT
 from planner.eligibility import override_constraints, recent_recipe_ids, season_for
-from scripts.inventory import assess_inventory, load_inventory
-from scripts.quick_meals import PARENTS_ONLY_REASON, suggest_quick_meal
-from scripts.side_dishes import suggest_sides
+from planner.explanations import (
+    expiring_refrigerated_items,
+    selection_explanation,
+)
+from planner.metrics import (
+    average_fiber_grams,
+    average_kid_friendly_score,
+    collect_inventory_requirements,
+    estimated_menu_cost,
+    estimated_shopping_cost as calculate_shopping_cost,
+    recipe_rotation_score,
+)
+from planner.quick_meal_planning import (
+    plan_quick_meals,
+    public_quick_meal,
+    quick_meal_requirements,
+)
+from planner.side_planning import (
+    plan_side_suggestions,
+    public_side_suggestions,
+    side_requirements,
+)
+from scripts.inventory import assess_inventory
+from scripts.quick_meals import PARENTS_ONLY_REASON
 from scripts.weather_context import is_heat_friendly, load_weather_context, load_weather_rules
-
-
-def expiring_refrigerated_items(
-    requirements: list[dict],
-    *,
-    meal_date: dt.date,
-    week_of: dt.date,
-    root: Path,
-) -> list[str]:
-    catalog, stock, _ = load_inventory(root)
-    required_ids = {item["item_id"] for item in requirements}
-    week_end = week_of + dt.timedelta(days=6)
-    names: set[str] = set()
-    for lot in stock.get("items", []):
-        item_id = lot.get("item_id")
-        if item_id not in required_ids or item_id not in catalog:
-            continue
-        if catalog[item_id]["class"] != "refrigerated":
-            continue
-        expires_on = lot.get("expires_on")
-        if not expires_on or float(lot.get("quantity") or 0) <= 0:
-            continue
-        try:
-            expiration = dt.date.fromisoformat(expires_on)
-        except ValueError:
-            continue
-        if meal_date <= expiration <= week_end:
-            names.add(catalog[item_id]["name"])
-    return sorted(names)
-
-
-def selection_explanation(
-    recipe: dict,
-    *,
-    day: str,
-    day_index: int,
-    week_of: dt.date,
-    requirements: list[dict],
-    recent_ids: set[str],
-    fixed_assignments: dict[str, str],
-    weather_rules: dict,
-    weather_category: str,
-    root: Path,
-) -> dict:
-    is_override = (
-        recipe.get("status") == "override"
-        or fixed_assignments.get(day) == recipe["id"]
-    )
-    inventory_coverage = None
-    if requirements:
-        inventory_coverage = int(
-            assess_inventory(
-                requirements,
-                root=root,
-                week_of=week_of,
-            )["coverage_score"]
-        )
-    meal_date = week_of + dt.timedelta(days=day_index)
-    expiring_items = expiring_refrigerated_items(
-        requirements,
-        meal_date=meal_date,
-        week_of=week_of,
-        root=root,
-    )
-    if is_override:
-        day_rule = "Required by human meal override"
-    elif day == "Monday":
-        day_rule = "Satisfies Mexican Monday"
-    elif day in {"Tuesday", "Thursday"}:
-        day_rule = f"Satisfies {day} low-effort rule"
-    else:
-        day_rule = f"Fits {day} schedule"
-
-    reasons = [
-        (
-            f"Inventory coverage: {inventory_coverage}/100"
-            if inventory_coverage is not None
-            else "Inventory coverage: not applicable"
-        )
-    ]
-    if expiring_items:
-        reasons.append(
-            "Uses expiring refrigerated inventory: " + ", ".join(expiring_items)
-        )
-    reasons.append(day_rule)
-    reasons.append(
-        "Recent rotation: repeat within window"
-        if recipe["id"] in recent_ids
-        else "Recent rotation: no recent repeat"
-    )
-    if is_heat_friendly(recipe, weather_rules):
-        reasons.append(f"Weather fit: heat-friendly for {weather_category}")
-    reasons.append(f"Kid score: {recipe['kid_friendly_score']}/5")
-    return {
-        "inventory_coverage_score": inventory_coverage,
-        "expiring_refrigerated_items": expiring_items,
-        "day_rule": day_rule,
-        "recent_repeat": recipe["id"] in recent_ids,
-        "weather_fit": is_heat_friendly(recipe, weather_rules),
-        "kid_score": recipe["kid_friendly_score"],
-        "reasons": reasons,
-    }
 
 
 def evaluate_proposal(
@@ -242,121 +161,55 @@ def evaluate_proposal(
         if recipe.get("status") != "override"
     ]
     scored_meals = [recipe for _, recipe in scored_entries]
-    side_map: dict[str, list[dict]] = {}
-    used_side_ids: set[str] = set()
-    for recipe in scored_meals:
-        suggestions = suggest_sides(
-            recipe,
-            season=season,
-            week_of=week_of,
-            root=root,
-            exclude_ids=used_side_ids,
-        )
-        side_map[recipe["id"]] = suggestions
-        used_side_ids.update(side["id"] for side in suggestions)
-    quick_meal_map = {
-        index: quick_meal
-        for index, recipe in scored_entries
-        if (
-            quick_meal := suggest_quick_meal(
-                recipe,
-                week_of=week_of,
-                day_index=index,
-                root=root,
-            )
-        )
-        is not None
-    }
-    estimated_cost = round(
-        sum(float(recipe["estimated_cost_usd"]) for recipe in scored_meals)
-        + sum(
-            float(side["estimated_cost_usd"])
-            for suggestions in side_map.values()
-            for side in suggestions
-        )
-        + sum(
-            float(quick_meal["estimated_cost_usd"])
-            for quick_meal in quick_meal_map.values()
-        ),
-        2,
+    side_map = plan_side_suggestions(
+        scored_meals,
+        season=season,
+        week_of=week_of,
+        root=root,
     )
-    average_fiber = (
-        round(
-            sum(
-                float(recipe["fiber_grams"])
-                + sum(
-                    float(side["fiber_grams"])
-                    for side in side_map.get(recipe["id"], [])
-                )
-                for recipe in scored_meals
-            )
-            / len(scored_meals),
-            1,
-        )
-        if scored_meals
-        else 0.0
+    quick_meal_map = plan_quick_meals(
+        scored_entries,
+        week_of=week_of,
+        root=root,
     )
-    average_kid_friendly = (
-        round(
-            sum(
-                float(
-                    quick_meal_map.get(index, recipe)["kid_friendly_score"]
-                )
-                for index, recipe in scored_entries
-            )
-            / len(scored_entries),
-            1,
-        )
-        if scored_entries
-        else 0.0
+    estimated_cost = estimated_menu_cost(
+        scored_meals,
+        side_map,
+        quick_meal_map,
     )
-    inventory_requirements = [
-        requirement
-        for recipe in scored_meals
-        for requirement in recipe.get("inventory_requirements", [])
-    ]
-    inventory_requirements.extend(
-        requirement
-        for suggestions in side_map.values()
-        for side in suggestions
-        for requirement in side.get("requirements", [])
+    average_fiber = average_fiber_grams(scored_meals, side_map)
+    average_kid_friendly = average_kid_friendly_score(
+        scored_entries,
+        quick_meal_map,
     )
-    inventory_requirements.extend(
-        requirement
-        for quick_meal in quick_meal_map.values()
-        for requirement in quick_meal.get("requirements", [])
+    inventory_requirements = collect_inventory_requirements(
+        scored_meals,
+        side_map,
+        quick_meal_map,
     )
     inventory = assess_inventory(
         inventory_requirements,
         root=root,
         week_of=week_of,
     )
-    estimated_shopping_cost = round(
-        max(0.0, estimated_cost - inventory["estimated_savings_usd"]),
-        2,
+    estimated_shopping_cost = calculate_shopping_cost(
+        estimated_cost,
+        inventory["estimated_savings_usd"],
     )
 
-    rotation_score = 100
-    rotation_score -= sum((count - 1) * 12 for count in repeated.values())
-    rotation_score -= len(recent_repeats) * 10
-    method_counts = collections.Counter(recipe["cooking_method"] for recipe in scored_meals)
-    protein_counts = collections.Counter(recipe["protein"] for recipe in scored_meals)
-    rotation_score -= sum(max(0, count - 3) * 3 for count in method_counts.values())
-    rotation_score -= sum(max(0, count - MAX_PROTEIN_PER_WEEK) * 3 for count in protein_counts.values())
-    rotation_score = max(0, rotation_score)
+    rotation_score = recipe_rotation_score(
+        assignments,
+        scored_meals,
+        recent_repeats,
+    )
 
     meals = []
     for index, recipe in enumerate(selected):
         meal_requirements = list(recipe.get("inventory_requirements", []))
+        meal_requirements.extend(side_requirements(side_map.get(recipe["id"], [])))
         meal_requirements.extend(
-            requirement
-            for side in side_map.get(recipe["id"], [])
-            for requirement in side.get("requirements", [])
+            quick_meal_requirements(quick_meal_map.get(index))
         )
-        if index in quick_meal_map:
-            meal_requirements.extend(
-                quick_meal_map[index].get("requirements", [])
-            )
         explanation = selection_explanation(
             recipe,
             day=DAYS[index],
@@ -385,27 +238,11 @@ def evaluate_proposal(
                 "kid_friendly_reason": recipe["kid_friendly_reason"],
                 "meal_scope": recipe.get("meal_scope", "complete-meal"),
                 "selection_explanation": explanation,
-                "side_suggestions": [
-                    {
-                        "id": side["id"],
-                        "name": side["name"],
-                        "fiber_grams": side["fiber_grams"],
-                        "estimated_cost_usd": side["estimated_cost_usd"],
-                        "kid_friendly_reason": side["kid_friendly_reason"],
-                    }
-                    for side in side_map.get(recipe["id"], [])
-                ],
-                "kids_quick_meal": (
-                    {
-                        "id": quick_meal_map[index]["id"],
-                        "name": quick_meal_map[index]["name"],
-                        "fiber_grams": quick_meal_map[index]["fiber_grams"],
-                        "estimated_cost_usd": quick_meal_map[index][
-                            "estimated_cost_usd"
-                        ],
-                    }
-                    if index in quick_meal_map
-                    else None
+                "side_suggestions": public_side_suggestions(
+                    side_map.get(recipe["id"], [])
+                ),
+                "kids_quick_meal": public_quick_meal(
+                    quick_meal_map.get(index)
                 ),
             }
         )

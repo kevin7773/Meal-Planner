@@ -37,6 +37,7 @@ class DryRunTests(unittest.TestCase):
         self.root = Path(self.temporary_directory.name)
         shutil.copytree(ROOT / "recipes", self.root / "recipes")
         shutil.copytree(ROOT / "inventory", self.root / "inventory")
+        shutil.copytree(ROOT / "planner-data", self.root / "planner-data")
         shutil.copytree(ROOT / "quick-meals", self.root / "quick-meals")
         (self.root / "preferences").mkdir()
         shutil.copy2(
@@ -80,12 +81,20 @@ class DryRunTests(unittest.TestCase):
             for second in proposals[first_index + 1 :]:
                 overlap = set(first["assignments"]) & set(second["assignments"])
                 self.assertLessEqual(len(overlap), 2)
+        canonical_ids = {"FDP-0001", "FDP-0002", "FDP-0003", "FDP-0004"}
         self.assertTrue(
-            all(
-                all(recipe_id.startswith("IDEA-") for recipe_id in proposal["assignments"])
+            any(
+                set(proposal["assignments"]) & canonical_ids
                 for proposal in proposals
             )
         )
+        for proposal in proposals:
+            self.assertTrue(
+                any(
+                    recipe_id.startswith("IDEA-")
+                    for recipe_id in proposal["assignments"]
+                )
+            )
 
     def test_proposal_reports_cost_fiber_rotation_and_warnings(self) -> None:
         proposal = generate_proposals(self.week, 1, root=self.root)[0]

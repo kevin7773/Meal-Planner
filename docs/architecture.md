@@ -12,6 +12,7 @@ flowchart LR
     subgraph Inputs["Source-of-truth inputs"]
         Recipes["Recipe runbooks<br/>recipes/FDP-*.md"]
         Ideas["Recipe idea queue<br/>ideas/recipe-ideas.json"]
+        GeneratedIdeas["Generated idea pools<br/>planner-data/generated-idea-pools.json"]
         Preferences["Family and rotation rules<br/>preferences/"]
         Weather["Weather rules and weekly context<br/>preferences/weather-rules.json<br/>weather/"]
         Overrides["Weekly overrides<br/>overrides/"]
@@ -41,6 +42,7 @@ flowchart LR
     Recipes --> Requirements
     Recipes --> Load
     Ideas --> Load
+    GeneratedIdeas --> Load
     Preferences --> Constraints
     Weather --> Constraints
     Overrides --> Constraints
@@ -89,6 +91,7 @@ flowchart LR
 | Recipe identity and instructions | `recipes/FDP-*.md` | Dry runs, menus, emails, feedback |
 | Recipe discovery | `recipes/index.md` | Humans and importer; recipe files remain authoritative |
 | Unresolved meal concepts | `ideas/recipe-ideas.json` | Dry-run candidate pool |
+| Generated fallback candidates | `planner-data/generated-idea-pools.json` | Dry-run candidate generation |
 | Ingredient identity and units | `inventory/catalog.json` | Inventory UI, assessment, grocery generation |
 | On-hand food | `inventory/stock.json` | Coverage, FIFO, savings, buy list |
 | Recipe ingredient demand | `inventory/recipe-requirements.json` | Proposal scoring and grocery generation |
@@ -108,19 +111,25 @@ unsupported versions before a future migration changes the document shape.
 
 ## Planning Pipeline
 
-The `planner/` package separates planning responsibilities while
-`scripts/dry_run.py` remains the stable command-line and compatibility facade.
+The `planner/` package separates planning responsibilities.
+`scripts/planner_cli.py` is the command-line entry point, while
+`scripts/dry_run.py` remains a backward-compatible wrapper.
 
 | Module | Responsibility |
 | --- | --- |
 | `planner/constants.py` | Shared limits, day names, methods, and project root |
 | `planner/eligibility.py` | Recipe loading, season and override constraints, recent history, and inventory matching |
 | `planner/assignment.py` | Constrained weekly assignment search and option diversity |
-| `planner/scoring.py` | Proposal enrichment, metrics, warnings, and per-meal explanations |
-| `planner/proposal.py` | Recipe-idea pools and three-option proposal orchestration |
+| `planner/scoring.py` | Proposal validation and orchestration |
+| `planner/metrics.py` | Pure cost, fiber, kid-fit, inventory-demand, and rotation calculations |
+| `planner/explanations.py` | Per-meal selection explanations and expiring-inventory context |
+| `planner/side_planning.py` | Side selection, requirements, and public payload shaping |
+| `planner/quick_meal_planning.py` | Kids' quick-meal selection, requirements, and public payload shaping |
+| `planner/proposal.py` | Generated/user idea loading and three-option proposal orchestration |
 | `planner/reporting.py` | Human-readable dry-run comparison output |
 | `planner/commit.py` | Explicit selection persistence and idea canonicalization |
-| `scripts/dry_run.py` | Backward-compatible imports and command-line entry point |
+| `scripts/planner_cli.py` | Command parsing and planner operation dispatch |
+| `scripts/dry_run.py` | Backward-compatible imports and direct-execution wrapper |
 
 ### 1. Load and Normalize
 
@@ -129,6 +138,10 @@ and ephemeral idea pools. `planner/eligibility.py` loads recent meal history
 and weekly overrides. Scoring loads inventory requirements, weather context,
 side dishes, and kids' quick meals. Optional recipe fields receive safe
 defaults during loading.
+
+When fewer than seven canonical recipes are active, generated ideas supplement
+the canonical library rather than replace it. Known recipes and generated
+candidates compete under the same assignment constraints.
 
 ### 2. Constrain Assignments
 
@@ -220,6 +233,7 @@ actor.
 | `validate_recipes.py` | Recipe structure, metadata, semantic rules, references, and card consistency |
 | `inventory.py validate` | Catalog, stock lots, units, expiration data, and FDP requirement coverage |
 | `recipe_ideas.py validate` | Idea IDs, statuses, metadata, and conversion references |
+| `generated_idea_pools.py validate` | Generated candidate slots, day rules, nutrition estimates, kid fit, and forbidden ingredients |
 | `side_dishes.py validate` | Side IDs, nutrition metadata, and inventory references |
 | `quick_meals.py validate` | Kid alternative IDs, costs, scores, and inventory references |
 | `weather_context.py validate` | Weather categories, thresholds, weekly files, and sources |

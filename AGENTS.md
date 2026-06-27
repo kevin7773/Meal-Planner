@@ -23,7 +23,7 @@ before email delivery. Never send email unless the menu status is `approved`.
 After all messages are sent successfully, advance it to `completed`.
 
 Dry run precedes the planning lifecycle. Generate and compare three proposals
-with `scripts/dry_run.py` without writing project files. A weekly menu enters
+with `scripts/planner_cli.py` without writing project files. A weekly menu enters
 `draft` only after a human selects and commits one proposal.
 
 Before dry run, validate and read `inventory/`. Prefer otherwise comparable

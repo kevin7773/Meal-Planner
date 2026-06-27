@@ -1,0 +1,250 @@
+{
+  "schema_version": 1,
+  "pools": {
+    "Monday": [
+      {
+        "slot": 1,
+        "name": "Chicken and Cheese Quesadillas with Pinto Beans",
+        "protein": "chicken",
+        "cooking_method": "blackstone",
+        "fiber_grams": 12,
+        "estimated_cost_usd": 22.0,
+        "kid_friendly_score": 5,
+        "kid_friendly_reason": "Familiar cheesy quesadillas with beans and toppings served separately",
+        "tags": ["mexican-monday"]
+      },
+      {
+        "slot": 2,
+        "name": "Mild Turkey Taco Brown Rice Bowls",
+        "protein": "turkey",
+        "cooking_method": "blackstone",
+        "fiber_grams": 13,
+        "estimated_cost_usd": 23.0,
+        "kid_friendly_score": 5,
+        "kid_friendly_reason": "Familiar taco flavors in a build-your-own bowl",
+        "tags": ["mexican-monday"]
+      },
+      {
+        "slot": 3,
+        "name": "Blackstone Chicken Fajita Soft Tacos",
+        "protein": "chicken",
+        "cooking_method": "blackstone",
+        "fiber_grams": 12,
+        "estimated_cost_usd": 24.0,
+        "kid_friendly_score": 5,
+        "kid_friendly_reason": "Familiar soft tacos with mild seasoning and optional vegetables",
+        "tags": ["mexican-monday"]
+      }
+    ],
+    "Tuesday": [
+      {
+        "slot": 1,
+        "name": "Slow-Cooker BBQ Chicken Baked Potato Bar",
+        "protein": "chicken",
+        "cooking_method": "slow-cooker",
+        "fiber_grams": 11,
+        "estimated_cost_usd": 22.0,
+        "kid_friendly_score": 4,
+        "kid_friendly_reason": "Familiar barbecue chicken with customizable potato toppings",
+        "tags": []
+      },
+      {
+        "slot": 2,
+        "name": "Slow-Cooker Mild Salsa Chicken Quesadillas",
+        "protein": "chicken",
+        "cooking_method": "slow-cooker",
+        "fiber_grams": 12,
+        "estimated_cost_usd": 21.0,
+        "kid_friendly_score": 5,
+        "kid_friendly_reason": "Cheesy quesadillas with mild chicken filling and salsa on the side",
+        "tags": []
+      },
+      {
+        "slot": 3,
+        "name": "Slow-Cooker Turkey Sloppy Joe Sliders",
+        "protein": "turkey",
+        "cooking_method": "slow-cooker",
+        "fiber_grams": 10,
+        "estimated_cost_usd": 22.0,
+        "kid_friendly_score": 5,
+        "kid_friendly_reason": "Familiar sweet-savory sliders with vegetables blended into the sauce",
+        "tags": []
+      }
+    ],
+    "Wednesday": [
+      {
+        "slot": 1,
+        "name": "Blackstone Chicken Fried Brown Rice",
+        "protein": "chicken",
+        "cooking_method": "blackstone",
+        "fiber_grams": 9,
+        "estimated_cost_usd": 22.0,
+        "kid_friendly_score": 4,
+        "kid_friendly_reason": "Familiar fried rice with mild seasoning and vegetables cut small",
+        "tags": []
+      },
+      {
+        "slot": 2,
+        "name": "Turkey Cheesesteak Brown Rice Bowls",
+        "protein": "turkey",
+        "cooking_method": "blackstone",
+        "fiber_grams": 10,
+        "estimated_cost_usd": 23.0,
+        "kid_friendly_score": 4,
+        "kid_friendly_reason": "Cheesy turkey bowl with peppers served separately when preferred",
+        "tags": []
+      },
+      {
+        "slot": 3,
+        "name": "Grilled Chicken Pizza Pitas",
+        "protein": "chicken",
+        "cooking_method": "grill",
+        "fiber_grams": 9,
+        "estimated_cost_usd": 22.0,
+        "kid_friendly_score": 5,
+        "kid_friendly_reason": "Personal pizza format with familiar cheese and customizable toppings",
+        "tags": []
+      }
+    ],
+    "Thursday": [
+      {
+        "slot": 1,
+        "name": "No-Cook Turkey and Cheese Sandwich Bar",
+        "protein": "turkey",
+        "cooking_method": "no-cook",
+        "fiber_grams": 9,
+        "estimated_cost_usd": 20.0,
+        "kid_friendly_score": 5,
+        "kid_friendly_reason": "Familiar sandwiches assembled individually with fruit and vegetables on the side",
+        "tags": []
+      },
+      {
+        "slot": 2,
+        "name": "Rotisserie Chicken Corn Rice Bowls",
+        "protein": "chicken",
+        "cooking_method": "minimal-cook",
+        "fiber_grams": 10,
+        "estimated_cost_usd": 21.0,
+        "kid_friendly_score": 4,
+        "kid_friendly_reason": "Build-your-own bowl with familiar chicken, rice, corn, and cheese",
+        "tags": []
+      },
+      {
+        "slot": 3,
+        "name": "No-Cook Chicken and Cheese Roll-Up Plates",
+        "protein": "chicken",
+        "cooking_method": "no-cook",
+        "fiber_grams": 9,
+        "estimated_cost_usd": 20.0,
+        "kid_friendly_score": 5,
+        "kid_friendly_reason": "Snack-plate format with simple roll-ups, whole-grain crackers, and fruit",
+        "tags": []
+      }
+    ],
+    "Friday": [
+      {
+        "slot": 1,
+        "name": "Blackstone Hibachi Chicken Fried Rice",
+        "protein": "chicken",
+        "cooking_method": "blackstone",
+        "fiber_grams": 10,
+        "estimated_cost_usd": 24.0,
+        "kid_friendly_score": 4,
+        "kid_friendly_reason": "Familiar chicken and fried rice with sauce served on the side",
+        "tags": []
+      },
+      {
+        "slot": 2,
+        "name": "Grilled Turkey Cheeseburgers with Corn",
+        "protein": "turkey",
+        "cooking_method": "grill",
+        "fiber_grams": 9,
+        "estimated_cost_usd": 23.0,
+        "kid_friendly_score": 5,
+        "kid_friendly_reason": "Classic cheeseburger format using turkey with familiar sides",
+        "tags": []
+      },
+      {
+        "slot": 3,
+        "name": "Grilled Salmon with Brown Rice and Green Beans",
+        "protein": "seafood",
+        "cooking_method": "grill",
+        "fiber_grams": 9,
+        "estimated_cost_usd": 29.0,
+        "kid_friendly_score": 5,
+        "kid_friendly_reason": "Established family-favorite salmon with simple familiar sides",
+        "tags": []
+      }
+    ],
+    "Saturday": [
+      {
+        "slot": 1,
+        "name": "Blackstone Breakfast for Dinner",
+        "protein": "turkey",
+        "cooking_method": "blackstone",
+        "fiber_grams": 9,
+        "estimated_cost_usd": 22.0,
+        "kid_friendly_score": 5,
+        "kid_friendly_reason": "Familiar pancakes, eggs, fruit, and turkey sausage served separately",
+        "tags": []
+      },
+      {
+        "slot": 2,
+        "name": "Chicken Cheesesteak Baked Potatoes",
+        "protein": "chicken",
+        "cooking_method": "blackstone",
+        "fiber_grams": 10,
+        "estimated_cost_usd": 23.0,
+        "kid_friendly_score": 4,
+        "kid_friendly_reason": "Cheesy chicken and baked potatoes with vegetables optional",
+        "tags": []
+      },
+      {
+        "slot": 3,
+        "name": "Turkey Smash Burgers with Sweet Potato Wedges",
+        "protein": "turkey",
+        "cooking_method": "blackstone",
+        "fiber_grams": 10,
+        "estimated_cost_usd": 24.0,
+        "kid_friendly_score": 5,
+        "kid_friendly_reason": "Crispy-edged cheeseburgers with a familiar finger-food side",
+        "tags": []
+      }
+    ],
+    "Sunday": [
+      {
+        "slot": 1,
+        "name": "Grilled BBQ Chicken Corn Rice Bowls",
+        "protein": "chicken",
+        "cooking_method": "grill",
+        "fiber_grams": 11,
+        "estimated_cost_usd": 23.0,
+        "kid_friendly_score": 4,
+        "kid_friendly_reason": "Build-your-own bowl with familiar barbecue chicken, rice, corn, and cheese",
+        "tags": []
+      },
+      {
+        "slot": 2,
+        "name": "Chicken Parmesan Meatball Subs",
+        "protein": "chicken",
+        "cooking_method": "grill",
+        "fiber_grams": 9,
+        "estimated_cost_usd": 24.0,
+        "kid_friendly_score": 5,
+        "kid_friendly_reason": "Familiar meatball sub with mild tomato sauce and melted cheese",
+        "tags": []
+      },
+      {
+        "slot": 3,
+        "name": "Grilled Salmon Rice Bowls with Fruit",
+        "protein": "seafood",
+        "cooking_method": "grill",
+        "fiber_grams": 9,
+        "estimated_cost_usd": 29.0,
+        "kid_friendly_score": 5,
+        "kid_friendly_reason": "Established family-favorite salmon with simple rice and fruit",
+        "tags": []
+      }
+    ]
+  }
+}

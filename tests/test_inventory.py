@@ -19,6 +19,7 @@ class InventoryTests(unittest.TestCase):
         self.temporary_directory = tempfile.TemporaryDirectory()
         self.root = Path(self.temporary_directory.name)
         shutil.copytree(ROOT / "inventory", self.root / "inventory")
+        shutil.copytree(ROOT / "planner-data", self.root / "planner-data")
         shutil.copytree(ROOT / "recipes", self.root / "recipes")
         (self.root / "preferences").mkdir()
         shutil.copy2(

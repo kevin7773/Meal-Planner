@@ -264,22 +264,18 @@ def constrained_assignments(
     )
 
     def candidate_key(recipe: dict) -> tuple:
-        source_rank = (
-            0
-            if recipe.get("source") == "user-idea"
-            else 1
-            if recipe.get("status") == "candidate"
-            else 2
-        )
+        user_idea_rank = 0 if recipe.get("source") == "user-idea" else 1
+        review_rank = 0 if recipe.get("status") == "candidate" else 1
         rotation = (
             sum(ord(character) for character in recipe["id"]) + variant
         ) % max(1, len(recipes))
         return (
             global_usage[recipe["id"]],
             0 if is_heat_friendly(recipe, weather_rules) else 1,
-            source_rank,
+            user_idea_rank,
             protein_counts[recipe["protein"]],
             -inventory_match_score(recipe, week_of, root),
+            review_rank,
             rotation,
             recipe["id"],
         )

@@ -3,9 +3,11 @@ from __future__ import annotations
 import unittest
 
 import scripts.dry_run as facade
+import scripts.planner_cli as cli
 from planner.assignment import constrained_assignments, format_assignment_diagnostics
 from planner.commit import apply_proposal, commit_assignments
 from planner.eligibility import eligible_recipes, load_recipes
+from planner.explanations import selection_explanation as explanation_implementation
 from planner.proposal import ProposalGenerationError, generate_proposals
 from planner.reporting import proposal_report
 from planner.scoring import evaluate_proposal, selection_explanation
@@ -30,6 +32,14 @@ class PlannerModuleBoundaryTests(unittest.TestCase):
         for name, implementation in exports.items():
             with self.subTest(name=name):
                 self.assertIs(getattr(facade, name), implementation)
+                self.assertIs(getattr(cli, name), implementation)
+
+    def test_dry_run_wrapper_delegates_to_planner_cli(self) -> None:
+        self.assertIs(facade.main, cli.main)
+        self.assertEqual(facade.__all__, cli.__all__)
+
+    def test_scoring_preserves_explanation_compatibility_import(self) -> None:
+        self.assertIs(selection_explanation, explanation_implementation)
 
 
 if __name__ == "__main__":

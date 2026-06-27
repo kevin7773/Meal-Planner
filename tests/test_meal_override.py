@@ -23,6 +23,7 @@ class MealOverrideTests(unittest.TestCase):
             "recipes",
             "inventory",
             "menus",
+            "planner-data",
             "email-outputs",
             "grocery-lists",
             "ideas",

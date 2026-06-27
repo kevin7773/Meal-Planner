@@ -23,6 +23,7 @@ upcoming Monday through Sunday.
 
 - `prompts/`: weekly generation instructions
 - `planner/`: dry-run planning, assignment, scoring, reporting, and commit logic
+- `planner-data/`: versioned generated-idea candidate pools
 - `recipes/`: version-controlled recipe runbooks and library index
 - `preferences/`: family rules, seasonal rules, and meal history
 - `templates/`: required output formats

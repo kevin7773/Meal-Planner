@@ -143,7 +143,7 @@ def commit_assignments(
     _, override_recipes = override_constraints(week_of, root)
     recipe_universe = {
         **load_recipes(root),
-        **generated_ideas(week_of),
+        **generated_ideas(week_of, root),
         **user_idea_recipes(week_of, root),
         **override_recipes,
     }

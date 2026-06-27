@@ -2,7 +2,7 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
 $projectRoot = Split-Path -Parent $PSScriptRoot
-$plannerScript = Join-Path $PSScriptRoot 'dry_run.py'
+$plannerScript = Join-Path $PSScriptRoot 'planner_cli.py'
 
 function Resolve-Python {
     $bundled = Join-Path $env:USERPROFILE '.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe'

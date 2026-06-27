@@ -37,6 +37,7 @@ class AssignmentDiagnosticTests(unittest.TestCase):
     def setUp(self) -> None:
         self.temporary_directory = tempfile.TemporaryDirectory()
         self.root = Path(self.temporary_directory.name)
+        shutil.copytree(ROOT / "planner-data", self.root / "planner-data")
         (self.root / "preferences").mkdir()
         shutil.copy2(
             ROOT / "preferences" / "weather-rules.json",
@@ -51,13 +52,19 @@ class AssignmentDiagnosticTests(unittest.TestCase):
     def tearDown(self) -> None:
         self.temporary_directory.cleanup()
 
-    def run_assignment(self, recipes: dict[str, dict]) -> dict:
+    def run_assignment(
+        self,
+        recipes: dict[str, dict],
+        *,
+        fixed_assignments: dict[str, str] | None = None,
+        previous_options: list[set[str]] | None = None,
+    ) -> dict:
         diagnostics: dict = {}
         assignments = constrained_assignments(
             self.week,
             recipes,
-            {},
-            [],
+            fixed_assignments or {},
+            previous_options or [],
             collections.Counter(),
             0,
             root=self.root,
@@ -65,6 +72,30 @@ class AssignmentDiagnosticTests(unittest.TestCase):
         )
         self.assertIsNone(assignments)
         return diagnostics
+
+    def test_reports_monday_with_no_mexican_candidates(self) -> None:
+        proteins = ("chicken", "turkey", "beef", "seafood")
+        recipes = {
+            f"FDP-92{index:02d}": recipe(
+                f"FDP-92{index:02d}",
+                protein=proteins[index % len(proteins)],
+                tags=["family-dinner"],
+            )
+            for index in range(1, 8)
+        }
+
+        diagnostics = self.run_assignment(recipes)
+
+        self.assertIn(
+            "Monday failed: 0 recipes satisfy the Mexican Monday, season, "
+            "and status requirements.",
+            diagnostics["messages"],
+        )
+        monday = next(
+            day for day in diagnostics["days"] if day["day"] == "Monday"
+        )
+        self.assertEqual(monday["day_rule_eligible_count"], 0)
+        self.assertEqual(monday["eligible_count"], 0)
 
     def test_reports_day_emptied_by_weather_exclusions(self) -> None:
         path = self.root / "preferences" / "weather-rules.json"
@@ -107,6 +138,63 @@ class AssignmentDiagnosticTests(unittest.TestCase):
                 message.startswith("Protein cap eliminated")
                 for message in diagnostics["messages"]
             )
+        )
+
+    def test_reports_option_overlap_blocking_proposal_generation(self) -> None:
+        proteins = ("chicken", "turkey", "beef", "seafood")
+        recipes = {
+            f"FDP-93{index:02d}": recipe(
+                f"FDP-93{index:02d}",
+                protein=proteins[index % len(proteins)],
+            )
+            for index in range(1, 8)
+        }
+
+        diagnostics = self.run_assignment(
+            recipes,
+            previous_options=[set(recipes)],
+        )
+
+        overlap_detail = next(
+            item
+            for item in diagnostics["eliminations"]
+            if item["reason"] == "option_overlap"
+        )
+        self.assertGreater(overlap_detail["count"], 0)
+        expected_message = (
+            f"Option-overlap limit eliminated {overlap_detail['count']} "
+            "distinct recipes during assignment search."
+        )
+        self.assertIn(expected_message, diagnostics["messages"])
+        error = ProposalGenerationError(
+            self.week,
+            2,
+            [{"label": "Canonical-library candidate pool", **diagnostics}],
+        )
+        self.assertIn(expected_message, str(error))
+
+    def test_reports_fixed_overrides_exceeding_protein_cap(self) -> None:
+        recipes = {
+            f"FDP-94{index:02d}": recipe(f"FDP-94{index:02d}")
+            for index in range(1, 8)
+        }
+        fixed_assignments = {
+            day: recipe_id
+            for day, recipe_id in zip(
+                ("Monday", "Tuesday", "Wednesday", "Thursday"),
+                recipes,
+            )
+        }
+
+        diagnostics = self.run_assignment(
+            recipes,
+            fixed_assignments=fixed_assignments,
+        )
+
+        self.assertIn(
+            "Fixed assignments already exceed the weekly protein cap: "
+            "chicken=4.",
+            diagnostics["messages"],
         )
 
     def test_recent_candidates_are_context_not_false_eliminations(self) -> None:

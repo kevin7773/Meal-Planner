@@ -42,6 +42,9 @@ jobs:
       - name: Validate recipe idea backlog
         run: python scripts/recipe_ideas.py validate
 
+      - name: Validate generated idea pools
+        run: python scripts/generated_idea_pools.py validate
+
       - name: Validate side-dish library
         run: python scripts/side_dishes.py validate
 
