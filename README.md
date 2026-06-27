@@ -1,5 +1,7 @@
 # Family High-Fiber Dinner Planner
 
+[![Validate recipes](https://github.com/kevin7773/Meal-Planner/actions/workflows/validate-recipes.yml/badge.svg)](https://github.com/kevin7773/Meal-Planner/actions/workflows/validate-recipes.yml)
+
 This repository schedules practical, kid-friendly weekly dinners for a family
 of four from a version-controlled recipe library. It invents candidate recipes
 only when the approved library cannot fill the week.
