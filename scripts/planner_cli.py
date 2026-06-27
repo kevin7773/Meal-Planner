@@ -4,6 +4,7 @@ import argparse
 import datetime as dt
 import json
 import sys
+import time
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -36,10 +37,25 @@ from planner.proposal import (
     user_idea_recipes,
 )
 from planner.reporting import proposal_report
+from planner.rules import (
+    format_rule_coverage,
+    load_rules,
+    rule_coverage_summary,
+)
 from planner.scoring import (
     evaluate_proposal,
     expiring_refrigerated_items,
     selection_explanation,
+)
+from planner.telemetry import (
+    format_recommendation_drift,
+    format_recipe_utilization,
+    format_telemetry_summary,
+    load_telemetry,
+    recommendation_drift_summary,
+    recipe_utilization_rows,
+    record_generation,
+    telemetry_summary,
 )
 
 
@@ -58,6 +74,15 @@ def main() -> int:
     generate_parser.add_argument("--week", required=True, type=parse_week)
     generate_parser.add_argument("--count", type=int, default=3)
     generate_parser.add_argument("--json", action="store_true")
+    generate_parser.add_argument("--no-telemetry", action="store_true")
+
+    telemetry_parser = subparsers.add_parser("telemetry")
+    telemetry_parser.add_argument("--json", action="store_true")
+    telemetry_mode = telemetry_parser.add_mutually_exclusive_group()
+    telemetry_mode.add_argument("--recipes", action="store_true")
+    telemetry_mode.add_argument("--drift", action="store_true")
+    telemetry_mode.add_argument("--rules", action="store_true")
+    telemetry_parser.add_argument("--month")
 
     apply_parser = subparsers.add_parser("apply")
     apply_parser.add_argument("--week", required=True, type=parse_week)
@@ -66,12 +91,70 @@ def main() -> int:
     apply_parser.add_argument("--accept-warnings", action="store_true")
 
     args = parser.parse_args()
+    if args.command == "telemetry":
+        document = load_telemetry()
+        if args.recipes:
+            rows = recipe_utilization_rows(document)
+            if args.json:
+                print(json.dumps(rows, indent=2))
+            else:
+                print(format_recipe_utilization(rows))
+            return 0
+        if args.drift:
+            drift = recommendation_drift_summary(document)
+            if args.json:
+                print(json.dumps(drift, indent=2))
+            else:
+                print(format_recommendation_drift(drift))
+            return 0
+        if args.rules:
+            coverage = rule_coverage_summary(
+                document,
+                load_rules(),
+                month=args.month,
+            )
+            if args.json:
+                print(json.dumps(coverage, indent=2))
+            else:
+                print(format_rule_coverage(coverage))
+            return 0
+        summary = telemetry_summary(document)
+        if args.json:
+            print(json.dumps(summary, indent=2))
+        else:
+            print(format_telemetry_summary(summary))
+        return 0
+
     if args.command == "generate":
+        started = time.perf_counter()
         try:
             proposals = generate_proposals(args.week, args.count)
         except ProposalGenerationError as exc:
+            if not args.no_telemetry:
+                try:
+                    record_generation(
+                        week_of=args.week,
+                        requested_proposals=args.count,
+                        generation_time_ms=(
+                            time.perf_counter() - started
+                        )
+                        * 1000,
+                        failure_diagnostics=exc.diagnostics,
+                    )
+                except (OSError, ValueError, KeyError, json.JSONDecodeError):
+                    pass
             print(str(exc), file=sys.stderr)
             return 1
+        if not args.no_telemetry:
+            try:
+                record_generation(
+                    week_of=args.week,
+                    requested_proposals=args.count,
+                    generation_time_ms=(time.perf_counter() - started) * 1000,
+                    proposals=proposals,
+                )
+            except (OSError, ValueError, KeyError, json.JSONDecodeError):
+                pass
         if args.json:
             print(json.dumps(proposals, indent=2))
         else:

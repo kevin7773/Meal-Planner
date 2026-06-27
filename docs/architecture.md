@@ -70,6 +70,7 @@ flowchart LR
 
     subgraph Operations["Validation and delivery"]
         Validate["Automated validators and tests"]
+        Telemetry["Planner telemetry<br/>timing, rejected proposals,<br/>constraint pressure"]
         Lifecycle["Planning lifecycle"]
         Send["Approved Gmail delivery"]
         Feedback["Meal feedback and ratings"]
@@ -77,6 +78,7 @@ flowchart LR
         Validate --> Lifecycle --> Send --> Feedback --> Archive
     end
 
+    Compare --> Telemetry
     Grocery --> Validate
     Emails --> Validate
     Draft --> Validate
@@ -92,6 +94,7 @@ flowchart LR
 | Recipe discovery | `recipes/index.md` | Humans and importer; recipe files remain authoritative |
 | Unresolved meal concepts | `ideas/recipe-ideas.json` | Dry-run candidate pool |
 | Generated fallback candidates | `planner-data/generated-idea-pools.json` | Dry-run candidate generation |
+| Planning rule registry | `planner-data/planning-rules.json` | Trace instrumentation, tests, and monthly rule coverage |
 | Ingredient identity and units | `inventory/catalog.json` | Inventory UI, assessment, grocery generation |
 | On-hand food | `inventory/stock.json` | Coverage, FIFO, savings, buy list |
 | Recipe ingredient demand | `inventory/recipe-requirements.json` | Proposal scoring and grocery generation |
@@ -100,6 +103,7 @@ flowchart LR
 | Human schedule exceptions | `overrides/<year>/*-overrides.json` | Dry runs, menu rebuilds, grocery deltas |
 | Planning state | Weekly menu TOML and status history | Lifecycle validator and delivery workflow |
 | Sent-message record | Menu history and `memory.md` | Audit and resend prevention |
+| Planner operational history | `telemetry/planner-telemetry.json` | CLI telemetry, recipe utilization, and engine maintenance |
 
 Generated files under `menus/`, `grocery-lists/`, and `email-outputs/` are
 rebuildable views. They should not become independent sources of recipe or
@@ -120,6 +124,10 @@ The `planner/` package separates planning responsibilities.
 | `planner/constants.py` | Shared limits, day names, methods, and project root |
 | `planner/eligibility.py` | Recipe loading, season and override constraints, recent history, and inventory matching |
 | `planner/assignment.py` | Constrained weekly assignment search and option diversity |
+| `planner/tracing.py` | Versioned per-day filter, ranking, rejection, and selection traces |
+| `planner/explainability.py` | Candidate-level selected/rejected decisions, reason codes, and coverage scoring |
+| `planner/rules.py` | Planning rule registry validation and monthly coverage reporting |
+| `planner/telemetry.py` | Aggregate timing, constraint pressure, recipe utilization, and recommendation drift |
 | `planner/scoring.py` | Proposal validation and orchestration |
 | `planner/metrics.py` | Pure cost, fiber, kid-fit, inventory-demand, and rotation calculations |
 | `planner/explanations.py` | Per-meal selection explanations and expiring-inventory context |
@@ -163,6 +171,15 @@ counts for each day and unique recipe IDs rejected by the protein, uniqueness,
 queued-idea, option-overlap, weather, and heat-friendly constraints. The CLI
 formats these diagnostics for the dry-run GUI while preserving the structured
 payload on `ProposalGenerationError` for tests and future interfaces.
+
+Every successful proposal also carries a versioned `planning_trace`. It records
+per-day static filter counts, inventory ranking, dynamic constraint removals,
+candidate outcomes, solver attempts, search order, and the final selected
+recipe. This trace is rendered in the CLI and GUI dry-run reports.
+
+Each traced candidate receives a stable `Selected` or `Rejected` decision,
+reason code, and human-readable reason. The trace reports an explainability
+score equal to the percentage of candidate decisions with a reason.
 
 ### 3. Enrich and Score
 
@@ -234,9 +251,11 @@ actor.
 | `inventory.py validate` | Catalog, stock lots, units, expiration data, and FDP requirement coverage |
 | `recipe_ideas.py validate` | Idea IDs, statuses, metadata, and conversion references |
 | `generated_idea_pools.py validate` | Generated candidate slots, day rules, nutrition estimates, kid fit, and forbidden ingredients |
+| `planning_rules.py validate` | Stable rule IDs and live unit-test references |
 | `side_dishes.py validate` | Side IDs, nutrition metadata, and inventory references |
 | `quick_meals.py validate` | Kid alternative IDs, costs, scores, and inventory references |
 | `weather_context.py validate` | Weather categories, thresholds, weekly files, and sources |
+| `planner_telemetry.py validate` | Engine telemetry schema, aggregate counters, and bounded run history |
 | `meal_override.py validate` | Day uniqueness, types, and original/replacement IDs |
 | `menu_status.py check-all` | Lifecycle metadata and transition history |
 | `tests/` | Cross-component behavior and regression coverage |

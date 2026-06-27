@@ -232,6 +232,7 @@ def evaluate_proposal(
                 "name": recipe["name"],
                 "protein": recipe["protein"],
                 "cooking_method": recipe["cooking_method"],
+                "cook_time_minutes": recipe.get("cook_time_minutes", 0),
                 "fiber_grams": recipe["fiber_grams"],
                 "estimated_cost_usd": recipe["estimated_cost_usd"],
                 "kid_friendly_score": recipe["kid_friendly_score"],

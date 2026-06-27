@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "rules": [
+    {
+      "id": "RULE-ACTIVE-STATUS",
+      "name": "Exclude retired recipes",
+      "category": "eligibility",
+      "test_references": ["tests/test_rule_coverage.py::test_static_rule_ids_and_filters"]
+    },
+    {
+      "id": "RULE-GENERATED-DAY",
+      "name": "Limit generated ideas to their intended day",
+      "category": "eligibility",
+      "test_references": ["tests/test_rule_coverage.py::test_static_rule_ids_and_filters"]
+    },
+    {
+      "id": "RULE-MEXICAN-MONDAY",
+      "name": "Require Mexican Monday candidates",
+      "category": "day-policy",
+      "test_references": ["tests/test_assignment_diagnostics.py::test_reports_monday_with_no_mexican_candidates"]
+    },
+    {
+      "id": "RULE-TUESDAY-LOW-EFFORT",
+      "name": "Require low-effort Tuesday meals",
+      "category": "day-policy",
+      "test_references": ["tests/test_dry_run.py::test_tuesday_method_violation_is_blocking"]
+    },
+    {
+      "id": "RULE-THURSDAY-LOW-EFFORT",
+      "name": "Require low-effort Thursday meals",
+      "category": "day-policy",
+      "test_references": ["tests/test_rule_coverage.py::test_static_rule_ids_and_filters"]
+    },
+    {
+      "id": "RULE-SEASON",
+      "name": "Require seasonal recipe compatibility",
+      "category": "eligibility",
+      "test_references": ["tests/test_rule_coverage.py::test_static_rule_ids_and_filters"]
+    },
+    {
+      "id": "RULE-WEATHER",
+      "name": "Exclude weather-incompatible recipes",
+      "category": "weather",
+      "test_references": ["tests/test_assignment_diagnostics.py::test_reports_day_emptied_by_weather_exclusions"]
+    },
+    {
+      "id": "RULE-INVENTORY-RANKING",
+      "name": "Prefer recipes matching on-hand inventory",
+      "category": "ranking",
+      "test_references": ["tests/test_inventory.py::test_dry_run_prefers_matching_inventory"]
+    },
+    {
+      "id": "RULE-RECENT-ROTATION",
+      "name": "Prefer recipes outside the recent rotation window",
+      "category": "ranking",
+      "test_references": ["tests/test_explainability.py::test_recent_rotation_rejection_reason"]
+    },
+    {
+      "id": "RULE-UNIQUE-WEEK",
+      "name": "Do not repeat a recipe within a proposal",
+      "category": "assignment",
+      "test_references": ["tests/test_rule_coverage.py::test_dynamic_rule_ids"]
+    },
+    {
+      "id": "RULE-PROTEIN-CAP",
+      "name": "Limit each protein to three meals per week",
+      "category": "assignment",
+      "test_references": ["tests/test_assignment_diagnostics.py::test_reports_unique_recipes_eliminated_by_protein_cap"]
+    },
+    {
+      "id": "RULE-QUEUED-IDEA-CAP",
+      "name": "Limit queued user ideas per proposal",
+      "category": "assignment",
+      "test_references": ["tests/test_rule_coverage.py::test_dynamic_rule_ids"]
+    },
+    {
+      "id": "RULE-OPTION-OVERLAP",
+      "name": "Limit overlap between dry-run options",
+      "category": "diversity",
+      "test_references": ["tests/test_assignment_diagnostics.py::test_reports_option_overlap_blocking_proposal_generation"]
+    },
+    {
+      "id": "RULE-FIXED-OVERRIDE",
+      "name": "Preserve human meal overrides",
+      "category": "override",
+      "test_references": ["tests/test_meal_override.py::test_dining_out_override_updates_artifacts_and_returns_to_draft"]
+    },
+    {
+      "id": "RULE-HEAT-MINIMUM",
+      "name": "Meet the weather category heat-friendly minimum",
+      "category": "weather",
+      "test_references": ["tests/test_rule_coverage.py::test_heat_minimum_rule_is_traced"]
+    },
+    {
+      "id": "RULE-GENERATED-SUPPLEMENT",
+      "name": "Supplement small canonical libraries with generated ideas",
+      "category": "candidate-source",
+      "test_references": ["tests/test_dry_run.py::test_generate_three_proposals_without_writing_files"]
+    }
+  ]
+}

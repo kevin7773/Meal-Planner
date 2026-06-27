@@ -24,6 +24,7 @@ upcoming Monday through Sunday.
 - `prompts/`: weekly generation instructions
 - `planner/`: dry-run planning, assignment, scoring, reporting, and commit logic
 - `planner-data/`: versioned generated-idea candidate pools
+- `telemetry/`: aggregate planner-engine performance and constraint pressure
 - `recipes/`: version-controlled recipe runbooks and library index
 - `preferences/`: family rules, seasonal rules, and meal history
 - `templates/`: required output formats
@@ -47,6 +48,14 @@ Run `python scripts/validate_recipes.py` after changing the recipe library.
 Run `python scripts/menu_status.py check <menu-path>` to validate a weekly
 menu's lifecycle metadata.
 Run `python scripts/inventory.py validate` after changing inventory data.
+Run `python scripts/planner_cli.py telemetry` to inspect planner-engine
+performance and constraint pressure.
+Run `python scripts/planner_cli.py telemetry --recipes` to compare recipe
+eligibility, selection rate, and normalized ranking score.
+Run `python scripts/planner_cli.py telemetry --drift` to inspect protein,
+cooking-method, seasonal, Blackstone, prep-time, cost, and fiber trends.
+Run `python scripts/planner_cli.py telemetry --rules` to inspect registered,
+tested, monthly-used, and unused planning rules.
 
 ## Dry Run
 

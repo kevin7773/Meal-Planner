@@ -112,6 +112,7 @@ function Format-Proposal {
     $lines.Add(('Average fiber: {0:N1} g/serving' -f [double]$Proposal.average_fiber_grams))
     $lines.Add(('Kid-friendly score: {0:N1}/5' -f [double]$Proposal.average_kid_friendly_score))
     $lines.Add("Recipe rotation score: $($Proposal.rotation_score)/100")
+    $lines.Add("Explainability score: $($Proposal.explainability_score)/100")
     $lines.Add("Weather: $($Proposal.weather_category) ($($Proposal.heat_friendly_meals) heat-friendly meals)")
     $lines.Add('')
     foreach ($meal in $Proposal.meals) {
@@ -133,6 +134,49 @@ function Format-Proposal {
                 "  Kids' quick meal: $($meal.kids_quick_meal.name) " +
                 "($($meal.kids_quick_meal.id), `$$($meal.kids_quick_meal.estimated_cost_usd))"
             )
+        }
+    }
+    if ($null -ne $Proposal.planning_trace) {
+        $trace = $Proposal.planning_trace
+        $lines.Add('')
+        $lines.Add('PLANNING TRACE')
+        $lines.Add("Candidate recipes available: $($trace.candidate_recipes_available)")
+        $lines.Add("Candidate evaluations: $($trace.candidate_evaluations)")
+        $lines.Add("Search candidate attempts: $($trace.search_candidate_attempts)")
+        $lines.Add(
+            "Explainability score: $($trace.explainability.score)/100 " +
+            "($($trace.explainability.explained)/$($trace.explainability.decisions) decisions)"
+        )
+        $lines.Add("Search order: $(@($trace.search_order) -join ' -> ')")
+        foreach ($dayTrace in @($trace.days)) {
+            $lines.Add('')
+            $lines.Add([string]$dayTrace.day)
+            $lines.Add('-' * ([string]$dayTrace.day).Length)
+            $lines.Add("Started with $($dayTrace.started_count) recipes")
+            foreach ($stage in @($dayTrace.stages)) {
+                $suffix = if ($stage.action -eq 'sorted') { ' (sorted)' } else { '' }
+                $lines.Add(
+                    "  $($stage.name): $($stage.before) -> " +
+                    "$($stage.after)$suffix"
+                )
+            }
+            $lines.Add(
+                "  Selected: $($dayTrace.selected_recipe_id) - " +
+                "$($dayTrace.selected_name)"
+            )
+            $lines.Add('  Candidate decisions:')
+            foreach ($candidate in @($dayTrace.candidates)) {
+                $rank = if ($null -ne $candidate.rank) {
+                    "rank $($candidate.rank), score $($candidate.ranking_score)/100, inventory " +
+                    "$($candidate.inventory_score)/100, "
+                } else {
+                    ''
+                }
+                $lines.Add(
+                    "    - $($candidate.recipe_id) ($($candidate.name)): " +
+                    "$rank$($candidate.decision) - $($candidate.reason)"
+                )
+            }
         }
     }
     if (@($Proposal.errors).Count -gt 0) {
@@ -164,7 +208,7 @@ function Format-Proposal {
         }
     }
     $lines.Add('')
-    $lines.Add('No files were written.')
+    $lines.Add('No planning artifacts were written. Engine telemetry was recorded.')
     return $lines -join [Environment]::NewLine
 }
 

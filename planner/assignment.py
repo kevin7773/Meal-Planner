@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import collections
 import datetime as dt
-import re
 from pathlib import Path
 
 from planner.constants import (
@@ -12,10 +11,16 @@ from planner.constants import (
     MAX_USER_IDEAS_PER_WEEK,
 )
 from planner.eligibility import (
-    eligible_recipes,
     inventory_match_score,
     recent_recipe_ids,
     season_for,
+)
+from planner.explainability import explain_planning_trace
+from planner.tracing import (
+    TRACE_VERSION,
+    dynamic_decision_trace,
+    fixed_day_trace,
+    static_day_trace,
 )
 from scripts.weather_context import is_heat_friendly, load_weather_context, load_weather_rules
 
@@ -144,9 +149,12 @@ def constrained_assignments(
     *,
     root: Path,
     diagnostics: dict | None = None,
+    trace: dict | None = None,
 ) -> list[str] | None:
     if diagnostics is not None:
         diagnostics.clear()
+    if trace is not None:
+        trace.clear()
     season = season_for(week_of)
     recent_ids = recent_recipe_ids(root)
     weather = load_weather_context(week_of, root)
@@ -155,6 +163,7 @@ def constrained_assignments(
     excluded_tags = set(category_rule["exclude_tags"])
     minimum_heat_friendly = category_rule["minimum_heat_friendly_meals"]
     pools: dict[str, list[dict]] = {}
+    static_traces: dict[str, dict] = {}
     day_stats: list[dict] = []
     active = [
         recipe
@@ -167,28 +176,26 @@ def constrained_assignments(
     for day in DAYS:
         if day in fixed_assignments:
             continue
-        day_candidates = eligible_recipes(recipes, day, season)
-        weather_excluded = [
-            recipe
-            for recipe in day_candidates
-            if (
-                excluded_tags
-                & (
-                    set(recipe.get("tags", []))
-                    | set(re.findall(r"[a-z]+", recipe["name"].lower()))
-                )
-            )
-        ]
-        pools[day] = [
-            recipe for recipe in day_candidates if recipe not in weather_excluded
-        ]
+        pools[day], static_traces[day] = static_day_trace(
+            recipes,
+            day=day,
+            season=season,
+            excluded_tags=excluded_tags,
+            weather_category=weather["category"],
+        )
+        static_stages = static_traces[day]["stages"]
+        active_stage = static_stages[0]
+        season_stage = next(
+            stage for stage in static_stages if "season filter" in stage["name"]
+        )
+        weather_stage = static_stages[-1]
         day_stats.append(
             {
                 "day": day,
-                "active_count": len(active),
+                "active_count": active_stage["after"],
                 "season_eligible_count": len(seasonal),
-                "day_rule_eligible_count": len(day_candidates),
-                "weather_excluded_count": len(weather_excluded),
+                "day_rule_eligible_count": season_stage["after"],
+                "weather_excluded_count": weather_stage["removed"],
                 "eligible_count": len(pools[day]),
                 "recent_count": sum(
                     recipe["id"] in recent_ids for recipe in pools[day]
@@ -262,8 +269,17 @@ def constrained_assignments(
         pools,
         key=lambda day: (len(pools[day]), DAYS.index(day)),
     )
+    inventory_scores = {
+        day: {
+            recipe["id"]: inventory_match_score(recipe, week_of, root)
+            for recipe in pool
+        }
+        for day, pool in pools.items()
+    }
+    successful_decisions: dict[str, dict] = {}
+    candidate_evaluations = 0
 
-    def candidate_key(recipe: dict) -> tuple:
+    def candidate_key(recipe: dict, day: str) -> tuple:
         user_idea_rank = 0 if recipe.get("source") == "user-idea" else 1
         review_rank = 0 if recipe.get("status") == "candidate" else 1
         rotation = (
@@ -273,15 +289,16 @@ def constrained_assignments(
             global_usage[recipe["id"]],
             0 if is_heat_friendly(recipe, weather_rules) else 1,
             user_idea_rank,
+            1 if recipe["id"] in recent_ids else 0,
             protein_counts[recipe["protein"]],
-            -inventory_match_score(recipe, week_of, root),
+            -inventory_scores[day][recipe["id"]],
             review_rank,
             rotation,
             recipe["id"],
         )
 
     def search(position: int, idea_count: int, heat_count: int) -> bool:
-        nonlocal heat_bound_failed
+        nonlocal candidate_evaluations, heat_bound_failed
         if position == len(search_days):
             if heat_count < minimum_heat_friendly:
                 heat_bound_failed = True
@@ -290,18 +307,29 @@ def constrained_assignments(
             heat_bound_failed = True
             return False
         day = search_days[position]
-        for recipe in sorted(pools[day], key=candidate_key):
+        ordered_candidates = sorted(
+            pools[day],
+            key=lambda recipe: candidate_key(recipe, day),
+        )
+        decision_trace = dynamic_decision_trace(
+            ordered_candidates,
+            used_ids=used_ids,
+            protein_counts=protein_counts,
+            idea_count=idea_count,
+            previous_options=previous_options,
+            overlap_counts=overlap_counts,
+            inventory_scores=inventory_scores[day],
+            recent_ids=recent_ids,
+        )
+        backtracked_ids: list[str] = []
+        for recipe in ordered_candidates:
+            candidate_evaluations += 1
             recipe_id = recipe["id"]
             protein = recipe["protein"]
             is_user_idea = recipe.get("source") == "user-idea"
-            if recipe_id in used_ids:
-                rejections["duplicate_recipe"][day].add(recipe_id)
-                continue
-            if protein_counts[protein] >= MAX_PROTEIN_PER_WEEK:
-                rejections["protein_cap"][day].add(recipe_id)
-                continue
-            if is_user_idea and idea_count >= MAX_USER_IDEAS_PER_WEEK:
-                rejections["user_idea_cap"][day].add(recipe_id)
+            rejection_reason = decision_trace["rejection_reasons"].get(recipe_id)
+            if rejection_reason:
+                rejections[rejection_reason][day].add(recipe_id)
                 continue
             next_overlaps = [
                 overlap_counts[index] + int(recipe_id in previous)
@@ -321,14 +349,72 @@ def constrained_assignments(
                 idea_count + int(is_user_idea),
                 heat_count + int(is_heat_friendly(recipe, weather_rules)),
             ):
+                for candidate in decision_trace["ranked_candidates"]:
+                    if candidate["recipe_id"] == recipe_id:
+                        candidate["outcome"] = "selected"
+                    elif candidate["recipe_id"] in backtracked_ids:
+                        candidate["outcome"] = "backtracked"
+                decision_trace["backtracked_recipe_ids"] = backtracked_ids
+                successful_decisions[day] = decision_trace
                 return True
             overlap_counts[:] = old_overlaps
             protein_counts[protein] -= 1
             used_ids.remove(recipe_id)
             del assignments[day]
+            backtracked_ids.append(recipe_id)
         return False
 
     if not search(0, user_idea_count, heat_friendly_count):
         fail()
         return None
+    if trace is not None:
+        traced_days = []
+        for day in DAYS:
+            if day in fixed_assignments:
+                traced_days.append(
+                    fixed_day_trace(day, recipes[fixed_assignments[day]])
+                )
+                continue
+            day_trace = static_traces[day]
+            decision = successful_decisions[day]
+            day_trace["stages"].extend(decision["stages"])
+            day_trace["ranked_candidates"] = decision["ranked_candidates"]
+            selected_id = assignments[day]
+            day_trace["selected_recipe_id"] = selected_id
+            day_trace["selected_name"] = recipes[selected_id]["name"]
+            ranked_by_id = {
+                candidate["recipe_id"]: candidate
+                for candidate in decision["ranked_candidates"]
+            }
+            for candidate in day_trace["candidates"]:
+                ranked = ranked_by_id.get(candidate["recipe_id"])
+                if ranked:
+                    candidate.update(
+                        rank=ranked["rank"],
+                        inventory_score=ranked["inventory_score"],
+                        ranking_score=ranked["ranking_score"],
+                        recent_repeat=ranked["recent_repeat"],
+                        outcome=ranked["outcome"],
+                        constraint_reason=ranked["constraint_reason"],
+                    )
+            traced_days.append(day_trace)
+        trace.update(
+            {
+                "trace_version": TRACE_VERSION,
+                "candidate_recipes_available": len(recipes),
+                "candidate_evaluations": sum(
+                    len(day_trace["candidates"])
+                    for day_trace in static_traces.values()
+                ),
+                "search_candidate_attempts": candidate_evaluations,
+                "search_order": search_days,
+                "rules_used": (
+                    ["RULE-HEAT-MINIMUM"]
+                    if minimum_heat_friendly > 0
+                    else []
+                ),
+                "days": traced_days,
+            }
+        )
+        explain_planning_trace(trace)
     return [assignments[day] for day in DAYS]

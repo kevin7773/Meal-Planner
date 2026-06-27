@@ -183,6 +183,7 @@ def generate_proposals(
         else:
             proposal_recipes = {**recipes, **user_ideas, **override_recipes}
         diagnostics: dict = {}
+        planning_trace: dict = {}
         assignments = constrained_assignments(
             week_of,
             proposal_recipes,
@@ -192,6 +193,7 @@ def generate_proposals(
             variant,
             root=root,
             diagnostics=diagnostics,
+            trace=planning_trace,
         )
         if assignments is None:
             diagnostics["label"] = (
@@ -208,6 +210,7 @@ def generate_proposals(
                 **override_recipes,
             }
             diagnostics = {}
+            planning_trace = {}
             assignments = constrained_assignments(
                 week_of,
                 proposal_recipes,
@@ -217,6 +220,7 @@ def generate_proposals(
                 variant,
                 root=root,
                 diagnostics=diagnostics,
+                trace=planning_trace,
             )
             if assignments is None:
                 diagnostics["label"] = "Expanded pool with generated ideas"
@@ -227,9 +231,24 @@ def generate_proposals(
                 variant + 1,
                 attempt_diagnostics,
             )
-        proposals.append(
-            evaluate_proposal(week_of, assignments, proposal_recipes, root=root)
+        proposal = evaluate_proposal(
+            week_of,
+            assignments,
+            proposal_recipes,
+            root=root,
         )
+        planning_trace["rejected_proposal_attempts"] = len(
+            attempt_diagnostics
+        )
+        if supplement_with_generated_ideas:
+            planning_trace.setdefault("rules_used", []).append(
+                "RULE-GENERATED-SUPPLEMENT"
+            )
+        proposal["planning_trace"] = planning_trace
+        proposal["explainability_score"] = planning_trace[
+            "explainability"
+        ]["score"]
+        proposals.append(proposal)
         previous_options.append(
             set(assignments) - set(fixed_assignments.values())
         )

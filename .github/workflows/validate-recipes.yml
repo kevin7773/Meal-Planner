@@ -45,6 +45,9 @@ jobs:
       - name: Validate generated idea pools
         run: python scripts/generated_idea_pools.py validate
 
+      - name: Validate planning rule registry
+        run: python scripts/planning_rules.py validate
+
       - name: Validate side-dish library
         run: python scripts/side_dishes.py validate
 
@@ -53,6 +56,9 @@ jobs:
 
       - name: Validate weather planning context
         run: python scripts/weather_context.py validate
+
+      - name: Validate planner telemetry
+        run: python scripts/planner_telemetry.py validate
 
       - name: Validate weekly planning statuses
         run: python scripts/menu_status.py check-all
