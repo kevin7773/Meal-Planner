@@ -6,8 +6,8 @@ status = "candidate"
 servings = 4
 created = "2026-06-26"
 updated = "2026-06-26"
-rating_average = 0.0
-ratings_count = 0
+rating_average = 5
+ratings_count = 1
 protein = "chicken"
 fiber_grams = 12
 estimated_cost_usd = 24.0
@@ -79,14 +79,15 @@ tags = ["summer", "poultry", "mexican-monday", "blackstone"]
 
 ## Family Notes
 
-- **Verdict:** Awaiting first test
-- **Keep:** Pending
-- **Change next time:** Pending
+- **Verdict:** Tested on 2026-06-26; changes requested before approval
+- **Keep:** Everything
+- **Change next time:** NA
 
 ## Ratings
 
 | Date | Rating | Rater | Notes |
 | --- | ---: | --- | --- |
+| 2026-06-26 | 5 | Family | Again: Yes; Kids: Both enjoyed it; Effort: Easy; Keep: Everything; Change: NA |
 
 ## Revision History
 

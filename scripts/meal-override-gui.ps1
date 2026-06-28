@@ -15,6 +15,8 @@ $python = Resolve-Python
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 [System.Windows.Forms.Application]::EnableVisualStyles()
+. (Join-Path $PSScriptRoot 'gui-branding.ps1')
+$colors = Get-MealPlannerPalette
 
 $form = New-Object System.Windows.Forms.Form
 $form.Text = 'Override Planned Meal'
@@ -23,6 +25,7 @@ $form.StartPosition = 'CenterScreen'
 $form.FormBorderStyle = 'FixedDialog'
 $form.MaximizeBox = $false
 $form.Font = New-Object System.Drawing.Font('Segoe UI', 10)
+Set-MealPlannerFormSurface -Form $form -Palette $colors
 
 function Add-Label([string]$Text, [int]$X, [int]$Y, [int]$Width = 130) {
     $label = New-Object System.Windows.Forms.Label
@@ -191,7 +194,15 @@ $applyButton.Add_Click({
 
 if ($menuCombo.Items.Count -gt 0) { $menuCombo.SelectedIndex = 0 }
 $form.CancelButton = $closeButton
-. (Join-Path $PSScriptRoot 'gui-branding.ps1')
+Set-MealPlannerButtonStyle -Button $applyButton -Color $colors.Override
+Set-MealPlannerNeutralButtonStyle -Button $closeButton -Palette $colors
+$statusLabel.BackColor = $colors.SoftOverride
+$statusLabel.ForeColor = $colors.Override
+$statusLabel.Padding = New-Object System.Windows.Forms.Padding(10)
+$warningLabel.BackColor = $colors.SoftPantry
+$warningLabel.ForeColor = $colors.PantryText
+$warningLabel.Padding = New-Object System.Windows.Forms.Padding(10, 0, 10, 0)
+$noteText.BackColor = $colors.Surface
 Add-MealPlannerBranding `
     -Form $form `
     -Title 'Override Meal' `

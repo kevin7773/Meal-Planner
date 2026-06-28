@@ -219,6 +219,8 @@ if ($ListRecipes) {
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 [System.Windows.Forms.Application]::EnableVisualStyles()
+. (Join-Path $PSScriptRoot 'gui-branding.ps1')
+$colors = Get-MealPlannerPalette
 
 $form = New-Object System.Windows.Forms.Form
 $form.Text = 'Family Recipe Review'
@@ -228,6 +230,7 @@ $form.FormBorderStyle = 'FixedDialog'
 $form.MaximizeBox = $false
 $form.MinimizeBox = $false
 $form.Font = New-Object System.Drawing.Font('Segoe UI', 10)
+Set-MealPlannerFormSurface -Form $form -Palette $colors
 
 function Add-Label {
     param([string]$Text, [int]$X, [int]$Y, [int]$Width = 155)
@@ -243,7 +246,7 @@ function Add-Label {
 Add-Label 'Recipe' 20 22 | Out-Null
 $recipeCombo = New-Object System.Windows.Forms.ComboBox
 $recipeCombo.Location = New-Object System.Drawing.Point(180, 22)
-$recipeCombo.Size = New-Object System.Drawing.Size(510, 28)
+$recipeCombo.Size = New-Object System.Drawing.Size(390, 28)
 $recipeCombo.DropDownStyle = 'DropDownList'
 $recipeCombo.DisplayMember = 'Display'
 foreach ($recipe in $recipes) {
@@ -253,6 +256,99 @@ if ($recipeCombo.Items.Count -gt 0) {
     $recipeCombo.SelectedIndex = 0
 }
 $form.Controls.Add($recipeCombo)
+
+$viewRecipeButton = New-Object System.Windows.Forms.Button
+$viewRecipeButton.Text = 'View Recipe'
+$viewRecipeButton.Location = New-Object System.Drawing.Point(580, 19)
+$viewRecipeButton.Size = New-Object System.Drawing.Size(110, 34)
+$form.Controls.Add($viewRecipeButton)
+Set-MealPlannerButtonStyle -Button $viewRecipeButton -Color $colors.Review
+
+function Show-SelectedRecipe {
+    if ($null -eq $recipeCombo.SelectedItem) {
+        throw 'Select a recipe to view.'
+    }
+    $selectedRecipe = $recipeCombo.SelectedItem
+    $currentRecipes = @(
+        Get-RecipeList |
+            Where-Object { $_.Id -eq $selectedRecipe.Id }
+    )
+    if ($currentRecipes.Count -ne 1) {
+        throw "Could not resolve the current recipe card for $($selectedRecipe.Id)."
+    }
+    $recipe = $currentRecipes[0]
+    $text = [System.IO.File]::ReadAllText($recipe.Path)
+    $body = [regex]::Replace(
+        $text,
+        '(?s)\A\+\+\+\r?\n.*?\r?\n\+\+\+\s*',
+        ''
+    )
+    $body = $body -replace '(?m)^#{1,6}\s*', ''
+    $body = $body -replace '\*\*', ''
+    $body = $body -replace '`', ''
+    $body = $body -replace '\r?\n', [Environment]::NewLine
+
+    $dialog = New-Object System.Windows.Forms.Form
+    $dialog.Text = "Recipe - $($recipe.Name)"
+    $dialog.ClientSize = New-Object System.Drawing.Size(780, 650)
+    $dialog.StartPosition = 'CenterParent'
+    $dialog.FormBorderStyle = 'FixedDialog'
+    $dialog.MaximizeBox = $false
+    $dialog.MinimizeBox = $false
+    $dialog.Font = New-Object System.Drawing.Font('Segoe UI', 10)
+    Set-MealPlannerFormSurface -Form $dialog -Palette $colors
+
+    $recipeText = New-Object System.Windows.Forms.RichTextBox
+    $recipeText.Location = New-Object System.Drawing.Point(20, 20)
+    $recipeText.Size = New-Object System.Drawing.Size(740, 555)
+    $recipeText.ReadOnly = $true
+    $recipeText.ScrollBars = 'Vertical'
+    $recipeText.WordWrap = $true
+    $recipeText.DetectUrls = $true
+    $recipeText.MaxLength = [int]::MaxValue
+    $recipeText.BackColor = $colors.Surface
+    $recipeText.ForeColor = $colors.Text
+    $recipeText.Text = (
+        "$($recipe.Name)`r`n" +
+        "$($recipe.Id) | Revision $($recipe.Revision) | " +
+        "Status: $($recipe.Status)`r`n`r`n" +
+        $body
+    )
+    $recipeText.SelectionStart = 0
+    $dialog.Controls.Add($recipeText)
+
+    $closeRecipeButton = New-Object System.Windows.Forms.Button
+    $closeRecipeButton.Text = 'Close'
+    $closeRecipeButton.Location = New-Object System.Drawing.Point(650, 590)
+    $closeRecipeButton.Size = New-Object System.Drawing.Size(110, 38)
+    $closeRecipeButton.DialogResult = [System.Windows.Forms.DialogResult]::OK
+    $dialog.Controls.Add($closeRecipeButton)
+    Set-MealPlannerNeutralButtonStyle `
+        -Button $closeRecipeButton `
+        -Palette $colors
+
+    $dialog.AcceptButton = $closeRecipeButton
+    $dialog.CancelButton = $closeRecipeButton
+    Add-MealPlannerBranding `
+        -Form $dialog `
+        -Title 'Recipe Card' `
+        -Subtitle "$($recipe.Id) rev $($recipe.Revision) | $($recipe.Status)" `
+        -IconName 'review-meal'
+    [void]$dialog.ShowDialog($form)
+}
+
+$viewRecipeButton.Add_Click({
+    try {
+        Show-SelectedRecipe
+    } catch {
+        [System.Windows.Forms.MessageBox]::Show(
+            $_.Exception.Message,
+            'Unable to View Recipe',
+            'OK',
+            'Error'
+        ) | Out-Null
+    }
+})
 
 Add-Label 'Meal date' 20 64 | Out-Null
 $mealDatePicker = New-Object System.Windows.Forms.DateTimePicker
@@ -354,6 +450,53 @@ function Update-Outcome {
         $script:recommendedStatus = 'candidate'
         $outcomeLabel.Text = 'Outcome: KEEP AS CANDIDATE. More testing or a revised recipe is needed.'
     }
+    switch ($script:recommendedStatus) {
+        'approved' {
+            $outcomeLabel.BackColor = $colors.SoftPlanner
+            $outcomeLabel.ForeColor = $colors.Planner
+        }
+        'retired' {
+            $outcomeLabel.BackColor = $colors.SoftOverride
+            $outcomeLabel.ForeColor = $colors.Override
+        }
+        default {
+            $outcomeLabel.BackColor = $colors.SoftPantry
+            $outcomeLabel.ForeColor = $colors.PantryText
+        }
+    }
+}
+
+function Reset-ReviewEntry {
+    $nextIndex = if ($recipeCombo.Items.Count -gt 0) {
+        ($recipeCombo.SelectedIndex + 1) % $recipeCombo.Items.Count
+    } else {
+        0
+    }
+    $ratingCombo.SelectedIndex = 3
+    $againCombo.SelectedIndex = 1
+    $kidCombo.SelectedIndex = 0
+    $effortCombo.SelectedIndex = 1
+    $keepText.Clear()
+    $changeText.Clear()
+
+    $updatedRecipes = Get-RecipeList
+    $recipeCombo.BeginUpdate()
+    try {
+        $recipeCombo.Items.Clear()
+        foreach ($recipe in $updatedRecipes) {
+            [void]$recipeCombo.Items.Add($recipe)
+        }
+    } finally {
+        $recipeCombo.EndUpdate()
+    }
+    if ($recipeCombo.Items.Count -gt 0) {
+        $recipeCombo.SelectedIndex = [Math]::Min(
+            $nextIndex,
+            $recipeCombo.Items.Count - 1
+        )
+    }
+    Update-Outcome
+    $recipeCombo.Focus()
 }
 
 $recipeCombo.Add_SelectedIndexChanged({ Update-Outcome })
@@ -385,12 +528,17 @@ $saveButton.Add_Click({
             -ChangeNotes $changeText.Text `
             -RecommendedStatus $script:recommendedStatus
         [System.Windows.Forms.MessageBox]::Show(
-            "Review saved.`nStatus: $($result.Status)`nRating: $($result.RatingAverage) / 5 from $($result.RatingCount) review(s).",
+            (
+                "Review saved.`nStatus: $($result.Status)`n" +
+                "Rating: $($result.RatingAverage) / 5 from " +
+                "$($result.RatingCount) review(s).`n`n" +
+                'The form is ready for another review.'
+            ),
             'Recipe Review Saved',
             'OK',
             'Information'
         ) | Out-Null
-        $form.Close()
+        Reset-ReviewEntry
     } catch {
         [System.Windows.Forms.MessageBox]::Show(
             $_.Exception.Message,
@@ -411,8 +559,11 @@ $form.Controls.Add($cancelButton)
 
 $form.AcceptButton = $saveButton
 $form.CancelButton = $cancelButton
+Set-MealPlannerButtonStyle -Button $saveButton -Color $colors.Review
+Set-MealPlannerNeutralButtonStyle -Button $cancelButton -Palette $colors
+$keepText.BackColor = $colors.SoftPlanner
+$changeText.BackColor = $colors.SoftOverride
 Update-Outcome
-. (Join-Path $PSScriptRoot 'gui-branding.ps1')
 Add-MealPlannerBranding `
     -Form $form `
     -Title 'Review Meal' `

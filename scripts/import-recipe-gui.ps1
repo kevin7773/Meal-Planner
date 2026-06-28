@@ -17,6 +17,8 @@ $python = Resolve-Python
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 [System.Windows.Forms.Application]::EnableVisualStyles()
+. (Join-Path $PSScriptRoot 'gui-branding.ps1')
+$colors = Get-MealPlannerPalette
 
 $form = New-Object System.Windows.Forms.Form
 $form.Text = 'Import Recipe'
@@ -25,6 +27,7 @@ $form.StartPosition = 'CenterScreen'
 $form.FormBorderStyle = 'FixedDialog'
 $form.MaximizeBox = $false
 $form.Font = New-Object System.Drawing.Font('Segoe UI', 10)
+Set-MealPlannerFormSurface -Form $form -Palette $colors
 
 function Add-Label([string]$Text, [int]$X, [int]$Y, [int]$Width = 120) {
     $label = New-Object System.Windows.Forms.Label
@@ -223,6 +226,13 @@ $editRecipeButton.Location = New-Object System.Drawing.Point(20, 735)
 $editRecipeButton.Size = New-Object System.Drawing.Size(190, 42)
 $form.Controls.Add($editRecipeButton)
 
+$editCardButton = New-Object System.Windows.Forms.Button
+$editCardButton.Text = 'Edit Recipe Card'
+$editCardButton.Location = New-Object System.Drawing.Point(225, 735)
+$editCardButton.Size = New-Object System.Drawing.Size(210, 42)
+$editCardButton.Enabled = $false
+$form.Controls.Add($editCardButton)
+
 $saveIdeaButton = New-Object System.Windows.Forms.Button
 $saveIdeaButton.Text = 'Save Recipe Idea'
 $saveIdeaButton.Location = New-Object System.Drawing.Point(455, 735)
@@ -244,10 +254,14 @@ $form.Controls.Add($closeButton)
 
 $script:pastedText = ''
 $script:editingRecipeId = $null
+$script:editingCardSections = $null
+$script:cardModified = $false
 
 function Reset-ImportForm {
     $script:pastedText = ''
     $script:editingRecipeId = $null
+    $script:editingCardSections = $null
+    $script:cardModified = $false
     $sourceText.Clear()
     $sourceText.ReadOnly = $false
     $previewText.Clear()
@@ -269,6 +283,7 @@ function Reset-ImportForm {
     $importButton.Enabled = $false
     $importButton.Text = 'Import Candidate'
     $editRecipeButton.Text = 'Edit Imported Recipe'
+    $editCardButton.Enabled = $false
     $browseButton.Enabled = $true
     $pasteButton.Enabled = $true
     $previewButton.Enabled = $true
@@ -294,6 +309,7 @@ function Show-PasteEditor {
     $dialog.ClientSize = New-Object System.Drawing.Size(700, 520)
     $dialog.StartPosition = 'CenterParent'
     $dialog.Font = New-Object System.Drawing.Font('Segoe UI', 10)
+    Set-MealPlannerFormSurface -Form $dialog -Palette $colors
     $editor = New-Object System.Windows.Forms.TextBox
     $editor.Location = New-Object System.Drawing.Point(15, 15)
     $editor.Size = New-Object System.Drawing.Size(670, 440)
@@ -309,12 +325,14 @@ function Show-PasteEditor {
     $useButton.Size = New-Object System.Drawing.Size(150, 35)
     $useButton.DialogResult = 'OK'
     $dialog.Controls.Add($useButton)
+    Set-MealPlannerButtonStyle -Button $useButton -Color $colors.Email
     $cancel = New-Object System.Windows.Forms.Button
     $cancel.Text = 'Cancel'
     $cancel.Location = New-Object System.Drawing.Point(420, 470)
     $cancel.Size = New-Object System.Drawing.Size(100, 35)
     $cancel.DialogResult = 'Cancel'
     $dialog.Controls.Add($cancel)
+    Set-MealPlannerNeutralButtonStyle -Button $cancel -Palette $colors
     $dialog.AcceptButton = $useButton
     $dialog.CancelButton = $cancel
     if ($dialog.ShowDialog($form) -eq 'OK') {
@@ -344,6 +362,7 @@ function Select-ImportedRecipe {
     $dialog.FormBorderStyle = 'FixedDialog'
     $dialog.MaximizeBox = $false
     $dialog.Font = New-Object System.Drawing.Font('Segoe UI', 10)
+    Set-MealPlannerFormSurface -Form $dialog -Palette $colors
 
     $label = New-Object System.Windows.Forms.Label
     $label.Text = 'Imported recipe'
@@ -376,6 +395,7 @@ function Select-ImportedRecipe {
     $cancel.Size = New-Object System.Drawing.Size(100, 36)
     $cancel.DialogResult = 'Cancel'
     $dialog.Controls.Add($cancel)
+    Set-MealPlannerNeutralButtonStyle -Button $cancel -Palette $colors
 
     $load = New-Object System.Windows.Forms.Button
     $load.Text = 'Edit Selected'
@@ -383,6 +403,7 @@ function Select-ImportedRecipe {
     $load.Size = New-Object System.Drawing.Size(100, 36)
     $load.DialogResult = 'OK'
     $dialog.Controls.Add($load)
+    Set-MealPlannerButtonStyle -Button $load -Color $colors.Review
     $dialog.AcceptButton = $load
     $dialog.CancelButton = $cancel
 
@@ -396,6 +417,11 @@ function Load-ImportedRecipe {
     param($Recipe)
 
     $script:editingRecipeId = [string]$Recipe.id
+    $script:editingCardSections = [ordered]@{
+        ingredients = [string]$Recipe.card_sections.ingredients
+        directions = [string]$Recipe.card_sections.directions
+    }
+    $script:cardModified = $false
     $script:pastedText = ''
     $sourceText.Text = (
         "$($Recipe.id) rev $($Recipe.revision) | $($Recipe.source)"
@@ -436,7 +462,7 @@ function Load-ImportedRecipe {
         '',
         $warning,
         '',
-        'Ingredients, directions, ratings, and source attribution are preserved.'
+        'Use Edit Recipe Card to correct ingredients or directions.'
     ) -join [Environment]::NewLine
     $browseButton.Enabled = $false
     $pasteButton.Enabled = $false
@@ -444,13 +470,126 @@ function Load-ImportedRecipe {
     $ideaText.Enabled = $false
     $mexicanMonday.Enabled = $false
     $saveIdeaButton.Enabled = $false
+    $editCardButton.Enabled = $true
     $importButton.Text = 'Save Recipe Revision'
     $importButton.Enabled = $true
     $editRecipeButton.Text = 'Cancel Edit'
     $note.Text = (
         "Saving creates revision $([int]$Recipe.revision + 1). " +
-        'Recipe ID, source, ingredients, directions, ratings, and history are preserved.'
+        'Recipe ID, source, ratings, and history are preserved.'
     )
+}
+
+function Show-RecipeCardEditor {
+    if (
+        $null -eq $script:editingRecipeId -or
+        $null -eq $script:editingCardSections
+    ) {
+        throw 'Select an imported recipe before editing its card.'
+    }
+
+    $dialog = New-Object System.Windows.Forms.Form
+    $dialog.Text = "Edit Recipe Card - $($script:editingRecipeId)"
+    $dialog.ClientSize = New-Object System.Drawing.Size(820, 700)
+    $dialog.StartPosition = 'CenterParent'
+    $dialog.FormBorderStyle = 'FixedDialog'
+    $dialog.MaximizeBox = $false
+    $dialog.MinimizeBox = $false
+    $dialog.Font = New-Object System.Drawing.Font('Segoe UI', 10)
+    Set-MealPlannerFormSurface -Form $dialog -Palette $colors
+
+    $help = New-Object System.Windows.Forms.Label
+    $help.Text = (
+        'Edit list items and steps directly. Keep the Main Ingredients and ' +
+        'Seasonings subheadings; protected history and ratings are not shown.'
+    )
+    $help.Location = New-Object System.Drawing.Point(20, 18)
+    $help.Size = New-Object System.Drawing.Size(780, 42)
+    $help.ForeColor = $colors.Muted
+    $dialog.Controls.Add($help)
+
+    $ingredientsLabel = New-Object System.Windows.Forms.Label
+    $ingredientsLabel.Text = 'Ingredients'
+    $ingredientsLabel.Location = New-Object System.Drawing.Point(20, 68)
+    $ingredientsLabel.Size = New-Object System.Drawing.Size(120, 24)
+    $ingredientsLabel.ForeColor = $colors.Email
+    $dialog.Controls.Add($ingredientsLabel)
+
+    $ingredientsEditor = New-Object System.Windows.Forms.TextBox
+    $ingredientsEditor.Location = New-Object System.Drawing.Point(20, 94)
+    $ingredientsEditor.Size = New-Object System.Drawing.Size(780, 235)
+    $ingredientsEditor.Multiline = $true
+    $ingredientsEditor.AcceptsReturn = $true
+    $ingredientsEditor.AcceptsTab = $true
+    $ingredientsEditor.ScrollBars = 'Both'
+    $ingredientsEditor.WordWrap = $false
+    $ingredientsEditor.Font = New-Object System.Drawing.Font('Consolas', 10)
+    $ingredientsEditor.BackColor = $colors.SoftPantry
+    $ingredientsEditor.Text = $script:editingCardSections.ingredients
+    $dialog.Controls.Add($ingredientsEditor)
+
+    $directionsLabel = New-Object System.Windows.Forms.Label
+    $directionsLabel.Text = 'Directions'
+    $directionsLabel.Location = New-Object System.Drawing.Point(20, 345)
+    $directionsLabel.Size = New-Object System.Drawing.Size(120, 24)
+    $directionsLabel.ForeColor = $colors.Email
+    $dialog.Controls.Add($directionsLabel)
+
+    $directionsEditor = New-Object System.Windows.Forms.TextBox
+    $directionsEditor.Location = New-Object System.Drawing.Point(20, 371)
+    $directionsEditor.Size = New-Object System.Drawing.Size(780, 235)
+    $directionsEditor.Multiline = $true
+    $directionsEditor.AcceptsReturn = $true
+    $directionsEditor.AcceptsTab = $true
+    $directionsEditor.ScrollBars = 'Both'
+    $directionsEditor.WordWrap = $false
+    $directionsEditor.Font = New-Object System.Drawing.Font('Consolas', 10)
+    $directionsEditor.BackColor = $colors.SoftEmail
+    $directionsEditor.Text = $script:editingCardSections.directions
+    $dialog.Controls.Add($directionsEditor)
+
+    $saveCardButton = New-Object System.Windows.Forms.Button
+    $saveCardButton.Text = 'Use Card Changes'
+    $saveCardButton.Location = New-Object System.Drawing.Point(610, 630)
+    $saveCardButton.Size = New-Object System.Drawing.Size(190, 42)
+    $saveCardButton.DialogResult = [System.Windows.Forms.DialogResult]::OK
+    $dialog.Controls.Add($saveCardButton)
+    Set-MealPlannerButtonStyle -Button $saveCardButton -Color $colors.Email
+
+    $cancelCardButton = New-Object System.Windows.Forms.Button
+    $cancelCardButton.Text = 'Cancel'
+    $cancelCardButton.Location = New-Object System.Drawing.Point(490, 630)
+    $cancelCardButton.Size = New-Object System.Drawing.Size(105, 42)
+    $cancelCardButton.DialogResult = [System.Windows.Forms.DialogResult]::Cancel
+    $dialog.Controls.Add($cancelCardButton)
+    Set-MealPlannerNeutralButtonStyle `
+        -Button $cancelCardButton `
+        -Palette $colors
+    $dialog.CancelButton = $cancelCardButton
+    Add-MealPlannerBranding `
+        -Form $dialog `
+        -Title 'Recipe Card Editor' `
+        -Subtitle "$($script:editingRecipeId) ingredients and directions" `
+        -IconName 'import-recipe'
+
+    if (
+        $dialog.ShowDialog($form) -eq
+        [System.Windows.Forms.DialogResult]::OK
+    ) {
+        if ([string]::IsNullOrWhiteSpace($ingredientsEditor.Text)) {
+            throw 'Ingredients cannot be empty.'
+        }
+        if ([string]::IsNullOrWhiteSpace($directionsEditor.Text)) {
+            throw 'Directions cannot be empty.'
+        }
+        $script:editingCardSections.ingredients = $ingredientsEditor.Text
+        $script:editingCardSections.directions = $directionsEditor.Text
+        $script:cardModified = $true
+        $previewText.Text = (
+            $previewText.Text.TrimEnd() +
+            "`r`n`r`nRecipe card changes are staged for this revision."
+        )
+    }
 }
 
 $browseButton.Add_Click({
@@ -477,6 +616,18 @@ $editRecipeButton.Add_Click({
         [System.Windows.Forms.MessageBox]::Show(
             $_.Exception.Message,
             'Unable to Load Imported Recipe',
+            'OK',
+            'Error'
+        ) | Out-Null
+    }
+})
+$editCardButton.Add_Click({
+    try {
+        Show-RecipeCardEditor
+    } catch {
+        [System.Windows.Forms.MessageBox]::Show(
+            $_.Exception.Message,
+            'Unable to Edit Recipe Card',
             'OK',
             'Error'
         ) | Out-Null
@@ -525,6 +676,7 @@ $importButton.Add_Click({
         if ($proteinCombo.SelectedIndex -eq 0) { throw 'Select a protein.' }
         if ([string]::IsNullOrWhiteSpace($kidReason.Text)) { throw 'Kid-friendly reason is required.' }
         if ($null -ne $script:editingRecipeId) {
+            $temporaryCardPath = $null
             $arguments = @(
                 $recipeEditor,
                 'update',
@@ -540,7 +692,31 @@ $importButton.Add_Click({
                 '--method', [string]$methodCombo.SelectedItem,
                 '--seasons', (Get-SelectedSeasons)
             )
-            $result = & $python @arguments 2>&1
+            try {
+                if ($script:cardModified) {
+                    $temporaryCardPath = [System.IO.Path]::GetTempFileName()
+                    $cardJson = $script:editingCardSections |
+                        ConvertTo-Json -Depth 4
+                    [System.IO.File]::WriteAllText(
+                        $temporaryCardPath,
+                        $cardJson,
+                        (New-Object System.Text.UTF8Encoding($false))
+                    )
+                    $arguments += @(
+                        '--card-file', $temporaryCardPath,
+                        '--change-note',
+                        'Updated imported recipe metadata and recipe card through the GUI'
+                    )
+                }
+                $result = & $python @arguments 2>&1
+            } finally {
+                if (
+                    $null -ne $temporaryCardPath -and
+                    (Test-Path -LiteralPath $temporaryCardPath)
+                ) {
+                    Remove-Item -LiteralPath $temporaryCardPath
+                }
+            }
             if ($LASTEXITCODE -ne 0) {
                 throw ($result -join [Environment]::NewLine)
             }
@@ -638,7 +814,20 @@ $form.ClientSize = New-Object System.Drawing.Size(
     $form.ClientSize.Width,
     ($form.ClientSize.Height - 40)
 )
-. (Join-Path $PSScriptRoot 'gui-branding.ps1')
+Set-MealPlannerNeutralButtonStyle -Button $browseButton -Palette $colors
+Set-MealPlannerButtonStyle -Button $pasteButton -Color $colors.Email
+Set-MealPlannerButtonStyle -Button $previewButton -Color $colors.Planner
+Set-MealPlannerButtonStyle -Button $editRecipeButton -Color $colors.Review
+Set-MealPlannerButtonStyle -Button $editCardButton -Color $colors.Review
+Set-MealPlannerButtonStyle -Button $saveIdeaButton -Color $colors.Pantry
+Set-MealPlannerButtonStyle -Button $importButton -Color $colors.Email
+Set-MealPlannerNeutralButtonStyle -Button $closeButton -Palette $colors
+$previewText.BackColor = $colors.SoftEmail
+$previewText.ForeColor = $colors.Text
+$ideaText.BackColor = $colors.SoftPantry
+$note.BackColor = $colors.SoftEmail
+$note.ForeColor = $colors.Email
+$note.Padding = New-Object System.Windows.Forms.Padding(10)
 Add-MealPlannerBranding `
     -Form $form `
     -Title 'Import Recipe' `

@@ -149,10 +149,10 @@ def replace_metadata(text: str, name: str, value: str) -> str:
     return updated
 
 
-def run_recipe_validation() -> None:
+def run_recipe_validation(root: Path = ROOT) -> None:
     result = subprocess.run(
-        [sys.executable, str(ROOT / "scripts" / "validate_recipes.py")],
-        cwd=ROOT,
+        [sys.executable, str(root / "scripts" / "validate_recipes.py")],
+        cwd=root,
         capture_output=True,
         text=True,
         check=False,
@@ -171,6 +171,7 @@ def transition_menu(
     now: dt.datetime | None = None,
     run_validators: bool = True,
     allow_reopen: bool = False,
+    root: Path = ROOT,
 ) -> None:
     errors = validate_menu(path)
     if errors:
@@ -199,7 +200,7 @@ def transition_menu(
         raise MenuStatusError(f"{target} requires an audit note")
 
     if target == "validated" and run_validators:
-        run_recipe_validation()
+        run_recipe_validation(root)
 
     timestamp = (now or dt.datetime.now(dt.timezone.utc)).astimezone(
         dt.timezone.utc

@@ -32,6 +32,31 @@ class RecipeEditorGuiTests(unittest.TestCase):
         self.assertIn("'Save Recipe Revision'", self.script)
         self.assertIn("'Recipe Revision Saved'", self.script)
 
+    def test_edit_mode_can_stage_ingredients_and_directions(self) -> None:
+        self.assertIn("$editCardButton.Text = 'Edit Recipe Card'", self.script)
+        self.assertIn("function Show-RecipeCardEditor", self.script)
+        self.assertIn(
+            "$Recipe.card_sections.ingredients",
+            self.script,
+        )
+        self.assertIn(
+            "$Recipe.card_sections.directions",
+            self.script,
+        )
+        self.assertIn("Recipe card changes are staged", self.script)
+
+    def test_card_save_uses_guarded_temporary_json(self) -> None:
+        self.assertIn("'--card-file'", self.script)
+        self.assertIn("[System.IO.Path]::GetTempFileName()", self.script)
+        self.assertIn(
+            "Remove-Item -LiteralPath $temporaryCardPath",
+            self.script,
+        )
+        self.assertIn(
+            "protected history and ratings are not shown",
+            self.script,
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

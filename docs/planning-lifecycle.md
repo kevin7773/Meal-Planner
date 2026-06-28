@@ -24,6 +24,21 @@ The normal path is:
 
 `draft -> generated -> validated -> reviewed -> approved -> completed -> archived`
 
+Plan Week drives the active portion of this lifecycle:
+
+1. `Commit Selected` creates the draft and keeps the window open for review.
+2. `Generate Review Package` creates the grocery list and three email drafts,
+   then advances through `generated` to `validated`.
+3. The Menu Summary, Grocery List, Email Drafts, and Raw Markdown views remain
+   available for any existing week.
+4. `Approve Package` records human review and explicit delivery approval.
+5. `Send Approved Emails` uses Gmail SMTP and advances to `completed` only
+   after all three drafts are delivered.
+
+The sender enters a Google app password at delivery time. It remains in process
+memory only. `delivery-status.json` records each successful message ID so a
+retry after partial failure skips messages that already sent.
+
 A week in `generated`, `validated`, `reviewed`, or `approved` may return to
 `draft` when changes are requested. The transition must include a reason.
 Completed weeks can return to `draft` only for an explicit human-requested

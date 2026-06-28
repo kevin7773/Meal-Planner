@@ -50,6 +50,47 @@ class GuiBrandingTests(unittest.TestCase):
             ).is_file()
         )
 
+    def test_shared_palette_matches_dashboard_module_colors(self) -> None:
+        branding = (
+            ROOT / "scripts" / "gui-branding.ps1"
+        ).read_text(encoding="utf-8")
+
+        for color in (
+            "#28765A",
+            "#C5842C",
+            "#48769A",
+            "#8A5D86",
+            "#A04E45",
+        ):
+            self.assertIn(color, branding)
+        self.assertIn("Get-MealPlannerPalette", branding)
+        self.assertIn("Set-MealPlannerButtonStyle", branding)
+        self.assertIn("Set-MealPlannerFormSurface", branding)
+
+    def test_each_module_uses_its_dashboard_color_identity(self) -> None:
+        expected_styles = {
+            "inventory-gui.ps1": (
+                "-Button $saveButton -Color $colors.Pantry"
+            ),
+            "import-recipe-gui.ps1": (
+                "-Button $importButton -Color $colors.Email"
+            ),
+            "meal-override-gui.ps1": (
+                "-Button $applyButton -Color $colors.Override"
+            ),
+            "recipe-feedback.ps1": (
+                "-Button $saveButton -Color $colors.Review"
+            ),
+        }
+
+        for script_name, expected in expected_styles.items():
+            script = (ROOT / "scripts" / script_name).read_text(
+                encoding="utf-8"
+            )
+            self.assertIn("Get-MealPlannerPalette", script)
+            self.assertIn("Set-MealPlannerFormSurface", script)
+            self.assertIn(expected, script)
+
     def test_shortcut_generator_covers_every_command(self) -> None:
         script = (
             ROOT / "scripts" / "create-launcher-shortcuts.ps1"

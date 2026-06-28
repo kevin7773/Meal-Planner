@@ -49,6 +49,13 @@ class InventoryAttentionFilterTests(unittest.TestCase):
             self.script,
         )
 
+    def test_expiration_is_editable_with_fresh_produce_default(self) -> None:
+        self.assertIn("$expiresPicker.Enabled = $true", self.script)
+        self.assertIn(
+            "$expiresPicker.Value = $acquiredPicker.Value.AddDays(5)",
+            self.script,
+        )
+
     def test_full_view_includes_untracked_catalog_items(self) -> None:
         self.assertIn("'Item ID'", self.script)
         self.assertIn(

@@ -3,6 +3,7 @@ $ErrorActionPreference = 'Stop'
 
 $projectRoot = Split-Path -Parent $PSScriptRoot
 $plannerScript = Join-Path $PSScriptRoot 'planner_cli.py'
+$workflowScript = Join-Path $PSScriptRoot 'week_workflow.py'
 
 function Resolve-Python {
     $bundled = Join-Path $env:USERPROFILE '.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe'
@@ -22,13 +23,46 @@ Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 [System.Windows.Forms.Application]::EnableVisualStyles()
 
+$colors = @{
+    Background = [System.Drawing.ColorTranslator]::FromHtml('#F3F6F4')
+    Surface = [System.Drawing.Color]::White
+    Text = [System.Drawing.ColorTranslator]::FromHtml('#202624')
+    Muted = [System.Drawing.ColorTranslator]::FromHtml('#66716D')
+    Border = [System.Drawing.ColorTranslator]::FromHtml('#D5DDD9')
+    Planner = [System.Drawing.ColorTranslator]::FromHtml('#28765A')
+    Pantry = [System.Drawing.ColorTranslator]::FromHtml('#C5842C')
+    Email = [System.Drawing.ColorTranslator]::FromHtml('#48769A')
+    Review = [System.Drawing.ColorTranslator]::FromHtml('#8A5D86')
+    Override = [System.Drawing.ColorTranslator]::FromHtml('#A04E45')
+    SoftPlanner = [System.Drawing.ColorTranslator]::FromHtml('#E8F3ED')
+    SoftPantry = [System.Drawing.ColorTranslator]::FromHtml('#FFF2DD')
+    SoftEmail = [System.Drawing.ColorTranslator]::FromHtml('#E8F0F7')
+    SoftReview = [System.Drawing.ColorTranslator]::FromHtml('#F1EAF1')
+    SoftMuted = [System.Drawing.ColorTranslator]::FromHtml('#ECEFED')
+}
+
+function Set-SectionButtonStyle {
+    param(
+        [System.Windows.Forms.Button]$Button,
+        [System.Drawing.Color]$Color
+    )
+
+    $Button.FlatStyle = 'Flat'
+    $Button.FlatAppearance.BorderSize = 0
+    $Button.BackColor = $Color
+    $Button.ForeColor = [System.Drawing.Color]::White
+    $Button.UseVisualStyleBackColor = $false
+}
+
 $form = New-Object System.Windows.Forms.Form
 $form.Text = 'Weekly Meal Planner - Dry Run'
-$form.ClientSize = New-Object System.Drawing.Size(900, 720)
+$form.ClientSize = New-Object System.Drawing.Size(1060, 800)
 $form.StartPosition = 'CenterScreen'
 $form.FormBorderStyle = 'FixedDialog'
 $form.MaximizeBox = $false
 $form.Font = New-Object System.Drawing.Font('Segoe UI', 10)
+$form.BackColor = $colors.Background
+$form.ForeColor = $colors.Text
 
 $weekLabel = New-Object System.Windows.Forms.Label
 $weekLabel.Text = 'Week of (Monday)'
@@ -61,22 +95,43 @@ $form.Controls.Add($noWriteLabel)
 
 $existingPlanPanel = New-Object System.Windows.Forms.Panel
 $existingPlanPanel.Location = New-Object System.Drawing.Point(20, 68)
-$existingPlanPanel.Size = New-Object System.Drawing.Size(855, 44)
+$existingPlanPanel.Size = New-Object System.Drawing.Size(1020, 44)
 $existingPlanPanel.BorderStyle = 'FixedSingle'
 $form.Controls.Add($existingPlanPanel)
 
 $existingPlanLabel = New-Object System.Windows.Forms.Label
 $existingPlanLabel.Location = New-Object System.Drawing.Point(12, 7)
-$existingPlanLabel.Size = New-Object System.Drawing.Size(655, 28)
+$existingPlanLabel.Size = New-Object System.Drawing.Size(385, 28)
 $existingPlanLabel.TextAlign = 'MiddleLeft'
 $existingPlanPanel.Controls.Add($existingPlanLabel)
 
 $viewExistingButton = New-Object System.Windows.Forms.Button
-$viewExistingButton.Text = 'View Existing Plan'
-$viewExistingButton.Location = New-Object System.Drawing.Point(685, 5)
-$viewExistingButton.Size = New-Object System.Drawing.Size(155, 32)
+$viewExistingButton.Text = 'Raw Markdown'
+$viewExistingButton.Location = New-Object System.Drawing.Point(865, 5)
+$viewExistingButton.Size = New-Object System.Drawing.Size(140, 32)
 $viewExistingButton.Enabled = $false
 $existingPlanPanel.Controls.Add($viewExistingButton)
+
+$viewSummaryButton = New-Object System.Windows.Forms.Button
+$viewSummaryButton.Text = 'Menu Summary'
+$viewSummaryButton.Location = New-Object System.Drawing.Point(400, 5)
+$viewSummaryButton.Size = New-Object System.Drawing.Size(145, 32)
+$viewSummaryButton.Enabled = $false
+$existingPlanPanel.Controls.Add($viewSummaryButton)
+
+$viewGroceryButton = New-Object System.Windows.Forms.Button
+$viewGroceryButton.Text = 'Grocery List'
+$viewGroceryButton.Location = New-Object System.Drawing.Point(555, 5)
+$viewGroceryButton.Size = New-Object System.Drawing.Size(140, 32)
+$viewGroceryButton.Enabled = $false
+$existingPlanPanel.Controls.Add($viewGroceryButton)
+
+$viewEmailsButton = New-Object System.Windows.Forms.Button
+$viewEmailsButton.Text = 'Email Drafts'
+$viewEmailsButton.Location = New-Object System.Drawing.Point(705, 5)
+$viewEmailsButton.Size = New-Object System.Drawing.Size(150, 32)
+$viewEmailsButton.Enabled = $false
+$existingPlanPanel.Controls.Add($viewEmailsButton)
 
 $dinersLabel = New-Object System.Windows.Forms.Label
 $dinersLabel.Text = 'Diners'
@@ -116,12 +171,12 @@ foreach ($day in $dinerDays) {
 
 $optionList = New-Object System.Windows.Forms.ListBox
 $optionList.Location = New-Object System.Drawing.Point(20, 184)
-$optionList.Size = New-Object System.Drawing.Size(280, 414)
+$optionList.Size = New-Object System.Drawing.Size(300, 414)
 $form.Controls.Add($optionList)
 
 $reportText = New-Object System.Windows.Forms.TextBox
-$reportText.Location = New-Object System.Drawing.Point(320, 184)
-$reportText.Size = New-Object System.Drawing.Size(555, 414)
+$reportText.Location = New-Object System.Drawing.Point(340, 184)
+$reportText.Size = New-Object System.Drawing.Size(700, 414)
 $reportText.Multiline = $true
 $reportText.ReadOnly = $true
 $reportText.ScrollBars = 'Vertical'
@@ -130,32 +185,88 @@ $form.Controls.Add($reportText)
 
 $actorLabel = New-Object System.Windows.Forms.Label
 $actorLabel.Text = 'Selected by'
-$actorLabel.Location = New-Object System.Drawing.Point(320, 623)
+$actorLabel.Location = New-Object System.Drawing.Point(340, 623)
 $actorLabel.Size = New-Object System.Drawing.Size(90, 28)
 $form.Controls.Add($actorLabel)
 
 $actorText = New-Object System.Windows.Forms.TextBox
-$actorText.Location = New-Object System.Drawing.Point(415, 620)
+$actorText.Location = New-Object System.Drawing.Point(435, 620)
 $actorText.Size = New-Object System.Drawing.Size(180, 28)
 $actorText.Text = $env:USERNAME
 $form.Controls.Add($actorText)
 
 $commitButton = New-Object System.Windows.Forms.Button
 $commitButton.Text = 'Commit Selected'
-$commitButton.Location = New-Object System.Drawing.Point(610, 615)
+$commitButton.Location = New-Object System.Drawing.Point(690, 615)
 $commitButton.Size = New-Object System.Drawing.Size(145, 40)
 $commitButton.Enabled = $false
 $form.Controls.Add($commitButton)
 
 $closeButton = New-Object System.Windows.Forms.Button
 $closeButton.Text = 'Close'
-$closeButton.Location = New-Object System.Drawing.Point(770, 615)
+$closeButton.Location = New-Object System.Drawing.Point(935, 615)
 $closeButton.Size = New-Object System.Drawing.Size(105, 40)
 $closeButton.Add_Click({ $form.Close() })
 $form.Controls.Add($closeButton)
 
+$workflowStatusLabel = New-Object System.Windows.Forms.Label
+$workflowStatusLabel.Location = New-Object System.Drawing.Point(20, 675)
+$workflowStatusLabel.Size = New-Object System.Drawing.Size(1020, 28)
+$workflowStatusLabel.TextAlign = 'MiddleLeft'
+$workflowStatusLabel.ForeColor = [System.Drawing.Color]::DimGray
+$form.Controls.Add($workflowStatusLabel)
+
+$generatePackageButton = New-Object System.Windows.Forms.Button
+$generatePackageButton.Text = 'Generate Review Package'
+$generatePackageButton.Location = New-Object System.Drawing.Point(20, 715)
+$generatePackageButton.Size = New-Object System.Drawing.Size(210, 40)
+$generatePackageButton.Enabled = $false
+$form.Controls.Add($generatePackageButton)
+
+$approvePackageButton = New-Object System.Windows.Forms.Button
+$approvePackageButton.Text = 'Approve Package'
+$approvePackageButton.Location = New-Object System.Drawing.Point(245, 715)
+$approvePackageButton.Size = New-Object System.Drawing.Size(175, 40)
+$approvePackageButton.Enabled = $false
+$form.Controls.Add($approvePackageButton)
+
+$sendEmailsButton = New-Object System.Windows.Forms.Button
+$sendEmailsButton.Text = 'Send Approved Emails'
+$sendEmailsButton.Location = New-Object System.Drawing.Point(435, 715)
+$sendEmailsButton.Size = New-Object System.Drawing.Size(205, 40)
+$sendEmailsButton.Enabled = $false
+$form.Controls.Add($sendEmailsButton)
+
+Set-SectionButtonStyle -Button $generateButton -Color $colors.Planner
+Set-SectionButtonStyle -Button $viewSummaryButton -Color $colors.Planner
+Set-SectionButtonStyle -Button $viewGroceryButton -Color $colors.Pantry
+Set-SectionButtonStyle -Button $viewEmailsButton -Color $colors.Email
+Set-SectionButtonStyle -Button $viewExistingButton -Color $colors.Override
+Set-SectionButtonStyle -Button $commitButton -Color $colors.Planner
+Set-SectionButtonStyle -Button $generatePackageButton -Color $colors.Planner
+Set-SectionButtonStyle -Button $approvePackageButton -Color $colors.Review
+Set-SectionButtonStyle -Button $sendEmailsButton -Color $colors.Email
+
+$closeButton.FlatStyle = 'Flat'
+$closeButton.FlatAppearance.BorderColor = $colors.Border
+$closeButton.BackColor = $colors.Surface
+$closeButton.ForeColor = $colors.Text
+
+$optionList.BackColor = $colors.SoftPlanner
+$optionList.ForeColor = $colors.Text
+$reportText.BackColor = $colors.Surface
+$reportText.ForeColor = $colors.Text
+$workflowStatusLabel.BackColor = $colors.SoftMuted
+$workflowStatusLabel.ForeColor = $colors.Muted
+$workflowStatusLabel.Padding = New-Object System.Windows.Forms.Padding(10, 0, 0, 0)
+
 $script:proposals = @()
 $script:existingMenuPath = $null
+$script:existingStatus = $null
+$script:lastEmailSender = [Environment]::GetEnvironmentVariable(
+    'MEAL_PLANNER_EMAIL_FROM',
+    'Process'
+)
 
 function Get-SelectedMenuPath {
     $week = $weekPicker.Value.Date
@@ -184,6 +295,126 @@ function Set-PlannedDiners {
     }
 }
 
+function Invoke-WeekWorkflow {
+    param(
+        [string]$Command,
+        [string]$Actor = '',
+        [string]$Sender = ''
+    )
+
+    $workflowArguments = @(
+        $workflowScript,
+        $Command,
+        '--week', $weekPicker.Value.ToString('yyyy-MM-dd'),
+        '--json'
+    )
+    if (-not [string]::IsNullOrWhiteSpace($Actor)) {
+        $workflowArguments += @('--actor', $Actor)
+    }
+    if (-not [string]::IsNullOrWhiteSpace($Sender)) {
+        $workflowArguments += @('--sender', $Sender)
+    }
+    $raw = & $python @workflowArguments 2>&1
+    if ($LASTEXITCODE -ne 0) {
+        throw ($raw -join [Environment]::NewLine)
+    }
+    return ($raw -join [Environment]::NewLine) | ConvertFrom-Json
+}
+
+function Show-WorkflowContent {
+    param(
+        [string]$Property,
+        [string]$Title
+    )
+
+    $package = Invoke-WeekWorkflow -Command 'inspect'
+    $optionList.ClearSelected()
+    $commitButton.Enabled = $false
+    $content = [string]$package.$Property
+    $reportText.Text = (
+        "$Title`r`nWeek of $($package.week_of) | " +
+        "Status: $($package.status)`r`n`r`n" +
+        ($content -replace '\r?\n', [Environment]::NewLine)
+    )
+    $reportText.SelectionStart = 0
+    $reportText.ScrollToCaret()
+}
+
+function Show-EmailCredentialDialog {
+    $dialog = New-Object System.Windows.Forms.Form
+    $dialog.Text = 'Send Approved Meal Plan Emails'
+    $dialog.ClientSize = New-Object System.Drawing.Size(520, 235)
+    $dialog.StartPosition = 'CenterParent'
+    $dialog.FormBorderStyle = 'FixedDialog'
+    $dialog.MaximizeBox = $false
+    $dialog.MinimizeBox = $false
+    $dialog.Font = New-Object System.Drawing.Font('Segoe UI', 10)
+
+    $note = New-Object System.Windows.Forms.Label
+    $note.Text = (
+        'Enter the Gmail account that will send the three approved drafts. ' +
+        'Use a Google app password, not the account password. Nothing is saved.'
+    )
+    $note.Location = New-Object System.Drawing.Point(20, 18)
+    $note.Size = New-Object System.Drawing.Size(480, 55)
+    $dialog.Controls.Add($note)
+
+    $senderLabel = New-Object System.Windows.Forms.Label
+    $senderLabel.Text = 'Sender email'
+    $senderLabel.Location = New-Object System.Drawing.Point(20, 90)
+    $senderLabel.Size = New-Object System.Drawing.Size(120, 28)
+    $dialog.Controls.Add($senderLabel)
+
+    $senderText = New-Object System.Windows.Forms.TextBox
+    $senderText.Location = New-Object System.Drawing.Point(145, 88)
+    $senderText.Size = New-Object System.Drawing.Size(350, 28)
+    $senderText.Text = [string]$script:lastEmailSender
+    $dialog.Controls.Add($senderText)
+
+    $passwordLabel = New-Object System.Windows.Forms.Label
+    $passwordLabel.Text = 'App password'
+    $passwordLabel.Location = New-Object System.Drawing.Point(20, 135)
+    $passwordLabel.Size = New-Object System.Drawing.Size(120, 28)
+    $dialog.Controls.Add($passwordLabel)
+
+    $passwordText = New-Object System.Windows.Forms.TextBox
+    $passwordText.Location = New-Object System.Drawing.Point(145, 133)
+    $passwordText.Size = New-Object System.Drawing.Size(350, 28)
+    $passwordText.UseSystemPasswordChar = $true
+    $dialog.Controls.Add($passwordText)
+
+    $sendButton = New-Object System.Windows.Forms.Button
+    $sendButton.Text = 'Send'
+    $sendButton.Location = New-Object System.Drawing.Point(305, 185)
+    $sendButton.Size = New-Object System.Drawing.Size(90, 34)
+    $sendButton.DialogResult = [System.Windows.Forms.DialogResult]::OK
+    $dialog.Controls.Add($sendButton)
+
+    $cancelButton = New-Object System.Windows.Forms.Button
+    $cancelButton.Text = 'Cancel'
+    $cancelButton.Location = New-Object System.Drawing.Point(405, 185)
+    $cancelButton.Size = New-Object System.Drawing.Size(90, 34)
+    $cancelButton.DialogResult = [System.Windows.Forms.DialogResult]::Cancel
+    $dialog.Controls.Add($cancelButton)
+
+    $dialog.AcceptButton = $sendButton
+    $dialog.CancelButton = $cancelButton
+    if ($dialog.ShowDialog($form) -ne [System.Windows.Forms.DialogResult]::OK) {
+        return $null
+    }
+    if (
+        [string]::IsNullOrWhiteSpace($senderText.Text) -or
+        [string]::IsNullOrWhiteSpace($passwordText.Text)
+    ) {
+        throw 'Sender email and app password are required.'
+    }
+    $script:lastEmailSender = $senderText.Text.Trim()
+    return [pscustomobject]@{
+        Sender = $senderText.Text.Trim()
+        Password = $passwordText.Text
+    }
+}
+
 function Update-ExistingPlanState {
     param([switch]$LoadDiners)
 
@@ -200,12 +431,93 @@ function Update-ExistingPlanState {
         } else {
             'status unavailable'
         }
+        $script:existingStatus = $status
         $existingPlanLabel.Text = (
             "Existing plan found for this week | Status: $status"
         )
-        $existingPlanLabel.ForeColor = [System.Drawing.Color]::DarkRed
-        $existingPlanPanel.BackColor = [System.Drawing.Color]::Moccasin
+        switch ($status) {
+            'draft' {
+                $existingPlanLabel.ForeColor = $colors.Pantry
+                $existingPlanPanel.BackColor = $colors.SoftPantry
+                $workflowStatusLabel.BackColor = $colors.SoftPantry
+            }
+            { $_ -in @('generated', 'validated') } {
+                $existingPlanLabel.ForeColor = $colors.Email
+                $existingPlanPanel.BackColor = $colors.SoftEmail
+                $workflowStatusLabel.BackColor = $colors.SoftEmail
+            }
+            'reviewed' {
+                $existingPlanLabel.ForeColor = $colors.Review
+                $existingPlanPanel.BackColor = $colors.SoftReview
+                $workflowStatusLabel.BackColor = $colors.SoftReview
+            }
+            { $_ -in @('approved', 'completed') } {
+                $existingPlanLabel.ForeColor = $colors.Planner
+                $existingPlanPanel.BackColor = $colors.SoftPlanner
+                $workflowStatusLabel.BackColor = $colors.SoftPlanner
+            }
+            default {
+                $existingPlanLabel.ForeColor = $colors.Muted
+                $existingPlanPanel.BackColor = $colors.SoftMuted
+                $workflowStatusLabel.BackColor = $colors.SoftMuted
+            }
+        }
         $viewExistingButton.Enabled = $true
+        $viewSummaryButton.Enabled = $true
+        $groceryPath = Join-Path $projectRoot (
+            "grocery-lists\{0}\{1}-grocery-list.md" -f
+                $weekPicker.Value.Year,
+                $weekPicker.Value.ToString('yyyy-MM-dd')
+        )
+        $emailRoot = Join-Path $projectRoot (
+            "email-outputs\{0}\{1}" -f
+                $weekPicker.Value.Year,
+                $weekPicker.Value.ToString('yyyy-MM-dd')
+        )
+        $emailDraftsComplete = @(
+            'email-1-mon-tue.md',
+            'email-2-wed-thu-fri.md',
+            'email-3-sat-sun.md'
+        ) | ForEach-Object {
+            Test-Path -LiteralPath (Join-Path $emailRoot $_)
+        }
+        $viewGroceryButton.Enabled = Test-Path -LiteralPath $groceryPath
+        $viewEmailsButton.Enabled = (
+            @($emailDraftsComplete | Where-Object { -not $_ }).Count -eq 0
+        )
+        $generatePackageButton.Enabled = $status -in @('draft', 'generated')
+        $approvePackageButton.Enabled = (
+            $status -in @('validated', 'reviewed') -and
+            $viewGroceryButton.Enabled -and
+            $viewEmailsButton.Enabled
+        )
+        $sendEmailsButton.Enabled = $status -eq 'approved'
+        $workflowStatusLabel.Text = switch ($status) {
+            'draft' {
+                'Review the menu summary, then generate the grocery and email review package.'
+            }
+            'generated' {
+                'Package generation is incomplete; run Generate Review Package to validate it.'
+            }
+            'validated' {
+                'Review Menu Summary, Grocery List, and Email Drafts, then approve the package.'
+            }
+            'reviewed' {
+                'Human review is recorded. Approve the package to authorize delivery.'
+            }
+            'approved' {
+                'Package is approved. Send Approved Emails is now available.'
+            }
+            'completed' {
+                'All approved emails were sent successfully.'
+            }
+            'archived' {
+                'This weekly package is archived and read-only.'
+            }
+            default {
+                "Existing package status: $status"
+            }
+        }
         if ($LoadDiners) {
             $dinersMatch = [regex]::Match(
                 $text,
@@ -220,10 +532,21 @@ function Update-ExistingPlanState {
         }
     } else {
         $script:existingMenuPath = $null
+        $script:existingStatus = $null
         $existingPlanLabel.Text = 'No existing plan found for this week.'
-        $existingPlanLabel.ForeColor = [System.Drawing.Color]::DarkGreen
-        $existingPlanPanel.BackColor = [System.Drawing.Color]::Honeydew
+        $existingPlanLabel.ForeColor = $colors.Planner
+        $existingPlanPanel.BackColor = $colors.SoftPlanner
         $viewExistingButton.Enabled = $false
+        $viewSummaryButton.Enabled = $false
+        $viewGroceryButton.Enabled = $false
+        $viewEmailsButton.Enabled = $false
+        $generatePackageButton.Enabled = $false
+        $approvePackageButton.Enabled = $false
+        $sendEmailsButton.Enabled = $false
+        $workflowStatusLabel.Text = (
+            'Generate dry runs and commit one option to begin the review workflow.'
+        )
+        $workflowStatusLabel.BackColor = $colors.SoftMuted
         if ($LoadDiners) {
             Set-PlannedDiners -Values @(4, 4, 4, 4, 4, 4, 4)
         }
@@ -446,7 +769,7 @@ $viewExistingButton.Add_Click({
         $optionList.ClearSelected()
         $commitButton.Enabled = $false
         $reportText.Text = (
-            "EXISTING WEEKLY PLAN`r`n" +
+            "EXISTING WEEKLY PLAN - RAW MARKDOWN`r`n" +
             "$($script:existingMenuPath)`r`n`r`n" +
             $menuText
         )
@@ -456,6 +779,51 @@ $viewExistingButton.Add_Click({
         [System.Windows.Forms.MessageBox]::Show(
             $_.Exception.Message,
             'Unable to View Existing Plan',
+            'OK',
+            'Error'
+        ) | Out-Null
+    }
+})
+
+$viewSummaryButton.Add_Click({
+    try {
+        Show-WorkflowContent `
+            -Property 'menu_summary' `
+            -Title 'HUMAN-READABLE MENU SUMMARY'
+    } catch {
+        [System.Windows.Forms.MessageBox]::Show(
+            $_.Exception.Message,
+            'Unable to View Menu Summary',
+            'OK',
+            'Error'
+        ) | Out-Null
+    }
+})
+
+$viewGroceryButton.Add_Click({
+    try {
+        Show-WorkflowContent `
+            -Property 'grocery_text' `
+            -Title 'GROCERY LIST'
+    } catch {
+        [System.Windows.Forms.MessageBox]::Show(
+            $_.Exception.Message,
+            'Unable to View Grocery List',
+            'OK',
+            'Error'
+        ) | Out-Null
+    }
+})
+
+$viewEmailsButton.Add_Click({
+    try {
+        Show-WorkflowContent `
+            -Property 'email_text' `
+            -Title 'EMAIL DRAFTS'
+    } catch {
+        [System.Windows.Forms.MessageBox]::Show(
+            $_.Exception.Message,
+            'Unable to View Email Drafts',
             'OK',
             'Error'
         ) | Out-Null
@@ -516,12 +884,21 @@ $commitButton.Add_Click({
             throw ($result -join [Environment]::NewLine)
         }
         [System.Windows.Forms.MessageBox]::Show(
-            "Draft weekly menu created:`n$($result -join '')",
+            (
+                "Draft weekly menu created:`n$($result -join '')`n`n" +
+                'Review the menu summary, then generate the review package.'
+            ),
             'Dry Run Committed',
             'OK',
             'Information'
         ) | Out-Null
-        $form.Close()
+        $script:proposals = @()
+        $optionList.Items.Clear()
+        $commitButton.Enabled = $false
+        Update-ExistingPlanState -LoadDiners
+        Show-WorkflowContent `
+            -Property 'menu_summary' `
+            -Title 'HUMAN-READABLE DRAFT MENU'
     } catch {
         [System.Windows.Forms.MessageBox]::Show(
             $_.Exception.Message,
@@ -529,6 +906,166 @@ $commitButton.Add_Click({
             'OK',
             'Error'
         ) | Out-Null
+    }
+})
+
+$generatePackageButton.Add_Click({
+    try {
+        $answer = [System.Windows.Forms.MessageBox]::Show(
+            (
+                'Generate the grocery list and three email drafts, then run ' +
+                'automated validation?'
+            ),
+            'Generate Review Package',
+            'YesNo',
+            'Question'
+        )
+        if ($answer -ne [System.Windows.Forms.DialogResult]::Yes) {
+            return
+        }
+        $form.UseWaitCursor = $true
+        $package = Invoke-WeekWorkflow -Command 'generate'
+        Update-ExistingPlanState
+        $reportText.Text = (
+            "REVIEW PACKAGE READY`r`n" +
+            "Week of $($package.week_of) | Status: $($package.status)`r`n`r`n" +
+            ($package.menu_summary -replace '\r?\n', [Environment]::NewLine)
+        )
+        $reportText.SelectionStart = 0
+        $reportText.ScrollToCaret()
+        [System.Windows.Forms.MessageBox]::Show(
+            (
+                'The menu, grocery list, and email drafts are validated. ' +
+                'Review each view before approving the package.'
+            ),
+            'Review Package Ready',
+            'OK',
+            'Information'
+        ) | Out-Null
+    } catch {
+        [System.Windows.Forms.MessageBox]::Show(
+            $_.Exception.Message,
+            'Unable to Generate Review Package',
+            'OK',
+            'Error'
+        ) | Out-Null
+    } finally {
+        $form.UseWaitCursor = $false
+    }
+})
+
+$approvePackageButton.Add_Click({
+    try {
+        if ([string]::IsNullOrWhiteSpace($actorText.Text)) {
+            throw 'Enter the person reviewing and approving this package.'
+        }
+        $answer = [System.Windows.Forms.MessageBox]::Show(
+            (
+                'I have reviewed the menu summary, grocery list, and all ' +
+                'three email drafts. Approve this package for delivery?'
+            ),
+            'Approve Weekly Package',
+            'YesNo',
+            'Warning'
+        )
+        if ($answer -ne [System.Windows.Forms.DialogResult]::Yes) {
+            return
+        }
+        $package = Invoke-WeekWorkflow `
+            -Command 'approve' `
+            -Actor $actorText.Text
+        Update-ExistingPlanState
+        $reportText.Text = (
+            "PACKAGE APPROVED FOR DELIVERY`r`n" +
+            "Week of $($package.week_of) | Status: $($package.status)`r`n`r`n" +
+            ($package.menu_summary -replace '\r?\n', [Environment]::NewLine)
+        )
+        [System.Windows.Forms.MessageBox]::Show(
+            'Approval recorded. Send Approved Emails is now available.',
+            'Package Approved',
+            'OK',
+            'Information'
+        ) | Out-Null
+    } catch {
+        [System.Windows.Forms.MessageBox]::Show(
+            $_.Exception.Message,
+            'Unable to Approve Package',
+            'OK',
+            'Error'
+        ) | Out-Null
+    }
+})
+
+$sendEmailsButton.Add_Click({
+    try {
+        if ([string]::IsNullOrWhiteSpace($actorText.Text)) {
+            throw 'Enter the person authorizing email delivery.'
+        }
+        $answer = [System.Windows.Forms.MessageBox]::Show(
+            (
+                'This will immediately send all three approved weekly menu ' +
+                'emails. Continue?'
+            ),
+            'Send Approved Emails',
+            'YesNo',
+            'Warning'
+        )
+        if ($answer -ne [System.Windows.Forms.DialogResult]::Yes) {
+            return
+        }
+        $credentials = Show-EmailCredentialDialog
+        if ($null -eq $credentials) {
+            return
+        }
+        $previousPassword = [Environment]::GetEnvironmentVariable(
+            'MEAL_PLANNER_EMAIL_PASSWORD',
+            'Process'
+        )
+        try {
+            [Environment]::SetEnvironmentVariable(
+                'MEAL_PLANNER_EMAIL_PASSWORD',
+                $credentials.Password,
+                'Process'
+            )
+            $form.UseWaitCursor = $true
+            $package = Invoke-WeekWorkflow `
+                -Command 'send' `
+                -Actor $actorText.Text `
+                -Sender $credentials.Sender
+        } finally {
+            [Environment]::SetEnvironmentVariable(
+                'MEAL_PLANNER_EMAIL_PASSWORD',
+                $previousPassword,
+                'Process'
+            )
+            $credentials.Password = ''
+            $form.UseWaitCursor = $false
+        }
+        Update-ExistingPlanState
+        $reportText.Text = (
+            "EMAIL DELIVERY COMPLETE`r`n" +
+            "Week of $($package.week_of) | Status: $($package.status)`r`n`r`n" +
+            "Message IDs:`r`n" +
+            (@($package.message_ids) -join [Environment]::NewLine)
+        )
+        [System.Windows.Forms.MessageBox]::Show(
+            'All three approved emails were sent successfully.',
+            'Email Delivery Complete',
+            'OK',
+            'Information'
+        ) | Out-Null
+    } catch {
+        [System.Windows.Forms.MessageBox]::Show(
+            (
+                "$($_.Exception.Message)`r`n`r`n" +
+                'Any successfully sent message was recorded; retrying will ' +
+                'send only drafts that remain unsent.'
+            ),
+            'Email Delivery Failed',
+            'OK',
+            'Error'
+        ) | Out-Null
+        Update-ExistingPlanState
     }
 })
 

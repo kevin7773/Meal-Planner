@@ -89,6 +89,18 @@ def recipe_payload(path: Path, metadata: dict, body: str) -> dict:
         "seasons": metadata["seasons"],
         "source": metadata.get("source", "Unknown import source"),
         "path": str(path),
+        "card_sections": {
+            "ingredients": _body_section(
+                body,
+                "## Ingredients",
+                "## Directions",
+            ),
+            "directions": _body_section(
+                body,
+                "## Directions",
+                "## Leftover Plan",
+            ),
+        },
     }
 
 
@@ -105,6 +117,7 @@ def update_imported_recipe(
     kid_friendly_reason: str,
     cooking_method: str,
     seasons: list[str],
+    card_sections: dict[str, str] | None = None,
     change_note: str = "Updated imported recipe metadata",
     root: Path = ROOT,
 ) -> tuple[int, Path]:
@@ -205,6 +218,27 @@ def update_imported_recipe(
     }
     for label, value in card_updates.items():
         content = _set_card_value(content, label, value)
+    if card_sections is not None:
+        ingredients = _editable_card_section(
+            card_sections,
+            "ingredients",
+        )
+        directions = _editable_card_section(
+            card_sections,
+            "directions",
+        )
+        content = _set_body_section(
+            content,
+            "## Ingredients",
+            "## Directions",
+            ingredients,
+        )
+        content = _set_body_section(
+            content,
+            "## Directions",
+            "## Leftover Plan",
+            directions,
+        )
     content = _add_revision_row(
         content,
         revision,
@@ -264,6 +298,54 @@ def update_imported_recipe(
         )
         raise
     return revision, target_path
+
+
+def _body_section(
+    body: str,
+    heading: str,
+    next_heading: str,
+) -> str:
+    match = re.search(
+        rf"(?ms)^{re.escape(heading)}\s*\n(.*?)(?=^{re.escape(next_heading)}\s*$)",
+        body,
+    )
+    if match is None:
+        raise ValueError(f"Recipe body is missing {heading}")
+    return match.group(1).strip()
+
+
+def _editable_card_section(
+    sections: dict[str, str],
+    name: str,
+) -> str:
+    value = str(sections.get(name, "")).replace("\r\n", "\n").strip()
+    if not value:
+        raise ValueError(f"Recipe card {name} cannot be empty")
+    if re.search(r"(?m)^##\s+", value):
+        raise ValueError(
+            f"Recipe card {name} cannot add top-level recipe sections"
+        )
+    return value
+
+
+def _set_body_section(
+    content: str,
+    heading: str,
+    next_heading: str,
+    value: str,
+) -> str:
+    pattern = (
+        rf"(?ms)(^{re.escape(heading)}\s*\n)"
+        rf".*?(?=^{re.escape(next_heading)}\s*$)"
+    )
+    if re.search(pattern, content) is None:
+        raise ValueError(f"Recipe body is missing {heading}")
+    return re.sub(
+        pattern,
+        lambda match: match.group(1) + "\n" + value + "\n\n",
+        content,
+        count=1,
+    )
 
 
 def _set_front_matter(content: str, field: str, value: str) -> str:

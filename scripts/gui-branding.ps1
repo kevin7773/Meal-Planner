@@ -12,6 +12,65 @@ function Get-MealPlannerBitmap {
     }
 }
 
+function Get-MealPlannerPalette {
+    return @{
+        Background = [System.Drawing.ColorTranslator]::FromHtml('#F3F6F4')
+        Surface = [System.Drawing.Color]::White
+        Header = [System.Drawing.ColorTranslator]::FromHtml('#24312D')
+        Planner = [System.Drawing.ColorTranslator]::FromHtml('#28765A')
+        Pantry = [System.Drawing.ColorTranslator]::FromHtml('#C5842C')
+        PantryText = [System.Drawing.ColorTranslator]::FromHtml('#8A5A1B')
+        Email = [System.Drawing.ColorTranslator]::FromHtml('#48769A')
+        Review = [System.Drawing.ColorTranslator]::FromHtml('#8A5D86')
+        Override = [System.Drawing.ColorTranslator]::FromHtml('#A04E45')
+        Text = [System.Drawing.ColorTranslator]::FromHtml('#202624')
+        Muted = [System.Drawing.ColorTranslator]::FromHtml('#66716D')
+        Border = [System.Drawing.ColorTranslator]::FromHtml('#D5DDD9')
+        SoftPlanner = [System.Drawing.ColorTranslator]::FromHtml('#E8F3ED')
+        SoftPantry = [System.Drawing.ColorTranslator]::FromHtml('#FFF2DD')
+        SoftEmail = [System.Drawing.ColorTranslator]::FromHtml('#E8F0F7')
+        SoftReview = [System.Drawing.ColorTranslator]::FromHtml('#F1EAF1')
+        SoftOverride = [System.Drawing.ColorTranslator]::FromHtml('#F7E8E6')
+        SoftMuted = [System.Drawing.ColorTranslator]::FromHtml('#ECEFED')
+    }
+}
+
+function Set-MealPlannerButtonStyle {
+    param(
+        [System.Windows.Forms.Button]$Button,
+        [System.Drawing.Color]$Color
+    )
+
+    $Button.FlatStyle = 'Flat'
+    $Button.FlatAppearance.BorderSize = 0
+    $Button.BackColor = $Color
+    $Button.ForeColor = [System.Drawing.Color]::White
+    $Button.UseVisualStyleBackColor = $false
+}
+
+function Set-MealPlannerNeutralButtonStyle {
+    param(
+        [System.Windows.Forms.Button]$Button,
+        [hashtable]$Palette
+    )
+
+    $Button.FlatStyle = 'Flat'
+    $Button.FlatAppearance.BorderColor = $Palette.Border
+    $Button.BackColor = $Palette.Surface
+    $Button.ForeColor = $Palette.Text
+    $Button.UseVisualStyleBackColor = $false
+}
+
+function Set-MealPlannerFormSurface {
+    param(
+        [System.Windows.Forms.Form]$Form,
+        [hashtable]$Palette
+    )
+
+    $Form.BackColor = $Palette.Background
+    $Form.ForeColor = $Palette.Text
+}
+
 function Set-MealPlannerFormIcon {
     param(
         [System.Windows.Forms.Form]$Form,

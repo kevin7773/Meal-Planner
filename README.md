@@ -11,14 +11,20 @@ only when the approved library cannot fill the week.
 1. Double-click `Meal Planner Suite.cmd`, open Plan Week, and generate three
    side-effect-free dry runs.
 2. Compare shopping cost after inventory, fiber, rotation score, and warnings.
-3. Commit one selected proposal, which creates a `draft` weekly menu.
-4. Generate the grocery list and email drafts.
-5. Validate the generated week and wait for explicit approval.
-6. Send the approved emails and update meal history with recipe IDs and
-   revisions.
+3. Commit one selected proposal, which creates a `draft` weekly menu and opens
+   its human-readable summary.
+4. In Plan Week, generate the validated review package, then inspect the menu,
+   grocery list, and three email drafts.
+5. Explicitly approve the reviewed package.
+6. Send the approved emails directly from Plan Week using a Gmail sender and
+   app password.
 
 The recurring Codex automation runs every Saturday at 8:00 AM Eastern for the
 upcoming Monday through Sunday.
+
+Plan Week never stores the Gmail app password. Successful deliveries are
+recorded per draft so retrying after a partial SMTP failure sends only messages
+that remain unsent.
 
 ## Planning Suite
 
@@ -123,10 +129,10 @@ before the week advances to `generated`.
 
 Double-click `Kitchen Inventory.cmd` to add and edit stock. The model tracks
 exact quantities for staples, pantry, refrigerated, frozen, and fresh items;
-expiration dates for refrigerated food; acquired dates and FIFO ordering for
-frozen food; and `full/half/low` levels for consumables. Refrigerated items
-default to a seven-day expiration, while frozen lots expire six calendar
-months after acquisition.
+editable expiration dates for every item; acquired dates and FIFO ordering for
+frozen food; and `full/half/low` levels for consumables. Fresh produce defaults
+to five days, refrigerated items to seven days, and frozen lots to six calendar
+months after acquisition. Each suggested expiration remains adjustable.
 
 The inventory window can filter to items needing attention: consumables marked
 low, countable ingredients below their catalog minimum, and lots expiring
@@ -144,6 +150,11 @@ public recipe URL, or recipe text pasted directly into the editor. URL imports
 prefer schema.org Recipe data. Imports are created as candidates with source
 attribution and must be reviewed for quantities, seasoning classification, and
 inventory mapping before scheduling.
+
+`Edit Imported Recipe` supports guarded metadata revisions. In edit mode,
+`Edit Recipe Card` also exposes Ingredients and Directions so incorrect URL
+imports and unnecessary steps can be corrected. Card changes are validated,
+recorded as a new revision, and rolled back automatically if invalid.
 
 The same window includes a **Recipe idea** field for meals that do not yet have
 a recipe. Saved ideas receive `IDEA-USER-*` IDs and are deliberately surfaced

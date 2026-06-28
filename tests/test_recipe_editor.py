@@ -131,6 +131,85 @@ class RecipeEditorTests(unittest.TestCase):
 
         self.assertEqual(before, after)
 
+    def test_update_can_revise_ingredients_and_directions(self) -> None:
+        temporary, root = self.make_root()
+        with temporary:
+            current = find_imported_recipe("FDP-0012", root)
+            card = dict(current["card_sections"])
+            card["ingredients"] = card["ingredients"].replace(
+                "- 2 tbsp crushed red pepper flakes\n",
+                "",
+            )
+            card["directions"] = (
+                "1. Warm the olive oil and garlic until fragrant.\n"
+                "2. Toss with cooked pasta, parsley, and Parmesan.\n"
+                "3. Serve immediately."
+            )
+
+            revision, path = update_imported_recipe(
+                "FDP-0012",
+                name="10 Minute Pasta",
+                protein="vegetarian",
+                meal_scope="complete-meal",
+                prep_minutes=5,
+                cook_minutes=10,
+                fiber_grams=8,
+                estimated_cost_usd=6,
+                kid_friendly_reason="Both children like/love it",
+                cooking_method="stovetop",
+                seasons=["spring", "summer", "fall", "winter"],
+                card_sections=card,
+                change_note="Removed excess heat and simplified directions",
+                root=root,
+            )
+            _, metadata, body, errors = validate_recipe(path)
+
+        self.assertEqual(errors, [])
+        self.assertEqual(metadata["revision"], revision)
+        self.assertNotIn("crushed red pepper flakes", body)
+        self.assertIn("Warm the olive oil and garlic", body)
+        self.assertIn(
+            "Removed excess heat and simplified directions",
+            body,
+        )
+
+    def test_invalid_card_edit_rolls_back_recipe_and_index(self) -> None:
+        temporary, root = self.make_root()
+        with temporary:
+            path = root / "recipes" / "10-minute-pasta.md"
+            index_path = root / "recipes" / "index.md"
+            before_recipe = path.read_text(encoding="utf-8")
+            before_index = index_path.read_text(encoding="utf-8")
+            current = find_imported_recipe("FDP-0012", root)
+            card = dict(current["card_sections"])
+            card["ingredients"] = "### Main Ingredients\n\n- 2 cups pasta"
+
+            with self.assertRaisesRegex(ValueError, "Seasonings"):
+                update_imported_recipe(
+                    "FDP-0012",
+                    name="10 Minute Pasta",
+                    protein="vegetarian",
+                    meal_scope="complete-meal",
+                    prep_minutes=5,
+                    cook_minutes=10,
+                    fiber_grams=8,
+                    estimated_cost_usd=6,
+                    kid_friendly_reason="Both children like/love it",
+                    cooking_method="stovetop",
+                    seasons=["spring", "summer"],
+                    card_sections=card,
+                    root=root,
+                )
+
+            self.assertEqual(
+                path.read_text(encoding="utf-8"),
+                before_recipe,
+            )
+            self.assertEqual(
+                index_path.read_text(encoding="utf-8"),
+                before_index,
+            )
+
 
 if __name__ == "__main__":
     unittest.main()

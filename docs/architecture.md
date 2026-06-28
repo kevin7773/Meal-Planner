@@ -134,7 +134,7 @@ The `planner/` package separates planning responsibilities.
 | `planner/telemetry.py` | Aggregate timing, constraint pressure, recipe utilization, and recommendation drift |
 | `planner/simulation.py` | Seeded multi-week scenario simulation using the production assignment engine |
 | `planner/performance_gate.py` | Baseline validation and objective simulation metric comparisons |
-| `planner/recipe_editor.py` | Guardrailed imported-recipe revisions with validation and rollback |
+| `planner/recipe_editor.py` | Guardrailed imported-recipe metadata and card revisions with validation and rollback |
 | `planner/scoring.py` | Proposal validation and orchestration |
 | `planner/metrics.py` | Pure cost, fiber, kid-fit, inventory-demand, and rotation calculations |
 | `planner/explanations.py` | Per-meal selection explanations and expiring-inventory context |
@@ -143,7 +143,9 @@ The `planner/` package separates planning responsibilities.
 | `planner/proposal.py` | Generated/user idea loading and three-option proposal orchestration |
 | `planner/reporting.py` | Human-readable dry-run comparison output |
 | `planner/commit.py` | Explicit selection persistence and idea canonicalization |
+| `planner/week_workflow.py` | Review-package generation, human-readable views, approval, SMTP delivery, and retry receipts |
 | `scripts/planner_cli.py` | Command parsing and planner operation dispatch |
+| `scripts/week_workflow.py` | Plan Week lifecycle and delivery command entrypoint |
 | `scripts/dry_run.py` | Backward-compatible imports and direct-execution wrapper |
 | `scripts/meal-planner-suite.ps1` | Shared dashboard and launcher for the five desktop workflow GUIs |
 

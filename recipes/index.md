@@ -2,7 +2,7 @@
 
 | ID | Recipe | Revision | Status | Rating | Last served |
 | --- | --- | ---: | --- | ---: | --- |
-| FDP-0001 | [Chicken Fajitas](chicken-fajitas.md) | 1 | candidate | Unrated | Never |
+| FDP-0001 | [Chicken Fajitas](chicken-fajitas.md) | 1 | candidate | 5.00 / 5 (1) | 2026-06-26 |
 | FDP-0002 | [BBQ Chicken Sliders](bbq-chicken-sliders.md) | 3 | candidate | Unrated | Never |
 | FDP-0003 | [Turkey Cheesesteak Bowls](turkey-cheesesteak-bowls.md) | 1 | candidate | Unrated | Never |
 | FDP-0004 | [Chicken Smash Tacos](chicken-smash-tacos.md) | 1 | candidate | Unrated | Never |
@@ -76,7 +76,7 @@
 
 | FDP-0042 | [Turkey and Cheese Deli Sandwich Night](turkey-and-cheese-deli-sandwich-night.md) | 1 | candidate | Unrated | Never |
 
-| FDP-0043 | [One-Pot Sausage and Fennel Rigatoni](one-pot-sausage-and-fennel-rigatoni.md) | 1 | candidate | 4.00 / 5 (1) | 2026-06-27 |
+| FDP-0043 | [One-Pot Sausage and Fennel Rigatoni](one-pot-sausage-and-fennel-rigatoni.md) | 3 | candidate | 3.50 / 5 (2) | 2026-06-28 |
 
 **Next recipe ID:** `FDP-0044`
 

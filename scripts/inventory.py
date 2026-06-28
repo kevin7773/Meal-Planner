@@ -147,14 +147,6 @@ def validate_inventory(root: Path = ROOT) -> list[str]:
         if item_class == "frozen":
             if expires_on is None:
                 errors.append(f"{lot_id}: frozen stock requires expires_on")
-            elif (
-                acquired_on is not None
-                and expires_on != add_months(acquired_on, 6)
-            ):
-                errors.append(
-                    f"{lot_id}: frozen stock expires_on must be "
-                    "six months after acquired_on"
-                )
         for date_field in ("acquired_on", "expires_on"):
             value = lot.get(date_field)
             if value not in {None, ""} and parse_date(value) is None:

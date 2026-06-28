@@ -1,0 +1,16 @@
+{
+    "schema_version":  1,
+    "recipe_id":  "FDP-0001",
+    "recipe_revision":  1,
+    "recipe_name":  "Chicken Fajitas",
+    "meal_date":  "2026-06-26",
+    "submitted_at":  "2026-06-28T11:53:51.7341045-04:00",
+    "rater":  "Family",
+    "overall_rating":  5,
+    "make_exact_recipe_again":  "Yes",
+    "kid_response":  "Both enjoyed it",
+    "effort":  "Easy",
+    "keep":  "Everything",
+    "change_next_time":  "NA",
+    "disposition":  "candidate"
+}

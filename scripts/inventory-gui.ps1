@@ -21,6 +21,8 @@ foreach ($lot in @($stockDocument.items)) {
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 [System.Windows.Forms.Application]::EnableVisualStyles()
+. (Join-Path $PSScriptRoot 'gui-branding.ps1')
+$colors = Get-MealPlannerPalette
 
 $form = New-Object System.Windows.Forms.Form
 $form.Text = 'Kitchen Inventory'
@@ -29,6 +31,7 @@ $form.StartPosition = 'CenterScreen'
 $form.FormBorderStyle = 'FixedDialog'
 $form.MaximizeBox = $false
 $form.Font = New-Object System.Drawing.Font('Segoe UI', 10)
+Set-MealPlannerFormSurface -Form $form -Palette $colors
 
 $attentionButton = New-Object System.Windows.Forms.Button
 $attentionButton.Text = 'Show Low Stock and Expiring'
@@ -257,7 +260,7 @@ function Refresh-Editor {
     $quantity.Enabled = -not $isConsumable
     $levelCombo.Enabled = $isConsumable
     $acquiredPicker.Enabled = $item.class -in @('frozen', 'fresh-produce', 'refrigerated')
-    $expiresPicker.Enabled = $item.class -eq 'refrigerated'
+    $expiresPicker.Enabled = $true
     if ($item.class -in @('frozen', 'fresh-produce') -and -not $acquiredPicker.Checked) {
         $acquiredPicker.Checked = $true
         $acquiredPicker.Value = Get-Date
@@ -266,12 +269,21 @@ function Refresh-Editor {
         $expiresPicker.Checked = $true
         $expiresPicker.Value = $acquiredPicker.Value.AddMonths(6)
     } elseif (
+        $item.class -eq 'fresh-produce' -and
+        -not $expiresPicker.Checked
+    ) {
+        $expiresPicker.Checked = $true
+        $expiresPicker.Value = $acquiredPicker.Value.AddDays(5)
+    } elseif (
         $item.class -eq 'refrigerated' -and
         -not $expiresPicker.Checked
     ) {
         $expiresPicker.Checked = $true
         $expiresPicker.Value = (Get-Date).AddDays(7)
-    } elseif ($item.class -notin @('frozen', 'refrigerated')) {
+    } elseif (
+        $null -eq $script:editingLotId -and
+        $item.class -notin @('frozen', 'fresh-produce', 'refrigerated')
+    ) {
         $expiresPicker.Checked = $false
     }
     $behaviorLabel.Text = "$($item.class): $($catalogDocument.classes.($item.class))"
@@ -401,13 +413,14 @@ function Reset-Editor {
 $ingredientCombo.Add_SelectedIndexChanged({ Refresh-Editor })
 $acquiredPicker.Add_ValueChanged({
     $item = $ingredientCombo.SelectedItem
-    if (
-        $null -ne $item -and
-        $item.class -eq 'frozen' -and
-        $acquiredPicker.Checked
-    ) {
-        $expiresPicker.Checked = $true
-        $expiresPicker.Value = $acquiredPicker.Value.AddMonths(6)
+    if ($null -ne $item -and $acquiredPicker.Checked) {
+        if ($item.class -eq 'frozen') {
+            $expiresPicker.Checked = $true
+            $expiresPicker.Value = $acquiredPicker.Value.AddMonths(6)
+        } elseif ($item.class -eq 'fresh-produce') {
+            $expiresPicker.Checked = $true
+            $expiresPicker.Value = $acquiredPicker.Value.AddDays(5)
+        }
     }
 })
 $newButton.Add_Click({ Reset-Editor })
@@ -463,6 +476,9 @@ $grid.Add_SelectionChanged({
     if ($null -ne $lot.expires_on -and [string]$lot.expires_on -ne '') {
         $expiresPicker.Checked = $true
         $expiresPicker.Value = [datetime]$lot.expires_on
+    } elseif ($item.class -eq 'fresh-produce' -and $acquiredPicker.Checked) {
+        $expiresPicker.Checked = $true
+        $expiresPicker.Value = $acquiredPicker.Value.AddDays(5)
     } else {
         $expiresPicker.Checked = $false
     }
@@ -561,9 +577,24 @@ $saveButton.Add_Click({
 })
 
 $form.CancelButton = $closeButton
+Set-MealPlannerButtonStyle -Button $attentionButton -Color $colors.Override
+Set-MealPlannerButtonStyle -Button $newButton -Color $colors.Email
+Set-MealPlannerButtonStyle -Button $addButton -Color $colors.Pantry
+Set-MealPlannerButtonStyle -Button $removeButton -Color $colors.Override
+Set-MealPlannerButtonStyle -Button $saveButton -Color $colors.Pantry
+Set-MealPlannerNeutralButtonStyle -Button $closeButton -Palette $colors
+$grid.EnableHeadersVisualStyles = $false
+$grid.ColumnHeadersDefaultCellStyle.BackColor = $colors.Pantry
+$grid.ColumnHeadersDefaultCellStyle.ForeColor = [System.Drawing.Color]::White
+$grid.BackgroundColor = $colors.Surface
+$grid.AlternatingRowsDefaultCellStyle.BackColor = $colors.SoftPantry
+$behaviorLabel.BackColor = $colors.SoftPantry
+$behaviorLabel.ForeColor = $colors.Text
+$statusLabel.BackColor = $colors.SoftPantry
+$statusLabel.ForeColor = $colors.PantryText
+$statusLabel.Padding = New-Object System.Windows.Forms.Padding(10, 0, 0, 0)
 Refresh-Editor
 Refresh-Grid
-. (Join-Path $PSScriptRoot 'gui-branding.ps1')
 Add-MealPlannerBranding `
     -Form $form `
     -Title 'Kitchen Inventory' `

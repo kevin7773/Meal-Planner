@@ -42,6 +42,11 @@ def main() -> int:
     update_parser.add_argument("--method", required=True)
     update_parser.add_argument("--seasons", required=True)
     update_parser.add_argument(
+        "--card-file",
+        type=Path,
+        help="JSON file containing edited ingredients and directions.",
+    )
+    update_parser.add_argument(
         "--change-note",
         default="Updated imported recipe metadata through the GUI",
     )
@@ -65,6 +70,14 @@ def main() -> int:
             )
             return 0
 
+        card_sections = (
+            json.loads(args.card_file.read_text(encoding="utf-8"))
+            if args.card_file
+            else None
+        )
+        if card_sections is not None and not isinstance(card_sections, dict):
+            raise ValueError("Recipe card JSON must be an object")
+
         revision, path = update_imported_recipe(
             args.id,
             name=args.name,
@@ -81,6 +94,7 @@ def main() -> int:
                 for item in args.seasons.split(",")
                 if item.strip()
             ],
+            card_sections=card_sections,
             change_note=args.change_note,
         )
         print(f"{args.id}|{revision}|{path}")
