@@ -25,8 +25,15 @@ upcoming Monday through Sunday.
 `Meal Planner Suite.cmd` is the common desktop entry point for weekly planning,
 kitchen inventory, recipe and idea imports, meal feedback, and planned-meal
 overrides. Its dashboard shows current project counts and upcoming-week status,
-then launches each existing GUI as an independent window. The original command
+today's forecast for the configured ZIP code, and a rotating kitchen fact, then
+launches each existing GUI as an independent window. The original command
 shortcuts remain available for direct access.
+
+The project also includes illustrated Windows shortcuts for the suite and each
+module. Run `powershell -ExecutionPolicy Bypass -File
+scripts/create-launcher-shortcuts.ps1` to recreate them after moving the
+project. Shared artwork under `assets/icons/` also appears in each GUI's branded
+header and title-bar icon.
 
 ## Repository Layout
 
@@ -82,6 +89,11 @@ average fiber, recipe rotation score, blocking errors, and warnings. Only
 `Commit Selected` creates a file, and that file begins at planning status
 `draft`.
 
+When the selected week already has a menu, Plan Week shows its lifecycle
+status and can display the existing menu before generation. Starting another
+dry run for that week requires confirmation and does not modify the existing
+plan.
+
 Every proposed meal also includes a **Why selected** block with its own
 inventory coverage, expiring refrigerated ingredients, day-rule fit, recent
 rotation result, weather fit, and kid score.
@@ -105,7 +117,13 @@ before the week advances to `generated`.
 Double-click `Kitchen Inventory.cmd` to add and edit stock. The model tracks
 exact quantities for staples, pantry, refrigerated, frozen, and fresh items;
 expiration dates for refrigerated food; acquired dates and FIFO ordering for
-frozen food; and `full/half/low` levels for consumables.
+frozen food; and `full/half/low` levels for consumables. Refrigerated items
+default to a seven-day expiration, while frozen lots expire six calendar
+months after acquisition.
+
+The inventory window can filter to items needing attention: consumables marked
+low, countable ingredients below their catalog minimum, and lots expiring
+within seven days or already expired.
 
 Dry run uses inventory coverage to rank recipe choices and reports estimated
 shopping cost after stock, approximate savings, fresh weekly purchases, and
@@ -125,6 +143,12 @@ a recipe. Saved ideas receive `IDEA-USER-*` IDs and are deliberately surfaced
 in compatible dry-run options. Only selected ideas are expanded into full
 `FDP-*` candidates. After an import or saved idea, the window stays open and
 resets for the next entry.
+
+Use **Edit Imported Recipe** in the importer to revise an existing imported
+candidate. The editor preloads prep and cook times, protein, method, seasons,
+meal coverage, cost, fiber, and the controlled kid-friendly reason. Saving
+creates a validated recipe revision while preserving its ID, source,
+ingredients, directions, ratings, and prior history.
 
 Set **Meal coverage** to `entree` when the imported recipe or idea does not
 include sides. Dry run then proposes two seasonal, kid-friendly, fiber-aware

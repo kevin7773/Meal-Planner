@@ -191,4 +191,10 @@ $applyButton.Add_Click({
 
 if ($menuCombo.Items.Count -gt 0) { $menuCombo.SelectedIndex = 0 }
 $form.CancelButton = $closeButton
+. (Join-Path $PSScriptRoot 'gui-branding.ps1')
+Add-MealPlannerBranding `
+    -Form $form `
+    -Title 'Override Meal' `
+    -Subtitle 'Schedule changes and meal substitutions' `
+    -IconName 'override-meal'
 [void]$form.ShowDialog()

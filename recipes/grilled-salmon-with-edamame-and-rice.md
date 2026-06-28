@@ -1,7 +1,7 @@
 +++
 id = "FDP-0026"
 name = "Grilled Salmon with Edamame and Rice"
-revision = 1
+revision = 2
 status = "candidate"
 servings = 4
 created = "2026-06-27"
@@ -13,9 +13,9 @@ meal_scope = "complete-meal"
 fiber_grams = 8
 estimated_cost_usd = 20
 kid_friendly_score = 4
-kid_friendly_reason = "only Gray like this. Need an alternative for Kellan"
+kid_friendly_reason = "Gray Loves It"
 cooking_method = "grill"
-cook_time_minutes = 4
+cook_time_minutes = 15
 seasons = ["spring", "summer", "fall"]
 leftover_recipe_ids = []
 tags = ["chicken", "fall", "grill", "imported", "spring", "summer"]
@@ -26,11 +26,11 @@ source = "pasted recipe text"
 
 ## Recipe Card
 
-- **Active prep:** 0 minutes
-- **Cook time:** 4 minutes
+- **Active prep:** 15 minutes
+- **Cook time:** 15 minutes
 - **Cooking method:** Grill
 - **Estimated fiber:** 8 grams per serving
-- **Kid-friendly design:** only Gray like this. Need an alternative for Kellan
+- **Kid-friendly design:** Gray Loves It
 - **Best seasons:** Spring, Summer, Fall
 - **Schedule fit:** Imported candidate; review before scheduling
 
@@ -81,4 +81,5 @@ source = "pasted recipe text"
 
 | Revision | Date | Status | Change |
 | ---: | --- | --- | --- |
+| 2 | 2026-06-27 | candidate | Updated imported recipe metadata through the GUI |
 | 1 | 2026-06-27 | candidate | Imported from pasted recipe text using plain text sections |

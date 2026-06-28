@@ -134,6 +134,7 @@ The `planner/` package separates planning responsibilities.
 | `planner/telemetry.py` | Aggregate timing, constraint pressure, recipe utilization, and recommendation drift |
 | `planner/monte_carlo.py` | Seeded multi-week statistical simulation using the production assignment engine |
 | `planner/performance_gate.py` | Baseline validation and objective simulation metric comparisons |
+| `planner/recipe_editor.py` | Guardrailed imported-recipe revisions with validation and rollback |
 | `planner/scoring.py` | Proposal validation and orchestration |
 | `planner/metrics.py` | Pure cost, fiber, kid-fit, inventory-demand, and rotation calculations |
 | `planner/explanations.py` | Per-meal selection explanations and expiring-inventory context |

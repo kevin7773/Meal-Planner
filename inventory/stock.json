@@ -8,7 +8,7 @@
                       "quantity":  4,
                       "level":  null,
                       "acquired_on":  "2026-06-27",
-                      "expires_on":  null
+                      "expires_on":  "2026-12-27"
                   },
                   {
                       "lot_id":  "8f7d18a6edfa4a5bae5908517d599882",
@@ -80,7 +80,7 @@
                       "quantity":  2,
                       "level":  null,
                       "acquired_on":  "2026-06-27",
-                      "expires_on":  null
+                      "expires_on":  "2026-12-27"
                   },
                   {
                       "lot_id":  "70865400c04b4036873170816eec552a",
@@ -184,7 +184,7 @@
                       "quantity":  12,
                       "level":  null,
                       "acquired_on":  "2026-06-27",
-                      "expires_on":  "2026-07-04"
+                      "expires_on":  "2026-12-27"
                   },
                   {
                       "lot_id":  "06a06fd18efb4fb5a466f405bfa1031b",

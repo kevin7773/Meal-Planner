@@ -1,7 +1,7 @@
 +++
 id = "FDP-0015"
 name = "Chicken Enchilada"
-revision = 2
+revision = 3
 status = "candidate"
 servings = 4
 created = "2026-06-27"
@@ -79,5 +79,6 @@ source = "pasted recipe text"
 
 | Revision | Date | Status | Change |
 | ---: | --- | --- | --- |
+| 3 | 2026-06-27 | candidate | Updated imported recipe metadata through the GUI |
 | 1 | 2026-06-27 | candidate | Imported from pasted recipe text using plain text sections |
 | 2 | 2026-06-27 | candidate | Corrected prep and cook times, temperature text, seasoning quantities, and family metadata |

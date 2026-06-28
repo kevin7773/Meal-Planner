@@ -1,7 +1,7 @@
 +++
 id = "FDP-0027"
 name = "Slow Cooker Pot Roast with Vegetables"
-revision = 1
+revision = 2
 status = "candidate"
 servings = 4
 created = "2026-06-27"
@@ -12,8 +12,8 @@ protein = "beef"
 meal_scope = "complete-meal"
 fiber_grams = 8
 estimated_cost_usd = 20
-kid_friendly_score = 4
-kid_friendly_reason = "not really kid friendly"
+kid_friendly_score = 1
+kid_friendly_reason = "Not kid friendly - for the parents only"
 cooking_method = "slow-cooker"
 cook_time_minutes = 300
 seasons = ["spring", "summer", "fall", "winter"]
@@ -26,11 +26,11 @@ source = "pasted recipe text"
 
 ## Recipe Card
 
-- **Active prep:** 0 minutes
+- **Active prep:** 20 minutes
 - **Cook time:** 300 minutes
 - **Cooking method:** Slow Cooker
 - **Estimated fiber:** 8 grams per serving
-- **Kid-friendly design:** not really kid friendly
+- **Kid-friendly design:** Not kid friendly - for the parents only
 - **Best seasons:** Spring, Summer, Fall, Winter
 - **Schedule fit:** Imported candidate; review before scheduling
 
@@ -113,4 +113,5 @@ source = "pasted recipe text"
 
 | Revision | Date | Status | Change |
 | ---: | --- | --- | --- |
+| 2 | 2026-06-27 | candidate | Updated imported recipe metadata through the GUI |
 | 1 | 2026-06-27 | candidate | Imported from pasted recipe text using plain text sections |

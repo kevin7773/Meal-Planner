@@ -1,7 +1,7 @@
 +++
 id = "FDP-0016"
 name = "Chicken Pot Pie Casserole with Biscuits"
-revision = 1
+revision = 2
 status = "candidate"
 servings = 4
 created = "2026-06-27"
@@ -12,24 +12,25 @@ protein = "chicken"
 fiber_grams = 8
 estimated_cost_usd = 20
 kid_friendly_score = 4
-kid_friendly_reason = "one kid loves it, the other tolerates it"
+kid_friendly_reason = "Gray Loves It"
 cooking_method = "oven"
-cook_time_minutes = 0
+cook_time_minutes = 30
 seasons = ["spring", "fall", "winter"]
 leftover_recipe_ids = []
 tags = ["chicken", "fall", "imported", "oven", "spring", "winter"]
 source = "pasted recipe text"
+meal_scope = "complete-meal"
 +++
 
 # Chicken Pot Pie Casserole with Biscuits
 
 ## Recipe Card
 
-- **Active prep:** 0 minutes
-- **Cook time:** 0 minutes
+- **Active prep:** 15 minutes
+- **Cook time:** 30 minutes
 - **Cooking method:** Oven
 - **Estimated fiber:** 8 grams per serving
-- **Kid-friendly design:** one kid loves it, the other tolerates it
+- **Kid-friendly design:** Gray Loves It
 - **Best seasons:** Spring, Fall, Winter
 - **Schedule fit:** Imported candidate; review before scheduling
 
@@ -85,4 +86,5 @@ source = "pasted recipe text"
 
 | Revision | Date | Status | Change |
 | ---: | --- | --- | --- |
+| 2 | 2026-06-27 | candidate | Updated imported recipe metadata through the GUI |
 | 1 | 2026-06-27 | candidate | Imported from pasted recipe text using plain text sections |

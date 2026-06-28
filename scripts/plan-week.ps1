@@ -59,14 +59,33 @@ $noWriteLabel.Size = New-Object System.Drawing.Size(250, 28)
 $noWriteLabel.ForeColor = [System.Drawing.Color]::DarkGreen
 $form.Controls.Add($noWriteLabel)
 
+$existingPlanPanel = New-Object System.Windows.Forms.Panel
+$existingPlanPanel.Location = New-Object System.Drawing.Point(20, 68)
+$existingPlanPanel.Size = New-Object System.Drawing.Size(855, 44)
+$existingPlanPanel.BorderStyle = 'FixedSingle'
+$form.Controls.Add($existingPlanPanel)
+
+$existingPlanLabel = New-Object System.Windows.Forms.Label
+$existingPlanLabel.Location = New-Object System.Drawing.Point(12, 7)
+$existingPlanLabel.Size = New-Object System.Drawing.Size(655, 28)
+$existingPlanLabel.TextAlign = 'MiddleLeft'
+$existingPlanPanel.Controls.Add($existingPlanLabel)
+
+$viewExistingButton = New-Object System.Windows.Forms.Button
+$viewExistingButton.Text = 'View Existing Plan'
+$viewExistingButton.Location = New-Object System.Drawing.Point(685, 5)
+$viewExistingButton.Size = New-Object System.Drawing.Size(155, 32)
+$viewExistingButton.Enabled = $false
+$existingPlanPanel.Controls.Add($viewExistingButton)
+
 $optionList = New-Object System.Windows.Forms.ListBox
-$optionList.Location = New-Object System.Drawing.Point(20, 78)
-$optionList.Size = New-Object System.Drawing.Size(280, 520)
+$optionList.Location = New-Object System.Drawing.Point(20, 126)
+$optionList.Size = New-Object System.Drawing.Size(280, 472)
 $form.Controls.Add($optionList)
 
 $reportText = New-Object System.Windows.Forms.TextBox
-$reportText.Location = New-Object System.Drawing.Point(320, 78)
-$reportText.Size = New-Object System.Drawing.Size(555, 520)
+$reportText.Location = New-Object System.Drawing.Point(320, 126)
+$reportText.Size = New-Object System.Drawing.Size(555, 472)
 $reportText.Multiline = $true
 $reportText.ReadOnly = $true
 $reportText.ScrollBars = 'Vertical'
@@ -100,6 +119,43 @@ $closeButton.Add_Click({ $form.Close() })
 $form.Controls.Add($closeButton)
 
 $script:proposals = @()
+$script:existingMenuPath = $null
+
+function Get-SelectedMenuPath {
+    $week = $weekPicker.Value.Date
+    return Join-Path $projectRoot (
+        "menus\{0}\{1}.md" -f $week.Year, $week.ToString('yyyy-MM-dd')
+    )
+}
+
+function Update-ExistingPlanState {
+    $path = Get-SelectedMenuPath
+    if (Test-Path -LiteralPath $path) {
+        $script:existingMenuPath = $path
+        $text = [System.IO.File]::ReadAllText($path)
+        $statusMatch = [regex]::Match(
+            $text,
+            '(?m)^status = "([^"]+)"$'
+        )
+        $status = if ($statusMatch.Success) {
+            $statusMatch.Groups[1].Value
+        } else {
+            'status unavailable'
+        }
+        $existingPlanLabel.Text = (
+            "Existing plan found for this week | Status: $status"
+        )
+        $existingPlanLabel.ForeColor = [System.Drawing.Color]::DarkRed
+        $existingPlanPanel.BackColor = [System.Drawing.Color]::Moccasin
+        $viewExistingButton.Enabled = $true
+    } else {
+        $script:existingMenuPath = $null
+        $existingPlanLabel.Text = 'No existing plan found for this week.'
+        $existingPlanLabel.ForeColor = [System.Drawing.Color]::DarkGreen
+        $existingPlanPanel.BackColor = [System.Drawing.Color]::Honeydew
+        $viewExistingButton.Enabled = $false
+    }
+}
 
 function Format-Proposal {
     param($Proposal, [int]$Number)
@@ -238,6 +294,23 @@ $generateButton.Add_Click({
         if ($weekPicker.Value.DayOfWeek -ne [DayOfWeek]::Monday) {
             throw 'Choose a Monday as the week start.'
         }
+        Update-ExistingPlanState
+        if ($null -ne $script:existingMenuPath) {
+            $answer = [System.Windows.Forms.MessageBox]::Show(
+                (
+                    "A meal plan already exists for " +
+                    "$($weekPicker.Value.ToString('MMMM d, yyyy')).`r`n`r`n" +
+                    "Generating dry runs will not change the existing plan. " +
+                    "Continue?"
+                ),
+                'Existing Meal Plan',
+                'YesNo',
+                'Warning'
+            )
+            if ($answer -ne [System.Windows.Forms.DialogResult]::Yes) {
+                return
+            }
+        }
         $week = $weekPicker.Value.ToString('yyyy-MM-dd')
         $raw = & $python $plannerScript generate --week $week --count 3 --json 2>&1
         if ($LASTEXITCODE -ne 0) {
@@ -269,11 +342,40 @@ $generateButton.Add_Click({
     }
 })
 
+$viewExistingButton.Add_Click({
+    if ($null -eq $script:existingMenuPath) {
+        return
+    }
+    try {
+        $menuText = [System.IO.File]::ReadAllText(
+            $script:existingMenuPath
+        )
+        $menuText = $menuText -replace '\r?\n', [Environment]::NewLine
+        $optionList.ClearSelected()
+        $commitButton.Enabled = $false
+        $reportText.Text = (
+            "EXISTING WEEKLY PLAN`r`n" +
+            "$($script:existingMenuPath)`r`n`r`n" +
+            $menuText
+        )
+        $reportText.SelectionStart = 0
+        $reportText.ScrollToCaret()
+    } catch {
+        [System.Windows.Forms.MessageBox]::Show(
+            $_.Exception.Message,
+            'Unable to View Existing Plan',
+            'OK',
+            'Error'
+        ) | Out-Null
+    }
+})
+
 $optionList.Add_SelectedIndexChanged({
     if ($optionList.SelectedIndex -ge 0) {
         $reportText.Text = Format-Proposal `
             -Proposal $script:proposals[$optionList.SelectedIndex] `
             -Number ($optionList.SelectedIndex + 1)
+        $commitButton.Enabled = $true
     }
 })
 
@@ -337,5 +439,18 @@ $commitButton.Add_Click({
     }
 })
 
+$weekPicker.Add_ValueChanged({
+    Update-ExistingPlanState
+})
+
 $form.CancelButton = $closeButton
+$form.Add_Shown({
+    Update-ExistingPlanState
+})
+. (Join-Path $PSScriptRoot 'gui-branding.ps1')
+Add-MealPlannerBranding `
+    -Form $form `
+    -Title 'Plan Week' `
+    -Subtitle 'Dry-run planning and proposal comparison' `
+    -IconName 'plan-week'
 [void]$form.ShowDialog()

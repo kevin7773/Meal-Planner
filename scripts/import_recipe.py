@@ -259,6 +259,7 @@ def import_recipe(
     protein: str,
     meal_scope: str = "complete-meal",
     cooking_method: str,
+    prep_minutes_override: int | None = None,
     cook_minutes_override: int | None = None,
     fiber_grams: float,
     estimated_cost_usd: float,
@@ -295,14 +296,18 @@ def import_recipe(
     today = dt.date.today().isoformat()
     servings_match = re.search(r"\d+", str(preview.get("servings", "4")))
     servings = int(servings_match.group()) if servings_match else 4
-    prep_minutes = int(preview.get("prep_minutes") or 0)
+    prep_minutes = (
+        int(prep_minutes_override)
+        if prep_minutes_override is not None
+        else int(preview.get("prep_minutes") or 0)
+    )
     cook_minutes = (
         int(cook_minutes_override)
         if cook_minutes_override is not None
         else int(preview.get("cook_minutes") or 0)
     )
-    if cook_minutes < 0:
-        raise ValueError("Cook time cannot be negative")
+    if prep_minutes < 0 or cook_minutes < 0:
+        raise ValueError("Prep and cook times cannot be negative")
     if cooking_method == "slow-cooker" and cook_minutes < 180:
         raise ValueError(
             "Slow-cooker recipes require at least 180 cook minutes. "
@@ -446,6 +451,7 @@ def main() -> int:
         default="complete-meal",
     )
     import_parser.add_argument("--method", required=True)
+    import_parser.add_argument("--prep-minutes", type=int)
     import_parser.add_argument("--cook-minutes", type=int)
     import_parser.add_argument("--fiber", required=True, type=float)
     import_parser.add_argument("--cost", required=True, type=float)
@@ -467,6 +473,7 @@ def main() -> int:
             protein=args.protein,
             meal_scope=args.meal_scope,
             cooking_method=args.method,
+            prep_minutes_override=args.prep_minutes,
             cook_minutes_override=args.cook_minutes,
             fiber_grams=args.fiber,
             estimated_cost_usd=args.cost,

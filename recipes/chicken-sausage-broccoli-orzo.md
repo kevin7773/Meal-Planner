@@ -1,7 +1,7 @@
 +++
 id = "FDP-0018"
 name = "Chicken Sausage Broccoli Orzo"
-revision = 1
+revision = 2
 status = "candidate"
 servings = 4
 created = "2026-06-27"
@@ -12,24 +12,25 @@ protein = "chicken"
 fiber_grams = 8
 estimated_cost_usd = 20
 kid_friendly_score = 4
-kid_friendly_reason = "one child loves it. The other, not so much"
+kid_friendly_reason = "Gray Loves It"
 cooking_method = "stovetop"
-cook_time_minutes = 0
+cook_time_minutes = 25
 seasons = ["spring", "fall", "winter"]
 leftover_recipe_ids = []
 tags = ["chicken", "fall", "imported", "spring", "stovetop", "winter"]
 source = "pasted recipe text"
+meal_scope = "complete-meal"
 +++
 
 # Chicken Sausage Broccoli Orzo
 
 ## Recipe Card
 
-- **Active prep:** 0 minutes
-- **Cook time:** 0 minutes
+- **Active prep:** 15 minutes
+- **Cook time:** 25 minutes
 - **Cooking method:** Stovetop
 - **Estimated fiber:** 8 grams per serving
-- **Kid-friendly design:** one child loves it. The other, not so much
+- **Kid-friendly design:** Gray Loves It
 - **Best seasons:** Spring, Fall, Winter
 - **Schedule fit:** Imported candidate; review before scheduling
 
@@ -84,4 +85,5 @@ source = "pasted recipe text"
 
 | Revision | Date | Status | Change |
 | ---: | --- | --- | --- |
+| 2 | 2026-06-27 | candidate | Updated imported recipe metadata through the GUI |
 | 1 | 2026-06-27 | candidate | Imported from pasted recipe text using plain text sections |

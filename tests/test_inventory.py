@@ -56,6 +56,26 @@ class InventoryTests(unittest.TestCase):
             validate_inventory(self.root),
         )
 
+    def test_frozen_expiration_is_six_months_after_acquisition(self) -> None:
+        frozen_lot = {
+            "lot_id": "frozen",
+            "item_id": "chicken-breast",
+            "quantity": 2,
+            "level": None,
+            "acquired_on": "2026-06-27",
+            "expires_on": "2026-07-04",
+        }
+        self.write_stock([frozen_lot])
+        self.assertIn(
+            "frozen: frozen stock expires_on must be six months "
+            "after acquired_on",
+            validate_inventory(self.root),
+        )
+
+        frozen_lot["expires_on"] = "2026-12-27"
+        self.write_stock([frozen_lot])
+        self.assertEqual(validate_inventory(self.root), [])
+
     def test_frozen_fifo_uses_oldest_lot_first(self) -> None:
         self.write_stock(
             [

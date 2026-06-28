@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import unittest
 from pathlib import Path
 
@@ -23,6 +24,9 @@ class SuiteLauncherTests(unittest.TestCase):
         for script_name in expected_scripts:
             self.assertIn(script_name, script)
             self.assertTrue((ROOT / "scripts" / script_name).is_file())
+        self.assertIn("CreateRunspace", script)
+        self.assertIn("ApartmentState = 'STA'", script)
+        self.assertNotIn("Start-Process", script)
 
     def test_cmd_entrypoint_starts_suite_in_sta_mode(self) -> None:
         command = (ROOT / "Meal Planner Suite.cmd").read_text(
@@ -31,6 +35,29 @@ class SuiteLauncherTests(unittest.TestCase):
 
         self.assertIn("-STA", command)
         self.assertIn("meal-planner-suite.ps1", command)
+
+    def test_launcher_loads_daily_weather_and_kitchen_fact(self) -> None:
+        script = (
+            ROOT / "scripts" / "meal-planner-suite.ps1"
+        ).read_text(encoding="utf-8")
+
+        self.assertIn("daily_weather.py", script)
+        self.assertIn("Start-WeatherRefresh", script)
+        self.assertIn("Kitchen fact:", script)
+        self.assertIn("kitchen-facts.json", script)
+        self.assertIn("Get-Random", script)
+        self.assertIn("$script:kitchenFactQueue", script)
+        self.assertNotIn("DayOfYear", script)
+
+        facts = json.loads(
+            (ROOT / "planner-data" / "kitchen-facts.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        self.assertEqual(facts["schema_version"], 1)
+        self.assertGreaterEqual(len(facts["facts"]), 15)
+        self.assertLessEqual(len(facts["facts"]), 20)
+        self.assertTrue(all(fact.strip() for fact in facts["facts"]))
 
 
 if __name__ == "__main__":

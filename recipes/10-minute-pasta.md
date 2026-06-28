@@ -1,7 +1,7 @@
 +++
 id = "FDP-0012"
 name = "10 Minute Pasta"
-revision = 1
+revision = 2
 status = "candidate"
 servings = 4
 created = "2026-06-27"
@@ -11,25 +11,26 @@ ratings_count = 0
 protein = "vegetarian"
 fiber_grams = 8
 estimated_cost_usd = 5
-kid_friendly_score = 4
-kid_friendly_reason = "Kids love pasta"
+kid_friendly_score = 5
+kid_friendly_reason = "Both children like/love it"
 cooking_method = "stovetop"
-cook_time_minutes = 0
+cook_time_minutes = 15
 seasons = ["spring", "summer", "fall", "winter"]
 leftover_recipe_ids = []
 tags = ["fall", "imported", "spring", "stovetop", "summer", "vegetarian", "winter"]
 source = "pasted recipe text"
+meal_scope = "complete-meal"
 +++
 
 # 10 Minute Pasta
 
 ## Recipe Card
 
-- **Active prep:** 0 minutes
-- **Cook time:** 0 minutes
+- **Active prep:** 5 minutes
+- **Cook time:** 15 minutes
 - **Cooking method:** Stovetop
 - **Estimated fiber:** 8 grams per serving
-- **Kid-friendly design:** Kids love pasta
+- **Kid-friendly design:** Both children like/love it
 - **Best seasons:** Spring, Summer, Fall, Winter
 - **Schedule fit:** Imported candidate; review before scheduling
 
@@ -74,4 +75,5 @@ source = "pasted recipe text"
 
 | Revision | Date | Status | Change |
 | ---: | --- | --- | --- |
+| 2 | 2026-06-27 | candidate | Updated imported recipe metadata through the GUI |
 | 1 | 2026-06-27 | candidate | Imported from pasted recipe text using plain text sections |

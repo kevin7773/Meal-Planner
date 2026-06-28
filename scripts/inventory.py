@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import calendar
 import collections
 import datetime as dt
 import json
@@ -47,6 +48,14 @@ def parse_date(value: object) -> dt.date | None:
         return dt.date.fromisoformat(value)
     except ValueError:
         return None
+
+
+def add_months(value: dt.date, months: int) -> dt.date:
+    month_index = value.month - 1 + months
+    year = value.year + month_index // 12
+    month = month_index % 12 + 1
+    day = min(value.day, calendar.monthrange(year, month)[1])
+    return dt.date(year, month, day)
 
 
 def validate_inventory(root: Path = ROOT) -> list[str]:
@@ -129,12 +138,23 @@ def validate_inventory(root: Path = ROOT) -> list[str]:
             or lot.get("quantity", 0) < 0
         ):
             errors.append(f"{lot_id}: quantity must be non-negative")
-        if item_class in {"frozen", "fresh-produce"} and parse_date(
-            lot.get("acquired_on")
-        ) is None:
+        acquired_on = parse_date(lot.get("acquired_on"))
+        expires_on = parse_date(lot.get("expires_on"))
+        if item_class in {"frozen", "fresh-produce"} and acquired_on is None:
             errors.append(f"{lot_id}: {item_class} stock requires acquired_on")
-        if item_class == "refrigerated" and parse_date(lot.get("expires_on")) is None:
+        if item_class == "refrigerated" and expires_on is None:
             errors.append(f"{lot_id}: refrigerated stock requires expires_on")
+        if item_class == "frozen":
+            if expires_on is None:
+                errors.append(f"{lot_id}: frozen stock requires expires_on")
+            elif (
+                acquired_on is not None
+                and expires_on != add_months(acquired_on, 6)
+            ):
+                errors.append(
+                    f"{lot_id}: frozen stock expires_on must be "
+                    "six months after acquired_on"
+                )
         for date_field in ("acquired_on", "expires_on"):
             value = lot.get(date_field)
             if value not in {None, ""} and parse_date(value) is None:

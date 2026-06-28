@@ -1,7 +1,7 @@
 +++
 id = "FDP-0021"
 name = "Creamy Gnocchi and Chicken Skillet"
-revision = 1
+revision = 2
 status = "candidate"
 servings = 4
 created = "2026-06-27"
@@ -12,24 +12,25 @@ protein = "chicken"
 fiber_grams = 8
 estimated_cost_usd = 20
 kid_friendly_score = 4
-kid_friendly_reason = "Gray loves this one"
+kid_friendly_reason = "Gray Loves It"
 cooking_method = "oven"
-cook_time_minutes = 0
+cook_time_minutes = 30
 seasons = ["spring", "summer", "fall", "winter"]
 leftover_recipe_ids = []
 tags = ["chicken", "fall", "imported", "oven", "spring", "summer", "winter"]
 source = "pasted recipe text"
+meal_scope = "complete-meal"
 +++
 
 # Creamy Gnocchi and Chicken Skillet
 
 ## Recipe Card
 
-- **Active prep:** 0 minutes
-- **Cook time:** 0 minutes
+- **Active prep:** 15 minutes
+- **Cook time:** 30 minutes
 - **Cooking method:** Oven
 - **Estimated fiber:** 8 grams per serving
-- **Kid-friendly design:** Gray loves this one
+- **Kid-friendly design:** Gray Loves It
 - **Best seasons:** Spring, Summer, Fall, Winter
 - **Schedule fit:** Imported candidate; review before scheduling
 
@@ -83,4 +84,5 @@ source = "pasted recipe text"
 
 | Revision | Date | Status | Change |
 | ---: | --- | --- | --- |
+| 2 | 2026-06-27 | candidate | Updated imported recipe metadata through the GUI |
 | 1 | 2026-06-27 | candidate | Imported from pasted recipe text using plain text sections |

@@ -2,10 +2,33 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
 $projectRoot = Split-Path -Parent $PSScriptRoot
+$script:moduleSessions = New-Object System.Collections.ArrayList
+$script:weatherSession = $null
+$script:weatherDate = $null
+$script:kitchenFactQueue = New-Object System.Collections.ArrayList
+$dailyWeatherScript = Join-Path $PSScriptRoot 'daily_weather.py'
+
+function Resolve-Python {
+    $bundled = Join-Path $env:USERPROFILE (
+        '.cache\codex-runtimes\codex-primary-runtime' +
+        '\dependencies\python\python.exe'
+    )
+    if (Test-Path -LiteralPath $bundled) {
+        return $bundled
+    }
+    $command = Get-Command python.exe -ErrorAction SilentlyContinue
+    if ($null -ne $command) {
+        return $command.Source
+    }
+    return $null
+}
+
+$python = Resolve-Python
 
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 [System.Windows.Forms.Application]::EnableVisualStyles()
+. (Join-Path $PSScriptRoot 'gui-branding.ps1')
 
 $colors = @{
     Background = [System.Drawing.ColorTranslator]::FromHtml('#F3F6F4')
@@ -25,6 +48,42 @@ function Get-NextMonday {
         $days = 7
     }
     return $today.AddDays($days)
+}
+
+function Get-KitchenFact {
+    try {
+        if ($script:kitchenFactQueue.Count -eq 0) {
+            $path = Join-Path $projectRoot (
+                'planner-data\kitchen-facts.json'
+            )
+            $document = (
+                Get-Content -Raw -LiteralPath $path |
+                ConvertFrom-Json
+            )
+            $facts = @($document.facts)
+            if (
+                $document.schema_version -ne 1 -or
+                $facts.Count -lt 15 -or
+                $facts.Count -gt 20
+            ) {
+                throw 'Kitchen fact data is invalid.'
+            }
+            for ($index = $facts.Count - 1; $index -gt 0; $index--) {
+                $swapIndex = Get-Random -Minimum 0 -Maximum ($index + 1)
+                $temporary = $facts[$index]
+                $facts[$index] = $facts[$swapIndex]
+                $facts[$swapIndex] = $temporary
+            }
+            foreach ($fact in $facts) {
+                [void]$script:kitchenFactQueue.Add([string]$fact)
+            }
+        }
+        $fact = [string]$script:kitchenFactQueue[0]
+        $script:kitchenFactQueue.RemoveAt(0)
+        return $fact
+    } catch {
+        return 'Good meals start with a little curiosity.'
+    }
 }
 
 function Get-RecipeSummary {
@@ -54,7 +113,8 @@ function Get-InventorySummary {
             $_.level -eq 'low'
         }
     ).Count
-    return "$($lots.Count) tracked lots | $lowCount low-stock items"
+    $lowLabel = if ($lowCount -eq 1) { 'item' } else { 'items' }
+    return "$($lots.Count) tracked lots | $lowCount low-stock $lowLabel"
 }
 
 function Get-FeedbackSummary {
@@ -73,7 +133,8 @@ function Get-OverrideSummary {
         Get-ChildItem -LiteralPath (Join-Path $projectRoot 'menus') `
             -Recurse -File -Filter '*.md'
     ).Count
-    return "$menuCount weekly menus available"
+    $menuLabel = if ($menuCount -eq 1) { 'menu' } else { 'menus' }
+    return "$menuCount weekly $menuLabel available"
 }
 
 function Get-PlanSummary {
@@ -120,16 +181,22 @@ function Start-SuiteModule {
         return
     }
 
-    $powerShellPath = (Get-Process -Id $PID).Path
-    $startInfo = New-Object System.Diagnostics.ProcessStartInfo
-    $startInfo.FileName = $powerShellPath
-    $startInfo.Arguments = (
-        '-NoProfile -ExecutionPolicy Bypass -STA -File "{0}"' -f
-        $ScriptPath.Replace('"', '\"')
+    $runspace = [System.Management.Automation.Runspaces.RunspaceFactory]::CreateRunspace()
+    $runspace.ApartmentState = 'STA'
+    $runspace.ThreadOptions = 'ReuseThread'
+    $runspace.Open()
+
+    $powerShell = [System.Management.Automation.PowerShell]::Create()
+    $powerShell.Runspace = $runspace
+    [void]$powerShell.AddCommand($ScriptPath)
+    $invocation = $powerShell.BeginInvoke()
+    [void]$script:moduleSessions.Add(
+        [pscustomobject]@{
+            PowerShell = $powerShell
+            Runspace = $runspace
+            Invocation = $invocation
+        }
     )
-    $startInfo.UseShellExecute = $false
-    $startInfo.CreateNoWindow = $true
-    [void][System.Diagnostics.Process]::Start($startInfo)
 }
 
 $form = New-Object System.Windows.Forms.Form
@@ -140,6 +207,10 @@ $form.StartPosition = 'CenterScreen'
 $form.BackColor = $colors.Background
 $form.Font = New-Object System.Drawing.Font('Segoe UI', 10)
 $form.MaximizeBox = $false
+$iconRoot = Join-Path $projectRoot 'assets\icons'
+Set-MealPlannerFormIcon `
+    -Form $form `
+    -IconPath (Join-Path $iconRoot 'meal-planner-suite.ico')
 
 $header = New-Object System.Windows.Forms.Panel
 $header.Location = New-Object System.Drawing.Point(0, 0)
@@ -150,8 +221,8 @@ $form.Controls.Add($header)
 
 $suiteLabel = New-Object System.Windows.Forms.Label
 $suiteLabel.Text = 'FAMILY MEAL PLANNER'
-$suiteLabel.Location = New-Object System.Drawing.Point(28, 22)
-$suiteLabel.Size = New-Object System.Drawing.Size(520, 38)
+$suiteLabel.Location = New-Object System.Drawing.Point(82, 22)
+$suiteLabel.Size = New-Object System.Drawing.Size(390, 38)
 $suiteLabel.Font = New-Object System.Drawing.Font(
     'Segoe UI Semibold',
     22,
@@ -160,13 +231,40 @@ $suiteLabel.Font = New-Object System.Drawing.Font(
 $suiteLabel.ForeColor = [System.Drawing.Color]::White
 $header.Controls.Add($suiteLabel)
 
+$suiteArtwork = New-Object System.Windows.Forms.PictureBox
+$suiteArtwork.Location = New-Object System.Drawing.Point(24, 17)
+$suiteArtwork.Size = New-Object System.Drawing.Size(48, 48)
+$suiteArtwork.SizeMode = 'Zoom'
+$suiteArtwork.Image = Get-MealPlannerBitmap -Path (
+    Join-Path $iconRoot 'meal-planner-suite.png'
+)
+$header.Controls.Add($suiteArtwork)
+
 $subtitle = New-Object System.Windows.Forms.Label
 $subtitle.Text = 'Planning Suite'
-$subtitle.Location = New-Object System.Drawing.Point(31, 65)
+$subtitle.Location = New-Object System.Drawing.Point(84, 65)
 $subtitle.Size = New-Object System.Drawing.Size(300, 26)
 $subtitle.Font = New-Object System.Drawing.Font('Segoe UI', 11)
 $subtitle.ForeColor = [System.Drawing.ColorTranslator]::FromHtml('#C9D7D1')
 $header.Controls.Add($subtitle)
+
+$weatherLabel = New-Object System.Windows.Forms.Label
+$weatherLabel.Text = "Today's weather: Loading..."
+$weatherLabel.Location = New-Object System.Drawing.Point(490, 15)
+$weatherLabel.Size = New-Object System.Drawing.Size(260, 46)
+$weatherLabel.TextAlign = 'MiddleRight'
+$weatherLabel.ForeColor = [System.Drawing.Color]::White
+$weatherLabel.Font = New-Object System.Drawing.Font('Segoe UI', 9)
+$header.Controls.Add($weatherLabel)
+
+$factLabel = New-Object System.Windows.Forms.Label
+$factLabel.Text = 'Kitchen fact: Loading...'
+$factLabel.Location = New-Object System.Drawing.Point(350, 68)
+$factLabel.Size = New-Object System.Drawing.Size(520, 28)
+$factLabel.TextAlign = 'MiddleRight'
+$factLabel.ForeColor = [System.Drawing.ColorTranslator]::FromHtml('#D9C59C')
+$factLabel.Font = New-Object System.Drawing.Font('Segoe UI', 9)
+$header.Controls.Add($factLabel)
 
 $refreshButton = New-Object System.Windows.Forms.Button
 $refreshButton.Text = 'Refresh'
@@ -186,6 +284,7 @@ $modules = @(
         Script = Join-Path $PSScriptRoot 'plan-week.ps1'
         Status = { Get-PlanSummary }
         Color = $colors.Primary
+        Icon = 'plan-week'
     },
     [pscustomobject]@{
         Name = 'Kitchen Inventory'
@@ -193,6 +292,7 @@ $modules = @(
         Script = Join-Path $PSScriptRoot 'inventory-gui.ps1'
         Status = { Get-InventorySummary }
         Color = $colors.Accent
+        Icon = 'kitchen-inventory'
     },
     [pscustomobject]@{
         Name = 'Import Recipe'
@@ -200,6 +300,7 @@ $modules = @(
         Script = Join-Path $PSScriptRoot 'import-recipe-gui.ps1'
         Status = { Get-ImportSummary }
         Color = [System.Drawing.ColorTranslator]::FromHtml('#48769A')
+        Icon = 'import-recipe'
     },
     [pscustomobject]@{
         Name = 'Review Meal'
@@ -207,6 +308,7 @@ $modules = @(
         Script = Join-Path $PSScriptRoot 'recipe-feedback.ps1'
         Status = { Get-FeedbackSummary }
         Color = [System.Drawing.ColorTranslator]::FromHtml('#8A5D86')
+        Icon = 'review-meal'
     },
     [pscustomobject]@{
         Name = 'Override Meal'
@@ -214,6 +316,7 @@ $modules = @(
         Script = Join-Path $PSScriptRoot 'meal-override-gui.ps1'
         Status = { Get-OverrideSummary }
         Color = [System.Drawing.ColorTranslator]::FromHtml('#A04E45')
+        Icon = 'override-meal'
     }
 )
 
@@ -234,9 +337,18 @@ foreach ($module in $modules) {
     $stripe.BackColor = $module.Color
     $row.Controls.Add($stripe)
 
+    $moduleArtwork = New-Object System.Windows.Forms.PictureBox
+    $moduleArtwork.Location = New-Object System.Drawing.Point(20, 20)
+    $moduleArtwork.Size = New-Object System.Drawing.Size(44, 44)
+    $moduleArtwork.SizeMode = 'Zoom'
+    $moduleArtwork.Image = Get-MealPlannerBitmap -Path (
+        Join-Path $iconRoot "$($module.Icon).png"
+    )
+    $row.Controls.Add($moduleArtwork)
+
     $nameLabel = New-Object System.Windows.Forms.Label
     $nameLabel.Text = $module.Name
-    $nameLabel.Location = New-Object System.Drawing.Point(22, 12)
+    $nameLabel.Location = New-Object System.Drawing.Point(78, 12)
     $nameLabel.Size = New-Object System.Drawing.Size(250, 27)
     $nameLabel.Font = New-Object System.Drawing.Font(
         'Segoe UI Semibold',
@@ -248,8 +360,8 @@ foreach ($module in $modules) {
 
     $detailLabel = New-Object System.Windows.Forms.Label
     $detailLabel.Text = $module.Detail
-    $detailLabel.Location = New-Object System.Drawing.Point(22, 44)
-    $detailLabel.Size = New-Object System.Drawing.Size(310, 24)
+    $detailLabel.Location = New-Object System.Drawing.Point(78, 44)
+    $detailLabel.Size = New-Object System.Drawing.Size(255, 24)
     $detailLabel.ForeColor = $colors.Muted
     $row.Controls.Add($detailLabel)
 
@@ -288,7 +400,99 @@ $footer.Anchor = 'Bottom,Left,Right'
 $footer.ForeColor = $colors.Muted
 $form.Controls.Add($footer)
 
+$weatherTimer = New-Object System.Windows.Forms.Timer
+$weatherTimer.Interval = 250
+$weatherTimer.Add_Tick({
+    if (
+        $null -eq $script:weatherSession -or
+        -not $script:weatherSession.Invocation.IsCompleted
+    ) {
+        return
+    }
+    try {
+        $output = @(
+            $script:weatherSession.PowerShell.EndInvoke(
+                $script:weatherSession.Invocation
+            )
+        )
+        $raw = (
+            $output | ForEach-Object { $_.ToString() }
+        ) -join [Environment]::NewLine
+        if ($script:weatherSession.PowerShell.HadErrors) {
+            throw $raw
+        }
+        $forecast = $raw | ConvertFrom-Json
+        $weatherLabel.Text = (
+            "Today in $($forecast.location): " +
+            "$($forecast.high_f)/$($forecast.low_f) F`r`n" +
+            "$($forecast.description) | " +
+            "$($forecast.precipitation_probability)% precip"
+        )
+        $weatherLabel.ForeColor = [System.Drawing.Color]::White
+        $script:weatherDate = (Get-Date).Date
+    } catch {
+        $weatherLabel.Text = "Today's weather unavailable`r`nZIP 21617"
+        $weatherLabel.ForeColor = (
+            [System.Drawing.ColorTranslator]::FromHtml('#E7C7A0')
+        )
+    } finally {
+        $script:weatherSession.PowerShell.Dispose()
+        $script:weatherSession.Runspace.Dispose()
+        $script:weatherSession = $null
+        $weatherTimer.Stop()
+    }
+})
+
+function Start-WeatherRefresh {
+    param([switch]$Force)
+
+    if ($null -ne $script:weatherSession) {
+        return
+    }
+    if (
+        -not $Force -and
+        $script:weatherDate -eq (Get-Date).Date
+    ) {
+        return
+    }
+    if ($null -eq $python) {
+        $weatherLabel.Text = "Today's weather unavailable`r`nPython not found"
+        return
+    }
+
+    $weatherLabel.Text = "Today's weather: Loading..."
+    $runspace = (
+        [System.Management.Automation.Runspaces.RunspaceFactory]
+    )::CreateRunspace()
+    $runspace.Open()
+    $powerShell = [System.Management.Automation.PowerShell]::Create()
+    $powerShell.Runspace = $runspace
+    [void]$powerShell.AddCommand($python)
+    [void]$powerShell.AddArgument($dailyWeatherScript)
+    [void]$powerShell.AddArgument('--json')
+    $invocation = $powerShell.BeginInvoke()
+    $script:weatherSession = [pscustomobject]@{
+        PowerShell = $powerShell
+        Runspace = $runspace
+        Invocation = $invocation
+    }
+    $weatherTimer.Start()
+}
+
 function Refresh-SuiteStatus {
+    foreach ($session in @($script:moduleSessions)) {
+        if ($session.Invocation.IsCompleted) {
+            try {
+                [void]$session.PowerShell.EndInvoke($session.Invocation)
+            } catch {
+                $footer.Text = "Module error: $($_.Exception.Message)"
+            } finally {
+                $session.PowerShell.Dispose()
+                $session.Runspace.Dispose()
+                [void]$script:moduleSessions.Remove($session)
+            }
+        }
+    }
     foreach ($label in $statusLabels) {
         try {
             $label.Text = & $label.Tag
@@ -298,11 +502,42 @@ function Refresh-SuiteStatus {
             $label.ForeColor = [System.Drawing.Color]::Firebrick
         }
     }
+    $factLabel.Text = "Kitchen fact: $(Get-KitchenFact)"
     $footer.Text = "Updated $((Get-Date).ToString('h:mm tt'))"
 }
 
-$refreshButton.Add_Click({ Refresh-SuiteStatus })
-$form.Add_Shown({ Refresh-SuiteStatus })
+$refreshButton.Add_Click({
+    Refresh-SuiteStatus
+    Start-WeatherRefresh -Force
+})
+$form.Add_Shown({
+    Refresh-SuiteStatus
+    Start-WeatherRefresh
+})
 $form.Add_Activated({ Refresh-SuiteStatus })
+$form.Add_FormClosed({
+    $weatherTimer.Stop()
+    if ($null -ne $script:weatherSession) {
+        $script:weatherSession.PowerShell.Stop()
+        $script:weatherSession.PowerShell.Dispose()
+        $script:weatherSession.Runspace.Dispose()
+    }
+    foreach ($session in @($script:moduleSessions)) {
+        $session.PowerShell.Stop()
+        $session.PowerShell.Dispose()
+        $session.Runspace.Dispose()
+    }
+    foreach ($row in @($form.Controls | Where-Object {
+        $_ -is [System.Windows.Forms.Panel]
+    })) {
+        foreach ($picture in @($row.Controls | Where-Object {
+            $_ -is [System.Windows.Forms.PictureBox]
+        })) {
+            if ($null -ne $picture.Image) {
+                $picture.Image.Dispose()
+            }
+        }
+    }
+})
 
 [void]$form.ShowDialog()

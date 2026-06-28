@@ -30,19 +30,44 @@ $form.FormBorderStyle = 'FixedDialog'
 $form.MaximizeBox = $false
 $form.Font = New-Object System.Drawing.Font('Segoe UI', 10)
 
+$attentionButton = New-Object System.Windows.Forms.Button
+$attentionButton.Text = 'Show Low Stock and Expiring'
+$attentionButton.Location = New-Object System.Drawing.Point(20, 18)
+$attentionButton.Size = New-Object System.Drawing.Size(235, 36)
+$form.Controls.Add($attentionButton)
+
+$attentionNote = New-Object System.Windows.Forms.Label
+$attentionNote.Text = 'Expiring means within 7 days.'
+$attentionNote.Location = New-Object System.Drawing.Point(270, 22)
+$attentionNote.Size = New-Object System.Drawing.Size(300, 28)
+$attentionNote.TextAlign = 'MiddleLeft'
+$attentionNote.ForeColor = [System.Drawing.Color]::DimGray
+$form.Controls.Add($attentionNote)
+
 $grid = New-Object System.Windows.Forms.DataGridView
-$grid.Location = New-Object System.Drawing.Point(20, 20)
-$grid.Size = New-Object System.Drawing.Size(1040, 360)
+$grid.Location = New-Object System.Drawing.Point(20, 68)
+$grid.Size = New-Object System.Drawing.Size(1040, 312)
 $grid.ReadOnly = $true
 $grid.AllowUserToAddRows = $false
 $grid.AllowUserToDeleteRows = $false
 $grid.MultiSelect = $false
 $grid.SelectionMode = 'FullRowSelect'
 $grid.AutoSizeColumnsMode = 'Fill'
-foreach ($columnName in @('Lot ID', 'Ingredient', 'Class', 'On Hand', 'Unit', 'Level', 'Acquired', 'Expires')) {
+foreach ($columnName in @(
+    'Lot ID',
+    'Ingredient',
+    'Class',
+    'On Hand',
+    'Unit',
+    'Level',
+    'Acquired',
+    'Expires',
+    'Attention'
+)) {
     [void]$grid.Columns.Add(($columnName -replace ' ', ''), $columnName)
 }
 $grid.Columns['LotID'].Visible = $false
+$grid.Columns['Attention'].FillWeight = 150
 $form.Controls.Add($grid)
 
 function Add-Label {
@@ -152,6 +177,72 @@ $statusLabel.ForeColor = [System.Drawing.Color]::DarkGreen
 $form.Controls.Add($statusLabel)
 
 $script:editingLotId = $null
+$script:attentionOnly = $false
+
+function Get-QuantityTotals {
+    $totals = @{}
+    foreach ($lot in $script:lots) {
+        if ($null -eq $lot.quantity) {
+            continue
+        }
+        if (-not $totals.ContainsKey($lot.item_id)) {
+            $totals[$lot.item_id] = 0.0
+        }
+        $totals[$lot.item_id] += [double]$lot.quantity
+    }
+    return $totals
+}
+
+function Get-AttentionReasons {
+    param(
+        $Lot,
+        $Item,
+        [hashtable]$QuantityTotals
+    )
+
+    $reasons = New-Object System.Collections.Generic.List[string]
+    if ($Item.class -eq 'consumable' -and $Lot.level -eq 'low') {
+        $reasons.Add('Low stock')
+    }
+
+    $minimum = if ($null -ne $Item.minimum) {
+        [double]$Item.minimum
+    } else {
+        0.0
+    }
+    $total = if ($QuantityTotals.ContainsKey($Item.id)) {
+        [double]$QuantityTotals[$Item.id]
+    } else {
+        0.0
+    }
+    if (
+        $Item.class -ne 'consumable' -and
+        $minimum -gt 0 -and
+        $total -lt $minimum
+    ) {
+        $reasons.Add(
+            "Low: $total $($Item.unit), minimum $minimum"
+        )
+    }
+
+    if (
+        $null -ne $Lot.expires_on -and
+        -not [string]::IsNullOrWhiteSpace([string]$Lot.expires_on)
+    ) {
+        $expiration = ([datetime]$Lot.expires_on).Date
+        $today = (Get-Date).Date
+        if ($expiration -lt $today) {
+            $reasons.Add(
+                "Expired $($expiration.ToString('MMM d'))"
+            )
+        } elseif ($expiration -le $today.AddDays(7)) {
+            $reasons.Add(
+                "Expires $($expiration.ToString('MMM d'))"
+            )
+        }
+    }
+    return @($reasons)
+}
 
 function Refresh-Editor {
     $item = $ingredientCombo.SelectedItem
@@ -168,24 +259,46 @@ function Refresh-Editor {
         $acquiredPicker.Checked = $true
         $acquiredPicker.Value = Get-Date
     }
-    if ($item.class -eq 'refrigerated' -and -not $expiresPicker.Checked) {
+    if ($item.class -eq 'frozen') {
+        $expiresPicker.Checked = $true
+        $expiresPicker.Value = $acquiredPicker.Value.AddMonths(6)
+    } elseif (
+        $item.class -eq 'refrigerated' -and
+        -not $expiresPicker.Checked
+    ) {
         $expiresPicker.Checked = $true
         $expiresPicker.Value = (Get-Date).AddDays(7)
+    } elseif ($item.class -notin @('frozen', 'refrigerated')) {
+        $expiresPicker.Checked = $false
     }
     $behaviorLabel.Text = "$($item.class): $($catalogDocument.classes.($item.class))"
 }
 
 function Refresh-Grid {
     $grid.Rows.Clear()
+    $quantityTotals = Get-QuantityTotals
     $ordered = @($script:lots | Sort-Object item_id, acquired_on)
+    $attentionCount = 0
     foreach ($lot in $ordered) {
         if (-not $catalogById.ContainsKey($lot.item_id)) {
             continue
         }
         $item = $catalogById[$lot.item_id]
+        $reasons = @(
+            Get-AttentionReasons `
+                -Lot $lot `
+                -Item $item `
+                -QuantityTotals $quantityTotals
+        )
+        if ($reasons.Count -gt 0) {
+            $attentionCount++
+        }
+        if ($script:attentionOnly -and $reasons.Count -eq 0) {
+            continue
+        }
         $quantityText = if ($null -ne $lot.quantity) { [string]$lot.quantity } else { '' }
         $levelText = if ($null -ne $lot.level) { [string]$lot.level } else { '' }
-        [void]$grid.Rows.Add(
+        $rowIndex = $grid.Rows.Add(
             $lot.lot_id,
             $item.name,
             $item.class,
@@ -193,10 +306,27 @@ function Refresh-Grid {
             $item.unit,
             $levelText,
             [string]$lot.acquired_on,
-            [string]$lot.expires_on
+            [string]$lot.expires_on,
+            ($reasons -join '; ')
+        )
+        if ($reasons.Count -gt 0) {
+            $grid.Rows[$rowIndex].DefaultCellStyle.BackColor = (
+                [System.Drawing.Color]::LightYellow
+            )
+        }
+    }
+    if ($script:attentionOnly) {
+        $statusLabel.Text = (
+            "$attentionCount low-stock or expiring lot(s) shown. " +
+            'Unsaved changes remain until Save Inventory is clicked.'
+        )
+    } else {
+        $statusLabel.Text = (
+            "$($script:lots.Count) inventory lot(s). " +
+            "$attentionCount need attention. " +
+            'Unsaved changes remain until Save Inventory is clicked.'
         )
     }
-    $statusLabel.Text = "$($script:lots.Count) inventory lot(s). Unsaved changes remain until Save Inventory is clicked."
 }
 
 function Reset-Editor {
@@ -210,7 +340,27 @@ function Reset-Editor {
 }
 
 $ingredientCombo.Add_SelectedIndexChanged({ Refresh-Editor })
+$acquiredPicker.Add_ValueChanged({
+    $item = $ingredientCombo.SelectedItem
+    if (
+        $null -ne $item -and
+        $item.class -eq 'frozen' -and
+        $acquiredPicker.Checked
+    ) {
+        $expiresPicker.Checked = $true
+        $expiresPicker.Value = $acquiredPicker.Value.AddMonths(6)
+    }
+})
 $newButton.Add_Click({ Reset-Editor })
+$attentionButton.Add_Click({
+    $script:attentionOnly = -not $script:attentionOnly
+    $attentionButton.Text = if ($script:attentionOnly) {
+        'Show All Inventory'
+    } else {
+        'Show Low Stock and Expiring'
+    }
+    Refresh-Grid
+})
 
 $grid.Add_SelectionChanged({
     if ($grid.SelectedRows.Count -ne 1) {
@@ -262,6 +412,9 @@ $addButton.Add_Click({
         }
         if ($item.class -eq 'refrigerated' -and -not $expiresPicker.Checked) {
             throw 'Refrigerated inventory requires an expiration date.'
+        }
+        if ($item.class -eq 'frozen' -and -not $expiresPicker.Checked) {
+            throw 'Frozen inventory requires an expiration date.'
         }
         $lotId = if ($null -ne $script:editingLotId) {
             $script:editingLotId
@@ -337,4 +490,10 @@ $saveButton.Add_Click({
 $form.CancelButton = $closeButton
 Refresh-Editor
 Refresh-Grid
+. (Join-Path $PSScriptRoot 'gui-branding.ps1')
+Add-MealPlannerBranding `
+    -Form $form `
+    -Title 'Kitchen Inventory' `
+    -Subtitle 'Stock, expiration, and pantry readiness' `
+    -IconName 'kitchen-inventory'
 [void]$form.ShowDialog()

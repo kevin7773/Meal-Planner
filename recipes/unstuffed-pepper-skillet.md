@@ -1,7 +1,7 @@
 +++
 id = "FDP-0035"
 name = "Unstuffed Pepper Skillet"
-revision = 1
+revision = 2
 status = "candidate"
 servings = 4
 created = "2026-06-27"
@@ -12,10 +12,10 @@ protein = "turkey"
 meal_scope = "complete-meal"
 fiber_grams = 8
 estimated_cost_usd = 20
-kid_friendly_score = 4
-kid_friendly_reason = "not really kid friendly"
+kid_friendly_score = 1
+kid_friendly_reason = "Not kid friendly - for the parents only"
 cooking_method = "stovetop"
-cook_time_minutes = 0
+cook_time_minutes = 25
 seasons = ["spring", "fall", "winter"]
 leftover_recipe_ids = []
 tags = ["fall", "imported", "spring", "stovetop", "turkey", "winter"]
@@ -26,11 +26,11 @@ source = "pasted recipe text"
 
 ## Recipe Card
 
-- **Active prep:** 0 minutes
-- **Cook time:** 0 minutes
+- **Active prep:** 10 minutes
+- **Cook time:** 25 minutes
 - **Cooking method:** Stovetop
 - **Estimated fiber:** 8 grams per serving
-- **Kid-friendly design:** not really kid friendly
+- **Kid-friendly design:** Not kid friendly - for the parents only
 - **Best seasons:** Spring, Fall, Winter
 - **Schedule fit:** Imported candidate; review before scheduling
 
@@ -86,4 +86,5 @@ source = "pasted recipe text"
 
 | Revision | Date | Status | Change |
 | ---: | --- | --- | --- |
+| 2 | 2026-06-27 | candidate | Updated imported recipe metadata through the GUI |
 | 1 | 2026-06-27 | candidate | Imported from pasted recipe text using plain text sections |

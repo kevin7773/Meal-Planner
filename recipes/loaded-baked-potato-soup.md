@@ -1,7 +1,7 @@
 +++
 id = "FDP-0028"
 name = "Loaded Baked Potato Soup"
-revision = 1
+revision = 2
 status = "candidate"
 servings = 4
 created = "2026-06-27"
@@ -12,8 +12,8 @@ protein = "vegetarian"
 meal_scope = "entree"
 fiber_grams = 8
 estimated_cost_usd = 20
-kid_friendly_score = 4
-kid_friendly_reason = "kids like it"
+kid_friendly_score = 5
+kid_friendly_reason = "Both children like/love it"
 cooking_method = "stovetop"
 cook_time_minutes = 12
 seasons = ["spring", "fall", "winter"]
@@ -26,11 +26,11 @@ source = "pasted recipe text"
 
 ## Recipe Card
 
-- **Active prep:** 0 minutes
+- **Active prep:** 15 minutes
 - **Cook time:** 12 minutes
 - **Cooking method:** Stovetop
 - **Estimated fiber:** 8 grams per serving
-- **Kid-friendly design:** kids like it
+- **Kid-friendly design:** Both children like/love it
 - **Best seasons:** Spring, Fall, Winter
 - **Schedule fit:** Imported candidate; review before scheduling
 
@@ -90,4 +90,5 @@ source = "pasted recipe text"
 
 | Revision | Date | Status | Change |
 | ---: | --- | --- | --- |
+| 2 | 2026-06-27 | candidate | Updated imported recipe metadata through the GUI |
 | 1 | 2026-06-27 | candidate | Imported from pasted recipe text using plain text sections |

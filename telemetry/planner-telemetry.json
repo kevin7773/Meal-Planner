@@ -1,317 +1,317 @@
 {
   "schema_version": 1,
   "created_at": "2026-06-27T00:00:00+00:00",
-  "updated_at": "2026-06-28T01:43:16.074347+00:00",
+  "updated_at": "2026-06-28T04:07:46.552768+00:00",
   "aggregate": {
-    "generation_runs": 4,
-    "menus_generated": 12,
+    "generation_runs": 6,
+    "menus_generated": 18,
     "failed_generation_runs": 0,
-    "total_generation_time_ms": 1391.338,
+    "total_generation_time_ms": 2925.668,
     "proposals_rejected": 0,
     "constraint_failures": {
-      "protein_cap": 144,
+      "protein_cap": 228,
       "weather": 0,
-      "mexican_monday": 0,
-      "inventory_conflicts": 12,
+      "mexican_monday": 282,
+      "inventory_conflicts": 18,
       "option_overlap": 0,
-      "queued_idea_cap": 0,
-      "duplicate_recipe": 132,
+      "queued_idea_cap": 206,
+      "duplicate_recipe": 250,
       "heat_friendly": 0
     },
     "recipe_utilization": {
       "FDP-0012": {
         "name": "10 Minute Pasta",
-        "times_eligible": 24,
+        "times_eligible": 48,
         "times_selected": 0,
-        "ranking_score_total": 370.4,
-        "score_observations": 24
+        "ranking_score_total": 859.0,
+        "score_observations": 48
       },
       "FDP-0002": {
         "name": "BBQ Chicken Sliders",
-        "times_eligible": 24,
+        "times_eligible": 60,
         "times_selected": 0,
-        "ranking_score_total": 1003.3,
-        "score_observations": 24
+        "ranking_score_total": 2752.3,
+        "score_observations": 60
       },
       "FDP-0041": {
         "name": "Blackstone Breakfast for Dinner",
-        "times_eligible": 24,
-        "times_selected": 0,
-        "ranking_score_total": 448.8,
-        "score_observations": 24
+        "times_eligible": 48,
+        "times_selected": 2,
+        "ranking_score_total": 2025.0,
+        "score_observations": 48
       },
       "FDP-0005": {
         "name": "Blackstone Chicken Fajita Soft Tacos",
-        "times_eligible": 24,
-        "times_selected": 0,
-        "ranking_score_total": 1733.6,
-        "score_observations": 24
+        "times_eligible": 54,
+        "times_selected": 2,
+        "ranking_score_total": 3258.0,
+        "score_observations": 54
       },
       "FDP-0031": {
         "name": "Blackstone Cowboy Stir Fry",
-        "times_eligible": 24,
-        "times_selected": 0,
-        "ranking_score_total": 2020.8,
-        "score_observations": 24
+        "times_eligible": 48,
+        "times_selected": 2,
+        "ranking_score_total": 2829.8,
+        "score_observations": 48
       },
       "FDP-0009": {
         "name": "Blackstone Hibachi Chicken Fried Rice",
-        "times_eligible": 24,
-        "times_selected": 0,
-        "ranking_score_total": 1844.8,
-        "score_observations": 24
+        "times_eligible": 48,
+        "times_selected": 2,
+        "ranking_score_total": 3137.6,
+        "score_observations": 48
       },
       "FDP-0013": {
         "name": "Blackstone Tortellini",
-        "times_eligible": 24,
-        "times_selected": 0,
-        "ranking_score_total": 1438.2,
-        "score_observations": 24
+        "times_eligible": 48,
+        "times_selected": 2,
+        "ranking_score_total": 2577.6,
+        "score_observations": 48
       },
       "FDP-0010": {
         "name": "Chicken Cheesesteak Baked Potatoes",
-        "times_eligible": 24,
-        "times_selected": 0,
-        "ranking_score_total": 1965.0,
-        "score_observations": 24
+        "times_eligible": 48,
+        "times_selected": 2,
+        "ranking_score_total": 2718.8,
+        "score_observations": 48
       },
       "FDP-0015": {
         "name": "Chicken Enchilada",
-        "times_eligible": 24,
+        "times_eligible": 48,
         "times_selected": 0,
-        "ranking_score_total": 892.3,
-        "score_observations": 24
+        "ranking_score_total": 1976.5,
+        "score_observations": 48
       },
       "FDP-0001": {
         "name": "Chicken Fajitas",
-        "times_eligible": 24,
-        "times_selected": 0,
-        "ranking_score_total": 1789.8,
-        "score_observations": 24
+        "times_eligible": 54,
+        "times_selected": 2,
+        "ranking_score_total": 3455.8,
+        "score_observations": 54
       },
       "FDP-0032": {
         "name": "Chicken Pesto Cavatappi",
-        "times_eligible": 24,
+        "times_eligible": 48,
         "times_selected": 0,
-        "ranking_score_total": 615.2,
-        "score_observations": 24
+        "ranking_score_total": 1419.8,
+        "score_observations": 48
       },
       "FDP-0004": {
         "name": "Chicken Smash Tacos",
-        "times_eligible": 24,
-        "times_selected": 0,
-        "ranking_score_total": 1678.6,
-        "score_observations": 24
+        "times_eligible": 54,
+        "times_selected": 2,
+        "ranking_score_total": 3977.4,
+        "score_observations": 54
       },
       "FDP-0019": {
         "name": "Chicken Stir Fry",
-        "times_eligible": 24,
+        "times_eligible": 48,
         "times_selected": 0,
-        "ranking_score_total": 481.2,
-        "score_observations": 24
+        "ranking_score_total": 1095.6,
+        "score_observations": 48
       },
       "FDP-0021": {
         "name": "Creamy Gnocchi and Chicken Skillet",
-        "times_eligible": 24,
+        "times_eligible": 48,
         "times_selected": 0,
-        "ranking_score_total": 837.2,
-        "score_observations": 24
+        "ranking_score_total": 1865.0,
+        "score_observations": 48
       },
       "FDP-0022": {
         "name": "Crock Pot Sesame Chicken",
-        "times_eligible": 24,
+        "times_eligible": 60,
         "times_selected": 0,
-        "ranking_score_total": 725.9,
-        "score_observations": 24
+        "ranking_score_total": 2011.9,
+        "score_observations": 60
       },
       "FDP-0023": {
         "name": "Eggroll in a Bowl",
-        "times_eligible": 24,
+        "times_eligible": 48,
         "times_selected": 0,
-        "ranking_score_total": 670.4,
-        "score_observations": 24
+        "ranking_score_total": 1531.4,
+        "score_observations": 48
       },
       "FDP-0024": {
         "name": "Garlic Butter Shrimp",
-        "times_eligible": 24,
+        "times_eligible": 48,
         "times_selected": 0,
-        "ranking_score_total": 1068.3,
-        "score_observations": 24
+        "ranking_score_total": 2272.9,
+        "score_observations": 48
       },
       "FDP-0025": {
         "name": "Grill Smoked Barbecued Chicken",
-        "times_eligible": 24,
+        "times_eligible": 48,
         "times_selected": 0,
-        "ranking_score_total": 549.8,
-        "score_observations": 24
+        "ranking_score_total": 1284.6,
+        "score_observations": 48
       },
       "FDP-0040": {
         "name": "Grilled Chicken Caesar Salad",
-        "times_eligible": 24,
-        "times_selected": 0,
-        "ranking_score_total": 559.8,
-        "score_observations": 24
+        "times_eligible": 48,
+        "times_selected": 2,
+        "ranking_score_total": 2206.4,
+        "score_observations": 48
       },
       "FDP-0011": {
         "name": "Grilled Salmon Rice Bowls with Fruit",
-        "times_eligible": 24,
-        "times_selected": 4,
-        "ranking_score_total": 2048.2,
-        "score_observations": 24
+        "times_eligible": 48,
+        "times_selected": 6,
+        "ranking_score_total": 2941.4,
+        "score_observations": 48
       },
       "FDP-0026": {
         "name": "Grilled Salmon with Edamame and Rice",
-        "times_eligible": 24,
-        "times_selected": 0,
-        "ranking_score_total": 1622.8,
-        "score_observations": 24
+        "times_eligible": 48,
+        "times_selected": 2,
+        "ranking_score_total": 3376.4,
+        "score_observations": 48
       },
       "FDP-0038": {
         "name": "Ground Turkey Hard Shell Tacos with Pinto Beans and Rice",
-        "times_eligible": 24,
+        "times_eligible": 54,
         "times_selected": 0,
-        "ranking_score_total": 55.2,
-        "score_observations": 24
+        "ranking_score_total": 715.4,
+        "score_observations": 54
       },
       "FDP-0039": {
         "name": "Hot Dogs with Macaroni and Cheese and Baked Beans",
-        "times_eligible": 24,
+        "times_eligible": 48,
         "times_selected": 0,
-        "ranking_score_total": 425.6,
-        "score_observations": 24
+        "ranking_score_total": 984.0,
+        "score_observations": 48
       },
       "FDP-0030": {
         "name": "Marry me chicken",
-        "times_eligible": 24,
+        "times_eligible": 48,
         "times_selected": 0,
-        "ranking_score_total": 781.3,
-        "score_observations": 24
+        "ranking_score_total": 1753.1,
+        "score_observations": 48
       },
       "FDP-0008": {
         "name": "No-Cook Chicken and Cheese Roll-Up Plates",
-        "times_eligible": 24,
-        "times_selected": 0,
-        "ranking_score_total": 1900.4,
-        "score_observations": 24
+        "times_eligible": 60,
+        "times_selected": 2,
+        "ranking_score_total": 2830.4,
+        "score_observations": 60
       },
       "FDP-0006": {
         "name": "Slow-Cooker BBQ Chicken Baked Potato Bar",
-        "times_eligible": 24,
+        "times_eligible": 60,
         "times_selected": 0,
-        "ranking_score_total": 947.8,
-        "score_observations": 24
+        "ranking_score_total": 2549.0,
+        "score_observations": 60
       },
       "FDP-0027": {
         "name": "Slow Cooker Pot Roast with Vegetables",
-        "times_eligible": 24,
+        "times_eligible": 60,
         "times_selected": 0,
-        "ranking_score_total": 1059.2,
-        "score_observations": 24
+        "ranking_score_total": 2842.2,
+        "score_observations": 60
       },
       "FDP-0017": {
         "name": "Spaghetti Carbonara",
-        "times_eligible": 24,
+        "times_eligible": 48,
         "times_selected": 0,
-        "ranking_score_total": 1114.1,
-        "score_observations": 24
+        "ranking_score_total": 2295.7,
+        "score_observations": 48
       },
       "FDP-0042": {
         "name": "Turkey and Cheese Deli Sandwich Night",
-        "times_eligible": 24,
-        "times_selected": 0,
-        "ranking_score_total": 504.0,
-        "score_observations": 24
+        "times_eligible": 60,
+        "times_selected": 2,
+        "ranking_score_total": 2844.0,
+        "score_observations": 60
       },
       "FDP-0003": {
         "name": "Turkey Cheesesteak Bowls",
-        "times_eligible": 24,
-        "times_selected": 0,
-        "ranking_score_total": 1549.0,
-        "score_observations": 24
+        "times_eligible": 48,
+        "times_selected": 2,
+        "ranking_score_total": 2339.8,
+        "score_observations": 48
       },
       "FDP-0007": {
         "name": "Turkey Cheesesteak Brown Rice Bowls",
-        "times_eligible": 24,
-        "times_selected": 0,
-        "ranking_score_total": 1493.2,
-        "score_observations": 24
+        "times_eligible": 48,
+        "times_selected": 2,
+        "ranking_score_total": 2865.0,
+        "score_observations": 48
       },
       "IDEA-USER-0001": {
         "name": "Chicken quesadillas",
-        "times_eligible": 24,
+        "times_eligible": 54,
         "times_selected": 0,
-        "ranking_score_total": 1215.6,
-        "score_observations": 24
+        "ranking_score_total": 2896.6,
+        "score_observations": 54
       },
       "IDEA-USER-0004": {
         "name": "meatloaf with mashed potatoes and green beans",
-        "times_eligible": 24,
+        "times_eligible": 48,
         "times_selected": 0,
-        "ranking_score_total": 1327.0,
-        "score_observations": 24
+        "ranking_score_total": 2834.2,
+        "score_observations": 48
       },
       "IDEA-USER-0005": {
         "name": "One Pot Cheesy Taco Pasta",
-        "times_eligible": 24,
+        "times_eligible": 54,
         "times_selected": 0,
-        "ranking_score_total": 1272.0,
-        "score_observations": 24
+        "ranking_score_total": 3094.6,
+        "score_observations": 54
       },
       "IDEA-USER-0009": {
         "name": "Cold Italian Tortellini Pasta Salad",
-        "times_eligible": 24,
-        "times_selected": 4,
-        "ranking_score_total": 1509.9,
-        "score_observations": 24
+        "times_eligible": 60,
+        "times_selected": 6,
+        "ranking_score_total": 4960.5,
+        "score_observations": 60
       },
       "IDEA-USER-0010": {
         "name": "Rotisserie Chicken Caesar Wraps with Fruit",
-        "times_eligible": 24,
+        "times_eligible": 60,
         "times_selected": 4,
-        "ranking_score_total": 2298.2,
-        "score_observations": 24
+        "ranking_score_total": 5380.4,
+        "score_observations": 60
       },
       "IDEA-USER-0011": {
         "name": "Cold Sesame Noodle Bowls with Edamame",
-        "times_eligible": 24,
-        "times_selected": 4,
-        "ranking_score_total": 1204.7,
-        "score_observations": 24
+        "times_eligible": 60,
+        "times_selected": 6,
+        "ranking_score_total": 3878.7,
+        "score_observations": 60
       },
       "IDEA-USER-0012": {
         "name": "Turkey Taco Salad Bar",
-        "times_eligible": 24,
-        "times_selected": 0,
-        "ranking_score_total": 2122.4,
-        "score_observations": 24
+        "times_eligible": 66,
+        "times_selected": 2,
+        "ranking_score_total": 3790.8,
+        "score_observations": 66
       },
       "IDEA-USER-0013": {
         "name": "Mediterranean Hummus Pita Plates",
-        "times_eligible": 24,
-        "times_selected": 0,
-        "ranking_score_total": 2233.6,
-        "score_observations": 24
+        "times_eligible": 60,
+        "times_selected": 2,
+        "ranking_score_total": 4788.0,
+        "score_observations": 60
       },
       "IDEA-USER-0014": {
         "name": "Grilled Chicken Caprese Tortellini Salad",
-        "times_eligible": 24,
+        "times_eligible": 48,
         "times_selected": 4,
-        "ranking_score_total": 1646.4,
-        "score_observations": 24
+        "ranking_score_total": 3860.0,
+        "score_observations": 48
       },
       "IDEA-USER-0015": {
         "name": "Turkey and Cheese Snack-Board Dinner",
-        "times_eligible": 24,
-        "times_selected": 0,
-        "ranking_score_total": 2177.6,
-        "score_observations": 24
+        "times_eligible": 60,
+        "times_selected": 2,
+        "ranking_score_total": 5348.4,
+        "score_observations": 60
       },
       "IDEA-USER-0016": {
         "name": "Chilled Shrimp and Orzo Salad",
-        "times_eligible": 24,
-        "times_selected": 4,
-        "ranking_score_total": 1096.0,
-        "score_observations": 24
+        "times_eligible": 60,
+        "times_selected": 6,
+        "ranking_score_total": 2794.4,
+        "score_observations": 60
       },
       "OVERRIDE-20260629-THU": {
         "name": "Chinese Carryout",
@@ -322,49 +322,53 @@
       },
       "FDP-0043": {
         "name": "One-Pot Sausage and Fennel Rigatoni",
-        "times_eligible": 6,
+        "times_eligible": 30,
         "times_selected": 0,
-        "ranking_score_total": 131.8,
-        "score_observations": 6
+        "ranking_score_total": 811.0,
+        "score_observations": 30
       }
     },
     "recommendation_drift": {
-      "meal_observations": 72,
+      "meal_observations": 114,
       "protein_distribution": {
-        "chicken": 20,
-        "seafood": 8,
-        "turkey": 36,
-        "vegetarian": 8
+        "chicken": 36,
+        "seafood": 12,
+        "turkey": 52,
+        "vegetarian": 12,
+        "other": 2
       },
       "cooking_method_distribution": {
-        "blackstone": 12,
-        "grill": 20,
-        "minimal-cook": 12,
-        "no-cook": 16,
+        "blackstone": 32,
+        "grill": 26,
+        "minimal-cook": 20,
+        "no-cook": 24,
         "stovetop": 12
       },
       "season_distribution": {
-        "summer": 72
+        "summer": 114
       },
-      "blackstone_selections": 12,
-      "prep_minutes_total": 1600.0,
-      "cost_usd_total": 1719.0,
-      "fiber_grams_total": 580.8
+      "blackstone_selections": 32,
+      "prep_minutes_total": 2584.0,
+      "cost_usd_total": 2657.0,
+      "fiber_grams_total": 968.6
     },
     "rule_usage_by_month": {
       "2026-06": {
         "RULE-HEAT-MINIMUM": 12,
         "RULE-FIXED-OVERRIDE": 60,
-        "RULE-ACTIVE-STATUS": 24,
-        "RULE-GENERATED-DAY": 24,
-        "RULE-SEASON": 24,
-        "RULE-WEATHER": 24,
-        "RULE-RECENT-ROTATION": 24,
-        "RULE-INVENTORY-RANKING": 24,
-        "RULE-UNIQUE-WEEK": 24,
-        "RULE-PROTEIN-CAP": 24,
-        "RULE-QUEUED-IDEA-CAP": 24,
-        "RULE-OPTION-OVERLAP": 24
+        "RULE-ACTIVE-STATUS": 66,
+        "RULE-GENERATED-DAY": 66,
+        "RULE-SEASON": 66,
+        "RULE-WEATHER": 66,
+        "RULE-RECENT-ROTATION": 66,
+        "RULE-INVENTORY-RANKING": 66,
+        "RULE-UNIQUE-WEEK": 66,
+        "RULE-PROTEIN-CAP": 66,
+        "RULE-QUEUED-IDEA-CAP": 66,
+        "RULE-OPTION-OVERLAP": 66,
+        "RULE-MEXICAN-MONDAY": 6,
+        "RULE-TUESDAY-LOW-EFFORT": 6,
+        "RULE-THURSDAY-LOW-EFFORT": 6
       }
     }
   },
@@ -603,6 +607,126 @@
         "RULE-SEASON": 6,
         "RULE-UNIQUE-WEEK": 6,
         "RULE-WEATHER": 6
+      }
+    },
+    {
+      "recorded_at": "2026-06-28T04:07:44.835596+00:00",
+      "week_of": "2026-07-06",
+      "requested_proposals": 3,
+      "menus_generated": 3,
+      "generation_time_ms": 723.503,
+      "proposals_rejected": 0,
+      "success": true,
+      "constraint_failures": {
+        "protein_cap": 42,
+        "weather": 0,
+        "mexican_monday": 141,
+        "inventory_conflicts": 3,
+        "option_overlap": 0,
+        "queued_idea_cap": 103,
+        "duplicate_recipe": 59,
+        "heat_friendly": 0
+      },
+      "recommendation_profile": {
+        "meal_observations": 21,
+        "protein_distribution": {
+          "chicken": 8,
+          "other": 1,
+          "seafood": 2,
+          "turkey": 8,
+          "vegetarian": 2
+        },
+        "cooking_method_distribution": {
+          "blackstone": 10,
+          "grill": 3,
+          "minimal-cook": 4,
+          "no-cook": 4
+        },
+        "season_distribution": {
+          "summer": 21
+        },
+        "blackstone_selections": 10,
+        "prep_minutes_total": 492.0,
+        "cost_usd_total": 469.0,
+        "fiber_grams_total": 193.9,
+        "average_prep_minutes": 23.4,
+        "average_cost_usd": 22.33,
+        "average_fiber_grams": 9.2
+      },
+      "rule_usage": {
+        "RULE-ACTIVE-STATUS": 21,
+        "RULE-GENERATED-DAY": 21,
+        "RULE-INVENTORY-RANKING": 21,
+        "RULE-MEXICAN-MONDAY": 3,
+        "RULE-OPTION-OVERLAP": 21,
+        "RULE-PROTEIN-CAP": 21,
+        "RULE-QUEUED-IDEA-CAP": 21,
+        "RULE-RECENT-ROTATION": 21,
+        "RULE-SEASON": 21,
+        "RULE-THURSDAY-LOW-EFFORT": 3,
+        "RULE-TUESDAY-LOW-EFFORT": 3,
+        "RULE-UNIQUE-WEEK": 21,
+        "RULE-WEATHER": 21
+      }
+    },
+    {
+      "recorded_at": "2026-06-28T04:07:46.552768+00:00",
+      "week_of": "2026-07-06",
+      "requested_proposals": 3,
+      "menus_generated": 3,
+      "generation_time_ms": 810.827,
+      "proposals_rejected": 0,
+      "success": true,
+      "constraint_failures": {
+        "protein_cap": 42,
+        "weather": 0,
+        "mexican_monday": 141,
+        "inventory_conflicts": 3,
+        "option_overlap": 0,
+        "queued_idea_cap": 103,
+        "duplicate_recipe": 59,
+        "heat_friendly": 0
+      },
+      "recommendation_profile": {
+        "meal_observations": 21,
+        "protein_distribution": {
+          "chicken": 8,
+          "other": 1,
+          "seafood": 2,
+          "turkey": 8,
+          "vegetarian": 2
+        },
+        "cooking_method_distribution": {
+          "blackstone": 10,
+          "grill": 3,
+          "minimal-cook": 4,
+          "no-cook": 4
+        },
+        "season_distribution": {
+          "summer": 21
+        },
+        "blackstone_selections": 10,
+        "prep_minutes_total": 492.0,
+        "cost_usd_total": 469.0,
+        "fiber_grams_total": 193.9,
+        "average_prep_minutes": 23.4,
+        "average_cost_usd": 22.33,
+        "average_fiber_grams": 9.2
+      },
+      "rule_usage": {
+        "RULE-ACTIVE-STATUS": 21,
+        "RULE-GENERATED-DAY": 21,
+        "RULE-INVENTORY-RANKING": 21,
+        "RULE-MEXICAN-MONDAY": 3,
+        "RULE-OPTION-OVERLAP": 21,
+        "RULE-PROTEIN-CAP": 21,
+        "RULE-QUEUED-IDEA-CAP": 21,
+        "RULE-RECENT-ROTATION": 21,
+        "RULE-SEASON": 21,
+        "RULE-THURSDAY-LOW-EFFORT": 3,
+        "RULE-TUESDAY-LOW-EFFORT": 3,
+        "RULE-UNIQUE-WEEK": 21,
+        "RULE-WEATHER": 21
       }
     }
   ]

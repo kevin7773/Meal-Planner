@@ -147,6 +147,27 @@ Directions
         )
         self.assertIn('meal_scope = "entree"', path.read_text(encoding="utf-8"))
 
+    def test_import_can_override_incorrect_prep_time(self) -> None:
+        _, path = import_recipe(
+            "pasted recipe text",
+            source_text=PLAIN_RECIPE,
+            name="Prep Time Chicken",
+            protein="chicken",
+            cooking_method="stovetop",
+            prep_minutes_override=25,
+            cook_minutes_override=20,
+            fiber_grams=8,
+            estimated_cost_usd=14,
+            kid_friendly_score=5,
+            kid_friendly_reason="Both children like/love it",
+            seasons=["spring", "summer", "fall", "winter"],
+            root=self.root,
+        )
+        text = path.read_text(encoding="utf-8")
+
+        self.assertIn("**Active prep:** 25 minutes", text)
+        self.assertIn("**Cook time:** 20 minutes", text)
+
     def test_schema_org_recipe_is_extracted(self) -> None:
         page = """<html><script type="application/ld+json">
         {"@context":"https://schema.org","@type":"Recipe","name":"Test Tacos",

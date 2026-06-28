@@ -1,7 +1,7 @@
 +++
 id = "FDP-0020"
 name = "Beef Lasagna"
-revision = 1
+revision = 2
 status = "candidate"
 servings = 4
 created = "2026-06-27"
@@ -11,25 +11,26 @@ ratings_count = 0
 protein = "beef"
 fiber_grams = 8
 estimated_cost_usd = 20
-kid_friendly_score = 4
-kid_friendly_reason = "Italian food for the win!"
+kid_friendly_score = 5
+kid_friendly_reason = "Both children like/love it"
 cooking_method = "oven"
-cook_time_minutes = 0
+cook_time_minutes = 45
 seasons = ["spring", "fall", "winter"]
 leftover_recipe_ids = []
 tags = ["beef", "fall", "imported", "oven", "spring", "winter"]
 source = "pasted recipe text"
+meal_scope = "complete-meal"
 +++
 
 # Beef Lasagna
 
 ## Recipe Card
 
-- **Active prep:** 0 minutes
-- **Cook time:** 0 minutes
+- **Active prep:** 10 minutes
+- **Cook time:** 45 minutes
 - **Cooking method:** Oven
 - **Estimated fiber:** 8 grams per serving
-- **Kid-friendly design:** Italian food for the win!
+- **Kid-friendly design:** Both children like/love it
 - **Best seasons:** Spring, Fall, Winter
 - **Schedule fit:** Imported candidate; review before scheduling
 
@@ -87,4 +88,5 @@ source = "pasted recipe text"
 
 | Revision | Date | Status | Change |
 | ---: | --- | --- | --- |
+| 2 | 2026-06-27 | candidate | Updated imported recipe metadata through the GUI |
 | 1 | 2026-06-27 | candidate | Imported from pasted recipe text using plain text sections |

@@ -2,6 +2,7 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent $PSScriptRoot
 $importer = Join-Path $PSScriptRoot 'import_recipe.py'
+$recipeEditor = Join-Path $PSScriptRoot 'edit_recipe.py'
 $ideaManager = Join-Path $PSScriptRoot 'recipe_ideas.py'
 
 function Resolve-Python {
@@ -128,7 +129,7 @@ $form.Controls.Add($kidScore)
 Add-Label 'Kid-friendly reason' 20 415
 $kidReason = New-Object System.Windows.Forms.ComboBox
 $kidReason.Location = New-Object System.Drawing.Point(160, 415)
-$kidReason.Size = New-Object System.Drawing.Size(490, 28)
+$kidReason.Size = New-Object System.Drawing.Size(330, 28)
 $kidReason.DropDownStyle = 'DropDownList'
 @(
     'Gray Loves It',
@@ -146,10 +147,17 @@ $kidReason.Add_SelectedIndexChanged({
     }
 })
 
-Add-Label 'Cook min' 670 415 70
+Add-Label 'Prep min' 510 415 70
+$prepMinutes = New-Object System.Windows.Forms.NumericUpDown
+$prepMinutes.Location = New-Object System.Drawing.Point(580, 415)
+$prepMinutes.Size = New-Object System.Drawing.Size(80, 28)
+$prepMinutes.Maximum = 1440
+$form.Controls.Add($prepMinutes)
+
+Add-Label 'Cook min' 680 415 70
 $cookMinutes = New-Object System.Windows.Forms.NumericUpDown
-$cookMinutes.Location = New-Object System.Drawing.Point(745, 415)
-$cookMinutes.Size = New-Object System.Drawing.Size(135, 28)
+$cookMinutes.Location = New-Object System.Drawing.Point(755, 415)
+$cookMinutes.Size = New-Object System.Drawing.Size(125, 28)
 $cookMinutes.Maximum = 1440
 $form.Controls.Add($cookMinutes)
 
@@ -205,8 +213,15 @@ $note.Location = New-Object System.Drawing.Point(20, 620)
 $note.Size = New-Object System.Drawing.Size(860, 65)
 $note.BorderStyle = 'FixedSingle'
 $note.Padding = New-Object System.Windows.Forms.Padding(10)
-$note.Text = 'Imports are candidates. Review quantities, seasoning classification, and inventory mapping before scheduling.'
+$defaultNoteText = 'Imports are candidates. Review quantities, seasoning classification, and inventory mapping before scheduling.'
+$note.Text = $defaultNoteText
 $form.Controls.Add($note)
+
+$editRecipeButton = New-Object System.Windows.Forms.Button
+$editRecipeButton.Text = 'Edit Imported Recipe'
+$editRecipeButton.Location = New-Object System.Drawing.Point(20, 735)
+$editRecipeButton.Size = New-Object System.Drawing.Size(190, 42)
+$form.Controls.Add($editRecipeButton)
 
 $saveIdeaButton = New-Object System.Windows.Forms.Button
 $saveIdeaButton.Text = 'Save Recipe Idea'
@@ -228,10 +243,13 @@ $closeButton.Add_Click({ $form.Close() })
 $form.Controls.Add($closeButton)
 
 $script:pastedText = ''
+$script:editingRecipeId = $null
 
 function Reset-ImportForm {
     $script:pastedText = ''
+    $script:editingRecipeId = $null
     $sourceText.Clear()
+    $sourceText.ReadOnly = $false
     $previewText.Clear()
     $nameText.Clear()
     $ideaText.Clear()
@@ -241,6 +259,7 @@ function Reset-ImportForm {
     $fiberInput.Value = 8
     $costInput.Value = 20
     $kidScore.SelectedItem = '4'
+    $prepMinutes.Value = 0
     $cookMinutes.Value = 0
     foreach ($season in @('spring','summer','fall','winter')) {
         $seasonButtons[$season].Checked = $true
@@ -248,6 +267,15 @@ function Reset-ImportForm {
     $mealScopeCombo.SelectedIndex = 0
     $mexicanMonday.Checked = $false
     $importButton.Enabled = $false
+    $importButton.Text = 'Import Candidate'
+    $editRecipeButton.Text = 'Edit Imported Recipe'
+    $browseButton.Enabled = $true
+    $pasteButton.Enabled = $true
+    $previewButton.Enabled = $true
+    $ideaText.Enabled = $true
+    $mexicanMonday.Enabled = $true
+    $saveIdeaButton.Enabled = $true
+    $note.Text = $defaultNoteText
     $sourceText.Focus()
 }
 
@@ -296,6 +324,135 @@ function Show-PasteEditor {
     }
 }
 
+function Select-ImportedRecipe {
+    $raw = & $python $recipeEditor list --json 2>&1
+    if ($LASTEXITCODE -ne 0) {
+        throw ($raw -join [Environment]::NewLine)
+    }
+    $parsedRecipes = (
+        $raw -join [Environment]::NewLine
+    ) | ConvertFrom-Json
+    $recipes = @($parsedRecipes)
+    if ($recipes.Count -eq 0) {
+        throw 'No imported recipes are available to edit.'
+    }
+
+    $dialog = New-Object System.Windows.Forms.Form
+    $dialog.Text = 'Select Imported Recipe'
+    $dialog.ClientSize = New-Object System.Drawing.Size(680, 165)
+    $dialog.StartPosition = 'CenterParent'
+    $dialog.FormBorderStyle = 'FixedDialog'
+    $dialog.MaximizeBox = $false
+    $dialog.Font = New-Object System.Drawing.Font('Segoe UI', 10)
+
+    $label = New-Object System.Windows.Forms.Label
+    $label.Text = 'Imported recipe'
+    $label.Location = New-Object System.Drawing.Point(20, 22)
+    $label.Size = New-Object System.Drawing.Size(130, 28)
+    $dialog.Controls.Add($label)
+
+    $combo = New-Object System.Windows.Forms.ComboBox
+    $combo.Location = New-Object System.Drawing.Point(150, 20)
+    $combo.Size = New-Object System.Drawing.Size(500, 28)
+    $combo.DropDownStyle = 'DropDownList'
+    $combo.DisplayMember = 'Display'
+    foreach ($recipe in $recipes) {
+        $warning = if ($recipe.kid_reason_is_current) {
+            ''
+        } else {
+            ' [kid reason needs update]'
+        }
+        $recipe | Add-Member `
+            -NotePropertyName Display `
+            -NotePropertyValue "$($recipe.id) - $($recipe.name)$warning"
+        [void]$combo.Items.Add($recipe)
+    }
+    $combo.SelectedIndex = 0
+    $dialog.Controls.Add($combo)
+
+    $cancel = New-Object System.Windows.Forms.Button
+    $cancel.Text = 'Cancel'
+    $cancel.Location = New-Object System.Drawing.Point(435, 95)
+    $cancel.Size = New-Object System.Drawing.Size(100, 36)
+    $cancel.DialogResult = 'Cancel'
+    $dialog.Controls.Add($cancel)
+
+    $load = New-Object System.Windows.Forms.Button
+    $load.Text = 'Edit Selected'
+    $load.Location = New-Object System.Drawing.Point(550, 95)
+    $load.Size = New-Object System.Drawing.Size(100, 36)
+    $load.DialogResult = 'OK'
+    $dialog.Controls.Add($load)
+    $dialog.AcceptButton = $load
+    $dialog.CancelButton = $cancel
+
+    if ($dialog.ShowDialog($form) -eq 'OK') {
+        return $combo.SelectedItem
+    }
+    return $null
+}
+
+function Load-ImportedRecipe {
+    param($Recipe)
+
+    $script:editingRecipeId = [string]$Recipe.id
+    $script:pastedText = ''
+    $sourceText.Text = (
+        "$($Recipe.id) rev $($Recipe.revision) | $($Recipe.source)"
+    )
+    $sourceText.ReadOnly = $true
+    $nameText.Text = [string]$Recipe.name
+    $proteinCombo.SelectedItem = [string]$Recipe.protein
+    $methodCombo.SelectedItem = [string]$Recipe.cooking_method
+    $mealScopeCombo.SelectedItem = [string]$Recipe.meal_scope
+    $prepMinutes.Value = [decimal]$Recipe.prep_minutes
+    $cookMinutes.Value = [decimal]$Recipe.cook_minutes
+    $fiberInput.Value = [decimal]$Recipe.fiber_grams
+    $costInput.Value = [decimal]$Recipe.estimated_cost_usd
+    foreach ($season in @('spring','summer','fall','winter')) {
+        $seasonButtons[$season].Checked = (
+            @($Recipe.seasons) -contains $season
+        )
+    }
+    if ($Recipe.kid_reason_is_current) {
+        $kidReason.SelectedItem = [string]$Recipe.kid_friendly_reason
+    } else {
+        $kidReason.SelectedIndex = -1
+    }
+
+    $warning = if ($Recipe.kid_reason_is_current) {
+        'All controlled values are within current guardrails.'
+    } else {
+        (
+            "Legacy kid-friendly reason: " +
+            "$($Recipe.kid_friendly_reason)`r`n" +
+            'Choose a current reason before saving.'
+        )
+    }
+    $previewText.Text = @(
+        "EDITING $($Recipe.id) REV $($Recipe.revision)",
+        "Status: $($Recipe.status)",
+        "Source: $($Recipe.source)",
+        '',
+        $warning,
+        '',
+        'Ingredients, directions, ratings, and source attribution are preserved.'
+    ) -join [Environment]::NewLine
+    $browseButton.Enabled = $false
+    $pasteButton.Enabled = $false
+    $previewButton.Enabled = $false
+    $ideaText.Enabled = $false
+    $mexicanMonday.Enabled = $false
+    $saveIdeaButton.Enabled = $false
+    $importButton.Text = 'Save Recipe Revision'
+    $importButton.Enabled = $true
+    $editRecipeButton.Text = 'Cancel Edit'
+    $note.Text = (
+        "Saving creates revision $([int]$Recipe.revision + 1). " +
+        'Recipe ID, source, ingredients, directions, ratings, and history are preserved.'
+    )
+}
+
 $browseButton.Add_Click({
     $dialog = New-Object System.Windows.Forms.OpenFileDialog
     $dialog.Filter = 'Text and Markdown|*.txt;*.md|All files|*.*'
@@ -306,6 +463,25 @@ $browseButton.Add_Click({
     }
 })
 $pasteButton.Add_Click({ Show-PasteEditor })
+$editRecipeButton.Add_Click({
+    try {
+        if ($null -ne $script:editingRecipeId) {
+            Reset-ImportForm
+            return
+        }
+        $recipe = Select-ImportedRecipe
+        if ($null -ne $recipe) {
+            Load-ImportedRecipe -Recipe $recipe
+        }
+    } catch {
+        [System.Windows.Forms.MessageBox]::Show(
+            $_.Exception.Message,
+            'Unable to Load Imported Recipe',
+            'OK',
+            'Error'
+        ) | Out-Null
+    }
+})
 
 $previewButton.Add_Click({
     try {
@@ -322,6 +498,7 @@ $previewButton.Add_Click({
         $preview = ($raw -join [Environment]::NewLine) | ConvertFrom-Json
         $nameText.Text = $preview.name
         if ([double]$preview.fiber_grams -gt 0) { $fiberInput.Value = [decimal]$preview.fiber_grams }
+        if ([int]$preview.prep_minutes -gt 0) { $prepMinutes.Value = [decimal]$preview.prep_minutes }
         if ([int]$preview.cook_minutes -gt 0) { $cookMinutes.Value = [decimal]$preview.cook_minutes }
         $lines = @(
             "Parser: $($preview.parser)",
@@ -347,6 +524,38 @@ $importButton.Add_Click({
         if ([string]::IsNullOrWhiteSpace($nameText.Text)) { throw 'Recipe name is required.' }
         if ($proteinCombo.SelectedIndex -eq 0) { throw 'Select a protein.' }
         if ([string]::IsNullOrWhiteSpace($kidReason.Text)) { throw 'Kid-friendly reason is required.' }
+        if ($null -ne $script:editingRecipeId) {
+            $arguments = @(
+                $recipeEditor,
+                'update',
+                '--id', $script:editingRecipeId,
+                '--name', $nameText.Text,
+                '--protein', [string]$proteinCombo.SelectedItem,
+                '--meal-scope', [string]$mealScopeCombo.SelectedItem,
+                '--prep-minutes', [string]$prepMinutes.Value,
+                '--cook-minutes', [string]$cookMinutes.Value,
+                '--fiber', [string]$fiberInput.Value,
+                '--cost', [string]$costInput.Value,
+                '--kid-reason', $kidReason.Text,
+                '--method', [string]$methodCombo.SelectedItem,
+                '--seasons', (Get-SelectedSeasons)
+            )
+            $result = & $python @arguments 2>&1
+            if ($LASTEXITCODE -ne 0) {
+                throw ($result -join [Environment]::NewLine)
+            }
+            [System.Windows.Forms.MessageBox]::Show(
+                (
+                    "Saved recipe revision:`n$($result -join '')`n`n" +
+                    'The importer is ready for another entry.'
+                ),
+                'Recipe Revision Saved',
+                'OK',
+                'Information'
+            ) | Out-Null
+            Reset-ImportForm
+            return
+        }
         $arguments = @($importer,'apply')
         $usingPastedText = (
             $sourceText.Text -like 'Pasted recipe text (*' -and
@@ -362,6 +571,7 @@ $importButton.Add_Click({
             '--protein',[string]$proteinCombo.SelectedItem,
             '--meal-scope',[string]$mealScopeCombo.SelectedItem,
             '--method',[string]$methodCombo.SelectedItem,
+            '--prep-minutes',[string]$prepMinutes.Value,
             '--cook-minutes',[string]$cookMinutes.Value,
             '--fiber',[string]$fiberInput.Value,
             '--cost',[string]$costInput.Value,
@@ -418,4 +628,21 @@ $saveIdeaButton.Add_Click({
 })
 
 $form.CancelButton = $closeButton
+$previewText.Height -= 100
+foreach ($control in @($form.Controls)) {
+    if ($control.Top -ge 310) {
+        $control.Top -= 100
+    }
+}
+$form.ClientSize = New-Object System.Drawing.Size(
+    $form.ClientSize.Width,
+    ($form.ClientSize.Height - 40)
+)
+. (Join-Path $PSScriptRoot 'gui-branding.ps1')
+Add-MealPlannerBranding `
+    -Form $form `
+    -Title 'Import Recipe' `
+    -Subtitle 'Recipe imports, ideas, and guarded revisions' `
+    -IconName 'import-recipe' `
+    -PreserveClientHeight
 [void]$form.ShowDialog()

@@ -412,4 +412,10 @@ $form.Controls.Add($cancelButton)
 $form.AcceptButton = $saveButton
 $form.CancelButton = $cancelButton
 Update-Outcome
+. (Join-Path $PSScriptRoot 'gui-branding.ps1')
+Add-MealPlannerBranding `
+    -Form $form `
+    -Title 'Review Meal' `
+    -Subtitle 'Family ratings and recipe approval' `
+    -IconName 'review-meal'
 [void]$form.ShowDialog()
