@@ -11,7 +11,7 @@ from planner.constants import (
 )
 
 
-TRACE_VERSION = 1
+TRACE_VERSION = 2
 
 
 def _apply_stage(

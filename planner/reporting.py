@@ -46,6 +46,10 @@ def proposal_report(proposal: dict, number: int | None = None) -> str:
             )
     trace = proposal.get("planning_trace")
     if trace:
+        static_candidates_considered = trace.get(
+            "static_candidates_considered",
+            trace.get("candidate_evaluations", 0),
+        )
         lines.extend(
             [
                 "",
@@ -54,7 +58,10 @@ def proposal_report(proposal: dict, number: int | None = None) -> str:
                     "Candidate recipes available: "
                     f"{trace['candidate_recipes_available']}"
                 ),
-                f"Candidate evaluations: {trace['candidate_evaluations']}",
+                (
+                    "Static candidates considered: "
+                    f"{static_candidates_considered}"
+                ),
                 (
                     "Search candidate attempts: "
                     f"{trace['search_candidate_attempts']}"

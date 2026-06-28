@@ -40,9 +40,10 @@ class PlanningTraceTests(unittest.TestCase):
 
         for proposal in proposals:
             trace = proposal["planning_trace"]
-            self.assertEqual(trace["trace_version"], 1)
+            self.assertEqual(trace["trace_version"], 2)
             self.assertEqual(len(trace["days"]), 7)
-            self.assertGreater(trace["candidate_evaluations"], 0)
+            self.assertGreater(trace["static_candidates_considered"], 0)
+            self.assertNotIn("candidate_evaluations", trace)
             self.assertGreater(trace["search_candidate_attempts"], 0)
             self.assertEqual(trace["explainability"]["score"], 100.0)
             self.assertEqual(trace["explainability"]["unexplained"], 0)
@@ -101,7 +102,7 @@ class PlanningTraceTests(unittest.TestCase):
         report = proposal_report(self.generate(), 1)
 
         self.assertIn("PLANNING TRACE", report)
-        self.assertIn("Candidate evaluations:", report)
+        self.assertIn("Static candidates considered:", report)
         self.assertIn("Search candidate attempts:", report)
         self.assertIn("Explainability score: 100.0/100", report)
         self.assertIn("Mexican Monday filter:", report)

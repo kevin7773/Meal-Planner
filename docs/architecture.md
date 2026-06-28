@@ -185,7 +185,9 @@ payload on `ProposalGenerationError` for tests and future interfaces.
 Every successful proposal also carries a versioned `planning_trace`. It records
 per-day static filter counts, inventory ranking, dynamic constraint removals,
 candidate outcomes, solver attempts, search order, and the final selected
-recipe. This trace is rendered in the CLI and GUI dry-run reports.
+recipe. `static_candidates_considered` counts candidates represented in the
+per-day static traces, while `search_candidate_attempts` counts recursive solver
+attempts. This trace is rendered in the CLI and GUI dry-run reports.
 
 Each traced candidate receives a stable `Selected` or `Rejected` decision,
 reason code, and human-readable reason. The trace reports an explainability

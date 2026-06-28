@@ -292,7 +292,7 @@ def constrained_assignments(
         for day, pool in pools.items()
     }
     successful_decisions: dict[str, dict] = {}
-    candidate_evaluations = 0
+    search_candidate_attempts = 0
     search_limit_hit = False
 
     def candidate_key(recipe: dict, day: str) -> tuple:
@@ -314,10 +314,10 @@ def constrained_assignments(
         )
 
     def search(position: int, idea_count: int, heat_count: int) -> bool:
-        nonlocal candidate_evaluations, heat_bound_failed, search_limit_hit
+        nonlocal search_candidate_attempts, heat_bound_failed, search_limit_hit
         if (
             max_search_evaluations is not None
-            and candidate_evaluations >= max_search_evaluations
+            and search_candidate_attempts >= max_search_evaluations
         ):
             search_limit_hit = True
             return False
@@ -347,11 +347,11 @@ def constrained_assignments(
         for recipe in ordered_candidates:
             if (
                 max_search_evaluations is not None
-                and candidate_evaluations >= max_search_evaluations
+                and search_candidate_attempts >= max_search_evaluations
             ):
                 search_limit_hit = True
                 return False
-            candidate_evaluations += 1
+            search_candidate_attempts += 1
             recipe_id = recipe["id"]
             protein = recipe["protein"]
             is_user_idea = recipe.get("source") == "user-idea"
@@ -434,11 +434,11 @@ def constrained_assignments(
             {
                 "trace_version": TRACE_VERSION,
                 "candidate_recipes_available": len(recipes),
-                "candidate_evaluations": sum(
+                "static_candidates_considered": sum(
                     len(day_trace["candidates"])
                     for day_trace in static_traces.values()
                 ),
-                "search_candidate_attempts": candidate_evaluations,
+                "search_candidate_attempts": search_candidate_attempts,
                 "search_order": search_days,
                 "rules_used": (
                     ["RULE-HEAT-MINIMUM"]

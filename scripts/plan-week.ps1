@@ -276,7 +276,15 @@ function Format-Proposal {
         $lines.Add('')
         $lines.Add('PLANNING TRACE')
         $lines.Add("Candidate recipes available: $($trace.candidate_recipes_available)")
-        $lines.Add("Candidate evaluations: $($trace.candidate_evaluations)")
+        $staticCandidatesProperty = $trace.PSObject.Properties[
+            'static_candidates_considered'
+        ]
+        $staticCandidates = if ($null -ne $staticCandidatesProperty) {
+            $staticCandidatesProperty.Value
+        } else {
+            $trace.candidate_evaluations
+        }
+        $lines.Add("Static candidates considered: $staticCandidates")
         $lines.Add("Search candidate attempts: $($trace.search_candidate_attempts)")
         $lines.Add(
             "Explainability score: $($trace.explainability.score)/100 " +

@@ -345,69 +345,68 @@ def run_simulation(
             constraint_counts.update(
                 _failure_constraint_counts(diagnostics)
             )
-            continue
-
-        successful += 1
-        selected = [recipes[recipe_id] for recipe_id in assignments]
-        selected_recipe_ids.update(assignments)
-        cost_total += sum(
-            float(recipe["estimated_cost_usd"]) for recipe in selected
-        )
-        fiber_total += sum(
-            float(recipe["fiber_grams"]) for recipe in selected
-        )
-        meal_count += len(selected)
-        protein_counts.update(recipe["protein"] for recipe in selected)
-        method_counts.update(
-            recipe["cooking_method"] for recipe in selected
-        )
-        season_counts[season] += len(selected)
-        weather_counts[weather_category] += 1
-        run_constraints = _constraint_counts(trace)
-        if any(
-            candidate.get("outcome") == "selected"
-            and int(candidate.get("inventory_score", 100)) < 100
-            for day in trace["days"]
-            for candidate in day["candidates"]
-        ):
-            run_constraints["inventory_conflicts"] += 1
-        constraint_counts.update(run_constraints)
-        final_violations.update(
-            selected_constraint_violations(
-                assignments,
-                selected,
-                season=season,
-                weather_category=weather_category,
-                weather_rules=weather_rules,
+        else:
+            successful += 1
+            selected = [recipes[recipe_id] for recipe_id in assignments]
+            selected_recipe_ids.update(assignments)
+            cost_total += sum(
+                float(recipe["estimated_cost_usd"]) for recipe in selected
             )
-        )
+            fiber_total += sum(
+                float(recipe["fiber_grams"]) for recipe in selected
+            )
+            meal_count += len(selected)
+            protein_counts.update(recipe["protein"] for recipe in selected)
+            method_counts.update(
+                recipe["cooking_method"] for recipe in selected
+            )
+            season_counts[season] += len(selected)
+            weather_counts[weather_category] += 1
+            run_constraints = _constraint_counts(trace)
+            if any(
+                candidate.get("outcome") == "selected"
+                and int(candidate.get("inventory_score", 100)) < 100
+                for day in trace["days"]
+                for candidate in day["candidates"]
+            ):
+                run_constraints["inventory_conflicts"] += 1
+            constraint_counts.update(run_constraints)
+            final_violations.update(
+                selected_constraint_violations(
+                    assignments,
+                    selected,
+                    season=season,
+                    weather_category=weather_category,
+                    weather_rules=weather_rules,
+                )
+            )
 
-        for day in trace["days"]:
-            for candidate in day["candidates"]:
-                if candidate.get("rank") is None:
-                    continue
-                recipe_id = candidate["recipe_id"]
-                record = utilization.setdefault(
-                    recipe_id,
-                    {
-                        "name": candidate["name"],
-                        "times_eligible": 0,
-                        "times_selected": 0,
-                        "ranking_score_total": 0.0,
-                    },
-                )
-                record["times_eligible"] += 1
-                record["times_selected"] += int(
-                    candidate.get("outcome") == "selected"
-                )
-                record["ranking_score_total"] += float(
-                    candidate["ranking_score"]
-                )
-                if candidate.get("outcome") == "selected":
-                    inventory_coverage_total += float(
-                        candidate["inventory_score"]
+            for day in trace["days"]:
+                for candidate in day["candidates"]:
+                    if candidate.get("rank") is None:
+                        continue
+                    recipe_id = candidate["recipe_id"]
+                    record = utilization.setdefault(
+                        recipe_id,
+                        {
+                            "name": candidate["name"],
+                            "times_eligible": 0,
+                            "times_selected": 0,
+                            "ranking_score_total": 0.0,
+                        },
                     )
-                    inventory_coverage_observations += 1
+                    record["times_eligible"] += 1
+                    record["times_selected"] += int(
+                        candidate.get("outcome") == "selected"
+                    )
+                    record["ranking_score_total"] += float(
+                        candidate["ranking_score"]
+                    )
+                    if candidate.get("outcome") == "selected":
+                        inventory_coverage_total += float(
+                            candidate["inventory_score"]
+                        )
+                        inventory_coverage_observations += 1
         if progress is not None and (
             (iteration + 1) % max(1, iterations // 100) == 0
             or iteration + 1 == iterations
