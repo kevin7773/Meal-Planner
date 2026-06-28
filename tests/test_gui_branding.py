@@ -8,7 +8,7 @@ ROOT = Path(__file__).resolve().parents[1]
 MODULES = {
     "plan-week.ps1": "plan-week",
     "inventory-gui.ps1": "kitchen-inventory",
-    "import-recipe-gui.ps1": "import-recipe",
+    "import-recipe-gui.ps1": "recipe-cookbook",
     "recipe-feedback.ps1": "review-meal",
     "meal-override-gui.ps1": "override-meal",
 }
@@ -106,6 +106,7 @@ class GuiBrandingTests(unittest.TestCase):
             "Family Meal Planner.lnk",
             "Plan Week.lnk",
             "Kitchen Inventory.lnk",
+            "Recipe Cookbook.lnk",
             "Import Recipe.lnk",
             "Review Meal.lnk",
             "Override Meal.lnk",

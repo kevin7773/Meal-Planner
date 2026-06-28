@@ -155,7 +155,7 @@ function Get-PlanSummary {
     return "Week of $($week.ToString('MMM d, yyyy')) | $status"
 }
 
-function Get-ImportSummary {
+function Get-CookbookSummary {
     $recipeSummary = Get-RecipeSummary
     $ideaPath = Join-Path $projectRoot 'ideas\recipe-ideas.json'
     $ideaCount = 0
@@ -295,12 +295,12 @@ $modules = @(
         Icon = 'kitchen-inventory'
     },
     [pscustomobject]@{
-        Name = 'Import Recipe'
-        Detail = 'Add recipes and meal ideas'
+        Name = 'Recipe Cookbook'
+        Detail = 'Browse, import, edit, and approve recipes'
         Script = Join-Path $PSScriptRoot 'import-recipe-gui.ps1'
-        Status = { Get-ImportSummary }
+        Status = { Get-CookbookSummary }
         Color = [System.Drawing.ColorTranslator]::FromHtml('#48769A')
-        Icon = 'import-recipe'
+        Icon = 'recipe-cookbook'
     },
     [pscustomobject]@{
         Name = 'Review Meal'

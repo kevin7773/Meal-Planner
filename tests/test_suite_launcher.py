@@ -36,6 +36,23 @@ class SuiteLauncherTests(unittest.TestCase):
         self.assertIn("-STA", command)
         self.assertIn("meal-planner-suite.ps1", command)
 
+    def test_cookbook_is_primary_and_import_command_is_compatible(self) -> None:
+        dashboard = (
+            ROOT / "scripts" / "meal-planner-suite.ps1"
+        ).read_text(encoding="utf-8")
+        cookbook = (ROOT / "Recipe Cookbook.cmd").read_text(
+            encoding="utf-8"
+        )
+        legacy = (ROOT / "Import Recipe.cmd").read_text(
+            encoding="utf-8"
+        )
+
+        self.assertIn("Name = 'Recipe Cookbook'", dashboard)
+        self.assertNotIn("Name = 'Import Recipe'", dashboard)
+        self.assertIn("-STA", cookbook)
+        self.assertIn("import-recipe-gui.ps1", cookbook)
+        self.assertIn("Recipe Cookbook.cmd", legacy)
+
     def test_dashboard_shutdown_never_blocks_on_runspace_stop(self) -> None:
         script = (
             ROOT / "scripts" / "meal-planner-suite.ps1"

@@ -294,7 +294,8 @@ family-approved.
 ## User Interfaces and Automation
 
 - `Plan Week.cmd` launches the dry-run comparison GUI.
-- `Import Recipe.cmd` imports candidates and saves ideas.
+- `Recipe Cookbook.cmd` browses, imports, edits, and approves recipes.
+- `Import Recipe.cmd` is the backward-compatible cookbook launcher.
 - `Kitchen Inventory.cmd` edits stock and consumable levels.
 - `Override Meal.cmd` records audited schedule changes.
 - `Review Meal.cmd` collects post-meal feedback.

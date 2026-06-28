@@ -24,10 +24,16 @@ $launchers = @(
         Description = 'Manage kitchen inventory'
     },
     @{
+        Name = 'Recipe Cookbook'
+        Command = 'Recipe Cookbook.cmd'
+        Icon = 'recipe-cookbook.ico'
+        Description = 'Browse, import, edit, and approve recipes'
+    },
+    @{
         Name = 'Import Recipe'
         Command = 'Import Recipe.cmd'
-        Icon = 'import-recipe.ico'
-        Description = 'Import and edit recipes'
+        Icon = 'recipe-cookbook.ico'
+        Description = 'Legacy shortcut for Recipe Cookbook'
     },
     @{
         Name = 'Review Meal'

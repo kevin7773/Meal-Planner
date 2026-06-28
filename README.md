@@ -192,13 +192,14 @@ An optional recipe photo can be stored as
 `assets/recipes/<RECIPE-ID>.jpg` (also `.jpeg`, `.png`, or `.bmp`). The photo
 appears in the recipe viewer, print preview, and exported printable HTML.
 
-## Recipe Import
+## Recipe Cookbook
 
-Double-click `Import Recipe.cmd` to preview and import a `.txt`/`.md` recipe, a
-public recipe URL, or recipe text pasted directly into the editor. URL imports
-prefer schema.org Recipe data. Imports are created as candidates with source
-attribution and must be reviewed for quantities, seasoning classification, and
-inventory mapping before scheduling.
+Double-click `Recipe Cookbook.cmd` to browse and edit the recipe library,
+preview and import a `.txt`/`.md` recipe or public recipe URL, or paste recipe
+text directly into the editor. `Import Recipe.cmd` remains as a legacy wrapper.
+URL imports prefer schema.org Recipe data. Imports are created as candidates
+with source attribution and must be reviewed for quantities, seasoning
+classification, and inventory mapping before scheduling.
 
 `Edit Imported Recipe` supports guarded metadata revisions. In edit mode,
 `Edit Recipe Card` also exposes Ingredients and Directions so incorrect URL

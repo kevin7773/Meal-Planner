@@ -1,7 +1,9 @@
-# Recipe Import
+# Recipe Cookbook
 
-`Import Recipe.cmd` supports local text/Markdown files, public HTTP/HTTPS
-recipe pages, and text pasted directly into an in-memory editor.
+`Recipe Cookbook.cmd` supports browsing and revising the recipe library, local
+text/Markdown imports, public HTTP/HTTPS recipe pages, and text pasted directly
+into an in-memory editor. `Import Recipe.cmd` remains a compatibility wrapper
+for existing shortcuts and habits.
 
 The preview stage writes nothing. URL preview prefers schema.org Recipe JSON-LD
 and falls back to visible page text. Downloads are limited to 2 MB, redirects
