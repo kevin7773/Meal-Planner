@@ -8,7 +8,8 @@ only when the approved library cannot fill the week.
 
 ## Weekly Workflow
 
-1. Double-click `Plan Week.cmd` and generate three side-effect-free dry runs.
+1. Double-click `Meal Planner Suite.cmd`, open Plan Week, and generate three
+   side-effect-free dry runs.
 2. Compare shopping cost after inventory, fiber, rotation score, and warnings.
 3. Commit one selected proposal, which creates a `draft` weekly menu.
 4. Generate the grocery list and email drafts.
@@ -18,6 +19,14 @@ only when the approved library cannot fill the week.
 
 The recurring Codex automation runs every Saturday at 8:00 AM Eastern for the
 upcoming Monday through Sunday.
+
+## Planning Suite
+
+`Meal Planner Suite.cmd` is the common desktop entry point for weekly planning,
+kitchen inventory, recipe and idea imports, meal feedback, and planned-meal
+overrides. Its dashboard shows current project counts and upcoming-week status,
+then launches each existing GUI as an independent window. The original command
+shortcuts remain available for direct access.
 
 ## Repository Layout
 
@@ -56,6 +65,14 @@ Run `python scripts/planner_cli.py telemetry --drift` to inspect protein,
 cooking-method, seasonal, Blackstone, prep-time, cost, and fiber trends.
 Run `python scripts/planner_cli.py telemetry --rules` to inspect registered,
 tested, monthly-used, and unused planning rules.
+Run `python scripts/planner_monte_carlo.py run --iterations 10000 --seed 42`
+to statistically test planner cost, fiber, distribution, utilization, and
+constraint behavior.
+Run `python scripts/performance_gate.py check` to reproduce the checked-in
+10,000-week baseline and enforce cost, fiber, inventory coverage, diversity,
+and final-constraint policies. Intentional baseline changes require
+`python scripts/performance_gate.py update-baseline --reason "review note"`
+and normal review of the resulting JSON diff.
 
 ## Dry Run
 

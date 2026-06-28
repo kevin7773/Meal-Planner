@@ -30,6 +30,9 @@ jobs:
       - name: Test semantic validation rules
         run: python -m unittest discover -s tests -p "test_*.py"
 
+      - name: Enforce deterministic planner performance baseline
+        run: python scripts/performance_gate.py check
+
       - name: Validate recipe library
         run: python scripts/validate_recipes.py
 

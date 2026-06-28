@@ -1,35 +1,609 @@
 {
   "schema_version": 1,
   "created_at": "2026-06-27T00:00:00+00:00",
-  "updated_at": "2026-06-27T00:00:00+00:00",
+  "updated_at": "2026-06-28T01:43:16.074347+00:00",
   "aggregate": {
-    "generation_runs": 0,
-    "menus_generated": 0,
+    "generation_runs": 4,
+    "menus_generated": 12,
     "failed_generation_runs": 0,
-    "total_generation_time_ms": 0.0,
+    "total_generation_time_ms": 1391.338,
     "proposals_rejected": 0,
     "constraint_failures": {
-      "protein_cap": 0,
+      "protein_cap": 144,
       "weather": 0,
       "mexican_monday": 0,
-      "inventory_conflicts": 0,
+      "inventory_conflicts": 12,
       "option_overlap": 0,
       "queued_idea_cap": 0,
-      "duplicate_recipe": 0,
+      "duplicate_recipe": 132,
       "heat_friendly": 0
     },
-    "recipe_utilization": {},
-    "recommendation_drift": {
-      "meal_observations": 0,
-      "protein_distribution": {},
-      "cooking_method_distribution": {},
-      "season_distribution": {},
-      "blackstone_selections": 0,
-      "prep_minutes_total": 0.0,
-      "cost_usd_total": 0.0,
-      "fiber_grams_total": 0.0
+    "recipe_utilization": {
+      "FDP-0012": {
+        "name": "10 Minute Pasta",
+        "times_eligible": 24,
+        "times_selected": 0,
+        "ranking_score_total": 370.4,
+        "score_observations": 24
+      },
+      "FDP-0002": {
+        "name": "BBQ Chicken Sliders",
+        "times_eligible": 24,
+        "times_selected": 0,
+        "ranking_score_total": 1003.3,
+        "score_observations": 24
+      },
+      "FDP-0041": {
+        "name": "Blackstone Breakfast for Dinner",
+        "times_eligible": 24,
+        "times_selected": 0,
+        "ranking_score_total": 448.8,
+        "score_observations": 24
+      },
+      "FDP-0005": {
+        "name": "Blackstone Chicken Fajita Soft Tacos",
+        "times_eligible": 24,
+        "times_selected": 0,
+        "ranking_score_total": 1733.6,
+        "score_observations": 24
+      },
+      "FDP-0031": {
+        "name": "Blackstone Cowboy Stir Fry",
+        "times_eligible": 24,
+        "times_selected": 0,
+        "ranking_score_total": 2020.8,
+        "score_observations": 24
+      },
+      "FDP-0009": {
+        "name": "Blackstone Hibachi Chicken Fried Rice",
+        "times_eligible": 24,
+        "times_selected": 0,
+        "ranking_score_total": 1844.8,
+        "score_observations": 24
+      },
+      "FDP-0013": {
+        "name": "Blackstone Tortellini",
+        "times_eligible": 24,
+        "times_selected": 0,
+        "ranking_score_total": 1438.2,
+        "score_observations": 24
+      },
+      "FDP-0010": {
+        "name": "Chicken Cheesesteak Baked Potatoes",
+        "times_eligible": 24,
+        "times_selected": 0,
+        "ranking_score_total": 1965.0,
+        "score_observations": 24
+      },
+      "FDP-0015": {
+        "name": "Chicken Enchilada",
+        "times_eligible": 24,
+        "times_selected": 0,
+        "ranking_score_total": 892.3,
+        "score_observations": 24
+      },
+      "FDP-0001": {
+        "name": "Chicken Fajitas",
+        "times_eligible": 24,
+        "times_selected": 0,
+        "ranking_score_total": 1789.8,
+        "score_observations": 24
+      },
+      "FDP-0032": {
+        "name": "Chicken Pesto Cavatappi",
+        "times_eligible": 24,
+        "times_selected": 0,
+        "ranking_score_total": 615.2,
+        "score_observations": 24
+      },
+      "FDP-0004": {
+        "name": "Chicken Smash Tacos",
+        "times_eligible": 24,
+        "times_selected": 0,
+        "ranking_score_total": 1678.6,
+        "score_observations": 24
+      },
+      "FDP-0019": {
+        "name": "Chicken Stir Fry",
+        "times_eligible": 24,
+        "times_selected": 0,
+        "ranking_score_total": 481.2,
+        "score_observations": 24
+      },
+      "FDP-0021": {
+        "name": "Creamy Gnocchi and Chicken Skillet",
+        "times_eligible": 24,
+        "times_selected": 0,
+        "ranking_score_total": 837.2,
+        "score_observations": 24
+      },
+      "FDP-0022": {
+        "name": "Crock Pot Sesame Chicken",
+        "times_eligible": 24,
+        "times_selected": 0,
+        "ranking_score_total": 725.9,
+        "score_observations": 24
+      },
+      "FDP-0023": {
+        "name": "Eggroll in a Bowl",
+        "times_eligible": 24,
+        "times_selected": 0,
+        "ranking_score_total": 670.4,
+        "score_observations": 24
+      },
+      "FDP-0024": {
+        "name": "Garlic Butter Shrimp",
+        "times_eligible": 24,
+        "times_selected": 0,
+        "ranking_score_total": 1068.3,
+        "score_observations": 24
+      },
+      "FDP-0025": {
+        "name": "Grill Smoked Barbecued Chicken",
+        "times_eligible": 24,
+        "times_selected": 0,
+        "ranking_score_total": 549.8,
+        "score_observations": 24
+      },
+      "FDP-0040": {
+        "name": "Grilled Chicken Caesar Salad",
+        "times_eligible": 24,
+        "times_selected": 0,
+        "ranking_score_total": 559.8,
+        "score_observations": 24
+      },
+      "FDP-0011": {
+        "name": "Grilled Salmon Rice Bowls with Fruit",
+        "times_eligible": 24,
+        "times_selected": 4,
+        "ranking_score_total": 2048.2,
+        "score_observations": 24
+      },
+      "FDP-0026": {
+        "name": "Grilled Salmon with Edamame and Rice",
+        "times_eligible": 24,
+        "times_selected": 0,
+        "ranking_score_total": 1622.8,
+        "score_observations": 24
+      },
+      "FDP-0038": {
+        "name": "Ground Turkey Hard Shell Tacos with Pinto Beans and Rice",
+        "times_eligible": 24,
+        "times_selected": 0,
+        "ranking_score_total": 55.2,
+        "score_observations": 24
+      },
+      "FDP-0039": {
+        "name": "Hot Dogs with Macaroni and Cheese and Baked Beans",
+        "times_eligible": 24,
+        "times_selected": 0,
+        "ranking_score_total": 425.6,
+        "score_observations": 24
+      },
+      "FDP-0030": {
+        "name": "Marry me chicken",
+        "times_eligible": 24,
+        "times_selected": 0,
+        "ranking_score_total": 781.3,
+        "score_observations": 24
+      },
+      "FDP-0008": {
+        "name": "No-Cook Chicken and Cheese Roll-Up Plates",
+        "times_eligible": 24,
+        "times_selected": 0,
+        "ranking_score_total": 1900.4,
+        "score_observations": 24
+      },
+      "FDP-0006": {
+        "name": "Slow-Cooker BBQ Chicken Baked Potato Bar",
+        "times_eligible": 24,
+        "times_selected": 0,
+        "ranking_score_total": 947.8,
+        "score_observations": 24
+      },
+      "FDP-0027": {
+        "name": "Slow Cooker Pot Roast with Vegetables",
+        "times_eligible": 24,
+        "times_selected": 0,
+        "ranking_score_total": 1059.2,
+        "score_observations": 24
+      },
+      "FDP-0017": {
+        "name": "Spaghetti Carbonara",
+        "times_eligible": 24,
+        "times_selected": 0,
+        "ranking_score_total": 1114.1,
+        "score_observations": 24
+      },
+      "FDP-0042": {
+        "name": "Turkey and Cheese Deli Sandwich Night",
+        "times_eligible": 24,
+        "times_selected": 0,
+        "ranking_score_total": 504.0,
+        "score_observations": 24
+      },
+      "FDP-0003": {
+        "name": "Turkey Cheesesteak Bowls",
+        "times_eligible": 24,
+        "times_selected": 0,
+        "ranking_score_total": 1549.0,
+        "score_observations": 24
+      },
+      "FDP-0007": {
+        "name": "Turkey Cheesesteak Brown Rice Bowls",
+        "times_eligible": 24,
+        "times_selected": 0,
+        "ranking_score_total": 1493.2,
+        "score_observations": 24
+      },
+      "IDEA-USER-0001": {
+        "name": "Chicken quesadillas",
+        "times_eligible": 24,
+        "times_selected": 0,
+        "ranking_score_total": 1215.6,
+        "score_observations": 24
+      },
+      "IDEA-USER-0004": {
+        "name": "meatloaf with mashed potatoes and green beans",
+        "times_eligible": 24,
+        "times_selected": 0,
+        "ranking_score_total": 1327.0,
+        "score_observations": 24
+      },
+      "IDEA-USER-0005": {
+        "name": "One Pot Cheesy Taco Pasta",
+        "times_eligible": 24,
+        "times_selected": 0,
+        "ranking_score_total": 1272.0,
+        "score_observations": 24
+      },
+      "IDEA-USER-0009": {
+        "name": "Cold Italian Tortellini Pasta Salad",
+        "times_eligible": 24,
+        "times_selected": 4,
+        "ranking_score_total": 1509.9,
+        "score_observations": 24
+      },
+      "IDEA-USER-0010": {
+        "name": "Rotisserie Chicken Caesar Wraps with Fruit",
+        "times_eligible": 24,
+        "times_selected": 4,
+        "ranking_score_total": 2298.2,
+        "score_observations": 24
+      },
+      "IDEA-USER-0011": {
+        "name": "Cold Sesame Noodle Bowls with Edamame",
+        "times_eligible": 24,
+        "times_selected": 4,
+        "ranking_score_total": 1204.7,
+        "score_observations": 24
+      },
+      "IDEA-USER-0012": {
+        "name": "Turkey Taco Salad Bar",
+        "times_eligible": 24,
+        "times_selected": 0,
+        "ranking_score_total": 2122.4,
+        "score_observations": 24
+      },
+      "IDEA-USER-0013": {
+        "name": "Mediterranean Hummus Pita Plates",
+        "times_eligible": 24,
+        "times_selected": 0,
+        "ranking_score_total": 2233.6,
+        "score_observations": 24
+      },
+      "IDEA-USER-0014": {
+        "name": "Grilled Chicken Caprese Tortellini Salad",
+        "times_eligible": 24,
+        "times_selected": 4,
+        "ranking_score_total": 1646.4,
+        "score_observations": 24
+      },
+      "IDEA-USER-0015": {
+        "name": "Turkey and Cheese Snack-Board Dinner",
+        "times_eligible": 24,
+        "times_selected": 0,
+        "ranking_score_total": 2177.6,
+        "score_observations": 24
+      },
+      "IDEA-USER-0016": {
+        "name": "Chilled Shrimp and Orzo Salad",
+        "times_eligible": 24,
+        "times_selected": 4,
+        "ranking_score_total": 1096.0,
+        "score_observations": 24
+      },
+      "OVERRIDE-20260629-THU": {
+        "name": "Chinese Carryout",
+        "times_eligible": 24,
+        "times_selected": 0,
+        "ranking_score_total": 670.6,
+        "score_observations": 24
+      },
+      "FDP-0043": {
+        "name": "One-Pot Sausage and Fennel Rigatoni",
+        "times_eligible": 6,
+        "times_selected": 0,
+        "ranking_score_total": 131.8,
+        "score_observations": 6
+      }
     },
-    "rule_usage_by_month": {}
+    "recommendation_drift": {
+      "meal_observations": 72,
+      "protein_distribution": {
+        "chicken": 20,
+        "seafood": 8,
+        "turkey": 36,
+        "vegetarian": 8
+      },
+      "cooking_method_distribution": {
+        "blackstone": 12,
+        "grill": 20,
+        "minimal-cook": 12,
+        "no-cook": 16,
+        "stovetop": 12
+      },
+      "season_distribution": {
+        "summer": 72
+      },
+      "blackstone_selections": 12,
+      "prep_minutes_total": 1600.0,
+      "cost_usd_total": 1719.0,
+      "fiber_grams_total": 580.8
+    },
+    "rule_usage_by_month": {
+      "2026-06": {
+        "RULE-HEAT-MINIMUM": 12,
+        "RULE-FIXED-OVERRIDE": 60,
+        "RULE-ACTIVE-STATUS": 24,
+        "RULE-GENERATED-DAY": 24,
+        "RULE-SEASON": 24,
+        "RULE-WEATHER": 24,
+        "RULE-RECENT-ROTATION": 24,
+        "RULE-INVENTORY-RANKING": 24,
+        "RULE-UNIQUE-WEEK": 24,
+        "RULE-PROTEIN-CAP": 24,
+        "RULE-QUEUED-IDEA-CAP": 24,
+        "RULE-OPTION-OVERLAP": 24
+      }
+    }
   },
-  "recent_runs": []
+  "recent_runs": [
+    {
+      "recorded_at": "2026-06-28T00:05:17.264041+00:00",
+      "week_of": "2026-06-29",
+      "requested_proposals": 3,
+      "menus_generated": 3,
+      "generation_time_ms": 389.632,
+      "proposals_rejected": 0,
+      "success": true,
+      "constraint_failures": {
+        "protein_cap": 36,
+        "weather": 0,
+        "mexican_monday": 0,
+        "inventory_conflicts": 3,
+        "option_overlap": 0,
+        "queued_idea_cap": 0,
+        "duplicate_recipe": 33,
+        "heat_friendly": 0
+      },
+      "recommendation_profile": {
+        "meal_observations": 18,
+        "protein_distribution": {
+          "chicken": 5,
+          "seafood": 2,
+          "turkey": 9,
+          "vegetarian": 2
+        },
+        "cooking_method_distribution": {
+          "blackstone": 3,
+          "grill": 5,
+          "minimal-cook": 3,
+          "no-cook": 4,
+          "stovetop": 3
+        },
+        "season_distribution": {
+          "summer": 18
+        },
+        "blackstone_selections": 3,
+        "prep_minutes_total": 400.0,
+        "cost_usd_total": 429.0,
+        "fiber_grams_total": 145.2,
+        "average_prep_minutes": 22.2,
+        "average_cost_usd": 23.83,
+        "average_fiber_grams": 8.1
+      },
+      "rule_usage": {
+        "RULE-ACTIVE-STATUS": 6,
+        "RULE-FIXED-OVERRIDE": 15,
+        "RULE-GENERATED-DAY": 6,
+        "RULE-HEAT-MINIMUM": 3,
+        "RULE-INVENTORY-RANKING": 6,
+        "RULE-OPTION-OVERLAP": 6,
+        "RULE-PROTEIN-CAP": 6,
+        "RULE-QUEUED-IDEA-CAP": 6,
+        "RULE-RECENT-ROTATION": 6,
+        "RULE-SEASON": 6,
+        "RULE-UNIQUE-WEEK": 6,
+        "RULE-WEATHER": 6
+      }
+    },
+    {
+      "recorded_at": "2026-06-28T00:06:11.255509+00:00",
+      "week_of": "2026-06-29",
+      "requested_proposals": 3,
+      "menus_generated": 3,
+      "generation_time_ms": 346.69,
+      "proposals_rejected": 0,
+      "success": true,
+      "constraint_failures": {
+        "protein_cap": 36,
+        "weather": 0,
+        "mexican_monday": 0,
+        "inventory_conflicts": 3,
+        "option_overlap": 0,
+        "queued_idea_cap": 0,
+        "duplicate_recipe": 33,
+        "heat_friendly": 0
+      },
+      "recommendation_profile": {
+        "meal_observations": 18,
+        "protein_distribution": {
+          "chicken": 5,
+          "seafood": 2,
+          "turkey": 9,
+          "vegetarian": 2
+        },
+        "cooking_method_distribution": {
+          "blackstone": 3,
+          "grill": 5,
+          "minimal-cook": 3,
+          "no-cook": 4,
+          "stovetop": 3
+        },
+        "season_distribution": {
+          "summer": 18
+        },
+        "blackstone_selections": 3,
+        "prep_minutes_total": 400.0,
+        "cost_usd_total": 429.0,
+        "fiber_grams_total": 145.2,
+        "average_prep_minutes": 22.2,
+        "average_cost_usd": 23.83,
+        "average_fiber_grams": 8.1
+      },
+      "rule_usage": {
+        "RULE-ACTIVE-STATUS": 6,
+        "RULE-FIXED-OVERRIDE": 15,
+        "RULE-GENERATED-DAY": 6,
+        "RULE-HEAT-MINIMUM": 3,
+        "RULE-INVENTORY-RANKING": 6,
+        "RULE-OPTION-OVERLAP": 6,
+        "RULE-PROTEIN-CAP": 6,
+        "RULE-QUEUED-IDEA-CAP": 6,
+        "RULE-RECENT-ROTATION": 6,
+        "RULE-SEASON": 6,
+        "RULE-UNIQUE-WEEK": 6,
+        "RULE-WEATHER": 6
+      }
+    },
+    {
+      "recorded_at": "2026-06-28T00:06:38.553762+00:00",
+      "week_of": "2026-06-29",
+      "requested_proposals": 3,
+      "menus_generated": 3,
+      "generation_time_ms": 291.233,
+      "proposals_rejected": 0,
+      "success": true,
+      "constraint_failures": {
+        "protein_cap": 36,
+        "weather": 0,
+        "mexican_monday": 0,
+        "inventory_conflicts": 3,
+        "option_overlap": 0,
+        "queued_idea_cap": 0,
+        "duplicate_recipe": 33,
+        "heat_friendly": 0
+      },
+      "recommendation_profile": {
+        "meal_observations": 18,
+        "protein_distribution": {
+          "chicken": 5,
+          "seafood": 2,
+          "turkey": 9,
+          "vegetarian": 2
+        },
+        "cooking_method_distribution": {
+          "blackstone": 3,
+          "grill": 5,
+          "minimal-cook": 3,
+          "no-cook": 4,
+          "stovetop": 3
+        },
+        "season_distribution": {
+          "summer": 18
+        },
+        "blackstone_selections": 3,
+        "prep_minutes_total": 400.0,
+        "cost_usd_total": 429.0,
+        "fiber_grams_total": 145.2,
+        "average_prep_minutes": 22.2,
+        "average_cost_usd": 23.83,
+        "average_fiber_grams": 8.1
+      },
+      "rule_usage": {
+        "RULE-ACTIVE-STATUS": 6,
+        "RULE-FIXED-OVERRIDE": 15,
+        "RULE-GENERATED-DAY": 6,
+        "RULE-HEAT-MINIMUM": 3,
+        "RULE-INVENTORY-RANKING": 6,
+        "RULE-OPTION-OVERLAP": 6,
+        "RULE-PROTEIN-CAP": 6,
+        "RULE-QUEUED-IDEA-CAP": 6,
+        "RULE-RECENT-ROTATION": 6,
+        "RULE-SEASON": 6,
+        "RULE-UNIQUE-WEEK": 6,
+        "RULE-WEATHER": 6
+      }
+    },
+    {
+      "recorded_at": "2026-06-28T01:43:16.074347+00:00",
+      "week_of": "2026-06-29",
+      "requested_proposals": 3,
+      "menus_generated": 3,
+      "generation_time_ms": 363.783,
+      "proposals_rejected": 0,
+      "success": true,
+      "constraint_failures": {
+        "protein_cap": 36,
+        "weather": 0,
+        "mexican_monday": 0,
+        "inventory_conflicts": 3,
+        "option_overlap": 0,
+        "queued_idea_cap": 0,
+        "duplicate_recipe": 33,
+        "heat_friendly": 0
+      },
+      "recommendation_profile": {
+        "meal_observations": 18,
+        "protein_distribution": {
+          "chicken": 5,
+          "seafood": 2,
+          "turkey": 9,
+          "vegetarian": 2
+        },
+        "cooking_method_distribution": {
+          "blackstone": 3,
+          "grill": 5,
+          "minimal-cook": 3,
+          "no-cook": 4,
+          "stovetop": 3
+        },
+        "season_distribution": {
+          "summer": 18
+        },
+        "blackstone_selections": 3,
+        "prep_minutes_total": 400.0,
+        "cost_usd_total": 432.0,
+        "fiber_grams_total": 145.2,
+        "average_prep_minutes": 22.2,
+        "average_cost_usd": 24.0,
+        "average_fiber_grams": 8.1
+      },
+      "rule_usage": {
+        "RULE-ACTIVE-STATUS": 6,
+        "RULE-FIXED-OVERRIDE": 15,
+        "RULE-GENERATED-DAY": 6,
+        "RULE-HEAT-MINIMUM": 3,
+        "RULE-INVENTORY-RANKING": 6,
+        "RULE-OPTION-OVERLAP": 6,
+        "RULE-PROTEIN-CAP": 6,
+        "RULE-QUEUED-IDEA-CAP": 6,
+        "RULE-RECENT-ROTATION": 6,
+        "RULE-SEASON": 6,
+        "RULE-UNIQUE-WEEK": 6,
+        "RULE-WEATHER": 6
+      }
+    }
+  ]
 }

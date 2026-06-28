@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "simulation": {
+    "iterations": 10000,
+    "seed": 42,
+    "start_week": "2026-06-29",
+    "horizon_weeks": 52,
+    "ranking_variants": 2,
+    "search_evaluation_limit": 2000
+  },
+  "approved_metrics": {
+    "average_grocery_bill_usd": 153.97,
+    "average_fiber_grams": 8.7,
+    "average_inventory_coverage_score": 26.4,
+    "recipe_diversity_percentage": 29.5,
+    "final_constraint_violations": 0
+  },
+  "thresholds": {
+    "max_grocery_cost_increase_percent": 10.0,
+    "minimum_average_fiber_grams": 8.0,
+    "minimum_inventory_coverage_score": 25.0,
+    "minimum_recipe_diversity_percentage": 28.0,
+    "maximum_final_constraint_violations": 0
+  },
+  "approval": {
+    "updated_at": "2026-06-27T22:30:44-04:00",
+    "change_note": "Initial deterministic 10000-week performance baseline."
+  }
+}

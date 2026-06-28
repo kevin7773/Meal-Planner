@@ -76,6 +76,8 @@
 
 | FDP-0042 | [Turkey and Cheese Deli Sandwich Night](turkey-and-cheese-deli-sandwich-night.md) | 1 | candidate | Unrated | Never |
 
-**Next recipe ID:** `FDP-0043`
+| FDP-0043 | [One-Pot Sausage and Fennel Rigatoni](one-pot-sausage-and-fennel-rigatoni.md) | 1 | candidate | 4.00 / 5 (1) | 2026-06-27 |
+
+**Next recipe ID:** `FDP-0044`
 
 The index is a planning aid. Recipe files remain the source of truth.

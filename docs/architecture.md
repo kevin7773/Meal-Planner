@@ -2,8 +2,9 @@
 
 The Family Dinner Planner is a file-backed planning system. Version-controlled
 Markdown and JSON files are the database; Python scripts provide domain logic;
-PowerShell GUIs provide local interaction; generated menus, grocery lists, and
-email files are derived artifacts.
+the PowerShell Planning Suite provides a shared desktop entry point to the
+workflow GUIs; generated menus, grocery lists, and email files are derived
+artifacts.
 
 ## Component Flow
 
@@ -70,15 +71,17 @@ flowchart LR
 
     subgraph Operations["Validation and delivery"]
         Validate["Automated validators and tests"]
+        Performance["Deterministic performance gate<br/>10,000 seeded weeks"]
         Telemetry["Planner telemetry<br/>timing, rejected proposals,<br/>constraint pressure"]
         Lifecycle["Planning lifecycle"]
         Send["Approved Gmail delivery"]
         Feedback["Meal feedback and ratings"]
         Archive["Archived weekly package"]
-        Validate --> Lifecycle --> Send --> Feedback --> Archive
+        Performance --> Validate --> Lifecycle --> Send --> Feedback --> Archive
     end
 
     Compare --> Telemetry
+    Assign --> Performance
     Grocery --> Validate
     Emails --> Validate
     Draft --> Validate
@@ -104,6 +107,7 @@ flowchart LR
 | Planning state | Weekly menu TOML and status history | Lifecycle validator and delivery workflow |
 | Sent-message record | Menu history and `memory.md` | Audit and resend prevention |
 | Planner operational history | `telemetry/planner-telemetry.json` | CLI telemetry, recipe utilization, and engine maintenance |
+| Approved performance policy | `planner-data/performance-baseline.json` | Deterministic simulation and GitHub Actions regression gate |
 
 Generated files under `menus/`, `grocery-lists/`, and `email-outputs/` are
 rebuildable views. They should not become independent sources of recipe or
@@ -128,6 +132,8 @@ The `planner/` package separates planning responsibilities.
 | `planner/explainability.py` | Candidate-level selected/rejected decisions, reason codes, and coverage scoring |
 | `planner/rules.py` | Planning rule registry validation and monthly coverage reporting |
 | `planner/telemetry.py` | Aggregate timing, constraint pressure, recipe utilization, and recommendation drift |
+| `planner/monte_carlo.py` | Seeded multi-week statistical simulation using the production assignment engine |
+| `planner/performance_gate.py` | Baseline validation and objective simulation metric comparisons |
 | `planner/scoring.py` | Proposal validation and orchestration |
 | `planner/metrics.py` | Pure cost, fiber, kid-fit, inventory-demand, and rotation calculations |
 | `planner/explanations.py` | Per-meal selection explanations and expiring-inventory context |
@@ -138,6 +144,7 @@ The `planner/` package separates planning responsibilities.
 | `planner/commit.py` | Explicit selection persistence and idea canonicalization |
 | `scripts/planner_cli.py` | Command parsing and planner operation dispatch |
 | `scripts/dry_run.py` | Backward-compatible imports and direct-execution wrapper |
+| `scripts/meal-planner-suite.ps1` | Shared dashboard and launcher for the five desktop workflow GUIs |
 
 ### 1. Load and Normalize
 
@@ -256,6 +263,7 @@ actor.
 | `quick_meals.py validate` | Kid alternative IDs, costs, scores, and inventory references |
 | `weather_context.py validate` | Weather categories, thresholds, weekly files, and sources |
 | `planner_telemetry.py validate` | Engine telemetry schema, aggregate counters, and bounded run history |
+| `performance_gate.py check` | Reproducible 10,000-week cost, fiber, inventory, diversity, and final-constraint policy |
 | `meal_override.py validate` | Day uniqueness, types, and original/replacement IDs |
 | `menu_status.py check-all` | Lifecycle metadata and transition history |
 | `tests/` | Cross-component behavior and regression coverage |

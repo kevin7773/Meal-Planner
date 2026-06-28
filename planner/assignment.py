@@ -150,15 +150,25 @@ def constrained_assignments(
     root: Path,
     diagnostics: dict | None = None,
     trace: dict | None = None,
+    weather_context_override: dict | None = None,
+    weather_rules_override: dict | None = None,
+    recent_ids_override: set[str] | None = None,
+    inventory_scores_override: dict[str, int] | None = None,
+    explain_trace: bool = True,
+    max_search_evaluations: int | None = None,
 ) -> list[str] | None:
     if diagnostics is not None:
         diagnostics.clear()
     if trace is not None:
         trace.clear()
     season = season_for(week_of)
-    recent_ids = recent_recipe_ids(root)
-    weather = load_weather_context(week_of, root)
-    weather_rules = load_weather_rules(root)
+    recent_ids = (
+        recent_ids_override
+        if recent_ids_override is not None
+        else recent_recipe_ids(root)
+    )
+    weather = weather_context_override or load_weather_context(week_of, root)
+    weather_rules = weather_rules_override or load_weather_rules(root)
     category_rule = weather_rules["categories"][weather["category"]]
     excluded_tags = set(category_rule["exclude_tags"])
     minimum_heat_friendly = category_rule["minimum_heat_friendly_meals"]
@@ -271,13 +281,19 @@ def constrained_assignments(
     )
     inventory_scores = {
         day: {
-            recipe["id"]: inventory_match_score(recipe, week_of, root)
+            recipe["id"]: (
+                inventory_scores_override[recipe["id"]]
+                if inventory_scores_override is not None
+                and recipe["id"] in inventory_scores_override
+                else inventory_match_score(recipe, week_of, root)
+            )
             for recipe in pool
         }
         for day, pool in pools.items()
     }
     successful_decisions: dict[str, dict] = {}
     candidate_evaluations = 0
+    search_limit_hit = False
 
     def candidate_key(recipe: dict, day: str) -> tuple:
         user_idea_rank = 0 if recipe.get("source") == "user-idea" else 1
@@ -298,7 +314,13 @@ def constrained_assignments(
         )
 
     def search(position: int, idea_count: int, heat_count: int) -> bool:
-        nonlocal candidate_evaluations, heat_bound_failed
+        nonlocal candidate_evaluations, heat_bound_failed, search_limit_hit
+        if (
+            max_search_evaluations is not None
+            and candidate_evaluations >= max_search_evaluations
+        ):
+            search_limit_hit = True
+            return False
         if position == len(search_days):
             if heat_count < minimum_heat_friendly:
                 heat_bound_failed = True
@@ -323,6 +345,12 @@ def constrained_assignments(
         )
         backtracked_ids: list[str] = []
         for recipe in ordered_candidates:
+            if (
+                max_search_evaluations is not None
+                and candidate_evaluations >= max_search_evaluations
+            ):
+                search_limit_hit = True
+                return False
             candidate_evaluations += 1
             recipe_id = recipe["id"]
             protein = recipe["protein"]
@@ -365,7 +393,11 @@ def constrained_assignments(
         return False
 
     if not search(0, user_idea_count, heat_friendly_count):
-        fail()
+        fail(
+            ["Search evaluation limit reached during assignment."]
+            if search_limit_hit
+            else None
+        )
         return None
     if trace is not None:
         traced_days = []
@@ -416,5 +448,6 @@ def constrained_assignments(
                 "days": traced_days,
             }
         )
-        explain_planning_trace(trace)
+        if explain_trace:
+            explain_planning_trace(trace)
     return [assignments[day] for day in DAYS]

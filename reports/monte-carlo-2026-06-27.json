@@ -1,0 +1,2442 @@
+{
+  "schema_version": 1,
+  "simulation": {
+    "iterations": 10000,
+    "seed": 42,
+    "start_week": "2026-06-29",
+    "horizon_weeks": 52,
+    "ranking_variants": 2,
+    "search_evaluation_limit": 2000,
+    "weather_weights": {
+      "winter": {
+        "normal": 0.9,
+        "warm": 0.08,
+        "hot": 0.02,
+        "extreme-heat": 0.0
+      },
+      "spring": {
+        "normal": 0.65,
+        "warm": 0.25,
+        "hot": 0.09,
+        "extreme-heat": 0.01
+      },
+      "summer": {
+        "normal": 0.15,
+        "warm": 0.35,
+        "hot": 0.4,
+        "extreme-heat": 0.1
+      },
+      "fall": {
+        "normal": 0.65,
+        "warm": 0.25,
+        "hot": 0.09,
+        "extreme-heat": 0.01
+      }
+    },
+    "cost_basis": "Recipe estimated costs before inventory savings, sides, and kids' alternate meals",
+    "fiber_basis": "Recipe fiber metadata before side suggestions and kids' alternate meals",
+    "constraint_failure_basis": "Candidate filter and constraint-rejection observations"
+  },
+  "results": {
+    "successful_weeks": 10000,
+    "failed_weeks": 0,
+    "success_rate": 100.0,
+    "average_grocery_bill_usd": 153.97,
+    "average_fiber_grams": 8.7,
+    "average_inventory_coverage_score": 26.4,
+    "protein_distribution": {
+      "turkey": {
+        "count": 22471,
+        "percentage": 32.1
+      },
+      "chicken": {
+        "count": 20199,
+        "percentage": 28.9
+      },
+      "seafood": {
+        "count": 12894,
+        "percentage": 18.4
+      },
+      "other": {
+        "count": 7529,
+        "percentage": 10.8
+      },
+      "beef": {
+        "count": 4671,
+        "percentage": 6.7
+      },
+      "vegetarian": {
+        "count": 2236,
+        "percentage": 3.2
+      }
+    },
+    "cooking_method_distribution": {
+      "blackstone": {
+        "count": 18422,
+        "percentage": 26.3
+      },
+      "no-cook": {
+        "count": 14671,
+        "percentage": 21.0
+      },
+      "minimal-cook": {
+        "count": 13057,
+        "percentage": 18.7
+      },
+      "grill": {
+        "count": 10235,
+        "percentage": 14.6
+      },
+      "stovetop": {
+        "count": 8944,
+        "percentage": 12.8
+      },
+      "oven": {
+        "count": 4671,
+        "percentage": 6.7
+      }
+    },
+    "seasonal_distribution": {
+      "spring": {
+        "count": 18893,
+        "percentage": 27.0
+      },
+      "summer": {
+        "count": 18158,
+        "percentage": 25.9
+      },
+      "fall": {
+        "count": 17045,
+        "percentage": 24.3
+      },
+      "winter": {
+        "count": 15904,
+        "percentage": 22.7
+      }
+    },
+    "weather_scenarios": {
+      "normal": {
+        "count": 5796,
+        "percentage": 58.0
+      },
+      "warm": {
+        "count": 2409,
+        "percentage": 24.1
+      },
+      "hot": {
+        "count": 1470,
+        "percentage": 14.7
+      },
+      "extreme-heat": {
+        "count": 325,
+        "percentage": 3.2
+      }
+    },
+    "recipe_utilization": [
+      {
+        "recipe_id": "FDP-0002",
+        "name": "BBQ Chicken Sliders",
+        "times_eligible": 60000,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 46.1
+      },
+      {
+        "recipe_id": "FDP-0022",
+        "name": "Crock Pot Sesame Chicken",
+        "times_eligible": 60000,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 30.4
+      },
+      {
+        "recipe_id": "FDP-0027",
+        "name": "Slow Cooker Pot Roast with Vegetables",
+        "times_eligible": 60000,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 40.3
+      },
+      {
+        "recipe_id": "FDP-0006",
+        "name": "Slow-Cooker BBQ Chicken Baked Potato Bar",
+        "times_eligible": 60000,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 40.9
+      },
+      {
+        "recipe_id": "IDEA-USER-0001",
+        "name": "Chicken quesadillas",
+        "times_eligible": 50000,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 58.7
+      },
+      {
+        "recipe_id": "FDP-0038",
+        "name": "Ground Turkey Hard Shell Tacos with Pinto Beans and Rice",
+        "times_eligible": 50000,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 6.2
+      },
+      {
+        "recipe_id": "IDEA-USER-0013",
+        "name": "Mediterranean Hummus Pita Plates",
+        "times_eligible": 46368,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 90.2
+      },
+      {
+        "recipe_id": "FDP-0012",
+        "name": "10 Minute Pasta",
+        "times_eligible": 40000,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 5.0
+      },
+      {
+        "recipe_id": "FDP-0015",
+        "name": "Chicken Enchilada",
+        "times_eligible": 40000,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 45.6
+      },
+      {
+        "recipe_id": "FDP-0032",
+        "name": "Chicken Pesto Cavatappi",
+        "times_eligible": 40000,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 31.3
+      },
+      {
+        "recipe_id": "FDP-0019",
+        "name": "Chicken Stir Fry",
+        "times_eligible": 40000,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 13.3
+      },
+      {
+        "recipe_id": "FDP-0021",
+        "name": "Creamy Gnocchi and Chicken Skillet",
+        "times_eligible": 40000,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 42.6
+      },
+      {
+        "recipe_id": "FDP-0023",
+        "name": "Eggroll in a Bowl",
+        "times_eligible": 40000,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 33.8
+      },
+      {
+        "recipe_id": "FDP-0039",
+        "name": "Hot Dogs with Macaroni and Cheese and Baked Beans",
+        "times_eligible": 40000,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 7.5
+      },
+      {
+        "recipe_id": "FDP-0030",
+        "name": "Marry me chicken",
+        "times_eligible": 40000,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 40.1
+      },
+      {
+        "recipe_id": "IDEA-USER-0004",
+        "name": "meatloaf with mashed potatoes and green beans",
+        "times_eligible": 40000,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 67.8
+      },
+      {
+        "recipe_id": "FDP-0043",
+        "name": "One-Pot Sausage and Fennel Rigatoni",
+        "times_eligible": 40000,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 21.4
+      },
+      {
+        "recipe_id": "IDEA-USER-0009",
+        "name": "Cold Italian Tortellini Pasta Salad",
+        "times_eligible": 31758,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 94.7
+      },
+      {
+        "recipe_id": "IDEA-USER-0011",
+        "name": "Cold Sesame Noodle Bowls with Edamame",
+        "times_eligible": 31758,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 98.7
+      },
+      {
+        "recipe_id": "FDP-0037",
+        "name": "Beef Stroganoff",
+        "times_eligible": 29624,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 44.9
+      },
+      {
+        "recipe_id": "FDP-0016",
+        "name": "Chicken Pot Pie Casserole with Biscuits",
+        "times_eligible": 29624,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 30.3
+      },
+      {
+        "recipe_id": "FDP-0018",
+        "name": "Chicken Sausage Broccoli Orzo",
+        "times_eligible": 29624,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 20.3
+      },
+      {
+        "recipe_id": "FDP-0034",
+        "name": "Sheet Pan Lemon Herb Chicken and Roasted Vegetables",
+        "times_eligible": 29624,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 27.0
+      },
+      {
+        "recipe_id": "FDP-0035",
+        "name": "Unstuffed Pepper Skillet",
+        "times_eligible": 29624,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 17.6
+      },
+      {
+        "recipe_id": "FDP-0029",
+        "name": "Mom's Wonton Soup",
+        "times_eligible": 27564,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 11.6
+      },
+      {
+        "recipe_id": "FDP-0036",
+        "name": "Zuppa Toscana Soup - Olive Garden Copycat",
+        "times_eligible": 27564,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 17.5
+      },
+      {
+        "recipe_id": "FDP-0005",
+        "name": "Blackstone Chicken Fajita Soft Tacos",
+        "times_eligible": 26465,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 68.5
+      },
+      {
+        "recipe_id": "FDP-0001",
+        "name": "Chicken Fajitas",
+        "times_eligible": 26465,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 73.1
+      },
+      {
+        "recipe_id": "FDP-0004",
+        "name": "Chicken Smash Tacos",
+        "times_eligible": 26465,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 64.0
+      },
+      {
+        "recipe_id": "FDP-0009",
+        "name": "Blackstone Hibachi Chicken Fried Rice",
+        "times_eligible": 21172,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 72.1
+      },
+      {
+        "recipe_id": "FDP-0025",
+        "name": "Grill Smoked Barbecued Chicken",
+        "times_eligible": 21172,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 18.8
+      },
+      {
+        "recipe_id": "IDEA-USER-0014",
+        "name": "Grilled Chicken Caprese Tortellini Salad",
+        "times_eligible": 21172,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 90.4
+      },
+      {
+        "recipe_id": "FDP-0007",
+        "name": "Turkey Cheesesteak Brown Rice Bowls",
+        "times_eligible": 21172,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 74.2
+      },
+      {
+        "recipe_id": "FDP-0014",
+        "name": "Copycat Chick-Fil-A Tortilla Soup",
+        "times_eligible": 17776,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 46.4
+      },
+      {
+        "recipe_id": "FDP-0033",
+        "name": "Roasted Butternut and Chicken Harvest Soup",
+        "times_eligible": 17776,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 37.0
+      },
+      {
+        "recipe_id": "FDP-0013",
+        "name": "Blackstone Tortellini",
+        "times_eligible": 10376,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 58.1
+      },
+      {
+        "recipe_id": "IDEA-20270201-MON-3",
+        "name": "Blackstone Chicken Fajita Soft Tacos",
+        "times_eligible": 6,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 66.7
+      },
+      {
+        "recipe_id": "IDEA-20270201-FRI-1",
+        "name": "Blackstone Hibachi Chicken Fried Rice",
+        "times_eligible": 6,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 90.0
+      },
+      {
+        "recipe_id": "IDEA-20270201-MON-1",
+        "name": "Chicken and Cheese Quesadillas with Pinto Beans",
+        "times_eligible": 6,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 83.3
+      },
+      {
+        "recipe_id": "IDEA-20270201-SAT-2",
+        "name": "Chicken Cheesesteak Baked Potatoes",
+        "times_eligible": 6,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 90.0
+      },
+      {
+        "recipe_id": "IDEA-20270201-SUN-2",
+        "name": "Chicken Parmesan Meatball Subs",
+        "times_eligible": 6,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 93.3
+      },
+      {
+        "recipe_id": "IDEA-20270201-SUN-1",
+        "name": "Grilled BBQ Chicken Corn Rice Bowls",
+        "times_eligible": 6,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 90.0
+      },
+      {
+        "recipe_id": "IDEA-20270201-WED-3",
+        "name": "Grilled Chicken Pizza Pitas",
+        "times_eligible": 6,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 93.3
+      },
+      {
+        "recipe_id": "IDEA-20270201-FRI-2",
+        "name": "Grilled Turkey Cheeseburgers with Corn",
+        "times_eligible": 6,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 93.3
+      },
+      {
+        "recipe_id": "IDEA-20270201-THU-3",
+        "name": "No-Cook Chicken and Cheese Roll-Up Plates",
+        "times_eligible": 6,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 77.8
+      },
+      {
+        "recipe_id": "IDEA-20270201-THU-1",
+        "name": "No-Cook Turkey and Cheese Sandwich Bar",
+        "times_eligible": 6,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 66.7
+      },
+      {
+        "recipe_id": "IDEA-20270201-TUE-1",
+        "name": "Slow-Cooker BBQ Chicken Baked Potato Bar",
+        "times_eligible": 6,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 77.8
+      },
+      {
+        "recipe_id": "IDEA-20270201-TUE-2",
+        "name": "Slow-Cooker Mild Salsa Chicken Quesadillas",
+        "times_eligible": 6,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 44.4
+      },
+      {
+        "recipe_id": "IDEA-20270201-TUE-3",
+        "name": "Slow-Cooker Turkey Sloppy Joe Sliders",
+        "times_eligible": 6,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 11.1
+      },
+      {
+        "recipe_id": "IDEA-20270201-WED-2",
+        "name": "Turkey Cheesesteak Brown Rice Bowls",
+        "times_eligible": 6,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 90.0
+      },
+      {
+        "recipe_id": "IDEA-20270201-SAT-3",
+        "name": "Turkey Smash Burgers with Sweet Potato Wedges",
+        "times_eligible": 6,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 93.3
+      },
+      {
+        "recipe_id": "IDEA-20270222-MON-3",
+        "name": "Blackstone Chicken Fajita Soft Tacos",
+        "times_eligible": 5,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 66.7
+      },
+      {
+        "recipe_id": "IDEA-20270222-FRI-1",
+        "name": "Blackstone Hibachi Chicken Fried Rice",
+        "times_eligible": 5,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 90.0
+      },
+      {
+        "recipe_id": "IDEA-20270222-MON-1",
+        "name": "Chicken and Cheese Quesadillas with Pinto Beans",
+        "times_eligible": 5,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 83.3
+      },
+      {
+        "recipe_id": "IDEA-20270222-SAT-2",
+        "name": "Chicken Cheesesteak Baked Potatoes",
+        "times_eligible": 5,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 90.0
+      },
+      {
+        "recipe_id": "IDEA-20270222-SUN-2",
+        "name": "Chicken Parmesan Meatball Subs",
+        "times_eligible": 5,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 93.3
+      },
+      {
+        "recipe_id": "IDEA-20270222-SUN-1",
+        "name": "Grilled BBQ Chicken Corn Rice Bowls",
+        "times_eligible": 5,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 90.0
+      },
+      {
+        "recipe_id": "IDEA-20270222-WED-3",
+        "name": "Grilled Chicken Pizza Pitas",
+        "times_eligible": 5,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 93.3
+      },
+      {
+        "recipe_id": "IDEA-20270222-FRI-2",
+        "name": "Grilled Turkey Cheeseburgers with Corn",
+        "times_eligible": 5,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 93.3
+      },
+      {
+        "recipe_id": "IDEA-20270222-THU-3",
+        "name": "No-Cook Chicken and Cheese Roll-Up Plates",
+        "times_eligible": 5,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 77.8
+      },
+      {
+        "recipe_id": "IDEA-20270222-THU-1",
+        "name": "No-Cook Turkey and Cheese Sandwich Bar",
+        "times_eligible": 5,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 66.7
+      },
+      {
+        "recipe_id": "IDEA-20270222-TUE-1",
+        "name": "Slow-Cooker BBQ Chicken Baked Potato Bar",
+        "times_eligible": 5,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 77.8
+      },
+      {
+        "recipe_id": "IDEA-20270222-TUE-2",
+        "name": "Slow-Cooker Mild Salsa Chicken Quesadillas",
+        "times_eligible": 5,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 44.4
+      },
+      {
+        "recipe_id": "IDEA-20270222-TUE-3",
+        "name": "Slow-Cooker Turkey Sloppy Joe Sliders",
+        "times_eligible": 5,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 11.1
+      },
+      {
+        "recipe_id": "IDEA-20270222-WED-2",
+        "name": "Turkey Cheesesteak Brown Rice Bowls",
+        "times_eligible": 5,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 90.0
+      },
+      {
+        "recipe_id": "IDEA-20270222-SAT-3",
+        "name": "Turkey Smash Burgers with Sweet Potato Wedges",
+        "times_eligible": 5,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 93.3
+      },
+      {
+        "recipe_id": "IDEA-20270104-MON-3",
+        "name": "Blackstone Chicken Fajita Soft Tacos",
+        "times_eligible": 4,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 66.7
+      },
+      {
+        "recipe_id": "IDEA-20261228-MON-3",
+        "name": "Blackstone Chicken Fajita Soft Tacos",
+        "times_eligible": 4,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 66.7
+      },
+      {
+        "recipe_id": "IDEA-20270215-MON-3",
+        "name": "Blackstone Chicken Fajita Soft Tacos",
+        "times_eligible": 4,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 66.7
+      },
+      {
+        "recipe_id": "IDEA-20270104-FRI-1",
+        "name": "Blackstone Hibachi Chicken Fried Rice",
+        "times_eligible": 4,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 90.0
+      },
+      {
+        "recipe_id": "IDEA-20261228-FRI-1",
+        "name": "Blackstone Hibachi Chicken Fried Rice",
+        "times_eligible": 4,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 90.0
+      },
+      {
+        "recipe_id": "IDEA-20270215-FRI-1",
+        "name": "Blackstone Hibachi Chicken Fried Rice",
+        "times_eligible": 4,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 90.0
+      },
+      {
+        "recipe_id": "IDEA-20270104-MON-1",
+        "name": "Chicken and Cheese Quesadillas with Pinto Beans",
+        "times_eligible": 4,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 83.3
+      },
+      {
+        "recipe_id": "IDEA-20261228-MON-1",
+        "name": "Chicken and Cheese Quesadillas with Pinto Beans",
+        "times_eligible": 4,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 83.3
+      },
+      {
+        "recipe_id": "IDEA-20270215-MON-1",
+        "name": "Chicken and Cheese Quesadillas with Pinto Beans",
+        "times_eligible": 4,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 83.3
+      },
+      {
+        "recipe_id": "IDEA-20270104-SAT-2",
+        "name": "Chicken Cheesesteak Baked Potatoes",
+        "times_eligible": 4,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 90.0
+      },
+      {
+        "recipe_id": "IDEA-20261228-SAT-2",
+        "name": "Chicken Cheesesteak Baked Potatoes",
+        "times_eligible": 4,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 90.0
+      },
+      {
+        "recipe_id": "IDEA-20270215-SAT-2",
+        "name": "Chicken Cheesesteak Baked Potatoes",
+        "times_eligible": 4,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 90.0
+      },
+      {
+        "recipe_id": "IDEA-20270104-SUN-2",
+        "name": "Chicken Parmesan Meatball Subs",
+        "times_eligible": 4,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 93.3
+      },
+      {
+        "recipe_id": "IDEA-20261228-SUN-2",
+        "name": "Chicken Parmesan Meatball Subs",
+        "times_eligible": 4,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 93.3
+      },
+      {
+        "recipe_id": "IDEA-20270215-SUN-2",
+        "name": "Chicken Parmesan Meatball Subs",
+        "times_eligible": 4,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 93.3
+      },
+      {
+        "recipe_id": "IDEA-20270104-SUN-1",
+        "name": "Grilled BBQ Chicken Corn Rice Bowls",
+        "times_eligible": 4,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 90.0
+      },
+      {
+        "recipe_id": "IDEA-20261228-SUN-1",
+        "name": "Grilled BBQ Chicken Corn Rice Bowls",
+        "times_eligible": 4,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 90.0
+      },
+      {
+        "recipe_id": "IDEA-20270215-SUN-1",
+        "name": "Grilled BBQ Chicken Corn Rice Bowls",
+        "times_eligible": 4,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 90.0
+      },
+      {
+        "recipe_id": "IDEA-20270104-WED-3",
+        "name": "Grilled Chicken Pizza Pitas",
+        "times_eligible": 4,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 93.3
+      },
+      {
+        "recipe_id": "IDEA-20261228-WED-3",
+        "name": "Grilled Chicken Pizza Pitas",
+        "times_eligible": 4,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 93.3
+      },
+      {
+        "recipe_id": "IDEA-20270215-WED-3",
+        "name": "Grilled Chicken Pizza Pitas",
+        "times_eligible": 4,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 93.3
+      },
+      {
+        "recipe_id": "IDEA-20270104-FRI-2",
+        "name": "Grilled Turkey Cheeseburgers with Corn",
+        "times_eligible": 4,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 93.3
+      },
+      {
+        "recipe_id": "IDEA-20261228-FRI-2",
+        "name": "Grilled Turkey Cheeseburgers with Corn",
+        "times_eligible": 4,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 93.3
+      },
+      {
+        "recipe_id": "IDEA-20270215-FRI-2",
+        "name": "Grilled Turkey Cheeseburgers with Corn",
+        "times_eligible": 4,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 93.3
+      },
+      {
+        "recipe_id": "IDEA-20270104-THU-3",
+        "name": "No-Cook Chicken and Cheese Roll-Up Plates",
+        "times_eligible": 4,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 77.8
+      },
+      {
+        "recipe_id": "IDEA-20261228-THU-3",
+        "name": "No-Cook Chicken and Cheese Roll-Up Plates",
+        "times_eligible": 4,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 77.8
+      },
+      {
+        "recipe_id": "IDEA-20270215-THU-3",
+        "name": "No-Cook Chicken and Cheese Roll-Up Plates",
+        "times_eligible": 4,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 77.8
+      },
+      {
+        "recipe_id": "IDEA-20270104-THU-1",
+        "name": "No-Cook Turkey and Cheese Sandwich Bar",
+        "times_eligible": 4,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 66.7
+      },
+      {
+        "recipe_id": "IDEA-20261228-THU-1",
+        "name": "No-Cook Turkey and Cheese Sandwich Bar",
+        "times_eligible": 4,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 66.7
+      },
+      {
+        "recipe_id": "IDEA-20270215-THU-1",
+        "name": "No-Cook Turkey and Cheese Sandwich Bar",
+        "times_eligible": 4,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 66.7
+      },
+      {
+        "recipe_id": "IDEA-20270104-TUE-1",
+        "name": "Slow-Cooker BBQ Chicken Baked Potato Bar",
+        "times_eligible": 4,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 77.8
+      },
+      {
+        "recipe_id": "IDEA-20261228-TUE-1",
+        "name": "Slow-Cooker BBQ Chicken Baked Potato Bar",
+        "times_eligible": 4,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 77.8
+      },
+      {
+        "recipe_id": "IDEA-20270215-TUE-1",
+        "name": "Slow-Cooker BBQ Chicken Baked Potato Bar",
+        "times_eligible": 4,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 77.8
+      },
+      {
+        "recipe_id": "IDEA-20270104-TUE-2",
+        "name": "Slow-Cooker Mild Salsa Chicken Quesadillas",
+        "times_eligible": 4,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 44.4
+      },
+      {
+        "recipe_id": "IDEA-20261228-TUE-2",
+        "name": "Slow-Cooker Mild Salsa Chicken Quesadillas",
+        "times_eligible": 4,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 44.4
+      },
+      {
+        "recipe_id": "IDEA-20270215-TUE-2",
+        "name": "Slow-Cooker Mild Salsa Chicken Quesadillas",
+        "times_eligible": 4,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 44.4
+      },
+      {
+        "recipe_id": "IDEA-20270104-TUE-3",
+        "name": "Slow-Cooker Turkey Sloppy Joe Sliders",
+        "times_eligible": 4,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 11.1
+      },
+      {
+        "recipe_id": "IDEA-20261228-TUE-3",
+        "name": "Slow-Cooker Turkey Sloppy Joe Sliders",
+        "times_eligible": 4,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 11.1
+      },
+      {
+        "recipe_id": "IDEA-20270215-TUE-3",
+        "name": "Slow-Cooker Turkey Sloppy Joe Sliders",
+        "times_eligible": 4,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 11.1
+      },
+      {
+        "recipe_id": "IDEA-20270104-WED-2",
+        "name": "Turkey Cheesesteak Brown Rice Bowls",
+        "times_eligible": 4,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 90.0
+      },
+      {
+        "recipe_id": "IDEA-20261228-WED-2",
+        "name": "Turkey Cheesesteak Brown Rice Bowls",
+        "times_eligible": 4,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 90.0
+      },
+      {
+        "recipe_id": "IDEA-20270215-WED-2",
+        "name": "Turkey Cheesesteak Brown Rice Bowls",
+        "times_eligible": 4,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 90.0
+      },
+      {
+        "recipe_id": "IDEA-20270104-SAT-3",
+        "name": "Turkey Smash Burgers with Sweet Potato Wedges",
+        "times_eligible": 4,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 93.3
+      },
+      {
+        "recipe_id": "IDEA-20261228-SAT-3",
+        "name": "Turkey Smash Burgers with Sweet Potato Wedges",
+        "times_eligible": 4,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 93.3
+      },
+      {
+        "recipe_id": "IDEA-20270215-SAT-3",
+        "name": "Turkey Smash Burgers with Sweet Potato Wedges",
+        "times_eligible": 4,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 93.3
+      },
+      {
+        "recipe_id": "IDEA-20261214-MON-3",
+        "name": "Blackstone Chicken Fajita Soft Tacos",
+        "times_eligible": 3,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 66.7
+      },
+      {
+        "recipe_id": "IDEA-20270125-MON-3",
+        "name": "Blackstone Chicken Fajita Soft Tacos",
+        "times_eligible": 3,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 66.7
+      },
+      {
+        "recipe_id": "IDEA-20261214-FRI-1",
+        "name": "Blackstone Hibachi Chicken Fried Rice",
+        "times_eligible": 3,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 90.0
+      },
+      {
+        "recipe_id": "IDEA-20270125-FRI-1",
+        "name": "Blackstone Hibachi Chicken Fried Rice",
+        "times_eligible": 3,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 90.0
+      },
+      {
+        "recipe_id": "IDEA-20261214-MON-1",
+        "name": "Chicken and Cheese Quesadillas with Pinto Beans",
+        "times_eligible": 3,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 83.3
+      },
+      {
+        "recipe_id": "IDEA-20270125-MON-1",
+        "name": "Chicken and Cheese Quesadillas with Pinto Beans",
+        "times_eligible": 3,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 83.3
+      },
+      {
+        "recipe_id": "IDEA-20261214-SAT-2",
+        "name": "Chicken Cheesesteak Baked Potatoes",
+        "times_eligible": 3,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 90.0
+      },
+      {
+        "recipe_id": "IDEA-20270125-SAT-2",
+        "name": "Chicken Cheesesteak Baked Potatoes",
+        "times_eligible": 3,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 90.0
+      },
+      {
+        "recipe_id": "IDEA-20261214-SUN-2",
+        "name": "Chicken Parmesan Meatball Subs",
+        "times_eligible": 3,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 93.3
+      },
+      {
+        "recipe_id": "IDEA-20270125-SUN-2",
+        "name": "Chicken Parmesan Meatball Subs",
+        "times_eligible": 3,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 93.3
+      },
+      {
+        "recipe_id": "IDEA-20261214-SUN-1",
+        "name": "Grilled BBQ Chicken Corn Rice Bowls",
+        "times_eligible": 3,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 90.0
+      },
+      {
+        "recipe_id": "IDEA-20270125-SUN-1",
+        "name": "Grilled BBQ Chicken Corn Rice Bowls",
+        "times_eligible": 3,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 90.0
+      },
+      {
+        "recipe_id": "IDEA-20261214-WED-3",
+        "name": "Grilled Chicken Pizza Pitas",
+        "times_eligible": 3,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 93.3
+      },
+      {
+        "recipe_id": "IDEA-20270125-WED-3",
+        "name": "Grilled Chicken Pizza Pitas",
+        "times_eligible": 3,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 93.3
+      },
+      {
+        "recipe_id": "IDEA-20261214-FRI-2",
+        "name": "Grilled Turkey Cheeseburgers with Corn",
+        "times_eligible": 3,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 93.3
+      },
+      {
+        "recipe_id": "IDEA-20270125-FRI-2",
+        "name": "Grilled Turkey Cheeseburgers with Corn",
+        "times_eligible": 3,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 93.3
+      },
+      {
+        "recipe_id": "IDEA-20261214-THU-3",
+        "name": "No-Cook Chicken and Cheese Roll-Up Plates",
+        "times_eligible": 3,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 77.8
+      },
+      {
+        "recipe_id": "IDEA-20270125-THU-3",
+        "name": "No-Cook Chicken and Cheese Roll-Up Plates",
+        "times_eligible": 3,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 77.8
+      },
+      {
+        "recipe_id": "IDEA-20261214-THU-1",
+        "name": "No-Cook Turkey and Cheese Sandwich Bar",
+        "times_eligible": 3,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 66.7
+      },
+      {
+        "recipe_id": "IDEA-20270125-THU-1",
+        "name": "No-Cook Turkey and Cheese Sandwich Bar",
+        "times_eligible": 3,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 66.7
+      },
+      {
+        "recipe_id": "IDEA-20261214-TUE-1",
+        "name": "Slow-Cooker BBQ Chicken Baked Potato Bar",
+        "times_eligible": 3,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 77.8
+      },
+      {
+        "recipe_id": "IDEA-20270125-TUE-1",
+        "name": "Slow-Cooker BBQ Chicken Baked Potato Bar",
+        "times_eligible": 3,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 77.8
+      },
+      {
+        "recipe_id": "IDEA-20261214-TUE-2",
+        "name": "Slow-Cooker Mild Salsa Chicken Quesadillas",
+        "times_eligible": 3,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 44.4
+      },
+      {
+        "recipe_id": "IDEA-20270125-TUE-2",
+        "name": "Slow-Cooker Mild Salsa Chicken Quesadillas",
+        "times_eligible": 3,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 44.4
+      },
+      {
+        "recipe_id": "IDEA-20261214-TUE-3",
+        "name": "Slow-Cooker Turkey Sloppy Joe Sliders",
+        "times_eligible": 3,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 11.1
+      },
+      {
+        "recipe_id": "IDEA-20270125-TUE-3",
+        "name": "Slow-Cooker Turkey Sloppy Joe Sliders",
+        "times_eligible": 3,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 11.1
+      },
+      {
+        "recipe_id": "IDEA-20261214-WED-2",
+        "name": "Turkey Cheesesteak Brown Rice Bowls",
+        "times_eligible": 3,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 90.0
+      },
+      {
+        "recipe_id": "IDEA-20270125-WED-2",
+        "name": "Turkey Cheesesteak Brown Rice Bowls",
+        "times_eligible": 3,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 90.0
+      },
+      {
+        "recipe_id": "IDEA-20261214-SAT-3",
+        "name": "Turkey Smash Burgers with Sweet Potato Wedges",
+        "times_eligible": 3,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 93.3
+      },
+      {
+        "recipe_id": "IDEA-20270125-SAT-3",
+        "name": "Turkey Smash Burgers with Sweet Potato Wedges",
+        "times_eligible": 3,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 93.3
+      },
+      {
+        "recipe_id": "IDEA-20261207-MON-3",
+        "name": "Blackstone Chicken Fajita Soft Tacos",
+        "times_eligible": 2,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 66.7
+      },
+      {
+        "recipe_id": "IDEA-20270111-MON-3",
+        "name": "Blackstone Chicken Fajita Soft Tacos",
+        "times_eligible": 2,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 66.7
+      },
+      {
+        "recipe_id": "IDEA-20261221-MON-3",
+        "name": "Blackstone Chicken Fajita Soft Tacos",
+        "times_eligible": 2,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 66.7
+      },
+      {
+        "recipe_id": "IDEA-20261207-FRI-1",
+        "name": "Blackstone Hibachi Chicken Fried Rice",
+        "times_eligible": 2,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 90.0
+      },
+      {
+        "recipe_id": "IDEA-20270111-FRI-1",
+        "name": "Blackstone Hibachi Chicken Fried Rice",
+        "times_eligible": 2,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 90.0
+      },
+      {
+        "recipe_id": "IDEA-20261221-FRI-1",
+        "name": "Blackstone Hibachi Chicken Fried Rice",
+        "times_eligible": 2,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 90.0
+      },
+      {
+        "recipe_id": "IDEA-20261207-MON-1",
+        "name": "Chicken and Cheese Quesadillas with Pinto Beans",
+        "times_eligible": 2,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 83.3
+      },
+      {
+        "recipe_id": "IDEA-20270111-MON-1",
+        "name": "Chicken and Cheese Quesadillas with Pinto Beans",
+        "times_eligible": 2,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 83.3
+      },
+      {
+        "recipe_id": "IDEA-20261221-MON-1",
+        "name": "Chicken and Cheese Quesadillas with Pinto Beans",
+        "times_eligible": 2,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 83.3
+      },
+      {
+        "recipe_id": "IDEA-20261207-SAT-2",
+        "name": "Chicken Cheesesteak Baked Potatoes",
+        "times_eligible": 2,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 90.0
+      },
+      {
+        "recipe_id": "IDEA-20270111-SAT-2",
+        "name": "Chicken Cheesesteak Baked Potatoes",
+        "times_eligible": 2,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 90.0
+      },
+      {
+        "recipe_id": "IDEA-20261221-SAT-2",
+        "name": "Chicken Cheesesteak Baked Potatoes",
+        "times_eligible": 2,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 90.0
+      },
+      {
+        "recipe_id": "IDEA-20261207-SUN-2",
+        "name": "Chicken Parmesan Meatball Subs",
+        "times_eligible": 2,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 93.3
+      },
+      {
+        "recipe_id": "IDEA-20270111-SUN-2",
+        "name": "Chicken Parmesan Meatball Subs",
+        "times_eligible": 2,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 93.3
+      },
+      {
+        "recipe_id": "IDEA-20261221-SUN-2",
+        "name": "Chicken Parmesan Meatball Subs",
+        "times_eligible": 2,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 93.3
+      },
+      {
+        "recipe_id": "IDEA-20261207-SUN-1",
+        "name": "Grilled BBQ Chicken Corn Rice Bowls",
+        "times_eligible": 2,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 90.0
+      },
+      {
+        "recipe_id": "IDEA-20270111-SUN-1",
+        "name": "Grilled BBQ Chicken Corn Rice Bowls",
+        "times_eligible": 2,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 90.0
+      },
+      {
+        "recipe_id": "IDEA-20261221-SUN-1",
+        "name": "Grilled BBQ Chicken Corn Rice Bowls",
+        "times_eligible": 2,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 90.0
+      },
+      {
+        "recipe_id": "IDEA-20261207-WED-3",
+        "name": "Grilled Chicken Pizza Pitas",
+        "times_eligible": 2,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 93.3
+      },
+      {
+        "recipe_id": "IDEA-20270111-WED-3",
+        "name": "Grilled Chicken Pizza Pitas",
+        "times_eligible": 2,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 93.3
+      },
+      {
+        "recipe_id": "IDEA-20261221-WED-3",
+        "name": "Grilled Chicken Pizza Pitas",
+        "times_eligible": 2,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 93.3
+      },
+      {
+        "recipe_id": "IDEA-20261207-FRI-2",
+        "name": "Grilled Turkey Cheeseburgers with Corn",
+        "times_eligible": 2,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 93.3
+      },
+      {
+        "recipe_id": "IDEA-20270111-FRI-2",
+        "name": "Grilled Turkey Cheeseburgers with Corn",
+        "times_eligible": 2,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 93.3
+      },
+      {
+        "recipe_id": "IDEA-20261221-FRI-2",
+        "name": "Grilled Turkey Cheeseburgers with Corn",
+        "times_eligible": 2,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 93.3
+      },
+      {
+        "recipe_id": "IDEA-20261207-THU-3",
+        "name": "No-Cook Chicken and Cheese Roll-Up Plates",
+        "times_eligible": 2,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 77.8
+      },
+      {
+        "recipe_id": "IDEA-20270111-THU-3",
+        "name": "No-Cook Chicken and Cheese Roll-Up Plates",
+        "times_eligible": 2,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 77.8
+      },
+      {
+        "recipe_id": "IDEA-20261221-THU-3",
+        "name": "No-Cook Chicken and Cheese Roll-Up Plates",
+        "times_eligible": 2,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 77.8
+      },
+      {
+        "recipe_id": "IDEA-20261207-THU-1",
+        "name": "No-Cook Turkey and Cheese Sandwich Bar",
+        "times_eligible": 2,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 66.7
+      },
+      {
+        "recipe_id": "IDEA-20270111-THU-1",
+        "name": "No-Cook Turkey and Cheese Sandwich Bar",
+        "times_eligible": 2,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 66.7
+      },
+      {
+        "recipe_id": "IDEA-20261221-THU-1",
+        "name": "No-Cook Turkey and Cheese Sandwich Bar",
+        "times_eligible": 2,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 66.7
+      },
+      {
+        "recipe_id": "IDEA-20261207-TUE-1",
+        "name": "Slow-Cooker BBQ Chicken Baked Potato Bar",
+        "times_eligible": 2,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 77.8
+      },
+      {
+        "recipe_id": "IDEA-20270111-TUE-1",
+        "name": "Slow-Cooker BBQ Chicken Baked Potato Bar",
+        "times_eligible": 2,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 77.8
+      },
+      {
+        "recipe_id": "IDEA-20261221-TUE-1",
+        "name": "Slow-Cooker BBQ Chicken Baked Potato Bar",
+        "times_eligible": 2,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 77.8
+      },
+      {
+        "recipe_id": "IDEA-20261207-TUE-2",
+        "name": "Slow-Cooker Mild Salsa Chicken Quesadillas",
+        "times_eligible": 2,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 44.4
+      },
+      {
+        "recipe_id": "IDEA-20270111-TUE-2",
+        "name": "Slow-Cooker Mild Salsa Chicken Quesadillas",
+        "times_eligible": 2,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 44.4
+      },
+      {
+        "recipe_id": "IDEA-20261221-TUE-2",
+        "name": "Slow-Cooker Mild Salsa Chicken Quesadillas",
+        "times_eligible": 2,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 44.4
+      },
+      {
+        "recipe_id": "IDEA-20261207-TUE-3",
+        "name": "Slow-Cooker Turkey Sloppy Joe Sliders",
+        "times_eligible": 2,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 11.1
+      },
+      {
+        "recipe_id": "IDEA-20270111-TUE-3",
+        "name": "Slow-Cooker Turkey Sloppy Joe Sliders",
+        "times_eligible": 2,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 11.1
+      },
+      {
+        "recipe_id": "IDEA-20261221-TUE-3",
+        "name": "Slow-Cooker Turkey Sloppy Joe Sliders",
+        "times_eligible": 2,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 11.1
+      },
+      {
+        "recipe_id": "IDEA-20261207-WED-2",
+        "name": "Turkey Cheesesteak Brown Rice Bowls",
+        "times_eligible": 2,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 90.0
+      },
+      {
+        "recipe_id": "IDEA-20270111-WED-2",
+        "name": "Turkey Cheesesteak Brown Rice Bowls",
+        "times_eligible": 2,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 90.0
+      },
+      {
+        "recipe_id": "IDEA-20261221-WED-2",
+        "name": "Turkey Cheesesteak Brown Rice Bowls",
+        "times_eligible": 2,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 90.0
+      },
+      {
+        "recipe_id": "IDEA-20261207-SAT-3",
+        "name": "Turkey Smash Burgers with Sweet Potato Wedges",
+        "times_eligible": 2,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 93.3
+      },
+      {
+        "recipe_id": "IDEA-20270111-SAT-3",
+        "name": "Turkey Smash Burgers with Sweet Potato Wedges",
+        "times_eligible": 2,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 93.3
+      },
+      {
+        "recipe_id": "IDEA-20261221-SAT-3",
+        "name": "Turkey Smash Burgers with Sweet Potato Wedges",
+        "times_eligible": 2,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 93.3
+      },
+      {
+        "recipe_id": "IDEA-20270208-MON-3",
+        "name": "Blackstone Chicken Fajita Soft Tacos",
+        "times_eligible": 1,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 66.7
+      },
+      {
+        "recipe_id": "IDEA-20270208-FRI-1",
+        "name": "Blackstone Hibachi Chicken Fried Rice",
+        "times_eligible": 1,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 90.0
+      },
+      {
+        "recipe_id": "IDEA-20270208-MON-1",
+        "name": "Chicken and Cheese Quesadillas with Pinto Beans",
+        "times_eligible": 1,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 83.3
+      },
+      {
+        "recipe_id": "IDEA-20270208-SAT-2",
+        "name": "Chicken Cheesesteak Baked Potatoes",
+        "times_eligible": 1,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 90.0
+      },
+      {
+        "recipe_id": "IDEA-20270208-SUN-2",
+        "name": "Chicken Parmesan Meatball Subs",
+        "times_eligible": 1,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 93.3
+      },
+      {
+        "recipe_id": "IDEA-20270208-SUN-1",
+        "name": "Grilled BBQ Chicken Corn Rice Bowls",
+        "times_eligible": 1,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 90.0
+      },
+      {
+        "recipe_id": "IDEA-20270208-WED-3",
+        "name": "Grilled Chicken Pizza Pitas",
+        "times_eligible": 1,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 93.3
+      },
+      {
+        "recipe_id": "IDEA-20270208-FRI-2",
+        "name": "Grilled Turkey Cheeseburgers with Corn",
+        "times_eligible": 1,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 93.3
+      },
+      {
+        "recipe_id": "IDEA-20270208-THU-3",
+        "name": "No-Cook Chicken and Cheese Roll-Up Plates",
+        "times_eligible": 1,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 77.8
+      },
+      {
+        "recipe_id": "IDEA-20270208-THU-1",
+        "name": "No-Cook Turkey and Cheese Sandwich Bar",
+        "times_eligible": 1,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 66.7
+      },
+      {
+        "recipe_id": "IDEA-20270208-TUE-1",
+        "name": "Slow-Cooker BBQ Chicken Baked Potato Bar",
+        "times_eligible": 1,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 77.8
+      },
+      {
+        "recipe_id": "IDEA-20270208-TUE-2",
+        "name": "Slow-Cooker Mild Salsa Chicken Quesadillas",
+        "times_eligible": 1,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 44.4
+      },
+      {
+        "recipe_id": "IDEA-20270208-TUE-3",
+        "name": "Slow-Cooker Turkey Sloppy Joe Sliders",
+        "times_eligible": 1,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 11.1
+      },
+      {
+        "recipe_id": "IDEA-20270208-WED-2",
+        "name": "Turkey Cheesesteak Brown Rice Bowls",
+        "times_eligible": 1,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 90.0
+      },
+      {
+        "recipe_id": "IDEA-20270208-SAT-3",
+        "name": "Turkey Smash Burgers with Sweet Potato Wedges",
+        "times_eligible": 1,
+        "times_selected": 0,
+        "selection_rate": 0.0,
+        "average_score": 93.3
+      },
+      {
+        "recipe_id": "IDEA-USER-0015",
+        "name": "Turkey and Cheese Snack-Board Dinner",
+        "times_eligible": 60000,
+        "times_selected": 2272,
+        "selection_rate": 3.8,
+        "average_score": 87.9
+      },
+      {
+        "recipe_id": "IDEA-USER-0005",
+        "name": "One Pot Cheesy Taco Pasta",
+        "times_eligible": 50000,
+        "times_selected": 2236,
+        "selection_rate": 4.5,
+        "average_score": 64.9
+      },
+      {
+        "recipe_id": "IDEA-USER-0010",
+        "name": "Rotisserie Chicken Caesar Wraps with Fruit",
+        "times_eligible": 46368,
+        "times_selected": 2435,
+        "selection_rate": 5.3,
+        "average_score": 86.5
+      },
+      {
+        "recipe_id": "FDP-0024",
+        "name": "Garlic Butter Shrimp",
+        "times_eligible": 40000,
+        "times_selected": 2236,
+        "selection_rate": 5.6,
+        "average_score": 45.6
+      },
+      {
+        "recipe_id": "FDP-0017",
+        "name": "Spaghetti Carbonara",
+        "times_eligible": 40000,
+        "times_selected": 2236,
+        "selection_rate": 5.6,
+        "average_score": 46.4
+      },
+      {
+        "recipe_id": "FDP-0042",
+        "name": "Turkey and Cheese Deli Sandwich Night",
+        "times_eligible": 60000,
+        "times_selected": 4671,
+        "selection_rate": 7.8,
+        "average_score": 65.7
+      },
+      {
+        "recipe_id": "FDP-0041",
+        "name": "Blackstone Breakfast for Dinner",
+        "times_eligible": 30912,
+        "times_selected": 2435,
+        "selection_rate": 7.9,
+        "average_score": 62.7
+      },
+      {
+        "recipe_id": "FDP-0040",
+        "name": "Grilled Chicken Caesar Salad",
+        "times_eligible": 30912,
+        "times_selected": 2435,
+        "selection_rate": 7.9,
+        "average_score": 66.7
+      },
+      {
+        "recipe_id": "FDP-0026",
+        "name": "Grilled Salmon with Edamame and Rice",
+        "times_eligible": 30912,
+        "times_selected": 2435,
+        "selection_rate": 7.9,
+        "average_score": 70.3
+      },
+      {
+        "recipe_id": "FDP-0028",
+        "name": "Loaded Baked Potato Soup",
+        "times_eligible": 27564,
+        "times_selected": 2236,
+        "selection_rate": 8.1,
+        "average_score": 61.5
+      },
+      {
+        "recipe_id": "IDEA-USER-0012",
+        "name": "Turkey Taco Salad Bar",
+        "times_eligible": 54096,
+        "times_selected": 7728,
+        "selection_rate": 14.3,
+        "average_score": 82.1
+      },
+      {
+        "recipe_id": "FDP-0020",
+        "name": "Beef Lasagna",
+        "times_eligible": 29624,
+        "times_selected": 4671,
+        "selection_rate": 15.8,
+        "average_score": 64.0
+      },
+      {
+        "recipe_id": "IDEA-USER-0016",
+        "name": "Chilled Shrimp and Orzo Salad",
+        "times_eligible": 31758,
+        "times_selected": 5293,
+        "selection_rate": 16.7,
+        "average_score": 91.3
+      },
+      {
+        "recipe_id": "FDP-0008",
+        "name": "No-Cook Chicken and Cheese Roll-Up Plates",
+        "times_eligible": 31758,
+        "times_selected": 5293,
+        "selection_rate": 16.7,
+        "average_score": 64.9
+      },
+      {
+        "recipe_id": "FDP-0031",
+        "name": "Blackstone Cowboy Stir Fry",
+        "times_eligible": 21172,
+        "times_selected": 5293,
+        "selection_rate": 25.0,
+        "average_score": 73.4
+      },
+      {
+        "recipe_id": "FDP-0010",
+        "name": "Chicken Cheesesteak Baked Potatoes",
+        "times_eligible": 21172,
+        "times_selected": 5293,
+        "selection_rate": 25.0,
+        "average_score": 78.0
+      },
+      {
+        "recipe_id": "FDP-0011",
+        "name": "Grilled Salmon Rice Bowls with Fruit",
+        "times_eligible": 21172,
+        "times_selected": 5293,
+        "selection_rate": 25.0,
+        "average_score": 78.6
+      },
+      {
+        "recipe_id": "FDP-0003",
+        "name": "Turkey Cheesesteak Bowls",
+        "times_eligible": 21172,
+        "times_selected": 5293,
+        "selection_rate": 25.0,
+        "average_score": 76.4
+      },
+      {
+        "recipe_id": "IDEA-20270201-SAT-1",
+        "name": "Blackstone Breakfast for Dinner",
+        "times_eligible": 6,
+        "times_selected": 6,
+        "selection_rate": 100.0,
+        "average_score": 96.7
+      },
+      {
+        "recipe_id": "IDEA-20270201-WED-1",
+        "name": "Blackstone Chicken Fried Brown Rice",
+        "times_eligible": 6,
+        "times_selected": 6,
+        "selection_rate": 100.0,
+        "average_score": 96.7
+      },
+      {
+        "recipe_id": "IDEA-20270201-SUN-3",
+        "name": "Grilled Salmon Rice Bowls with Fruit",
+        "times_eligible": 6,
+        "times_selected": 6,
+        "selection_rate": 100.0,
+        "average_score": 96.7
+      },
+      {
+        "recipe_id": "IDEA-20270201-FRI-3",
+        "name": "Grilled Salmon with Brown Rice and Green Beans",
+        "times_eligible": 6,
+        "times_selected": 6,
+        "selection_rate": 100.0,
+        "average_score": 96.7
+      },
+      {
+        "recipe_id": "IDEA-20270201-MON-2",
+        "name": "Mild Turkey Taco Brown Rice Bowls",
+        "times_eligible": 6,
+        "times_selected": 6,
+        "selection_rate": 100.0,
+        "average_score": 100.0
+      },
+      {
+        "recipe_id": "IDEA-20270201-THU-2",
+        "name": "Rotisserie Chicken Corn Rice Bowls",
+        "times_eligible": 6,
+        "times_selected": 6,
+        "selection_rate": 100.0,
+        "average_score": 88.9
+      },
+      {
+        "recipe_id": "IDEA-20270222-SAT-1",
+        "name": "Blackstone Breakfast for Dinner",
+        "times_eligible": 5,
+        "times_selected": 5,
+        "selection_rate": 100.0,
+        "average_score": 96.7
+      },
+      {
+        "recipe_id": "IDEA-20270222-WED-1",
+        "name": "Blackstone Chicken Fried Brown Rice",
+        "times_eligible": 5,
+        "times_selected": 5,
+        "selection_rate": 100.0,
+        "average_score": 96.7
+      },
+      {
+        "recipe_id": "IDEA-20270222-SUN-3",
+        "name": "Grilled Salmon Rice Bowls with Fruit",
+        "times_eligible": 5,
+        "times_selected": 5,
+        "selection_rate": 100.0,
+        "average_score": 96.7
+      },
+      {
+        "recipe_id": "IDEA-20270222-FRI-3",
+        "name": "Grilled Salmon with Brown Rice and Green Beans",
+        "times_eligible": 5,
+        "times_selected": 5,
+        "selection_rate": 100.0,
+        "average_score": 96.7
+      },
+      {
+        "recipe_id": "IDEA-20270222-MON-2",
+        "name": "Mild Turkey Taco Brown Rice Bowls",
+        "times_eligible": 5,
+        "times_selected": 5,
+        "selection_rate": 100.0,
+        "average_score": 100.0
+      },
+      {
+        "recipe_id": "IDEA-20270222-THU-2",
+        "name": "Rotisserie Chicken Corn Rice Bowls",
+        "times_eligible": 5,
+        "times_selected": 5,
+        "selection_rate": 100.0,
+        "average_score": 88.9
+      },
+      {
+        "recipe_id": "IDEA-20270104-SAT-1",
+        "name": "Blackstone Breakfast for Dinner",
+        "times_eligible": 4,
+        "times_selected": 4,
+        "selection_rate": 100.0,
+        "average_score": 96.7
+      },
+      {
+        "recipe_id": "IDEA-20261228-SAT-1",
+        "name": "Blackstone Breakfast for Dinner",
+        "times_eligible": 4,
+        "times_selected": 4,
+        "selection_rate": 100.0,
+        "average_score": 96.7
+      },
+      {
+        "recipe_id": "IDEA-20270215-SAT-1",
+        "name": "Blackstone Breakfast for Dinner",
+        "times_eligible": 4,
+        "times_selected": 4,
+        "selection_rate": 100.0,
+        "average_score": 96.7
+      },
+      {
+        "recipe_id": "IDEA-20270104-WED-1",
+        "name": "Blackstone Chicken Fried Brown Rice",
+        "times_eligible": 4,
+        "times_selected": 4,
+        "selection_rate": 100.0,
+        "average_score": 96.7
+      },
+      {
+        "recipe_id": "IDEA-20261228-WED-1",
+        "name": "Blackstone Chicken Fried Brown Rice",
+        "times_eligible": 4,
+        "times_selected": 4,
+        "selection_rate": 100.0,
+        "average_score": 96.7
+      },
+      {
+        "recipe_id": "IDEA-20270215-WED-1",
+        "name": "Blackstone Chicken Fried Brown Rice",
+        "times_eligible": 4,
+        "times_selected": 4,
+        "selection_rate": 100.0,
+        "average_score": 96.7
+      },
+      {
+        "recipe_id": "IDEA-20270104-SUN-3",
+        "name": "Grilled Salmon Rice Bowls with Fruit",
+        "times_eligible": 4,
+        "times_selected": 4,
+        "selection_rate": 100.0,
+        "average_score": 96.7
+      },
+      {
+        "recipe_id": "IDEA-20261228-SUN-3",
+        "name": "Grilled Salmon Rice Bowls with Fruit",
+        "times_eligible": 4,
+        "times_selected": 4,
+        "selection_rate": 100.0,
+        "average_score": 96.7
+      },
+      {
+        "recipe_id": "IDEA-20270215-SUN-3",
+        "name": "Grilled Salmon Rice Bowls with Fruit",
+        "times_eligible": 4,
+        "times_selected": 4,
+        "selection_rate": 100.0,
+        "average_score": 96.7
+      },
+      {
+        "recipe_id": "IDEA-20270104-FRI-3",
+        "name": "Grilled Salmon with Brown Rice and Green Beans",
+        "times_eligible": 4,
+        "times_selected": 4,
+        "selection_rate": 100.0,
+        "average_score": 96.7
+      },
+      {
+        "recipe_id": "IDEA-20261228-FRI-3",
+        "name": "Grilled Salmon with Brown Rice and Green Beans",
+        "times_eligible": 4,
+        "times_selected": 4,
+        "selection_rate": 100.0,
+        "average_score": 96.7
+      },
+      {
+        "recipe_id": "IDEA-20270215-FRI-3",
+        "name": "Grilled Salmon with Brown Rice and Green Beans",
+        "times_eligible": 4,
+        "times_selected": 4,
+        "selection_rate": 100.0,
+        "average_score": 96.7
+      },
+      {
+        "recipe_id": "IDEA-20270104-MON-2",
+        "name": "Mild Turkey Taco Brown Rice Bowls",
+        "times_eligible": 4,
+        "times_selected": 4,
+        "selection_rate": 100.0,
+        "average_score": 100.0
+      },
+      {
+        "recipe_id": "IDEA-20261228-MON-2",
+        "name": "Mild Turkey Taco Brown Rice Bowls",
+        "times_eligible": 4,
+        "times_selected": 4,
+        "selection_rate": 100.0,
+        "average_score": 100.0
+      },
+      {
+        "recipe_id": "IDEA-20270215-MON-2",
+        "name": "Mild Turkey Taco Brown Rice Bowls",
+        "times_eligible": 4,
+        "times_selected": 4,
+        "selection_rate": 100.0,
+        "average_score": 100.0
+      },
+      {
+        "recipe_id": "IDEA-20270104-THU-2",
+        "name": "Rotisserie Chicken Corn Rice Bowls",
+        "times_eligible": 4,
+        "times_selected": 4,
+        "selection_rate": 100.0,
+        "average_score": 88.9
+      },
+      {
+        "recipe_id": "IDEA-20261228-THU-2",
+        "name": "Rotisserie Chicken Corn Rice Bowls",
+        "times_eligible": 4,
+        "times_selected": 4,
+        "selection_rate": 100.0,
+        "average_score": 88.9
+      },
+      {
+        "recipe_id": "IDEA-20270215-THU-2",
+        "name": "Rotisserie Chicken Corn Rice Bowls",
+        "times_eligible": 4,
+        "times_selected": 4,
+        "selection_rate": 100.0,
+        "average_score": 88.9
+      },
+      {
+        "recipe_id": "IDEA-20261214-SAT-1",
+        "name": "Blackstone Breakfast for Dinner",
+        "times_eligible": 3,
+        "times_selected": 3,
+        "selection_rate": 100.0,
+        "average_score": 96.7
+      },
+      {
+        "recipe_id": "IDEA-20270125-SAT-1",
+        "name": "Blackstone Breakfast for Dinner",
+        "times_eligible": 3,
+        "times_selected": 3,
+        "selection_rate": 100.0,
+        "average_score": 96.7
+      },
+      {
+        "recipe_id": "IDEA-20261214-WED-1",
+        "name": "Blackstone Chicken Fried Brown Rice",
+        "times_eligible": 3,
+        "times_selected": 3,
+        "selection_rate": 100.0,
+        "average_score": 96.7
+      },
+      {
+        "recipe_id": "IDEA-20270125-WED-1",
+        "name": "Blackstone Chicken Fried Brown Rice",
+        "times_eligible": 3,
+        "times_selected": 3,
+        "selection_rate": 100.0,
+        "average_score": 96.7
+      },
+      {
+        "recipe_id": "IDEA-20261214-SUN-3",
+        "name": "Grilled Salmon Rice Bowls with Fruit",
+        "times_eligible": 3,
+        "times_selected": 3,
+        "selection_rate": 100.0,
+        "average_score": 96.7
+      },
+      {
+        "recipe_id": "IDEA-20270125-SUN-3",
+        "name": "Grilled Salmon Rice Bowls with Fruit",
+        "times_eligible": 3,
+        "times_selected": 3,
+        "selection_rate": 100.0,
+        "average_score": 96.7
+      },
+      {
+        "recipe_id": "IDEA-20261214-FRI-3",
+        "name": "Grilled Salmon with Brown Rice and Green Beans",
+        "times_eligible": 3,
+        "times_selected": 3,
+        "selection_rate": 100.0,
+        "average_score": 96.7
+      },
+      {
+        "recipe_id": "IDEA-20270125-FRI-3",
+        "name": "Grilled Salmon with Brown Rice and Green Beans",
+        "times_eligible": 3,
+        "times_selected": 3,
+        "selection_rate": 100.0,
+        "average_score": 96.7
+      },
+      {
+        "recipe_id": "IDEA-20261214-MON-2",
+        "name": "Mild Turkey Taco Brown Rice Bowls",
+        "times_eligible": 3,
+        "times_selected": 3,
+        "selection_rate": 100.0,
+        "average_score": 100.0
+      },
+      {
+        "recipe_id": "IDEA-20270125-MON-2",
+        "name": "Mild Turkey Taco Brown Rice Bowls",
+        "times_eligible": 3,
+        "times_selected": 3,
+        "selection_rate": 100.0,
+        "average_score": 100.0
+      },
+      {
+        "recipe_id": "IDEA-20261214-THU-2",
+        "name": "Rotisserie Chicken Corn Rice Bowls",
+        "times_eligible": 3,
+        "times_selected": 3,
+        "selection_rate": 100.0,
+        "average_score": 88.9
+      },
+      {
+        "recipe_id": "IDEA-20270125-THU-2",
+        "name": "Rotisserie Chicken Corn Rice Bowls",
+        "times_eligible": 3,
+        "times_selected": 3,
+        "selection_rate": 100.0,
+        "average_score": 88.9
+      },
+      {
+        "recipe_id": "IDEA-20261207-SAT-1",
+        "name": "Blackstone Breakfast for Dinner",
+        "times_eligible": 2,
+        "times_selected": 2,
+        "selection_rate": 100.0,
+        "average_score": 96.7
+      },
+      {
+        "recipe_id": "IDEA-20270111-SAT-1",
+        "name": "Blackstone Breakfast for Dinner",
+        "times_eligible": 2,
+        "times_selected": 2,
+        "selection_rate": 100.0,
+        "average_score": 96.7
+      },
+      {
+        "recipe_id": "IDEA-20261221-SAT-1",
+        "name": "Blackstone Breakfast for Dinner",
+        "times_eligible": 2,
+        "times_selected": 2,
+        "selection_rate": 100.0,
+        "average_score": 96.7
+      },
+      {
+        "recipe_id": "IDEA-20261207-WED-1",
+        "name": "Blackstone Chicken Fried Brown Rice",
+        "times_eligible": 2,
+        "times_selected": 2,
+        "selection_rate": 100.0,
+        "average_score": 96.7
+      },
+      {
+        "recipe_id": "IDEA-20270111-WED-1",
+        "name": "Blackstone Chicken Fried Brown Rice",
+        "times_eligible": 2,
+        "times_selected": 2,
+        "selection_rate": 100.0,
+        "average_score": 96.7
+      },
+      {
+        "recipe_id": "IDEA-20261221-WED-1",
+        "name": "Blackstone Chicken Fried Brown Rice",
+        "times_eligible": 2,
+        "times_selected": 2,
+        "selection_rate": 100.0,
+        "average_score": 96.7
+      },
+      {
+        "recipe_id": "IDEA-20261207-SUN-3",
+        "name": "Grilled Salmon Rice Bowls with Fruit",
+        "times_eligible": 2,
+        "times_selected": 2,
+        "selection_rate": 100.0,
+        "average_score": 96.7
+      },
+      {
+        "recipe_id": "IDEA-20270111-SUN-3",
+        "name": "Grilled Salmon Rice Bowls with Fruit",
+        "times_eligible": 2,
+        "times_selected": 2,
+        "selection_rate": 100.0,
+        "average_score": 96.7
+      },
+      {
+        "recipe_id": "IDEA-20261221-SUN-3",
+        "name": "Grilled Salmon Rice Bowls with Fruit",
+        "times_eligible": 2,
+        "times_selected": 2,
+        "selection_rate": 100.0,
+        "average_score": 96.7
+      },
+      {
+        "recipe_id": "IDEA-20261207-FRI-3",
+        "name": "Grilled Salmon with Brown Rice and Green Beans",
+        "times_eligible": 2,
+        "times_selected": 2,
+        "selection_rate": 100.0,
+        "average_score": 96.7
+      },
+      {
+        "recipe_id": "IDEA-20270111-FRI-3",
+        "name": "Grilled Salmon with Brown Rice and Green Beans",
+        "times_eligible": 2,
+        "times_selected": 2,
+        "selection_rate": 100.0,
+        "average_score": 96.7
+      },
+      {
+        "recipe_id": "IDEA-20261221-FRI-3",
+        "name": "Grilled Salmon with Brown Rice and Green Beans",
+        "times_eligible": 2,
+        "times_selected": 2,
+        "selection_rate": 100.0,
+        "average_score": 96.7
+      },
+      {
+        "recipe_id": "IDEA-20261207-MON-2",
+        "name": "Mild Turkey Taco Brown Rice Bowls",
+        "times_eligible": 2,
+        "times_selected": 2,
+        "selection_rate": 100.0,
+        "average_score": 100.0
+      },
+      {
+        "recipe_id": "IDEA-20270111-MON-2",
+        "name": "Mild Turkey Taco Brown Rice Bowls",
+        "times_eligible": 2,
+        "times_selected": 2,
+        "selection_rate": 100.0,
+        "average_score": 100.0
+      },
+      {
+        "recipe_id": "IDEA-20261221-MON-2",
+        "name": "Mild Turkey Taco Brown Rice Bowls",
+        "times_eligible": 2,
+        "times_selected": 2,
+        "selection_rate": 100.0,
+        "average_score": 100.0
+      },
+      {
+        "recipe_id": "IDEA-20261207-THU-2",
+        "name": "Rotisserie Chicken Corn Rice Bowls",
+        "times_eligible": 2,
+        "times_selected": 2,
+        "selection_rate": 100.0,
+        "average_score": 88.9
+      },
+      {
+        "recipe_id": "IDEA-20270111-THU-2",
+        "name": "Rotisserie Chicken Corn Rice Bowls",
+        "times_eligible": 2,
+        "times_selected": 2,
+        "selection_rate": 100.0,
+        "average_score": 88.9
+      },
+      {
+        "recipe_id": "IDEA-20261221-THU-2",
+        "name": "Rotisserie Chicken Corn Rice Bowls",
+        "times_eligible": 2,
+        "times_selected": 2,
+        "selection_rate": 100.0,
+        "average_score": 88.9
+      },
+      {
+        "recipe_id": "IDEA-20270208-SAT-1",
+        "name": "Blackstone Breakfast for Dinner",
+        "times_eligible": 1,
+        "times_selected": 1,
+        "selection_rate": 100.0,
+        "average_score": 96.7
+      },
+      {
+        "recipe_id": "IDEA-20270208-WED-1",
+        "name": "Blackstone Chicken Fried Brown Rice",
+        "times_eligible": 1,
+        "times_selected": 1,
+        "selection_rate": 100.0,
+        "average_score": 96.7
+      },
+      {
+        "recipe_id": "IDEA-20270208-SUN-3",
+        "name": "Grilled Salmon Rice Bowls with Fruit",
+        "times_eligible": 1,
+        "times_selected": 1,
+        "selection_rate": 100.0,
+        "average_score": 96.7
+      },
+      {
+        "recipe_id": "IDEA-20270208-FRI-3",
+        "name": "Grilled Salmon with Brown Rice and Green Beans",
+        "times_eligible": 1,
+        "times_selected": 1,
+        "selection_rate": 100.0,
+        "average_score": 96.7
+      },
+      {
+        "recipe_id": "IDEA-20270208-MON-2",
+        "name": "Mild Turkey Taco Brown Rice Bowls",
+        "times_eligible": 1,
+        "times_selected": 1,
+        "selection_rate": 100.0,
+        "average_score": 100.0
+      },
+      {
+        "recipe_id": "IDEA-20270208-THU-2",
+        "name": "Rotisserie Chicken Corn Rice Bowls",
+        "times_eligible": 1,
+        "times_selected": 1,
+        "selection_rate": 100.0,
+        "average_score": 88.9
+      }
+    ],
+    "recipe_diversity": {
+      "eligible_recipes": 285,
+      "selected_recipes": 84,
+      "percentage": 29.5
+    },
+    "constraint_failures": {
+      "protein_cap": 105432,
+      "weather": 8284,
+      "mexican_monday": 446628,
+      "inventory_conflicts": 10000,
+      "option_overlap": 0,
+      "queued_idea_cap": 268991,
+      "duplicate_recipe": 204952,
+      "heat_friendly": 0,
+      "search_limit": 0
+    },
+    "final_constraint_violations": {
+      "total": 0,
+      "by_rule": {}
+    },
+    "elapsed_seconds": 9.803,
+    "weeks_per_second": 1020.1,
+    "unique_scenarios_evaluated": 370,
+    "scenario_cache_hit_rate": 96.3
+  }
+}

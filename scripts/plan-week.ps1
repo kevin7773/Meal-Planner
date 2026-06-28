@@ -154,7 +154,15 @@ function Format-Proposal {
             $lines.Add('-' * ([string]$dayTrace.day).Length)
             $lines.Add("Started with $($dayTrace.started_count) recipes")
             foreach ($stage in @($dayTrace.stages)) {
-                $suffix = if ($stage.action -eq 'sorted') { ' (sorted)' } else { '' }
+                $actionProperty = $stage.PSObject.Properties['action']
+                $suffix = if (
+                    $null -ne $actionProperty -and
+                    [string]$actionProperty.Value -eq 'sorted'
+                ) {
+                    ' (sorted)'
+                } else {
+                    ''
+                }
                 $lines.Add(
                     "  $($stage.name): $($stage.before) -> " +
                     "$($stage.after)$suffix"
@@ -166,9 +174,22 @@ function Format-Proposal {
             )
             $lines.Add('  Candidate decisions:')
             foreach ($candidate in @($dayTrace.candidates)) {
-                $rank = if ($null -ne $candidate.rank) {
-                    "rank $($candidate.rank), score $($candidate.ranking_score)/100, inventory " +
-                    "$($candidate.inventory_score)/100, "
+                $rankProperty = $candidate.PSObject.Properties['rank']
+                $rank = if ($null -ne $rankProperty) {
+                    $scoreProperty = $candidate.PSObject.Properties['ranking_score']
+                    $inventoryProperty = $candidate.PSObject.Properties['inventory_score']
+                    $score = if ($null -ne $scoreProperty) {
+                        [string]$scoreProperty.Value
+                    } else {
+                        'n/a'
+                    }
+                    $inventory = if ($null -ne $inventoryProperty) {
+                        [string]$inventoryProperty.Value
+                    } else {
+                        'n/a'
+                    }
+                    "rank $($rankProperty.Value), score $score/100, inventory " +
+                    "$inventory/100, "
                 } else {
                     ''
                 }

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import datetime as dt
 import hashlib
+import json
 import shutil
 import tempfile
 import unittest
@@ -124,6 +125,19 @@ class DryRunTests(unittest.TestCase):
         )
 
     def test_selection_explanation_reports_expiring_refrigerated_stock(self) -> None:
+        stock_path = self.root / "inventory" / "stock.json"
+        stock = json.loads(stock_path.read_text(encoding="utf-8"))
+        stock["items"].append(
+            {
+                "lot_id": "explanation-eggs",
+                "item_id": "eggs",
+                "quantity": 12,
+                "level": None,
+                "acquired_on": "2026-06-28",
+                "expires_on": "2026-07-04",
+            }
+        )
+        stock_path.write_text(json.dumps(stock), encoding="utf-8")
         recipe = load_recipes(self.root)["FDP-0041"]
         explanation = selection_explanation(
             recipe,
