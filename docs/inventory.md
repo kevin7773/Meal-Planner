@@ -20,8 +20,17 @@ The catalog defines stable ingredient IDs and base units.
 1. Open `Kitchen Inventory.cmd`.
 2. Add quantities, lots, expiration dates, or consumable levels.
 3. Save inventory.
-4. Open `Plan Week.cmd`.
-5. Compare inventory coverage, shopping cost, savings, and warnings.
+4. Use **Mapping Completeness** to find recipes with missing or invalid
+   ingredient mappings.
+5. Open `Plan Week.cmd`.
+6. Compare inventory coverage, shopping cost, savings, and warnings.
+
+The same completeness report is available from:
+
+```powershell
+python scripts/inventory_mapping_report.py
+python scripts/inventory_mapping_report.py --json
+```
 
 Planning reads inventory but does not deduct it. Stock should be deducted only
 after a completed week or an explicit inventory action, preventing an

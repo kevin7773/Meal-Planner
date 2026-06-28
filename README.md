@@ -47,6 +47,15 @@ remains available as a fallback.
 status. It retrieves the configured secret and authenticates with Gmail without
 sending a message or changing the planning lifecycle.
 
+### Local GUI backups
+
+Before a desktop GUI changes planner state, it snapshots mutable data under
+`.backup/YYYYMMDD-HHMMSS/`. Each snapshot preserves project-relative paths and
+contains a versioned `manifest.json` naming the operation, creation time, files
+copied, and paths that did not yet exist. Multiple writes within one second use
+a numeric suffix and never overwrite an earlier backup. `.backup/` is excluded
+from Git.
+
 ## Planning Suite
 
 `Meal Planner Suite.cmd` is the common desktop entry point for weekly planning,
@@ -132,6 +141,11 @@ Every proposed meal also includes a **Why selected** block with its own
 inventory coverage, expiring refrigerated ingredients, day-rule fit, recent
 rotation result, weather fit, and kid score.
 
+Committing an option adds a **Why This Menu** section to the weekly menu. It
+summarizes weather, inventory, family fit, nutrition, and rotation, followed by
+the strongest selection reasons for each day. Artifact regeneration preserves
+the section in the readable menu and weekly email package.
+
 Each pair of options shares at most two recipe or idea IDs, and no protein
 appears more than three times in a proposed week. Fiber remains a comparison
 metric and preference rather than overriding those variety constraints.
@@ -159,10 +173,24 @@ The inventory window can filter to items needing attention: consumables marked
 low, countable ingredients below their catalog minimum, and lots expiring
 within seven days or already expired.
 
+Use **Mapping Completeness** to report active recipes with no ingredient
+requirements and recipes that reference unknown catalog items. Completing
+these mappings improves inventory ranking and grocery estimates.
+
 Dry run uses inventory coverage to rank recipe choices and reports estimated
 shopping cost after stock, approximate savings, fresh weekly purchases, and
 low-stock warnings. Fresh produce from an earlier week is not carried forward
 automatically.
+
+## Recipe Review
+
+Double-click `Review Meal.cmd` to record ratings and family feedback. Use
+**Find** to search by recipe ID or name and filter the library by status,
+protein, cooking method, season, or minimum rating.
+
+An optional recipe photo can be stored as
+`assets/recipes/<RECIPE-ID>.jpg` (also `.jpeg`, `.png`, or `.bmp`). The photo
+appears in the recipe viewer, print preview, and exported printable HTML.
 
 ## Recipe Import
 
@@ -188,6 +216,12 @@ candidate. The editor preloads prep and cook times, protein, method, seasons,
 meal coverage, cost, fiber, and the controlled kid-friendly reason. Saving
 creates a validated recipe revision while preserving its ID, source,
 ingredients, directions, ratings, and prior history.
+
+Before save, the editor shows a field-by-field diff, card-section changes, and
+the pending revision number for explicit confirmation. Candidate edit mode also
+offers **Promote to Approved**. Promotion requires a reviewer and reason, takes
+a local pre-write backup, increments the revision, updates recipe history and
+the index, validates the result, and rolls both files back if validation fails.
 
 Set **Meal coverage** to `entree` when the imported recipe or idea does not
 include sides. Dry run then proposes two seasonal, kid-friendly, fiber-aware

@@ -81,6 +81,17 @@ class InventoryAttentionFilterTests(unittest.TestCase):
         self.assertIn("$addButton.Text = 'Add to Inventory'", self.script)
         self.assertIn("$addButton.Text = 'Update Lot'", self.script)
 
+    def test_inventory_gui_exposes_mapping_completeness_report(self) -> None:
+        self.assertIn(
+            "$mappingButton.Text = 'Mapping Completeness'",
+            self.script,
+        )
+        self.assertIn("inventory_mapping_report.py", self.script)
+        self.assertIn(
+            "$dialog.Text = 'Ingredient Mapping Completeness'",
+            self.script,
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

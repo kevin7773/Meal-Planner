@@ -1,6 +1,7 @@
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent $PSScriptRoot
+. (Join-Path $PSScriptRoot 'gui-backup.ps1')
 $overrideScript = Join-Path $PSScriptRoot 'meal_override.py'
 
 function Resolve-Python {
@@ -184,6 +185,10 @@ $applyButton.Add_Click({
             'Confirm Meal Override','YesNo','Question'
         )
         if ($answer -ne [System.Windows.Forms.DialogResult]::Yes) { return }
+        New-MealPlannerGuiBackup `
+            -ProjectRoot $projectRoot `
+            -Operation "meal-override-$($dayCombo.SelectedItem.day)" |
+            Out-Null
         $result = & $python @arguments 2>&1
         if ($LASTEXITCODE -ne 0) { throw ($result -join [Environment]::NewLine) }
         [System.Windows.Forms.MessageBox]::Show(

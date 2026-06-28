@@ -37,7 +37,7 @@ class ReviewMealRepeatEntryTests(unittest.TestCase):
         )
 
     def test_reviewer_can_open_complete_recipe_without_leaving_form(self) -> None:
-        self.assertIn("$viewRecipeButton.Text = 'View Recipe'", self.script)
+        self.assertIn("$viewRecipeButton.Text = 'View'", self.script)
         self.assertIn("function Show-SelectedRecipe", self.script)
         self.assertIn(
             "[System.IO.File]::ReadAllText($recipe.Path)",
@@ -79,7 +79,7 @@ class ReviewMealRepeatEntryTests(unittest.TestCase):
         )
 
     def test_recipe_list_can_print_a_clean_paginated_card(self) -> None:
-        self.assertIn("$printRecipeButton.Text = 'Print Recipe'", self.script)
+        self.assertIn("$printRecipeButton.Text = 'Print'", self.script)
         self.assertIn("function Get-PrintableRecipeLines", self.script)
         self.assertIn("function Print-SelectedRecipe", self.script)
         self.assertIn(
@@ -120,6 +120,31 @@ class ReviewMealRepeatEntryTests(unittest.TestCase):
             "New-Object System.Text.UTF8Encoding($false)",
             self.script,
         )
+
+    def test_recipe_finder_filters_library_metadata(self) -> None:
+        self.assertIn("$findRecipeButton.Text = 'Find'", self.script)
+        self.assertIn("function Show-RecipeFinder", self.script)
+        for field in (
+            "Status",
+            "Protein",
+            "Method",
+            "Season",
+            "Rating",
+        ):
+            self.assertIn(field, self.script)
+        self.assertIn("$search.Add_TextChanged", self.script)
+        self.assertIn("$recipe.Rating -ge $minimumRating", self.script)
+        self.assertIn("@($recipe.Seasons) -contains", self.script)
+
+    def test_optional_recipe_photo_appears_in_view_print_and_html(self) -> None:
+        self.assertIn("function Get-RecipeImagePath", self.script)
+        self.assertIn("assets\\recipes", self.script)
+        self.assertIn(
+            "New-Object System.Windows.Forms.PictureBox",
+            self.script,
+        )
+        self.assertIn("$eventArgs.Graphics.DrawImage", self.script)
+        self.assertIn("data:$mime;base64,$base64", self.script)
 
 
 if __name__ == "__main__":

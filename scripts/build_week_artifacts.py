@@ -360,6 +360,7 @@ def build_artifacts(
     grocery_path.write_text(grocery_text, encoding="utf-8", newline="\n")
     leftover_section = extract_section(original, "Weekly Leftover Plan")
     rotation_section = extract_section(original, "Rotation Notes")
+    why_section = extract_section(original, "Why This Menu")
     average_fiber = round(
         sum(
             float(metadata["fiber_grams"])
@@ -411,7 +412,12 @@ def build_artifacts(
     )
     menu_summary_sections = [
         section
-        for section in (leftover_section, rotation_section, dry_run_section)
+        for section in (
+            why_section,
+            leftover_section,
+            rotation_section,
+            dry_run_section,
+        )
         if section
     ]
     menu_text = "\n".join(
@@ -453,7 +459,13 @@ def build_artifacts(
         ]
         if filename.startswith("email-3"):
             email_summary_sections = [
-                section for section in (leftover_section, rotation_section) if section
+                section
+                for section in (
+                    why_section,
+                    leftover_section,
+                    rotation_section,
+                )
+                if section
             ]
             content.extend(
                 [

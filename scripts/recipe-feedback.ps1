@@ -6,7 +6,9 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
 $projectRoot = Split-Path -Parent $PSScriptRoot
+. (Join-Path $PSScriptRoot 'gui-backup.ps1')
 $recipesRoot = Join-Path $projectRoot 'recipes'
+$recipeAssetsRoot = Join-Path $projectRoot 'assets\recipes'
 $feedbackRoot = Join-Path $projectRoot 'feedback'
 $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
 
@@ -36,6 +38,41 @@ function Get-MetadataInteger {
     return [int]$match.Groups[1].Value
 }
 
+function Get-MetadataNumber {
+    param(
+        [string]$Text,
+        [string]$Name
+    )
+
+    $match = [regex]::Match(
+        $Text,
+        "(?m)^$([regex]::Escape($Name)) = (-?\d+(?:\.\d+)?)$"
+    )
+    if (-not $match.Success) {
+        throw "Recipe metadata is missing numeric '$Name'."
+    }
+    return [double]::Parse(
+        $match.Groups[1].Value,
+        [cultureinfo]::InvariantCulture
+    )
+}
+
+function Get-MetadataArray {
+    param(
+        [string]$Text,
+        [string]$Name
+    )
+
+    $match = [regex]::Match(
+        $Text,
+        "(?m)^$([regex]::Escape($Name)) = (\[.*\])$"
+    )
+    if (-not $match.Success) {
+        throw "Recipe metadata is missing array '$Name'."
+    }
+    return @($match.Groups[1].Value | ConvertFrom-Json)
+}
+
 function Get-RecipeList {
     $excluded = @('README.md', 'index.md', '_template.md')
     $records = foreach ($file in Get-ChildItem -LiteralPath $recipesRoot -Filter '*.md' -File) {
@@ -48,12 +85,20 @@ function Get-RecipeList {
         $name = Get-MetadataValue -Text $text -Name 'name'
         $status = Get-MetadataValue -Text $text -Name 'status'
         $revision = Get-MetadataInteger -Text $text -Name 'revision'
+        $protein = Get-MetadataValue -Text $text -Name 'protein'
+        $method = Get-MetadataValue -Text $text -Name 'cooking_method'
+        $seasons = Get-MetadataArray -Text $text -Name 'seasons'
+        $rating = Get-MetadataNumber -Text $text -Name 'rating_average'
 
         [pscustomobject]@{
             Id = $id
             Name = $name
             Revision = $revision
             Status = $status
+            Protein = $protein
+            Method = $method
+            Seasons = $seasons
+            Rating = $rating
             Path = $file.FullName
             FileName = $file.Name
             Display = "$id - $name (rev $revision, $status)"
@@ -97,6 +142,9 @@ function Save-RecipeFeedback {
         [string]$RecommendedStatus
     )
 
+    New-MealPlannerGuiBackup `
+        -ProjectRoot $projectRoot `
+        -Operation "recipe-review-$($Recipe.Id)" | Out-Null
     $dateText = $MealDate.ToString('yyyy-MM-dd')
     $text = [System.IO.File]::ReadAllText($Recipe.Path)
     $safeRater = ConvertTo-SafeCell $Rater
@@ -243,10 +291,10 @@ function Add-Label {
     return $label
 }
 
-Add-Label 'Recipe' 20 22 | Out-Null
+Add-Label 'Recipe' 20 22 70 | Out-Null
 $recipeCombo = New-Object System.Windows.Forms.ComboBox
-$recipeCombo.Location = New-Object System.Drawing.Point(180, 22)
-$recipeCombo.Size = New-Object System.Drawing.Size(220, 28)
+$recipeCombo.Location = New-Object System.Drawing.Point(95, 22)
+$recipeCombo.Size = New-Object System.Drawing.Size(245, 28)
 $recipeCombo.DropDownStyle = 'DropDownList'
 $recipeCombo.DisplayMember = 'Display'
 foreach ($recipe in $recipes) {
@@ -258,9 +306,9 @@ if ($recipeCombo.Items.Count -gt 0) {
 $form.Controls.Add($recipeCombo)
 
 $viewRecipeButton = New-Object System.Windows.Forms.Button
-$viewRecipeButton.Text = 'View Recipe'
-$viewRecipeButton.Location = New-Object System.Drawing.Point(410, 19)
-$viewRecipeButton.Size = New-Object System.Drawing.Size(85, 34)
+$viewRecipeButton.Text = 'View'
+$viewRecipeButton.Location = New-Object System.Drawing.Point(435, 19)
+$viewRecipeButton.Size = New-Object System.Drawing.Size(70, 34)
 $form.Controls.Add($viewRecipeButton)
 Set-MealPlannerButtonStyle -Button $viewRecipeButton -Color $colors.Review
 
@@ -280,9 +328,9 @@ function Get-CurrentSelectedRecipe {
 }
 
 $printRecipeButton = New-Object System.Windows.Forms.Button
-$printRecipeButton.Text = 'Print Recipe'
-$printRecipeButton.Location = New-Object System.Drawing.Point(505, 19)
-$printRecipeButton.Size = New-Object System.Drawing.Size(85, 34)
+$printRecipeButton.Text = 'Print'
+$printRecipeButton.Location = New-Object System.Drawing.Point(515, 19)
+$printRecipeButton.Size = New-Object System.Drawing.Size(75, 34)
 $form.Controls.Add($printRecipeButton)
 Set-MealPlannerButtonStyle -Button $printRecipeButton -Color $colors.Pantry
 
@@ -292,6 +340,187 @@ $exportRecipeButton.Location = New-Object System.Drawing.Point(600, 19)
 $exportRecipeButton.Size = New-Object System.Drawing.Size(90, 34)
 $form.Controls.Add($exportRecipeButton)
 Set-MealPlannerButtonStyle -Button $exportRecipeButton -Color $colors.Email
+
+$findRecipeButton = New-Object System.Windows.Forms.Button
+$findRecipeButton.Text = 'Find'
+$findRecipeButton.Location = New-Object System.Drawing.Point(350, 19)
+$findRecipeButton.Size = New-Object System.Drawing.Size(75, 34)
+$form.Controls.Add($findRecipeButton)
+Set-MealPlannerButtonStyle -Button $findRecipeButton -Color $colors.Planner
+
+function Get-RecipeImagePath {
+    param([string]$RecipeId)
+
+    foreach ($extension in @('.jpg', '.jpeg', '.png', '.bmp')) {
+        $path = Join-Path $recipeAssetsRoot "$RecipeId$extension"
+        if (Test-Path -LiteralPath $path) {
+            return $path
+        }
+    }
+    return $null
+}
+
+function Show-RecipeFinder {
+    $dialog = New-Object System.Windows.Forms.Form
+    $dialog.Text = 'Find Recipe'
+    $dialog.ClientSize = New-Object System.Drawing.Size(760, 510)
+    $dialog.StartPosition = 'CenterParent'
+    $dialog.MinimumSize = New-Object System.Drawing.Size(680, 480)
+    $dialog.Font = New-Object System.Drawing.Font('Segoe UI', 10)
+    Set-MealPlannerFormSurface -Form $dialog -Palette $colors
+
+    $search = New-Object System.Windows.Forms.TextBox
+    $search.Location = New-Object System.Drawing.Point(20, 20)
+    $search.Size = New-Object System.Drawing.Size(720, 28)
+    $dialog.Controls.Add($search)
+
+    $filterNames = @('Status', 'Protein', 'Method', 'Season', 'Rating')
+    $filterValues = @(
+        @('Any', 'candidate', 'approved', 'retired'),
+        @('Any', 'chicken', 'turkey', 'beef', 'seafood', 'pork', 'vegetarian', 'other'),
+        @('Any', 'stovetop', 'oven', 'grill', 'smoker', 'blackstone', 'slow-cooker', 'minimal-cook', 'no-cook'),
+        @('Any', 'spring', 'summer', 'fall', 'winter'),
+        @('Any', 'Unrated', '1+', '2+', '3+', '4+', '5')
+    )
+    $filters = New-Object System.Collections.ArrayList
+    for ($index = 0; $index -lt $filterNames.Count; $index++) {
+        $label = New-Object System.Windows.Forms.Label
+        $label.Text = $filterNames[$index]
+        $label.Location = New-Object System.Drawing.Point(
+            (20 + ($index * 144)),
+            60
+        )
+        $label.Size = New-Object System.Drawing.Size(135, 22)
+        $dialog.Controls.Add($label)
+
+        $combo = New-Object System.Windows.Forms.ComboBox
+        $combo.Location = New-Object System.Drawing.Point(
+            (20 + ($index * 144)),
+            84
+        )
+        $combo.Size = New-Object System.Drawing.Size(135, 28)
+        $combo.DropDownStyle = 'DropDownList'
+        foreach ($value in $filterValues[$index]) {
+            [void]$combo.Items.Add($value)
+        }
+        $combo.SelectedIndex = 0
+        $dialog.Controls.Add($combo)
+        [void]$filters.Add($combo)
+    }
+
+    $results = New-Object System.Windows.Forms.ListBox
+    $results.Location = New-Object System.Drawing.Point(20, 130)
+    $results.Size = New-Object System.Drawing.Size(720, 310)
+    $results.Anchor = 'Top,Bottom,Left,Right'
+    $results.DisplayMember = 'Display'
+    $dialog.Controls.Add($results)
+
+    $refreshResults = {
+        $results.BeginUpdate()
+        try {
+            $results.Items.Clear()
+            $minimumRating = switch ([string]$filters[4].SelectedItem) {
+                '1+' { 1 }
+                '2+' { 2 }
+                '3+' { 3 }
+                '4+' { 4 }
+                '5' { 5 }
+                default { 0 }
+            }
+            foreach ($recipe in Get-RecipeList) {
+                $matches = (
+                    (
+                        [string]::IsNullOrWhiteSpace($search.Text) -or
+                        $recipe.Id.IndexOf(
+                            $search.Text,
+                            [System.StringComparison]::OrdinalIgnoreCase
+                        ) -ge 0 -or
+                        $recipe.Name.IndexOf(
+                            $search.Text,
+                            [System.StringComparison]::OrdinalIgnoreCase
+                        ) -ge 0
+                    ) -and
+                    (
+                        $filters[0].SelectedItem -eq 'Any' -or
+                        $recipe.Status -eq $filters[0].SelectedItem
+                    ) -and
+                    (
+                        $filters[1].SelectedItem -eq 'Any' -or
+                        $recipe.Protein -eq $filters[1].SelectedItem
+                    ) -and
+                    (
+                        $filters[2].SelectedItem -eq 'Any' -or
+                        $recipe.Method -eq $filters[2].SelectedItem
+                    ) -and
+                    (
+                        $filters[3].SelectedItem -eq 'Any' -or
+                        @($recipe.Seasons) -contains $filters[3].SelectedItem
+                    ) -and
+                    (
+                        $filters[4].SelectedItem -eq 'Any' -or
+                        (
+                            $filters[4].SelectedItem -eq 'Unrated' -and
+                            [double]$recipe.Rating -eq 0
+                        ) -or
+                        (
+                            $minimumRating -gt 0 -and
+                            [double]$recipe.Rating -ge $minimumRating
+                        )
+                    )
+                )
+                if ($matches) {
+                    [void]$results.Items.Add($recipe)
+                }
+            }
+            if ($results.Items.Count -gt 0) {
+                $results.SelectedIndex = 0
+            }
+        } finally {
+            $results.EndUpdate()
+        }
+    }
+    $search.Add_TextChanged($refreshResults)
+    foreach ($filter in $filters) {
+        $filter.Add_SelectedIndexChanged($refreshResults)
+    }
+    & $refreshResults
+
+    $select = New-Object System.Windows.Forms.Button
+    $select.Text = 'Select'
+    $select.Location = New-Object System.Drawing.Point(520, 455)
+    $select.Size = New-Object System.Drawing.Size(100, 36)
+    $select.Anchor = 'Bottom,Right'
+    $select.DialogResult = [System.Windows.Forms.DialogResult]::OK
+    $dialog.Controls.Add($select)
+    Set-MealPlannerButtonStyle -Button $select -Color $colors.Planner
+
+    $cancel = New-Object System.Windows.Forms.Button
+    $cancel.Text = 'Cancel'
+    $cancel.Location = New-Object System.Drawing.Point(640, 455)
+    $cancel.Size = New-Object System.Drawing.Size(100, 36)
+    $cancel.Anchor = 'Bottom,Right'
+    $cancel.DialogResult = [System.Windows.Forms.DialogResult]::Cancel
+    $dialog.Controls.Add($cancel)
+    Set-MealPlannerNeutralButtonStyle -Button $cancel -Palette $colors
+    $dialog.AcceptButton = $select
+    $dialog.CancelButton = $cancel
+
+    if (
+        $dialog.ShowDialog($form) -eq
+        [System.Windows.Forms.DialogResult]::OK -and
+        $null -ne $results.SelectedItem
+    ) {
+        $selectedId = $results.SelectedItem.Id
+        for ($index = 0; $index -lt $recipeCombo.Items.Count; $index++) {
+            if ($recipeCombo.Items[$index].Id -eq $selectedId) {
+                $recipeCombo.SelectedIndex = $index
+                break
+            }
+        }
+    }
+}
+
+$findRecipeButton.Add_Click({ Show-RecipeFinder })
 
 function Get-PrintableRecipeLines {
     param([pscustomobject]$Recipe)
@@ -358,6 +587,16 @@ function Get-PrintableRecipeLines {
 function Print-SelectedRecipe {
     $recipe = Get-CurrentSelectedRecipe
     $lines = Get-PrintableRecipeLines -Recipe $recipe
+    $imagePath = Get-RecipeImagePath -RecipeId $recipe.Id
+    $printImage = $null
+    if ($null -ne $imagePath) {
+        $sourceImage = [System.Drawing.Image]::FromFile($imagePath)
+        try {
+            $printImage = New-Object System.Drawing.Bitmap($sourceImage)
+        } finally {
+            $sourceImage.Dispose()
+        }
+    }
     $document = New-Object System.Drawing.Printing.PrintDocument
     $document.DocumentName = "$($recipe.Id) - $($recipe.Name)"
     $document.DefaultPageSettings.Margins = (
@@ -394,6 +633,25 @@ function Print-SelectedRecipe {
         $state.Page++
         $bounds = $eventArgs.MarginBounds
         $y = [single]$bounds.Top
+        if ($state.Page -eq 1 -and $null -ne $printImage) {
+            $scale = [Math]::Min(
+                [double]$bounds.Width / [double]$printImage.Width,
+                180.0 / [double]$printImage.Height
+            )
+            $imageWidth = [single]($printImage.Width * $scale)
+            $imageHeight = [single]($printImage.Height * $scale)
+            $imageX = [single](
+                $bounds.Left + (($bounds.Width - $imageWidth) / 2)
+            )
+            $eventArgs.Graphics.DrawImage(
+                $printImage,
+                $imageX,
+                $y,
+                $imageWidth,
+                $imageHeight
+            )
+            $y += $imageHeight + 14
+        }
         if ($state.Page -gt 1) {
             $continuation = "$($recipe.Name) - continued"
             $eventArgs.Graphics.DrawString(
@@ -531,6 +789,9 @@ function Print-SelectedRecipe {
         $bodyFont.Dispose()
         $metaFont.Dispose()
         $footerFont.Dispose()
+        if ($null -ne $printImage) {
+            $printImage.Dispose()
+        }
     }
 }
 
@@ -565,6 +826,25 @@ function Export-SelectedRecipeHtml {
         }
     }
     $title = [System.Net.WebUtility]::HtmlEncode($recipe.Name)
+    $imagePath = Get-RecipeImagePath -RecipeId $recipe.Id
+    $imageHtml = ''
+    if ($null -ne $imagePath) {
+        $extension = [System.IO.Path]::GetExtension(
+            $imagePath
+        ).ToLowerInvariant()
+        $mime = switch ($extension) {
+            '.png' { 'image/png' }
+            '.bmp' { 'image/bmp' }
+            default { 'image/jpeg' }
+        }
+        $base64 = [Convert]::ToBase64String(
+            [System.IO.File]::ReadAllBytes($imagePath)
+        )
+        $imageHtml = (
+            "<img class=`"recipe-photo`" alt=`"$title`" " +
+            "src=`"data:$mime;base64,$base64`">"
+        )
+    }
     $html = @"
 <!doctype html>
 <html lang="en">
@@ -583,6 +863,14 @@ function Export-SelectedRecipeHtml {
       font: 11pt/1.42 "Segoe UI", Arial, sans-serif;
     }
     h1 { margin: 0 0 0.08in; font-size: 24pt; }
+    .recipe-photo {
+      display: block;
+      width: auto;
+      max-width: 100%;
+      max-height: 3in;
+      margin: 0 auto 0.2in;
+      object-fit: contain;
+    }
     h2 {
       margin: 0.22in 0 0.08in;
       border-bottom: 1px solid #cfd8d4;
@@ -602,6 +890,7 @@ function Export-SelectedRecipeHtml {
   </style>
 </head>
 <body>
+$imageHtml
 $($htmlBody.ToString())
 </body>
 </html>
@@ -638,6 +927,7 @@ $($htmlBody.ToString())
 
 function Show-SelectedRecipe {
     $recipe = Get-CurrentSelectedRecipe
+    $imagePath = Get-RecipeImagePath -RecipeId $recipe.Id
     $text = [System.IO.File]::ReadAllText($recipe.Path)
     $body = [regex]::Replace(
         $text,
@@ -661,7 +951,11 @@ function Show-SelectedRecipe {
 
     $recipeText = New-Object System.Windows.Forms.RichTextBox
     $recipeText.Location = New-Object System.Drawing.Point(20, 20)
-    $recipeText.Size = New-Object System.Drawing.Size(740, 555)
+    $recipeText.Size = if ($null -ne $imagePath) {
+        New-Object System.Drawing.Size(480, 555)
+    } else {
+        New-Object System.Drawing.Size(740, 555)
+    }
     $recipeText.ReadOnly = $true
     $recipeText.ScrollBars = 'Vertical'
     $recipeText.WordWrap = $true
@@ -677,6 +971,23 @@ function Show-SelectedRecipe {
     )
     $recipeText.SelectionStart = 0
     $dialog.Controls.Add($recipeText)
+
+    $recipePhoto = $null
+    if ($null -ne $imagePath) {
+        $sourceImage = [System.Drawing.Image]::FromFile($imagePath)
+        try {
+            $photoBitmap = New-Object System.Drawing.Bitmap($sourceImage)
+        } finally {
+            $sourceImage.Dispose()
+        }
+        $recipePhoto = New-Object System.Windows.Forms.PictureBox
+        $recipePhoto.Location = New-Object System.Drawing.Point(520, 20)
+        $recipePhoto.Size = New-Object System.Drawing.Size(240, 220)
+        $recipePhoto.SizeMode = 'Zoom'
+        $recipePhoto.BorderStyle = 'FixedSingle'
+        $recipePhoto.Image = $photoBitmap
+        $dialog.Controls.Add($recipePhoto)
+    }
 
     $closeRecipeButton = New-Object System.Windows.Forms.Button
     $closeRecipeButton.Text = 'Close'
@@ -696,6 +1007,10 @@ function Show-SelectedRecipe {
         -Subtitle "$($recipe.Id) rev $($recipe.Revision) | $($recipe.Status)" `
         -IconName 'review-meal'
     [void]$dialog.ShowDialog($form)
+    if ($null -ne $recipePhoto -and $null -ne $recipePhoto.Image) {
+        $recipePhoto.Image.Dispose()
+        $recipePhoto.Dispose()
+    }
 }
 
 $viewRecipeButton.Add_Click({

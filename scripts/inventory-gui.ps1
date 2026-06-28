@@ -2,9 +2,27 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
 $projectRoot = Split-Path -Parent $PSScriptRoot
+. (Join-Path $PSScriptRoot 'gui-backup.ps1')
 $catalogPath = Join-Path $projectRoot 'inventory\catalog.json'
 $stockPath = Join-Path $projectRoot 'inventory\stock.json'
+$mappingReportScript = Join-Path $PSScriptRoot 'inventory_mapping_report.py'
 $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+
+function Resolve-Python {
+    $bundled = Join-Path $env:USERPROFILE (
+        '.cache\codex-runtimes\codex-primary-runtime' +
+        '\dependencies\python\python.exe'
+    )
+    if (Test-Path -LiteralPath $bundled) {
+        return $bundled
+    }
+    $command = Get-Command python.exe -ErrorAction SilentlyContinue
+    if ($null -ne $command) {
+        return $command.Source
+    }
+    throw 'Python 3.11 or newer is required.'
+}
+$python = Resolve-Python
 
 $catalogDocument = Get-Content -Raw -LiteralPath $catalogPath | ConvertFrom-Json
 $stockDocument = Get-Content -Raw -LiteralPath $stockPath | ConvertFrom-Json
@@ -46,6 +64,12 @@ $attentionNote.Size = New-Object System.Drawing.Size(300, 28)
 $attentionNote.TextAlign = 'MiddleLeft'
 $attentionNote.ForeColor = [System.Drawing.Color]::DimGray
 $form.Controls.Add($attentionNote)
+
+$mappingButton = New-Object System.Windows.Forms.Button
+$mappingButton.Text = 'Mapping Completeness'
+$mappingButton.Location = New-Object System.Drawing.Point(820, 18)
+$mappingButton.Size = New-Object System.Drawing.Size(240, 36)
+$form.Controls.Add($mappingButton)
 
 $grid = New-Object System.Windows.Forms.DataGridView
 $grid.Location = New-Object System.Drawing.Point(20, 68)
@@ -558,6 +582,9 @@ $removeButton.Add_Click({
 
 $saveButton.Add_Click({
     try {
+        New-MealPlannerGuiBackup `
+            -ProjectRoot $projectRoot `
+            -Operation 'inventory-save' | Out-Null
         $document = [ordered]@{
             schema_version = 1
             updated_at = (Get-Date).ToUniversalTime().ToString('o')
@@ -576,8 +603,56 @@ $saveButton.Add_Click({
     }
 })
 
+$mappingButton.Add_Click({
+    try {
+        $raw = & $python $mappingReportScript 2>&1
+        if ($LASTEXITCODE -ne 0) {
+            throw ($raw -join [Environment]::NewLine)
+        }
+        $dialog = New-Object System.Windows.Forms.Form
+        $dialog.Text = 'Ingredient Mapping Completeness'
+        $dialog.ClientSize = New-Object System.Drawing.Size(760, 600)
+        $dialog.StartPosition = 'CenterParent'
+        $dialog.MinimumSize = New-Object System.Drawing.Size(620, 480)
+        $dialog.Font = New-Object System.Drawing.Font('Segoe UI', 10)
+        Set-MealPlannerFormSurface -Form $dialog -Palette $colors
+
+        $report = New-Object System.Windows.Forms.RichTextBox
+        $report.Location = New-Object System.Drawing.Point(18, 18)
+        $report.Size = New-Object System.Drawing.Size(724, 510)
+        $report.Anchor = 'Top,Bottom,Left,Right'
+        $report.ReadOnly = $true
+        $report.WordWrap = $false
+        $report.Font = New-Object System.Drawing.Font('Consolas', 10)
+        $report.BackColor = $colors.Surface
+        $report.Text = $raw -join [Environment]::NewLine
+        $dialog.Controls.Add($report)
+
+        $closeReport = New-Object System.Windows.Forms.Button
+        $closeReport.Text = 'Close'
+        $closeReport.Location = New-Object System.Drawing.Point(642, 545)
+        $closeReport.Size = New-Object System.Drawing.Size(100, 36)
+        $closeReport.Anchor = 'Bottom,Right'
+        $closeReport.Add_Click({ $dialog.Close() })
+        $dialog.Controls.Add($closeReport)
+        Set-MealPlannerNeutralButtonStyle `
+            -Button $closeReport `
+            -Palette $colors
+        $dialog.CancelButton = $closeReport
+        [void]$dialog.ShowDialog($form)
+    } catch {
+        [System.Windows.Forms.MessageBox]::Show(
+            $_.Exception.Message,
+            'Unable to Build Mapping Report',
+            'OK',
+            'Error'
+        ) | Out-Null
+    }
+})
+
 $form.CancelButton = $closeButton
 Set-MealPlannerButtonStyle -Button $attentionButton -Color $colors.Override
+Set-MealPlannerButtonStyle -Button $mappingButton -Color $colors.Email
 Set-MealPlannerButtonStyle -Button $newButton -Color $colors.Email
 Set-MealPlannerButtonStyle -Button $addButton -Color $colors.Pantry
 Set-MealPlannerButtonStyle -Button $removeButton -Color $colors.Override

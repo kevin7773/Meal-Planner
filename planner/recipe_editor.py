@@ -304,6 +304,102 @@ def update_imported_recipe(
     return revision, target_path
 
 
+def promote_imported_recipe(
+    recipe_id: str,
+    *,
+    actor: str,
+    note: str,
+    root: Path = ROOT,
+) -> tuple[int, Path]:
+    current = find_imported_recipe(recipe_id, root)
+    path = Path(current["path"])
+    original_text = path.read_text(encoding="utf-8")
+    metadata, _ = split_recipe(path)
+    index_path = root / "recipes" / "index.md"
+    original_index = index_path.read_text(encoding="utf-8")
+
+    actor = _safe_table_text(actor)
+    note = _safe_table_text(note)
+    if not actor:
+        raise ValueError("Approval reviewer is required")
+    if not note:
+        raise ValueError("Approval reason is required")
+    if metadata["status"] != "candidate":
+        raise ValueError(
+            "Only candidate recipes can be promoted to approved"
+        )
+
+    revision = int(metadata["revision"]) + 1
+    today = dt.date.today().isoformat()
+    content = _set_front_matter(
+        original_text,
+        "revision",
+        str(revision),
+    )
+    content = _set_front_matter(
+        content,
+        "status",
+        json.dumps("approved"),
+    )
+    content = _set_front_matter(
+        content,
+        "updated",
+        json.dumps(today),
+    )
+    content = _add_revision_row(
+        content,
+        revision,
+        today,
+        "approved",
+        f"Promoted to approved by {actor}: {note}",
+    )
+    updated_index = _update_index(
+        original_index,
+        recipe_id,
+        metadata["name"],
+        path.name,
+        revision,
+        "approved",
+    )
+
+    try:
+        path.write_text(content, encoding="utf-8", newline="\n")
+        index_path.write_text(
+            updated_index,
+            encoding="utf-8",
+            newline="\n",
+        )
+        parsed_id, parsed_metadata, body, errors = validate_recipe(path)
+        all_ids = {
+            match.group(1)
+            for recipe_path in (root / "recipes").glob("*.md")
+            if (
+                match := re.search(
+                    r'(?m)^id = "(FDP-\d{4})"$',
+                    recipe_path.read_text(encoding="utf-8"),
+                )
+            )
+        }
+        errors.extend(
+            semantic_errors(parsed_metadata, body, all_ids)
+        )
+        if parsed_id != recipe_id or errors:
+            raise ValueError("; ".join(errors))
+    except Exception:
+        path.write_text(
+            original_text,
+            encoding="utf-8",
+            newline="\n",
+        )
+        index_path.write_text(
+            original_index,
+            encoding="utf-8",
+            newline="\n",
+        )
+        raise
+    return revision, path
+
+
 def _body_section(
     body: str,
     heading: str,

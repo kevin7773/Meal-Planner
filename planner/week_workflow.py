@@ -127,6 +127,18 @@ def human_readable_menu(menu_text: str) -> str:
                 )
         lines.append("")
 
+    why = re.search(
+        r"(?ms)^## Why This Menu\s*(.*?)(?=^## |\Z)",
+        menu_text,
+    )
+    if why:
+        lines.extend(
+            [
+                "WHY THIS MENU",
+                markdown_to_text(why.group(1)),
+                "",
+            ]
+        )
     summary = re.search(
         r"(?ms)^## Dry Run Summary\s*(.*?)(?=^## |\Z)",
         menu_text,

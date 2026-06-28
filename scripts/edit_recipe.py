@@ -12,6 +12,7 @@ if str(PROJECT_ROOT) not in sys.path:
 from planner.recipe_editor import (
     find_imported_recipe,
     imported_recipes,
+    promote_imported_recipe,
     update_imported_recipe,
 )
 
@@ -28,6 +29,11 @@ def main() -> int:
     show_parser = subparsers.add_parser("show")
     show_parser.add_argument("--id", required=True)
     show_parser.add_argument("--json", action="store_true")
+
+    promote_parser = subparsers.add_parser("promote")
+    promote_parser.add_argument("--id", required=True)
+    promote_parser.add_argument("--actor", required=True)
+    promote_parser.add_argument("--note", required=True)
 
     update_parser = subparsers.add_parser("update")
     update_parser.add_argument("--id", required=True)
@@ -68,6 +74,14 @@ def main() -> int:
                 if args.json
                 else f"{recipe['id']}|{recipe['name']}"
             )
+            return 0
+        if args.command == "promote":
+            revision, path = promote_imported_recipe(
+                args.id,
+                actor=args.actor,
+                note=args.note,
+            )
+            print(f"{args.id}|{revision}|{path}")
             return 0
 
         card_sections = (

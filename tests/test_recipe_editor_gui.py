@@ -57,6 +57,35 @@ class RecipeEditorGuiTests(unittest.TestCase):
             self.script,
         )
 
+    def test_edit_save_shows_prewrite_revision_diff(self) -> None:
+        self.assertIn("function Get-RecipeEditDiff", self.script)
+        self.assertIn("'Ingredients changed'", self.script)
+        self.assertIn("'Directions changed'", self.script)
+        self.assertIn('"Revision: $([int]$original.revision) ->', self.script)
+        self.assertIn("'Confirm Recipe Revision'", self.script)
+        diff_index = self.script.index("$diff = Get-RecipeEditDiff")
+        backup_index = self.script.index(
+            '-Operation "recipe-edit-',
+            diff_index,
+        )
+        write_index = self.script.index(
+            "$result = & $python @arguments",
+            backup_index,
+        )
+        self.assertLess(diff_index, backup_index)
+        self.assertLess(backup_index, write_index)
+
+    def test_candidate_can_be_promoted_outside_feedback(self) -> None:
+        self.assertIn(
+            "$promoteButton.Text = 'Promote to Approved'",
+            self.script,
+        )
+        self.assertIn("function Show-PromotionDialog", self.script)
+        self.assertIn("'Approved by is required.'", self.script)
+        self.assertIn("'Approval reason is required.'", self.script)
+        self.assertIn("$recipeEditor promote", self.script)
+        self.assertIn("recipe-promote-", self.script)
+
 
 if __name__ == "__main__":
     unittest.main()

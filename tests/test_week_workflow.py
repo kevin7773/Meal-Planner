@@ -106,6 +106,8 @@ class WeekWorkflowTests(unittest.TestCase):
         self.assertTrue(package["email_drafts_complete"])
         self.assertIn("FRESH PRODUCE", package["grocery_text"].upper())
         self.assertIn("EMAIL-1-MON-TUE.MD", package["email_text"].upper())
+        self.assertIn("WHY THIS MENU", package["menu_summary"])
+        self.assertIn("Why This Menu", package["email_text"])
 
     def test_approval_records_human_review_and_authorization(self) -> None:
         generate_review_package(WEEK, root=self.root)

@@ -108,6 +108,46 @@ def apply_proposal(
         )
     lines.extend(
         [
+            "## Why This Menu",
+            "",
+            (
+                f"- Weather fit: {proposal['weather_category']}; "
+                f"{proposal['heat_friendly_meals']} of 7 meals are "
+                "heat-friendly."
+            ),
+            (
+                "- Inventory fit: "
+                f"{proposal['inventory_coverage_score']}/100 coverage; "
+                f"estimated shopping cost "
+                f"${proposal['estimated_shopping_cost_usd']:.2f}."
+            ),
+            (
+                "- Family fit: average kid-friendly score "
+                f"{proposal['average_kid_friendly_score']:.1f}/5."
+            ),
+            (
+                "- Nutrition fit: average fiber "
+                f"{proposal['average_fiber_grams']:.1f} grams per serving."
+            ),
+            (
+                "- Rotation fit: "
+                f"{proposal['rotation_score']}/100 with recent repeats "
+                "penalized."
+            ),
+            "",
+        ]
+    )
+    for meal in proposal["meals"]:
+        reasons = meal["selection_explanation"]["reasons"][:3]
+        lines.extend(
+            [
+                f"### {meal['day']} - {meal['name']}",
+                *[f"- {reason}" for reason in reasons],
+                "",
+            ]
+        )
+    lines.extend(
+        [
             "## Dry Run Summary",
             "",
             f"- Estimated weekly cost: ${proposal['estimated_cost_usd']:.2f}",

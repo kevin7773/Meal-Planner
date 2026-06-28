@@ -9,6 +9,7 @@ from pathlib import Path
 from planner.recipe_editor import (
     find_imported_recipe,
     imported_recipes,
+    promote_imported_recipe,
     update_imported_recipe,
 )
 from scripts.validate_recipes import split_recipe, validate_recipe
@@ -81,9 +82,13 @@ class RecipeEditorTests(unittest.TestCase):
 
         self.assertEqual(recipes, [])
 
-    def test_update_creates_valid_revision_and_preserves_recipe_body(self) -> None:
+    def test_successful_metadata_only_revision(self) -> None:
         temporary, root = self.make_root()
         with temporary:
+            before_card = find_imported_recipe(
+                "FDP-0012",
+                root,
+            )["card_sections"]
             starting_revision = split_recipe(
                 root / "recipes" / "10-minute-pasta.md"
             )[0]["revision"]
@@ -121,6 +126,7 @@ class RecipeEditorTests(unittest.TestCase):
         self.assertIn("| FDP-0012 | [10 Minute Pasta]", index)
         self.assertEqual(loaded["prep_minutes"], 5)
         self.assertTrue(loaded["kid_reason_is_current"])
+        self.assertEqual(loaded["card_sections"], before_card)
 
     def test_rejects_freeform_kid_reason_without_writing(self) -> None:
         temporary, root = self.make_root()
@@ -146,7 +152,7 @@ class RecipeEditorTests(unittest.TestCase):
 
         self.assertEqual(before, after)
 
-    def test_update_can_revise_ingredients_and_directions(self) -> None:
+    def test_successful_card_section_revision(self) -> None:
         temporary, root = self.make_root()
         with temporary:
             current = find_imported_recipe("FDP-0012", root)
@@ -178,6 +184,10 @@ class RecipeEditorTests(unittest.TestCase):
                 root=root,
             )
             _, metadata, body, errors = validate_recipe(path)
+            loaded = find_imported_recipe("FDP-0012", root)
+            index = (root / "recipes" / "index.md").read_text(
+                encoding="utf-8"
+            )
 
         self.assertEqual(errors, [])
         self.assertEqual(metadata["revision"], revision)
@@ -186,6 +196,20 @@ class RecipeEditorTests(unittest.TestCase):
         self.assertIn(
             "Removed excess heat and simplified directions",
             body,
+        )
+        for heading in (
+            "## Ingredients",
+            "## Directions",
+            "## Leftover Plan",
+            "## Revision History",
+        ):
+            with self.subTest(heading=heading):
+                self.assertEqual(body.count(heading), 1)
+        self.assertEqual(loaded["card_sections"], card)
+        self.assertIn(
+            f"| FDP-0012 | [10 Minute Pasta](10-minute-pasta.md) | "
+            f"{revision} |",
+            index,
         )
 
     def test_legacy_ingredients_heading_loads_and_is_repaired(self) -> None:
@@ -226,7 +250,7 @@ class RecipeEditorTests(unittest.TestCase):
         self.assertEqual(errors, [])
         self.assertIn("## Ingredients\n\n### Main Ingredients", body)
 
-    def test_invalid_card_edit_rolls_back_recipe_and_index(self) -> None:
+    def test_validation_failure_rolls_back_recipe_and_index(self) -> None:
         temporary, root = self.make_root()
         with temporary:
             path = root / "recipes" / "10-minute-pasta.md"
@@ -256,6 +280,218 @@ class RecipeEditorTests(unittest.TestCase):
 
             self.assertEqual(
                 path.read_text(encoding="utf-8"),
+                before_recipe,
+            )
+            self.assertEqual(
+                index_path.read_text(encoding="utf-8"),
+                before_index,
+            )
+
+    def test_card_edits_cannot_inject_protected_sections(self) -> None:
+        protected = (
+            "## Ingredients",
+            "## Directions",
+            "## Leftover Plan",
+            "## Revision History",
+        )
+        for heading in protected:
+            with self.subTest(heading=heading):
+                temporary, root = self.make_root()
+                with temporary:
+                    recipe_path = root / "recipes" / "10-minute-pasta.md"
+                    index_path = root / "recipes" / "index.md"
+                    before_recipe = recipe_path.read_text(encoding="utf-8")
+                    before_index = index_path.read_text(encoding="utf-8")
+                    current = find_imported_recipe("FDP-0012", root)
+                    card = dict(current["card_sections"])
+                    card["directions"] += f"\n\n{heading}\n\nRemoved"
+
+                    with self.assertRaisesRegex(
+                        ValueError,
+                        "cannot add top-level recipe sections",
+                    ):
+                        update_imported_recipe(
+                            "FDP-0012",
+                            name="10 Minute Pasta",
+                            protein="vegetarian",
+                            meal_scope="complete-meal",
+                            prep_minutes=5,
+                            cook_minutes=10,
+                            fiber_grams=8,
+                            estimated_cost_usd=6,
+                            kid_friendly_reason="Both children like/love it",
+                            cooking_method="stovetop",
+                            seasons=["spring", "summer"],
+                            card_sections=card,
+                            root=root,
+                        )
+
+                    self.assertEqual(
+                        recipe_path.read_text(encoding="utf-8"),
+                        before_recipe,
+                    )
+                    self.assertEqual(
+                        index_path.read_text(encoding="utf-8"),
+                        before_index,
+                    )
+
+    def test_rename_collision_fails_safely(self) -> None:
+        temporary, root = self.make_root()
+        with temporary:
+            recipe_path = root / "recipes" / "10-minute-pasta.md"
+            index_path = root / "recipes" / "index.md"
+            collision_path = root / "recipes" / "collision-name.md"
+            collision_path.write_text(
+                "occupied target\n",
+                encoding="utf-8",
+                newline="\n",
+            )
+            before_recipe = recipe_path.read_text(encoding="utf-8")
+            before_index = index_path.read_text(encoding="utf-8")
+            before_collision = collision_path.read_text(encoding="utf-8")
+
+            with self.assertRaisesRegex(
+                ValueError,
+                "already exists: collision-name.md",
+            ):
+                update_imported_recipe(
+                    "FDP-0012",
+                    name="Collision Name",
+                    protein="vegetarian",
+                    meal_scope="complete-meal",
+                    prep_minutes=5,
+                    cook_minutes=10,
+                    fiber_grams=8,
+                    estimated_cost_usd=6,
+                    kid_friendly_reason="Both children like/love it",
+                    cooking_method="stovetop",
+                    seasons=["spring", "summer"],
+                    root=root,
+                )
+
+            self.assertTrue(recipe_path.exists())
+            self.assertEqual(
+                recipe_path.read_text(encoding="utf-8"),
+                before_recipe,
+            )
+            self.assertEqual(
+                index_path.read_text(encoding="utf-8"),
+                before_index,
+            )
+            self.assertEqual(
+                collision_path.read_text(encoding="utf-8"),
+                before_collision,
+            )
+
+    def test_invalid_slow_cooker_cook_time_fails_without_writing(self) -> None:
+        temporary, root = self.make_root()
+        with temporary:
+            recipe_path = root / "recipes" / "10-minute-pasta.md"
+            index_path = root / "recipes" / "index.md"
+            before_recipe = recipe_path.read_text(encoding="utf-8")
+            before_index = index_path.read_text(encoding="utf-8")
+
+            with self.assertRaisesRegex(
+                ValueError,
+                "at least 180 cook minutes",
+            ):
+                update_imported_recipe(
+                    "FDP-0012",
+                    name="10 Minute Pasta",
+                    protein="vegetarian",
+                    meal_scope="complete-meal",
+                    prep_minutes=5,
+                    cook_minutes=120,
+                    fiber_grams=8,
+                    estimated_cost_usd=6,
+                    kid_friendly_reason="Both children like/love it",
+                    cooking_method="slow-cooker",
+                    seasons=["fall", "winter"],
+                    root=root,
+                )
+
+            self.assertEqual(
+                recipe_path.read_text(encoding="utf-8"),
+                before_recipe,
+            )
+            self.assertEqual(
+                index_path.read_text(encoding="utf-8"),
+                before_index,
+            )
+
+    def test_candidate_can_be_promoted_with_audited_revision(self) -> None:
+        temporary, root = self.make_root()
+        with temporary:
+            starting_revision, _ = update_imported_recipe(
+                "FDP-0012",
+                name="10 Minute Pasta",
+                protein="vegetarian",
+                meal_scope="complete-meal",
+                prep_minutes=5,
+                cook_minutes=10,
+                fiber_grams=8,
+                estimated_cost_usd=6,
+                kid_friendly_reason="Both children like/love it",
+                cooking_method="stovetop",
+                seasons=["spring", "summer", "fall", "winter"],
+                root=root,
+            )
+
+            revision, path = promote_imported_recipe(
+                "FDP-0012",
+                actor="Kevin",
+                note="Manual family decision",
+                root=root,
+            )
+            _, metadata, body, errors = validate_recipe(path)
+            index = (root / "recipes" / "index.md").read_text(
+                encoding="utf-8"
+            )
+
+        self.assertEqual(errors, [])
+        self.assertEqual(revision, starting_revision + 1)
+        self.assertEqual(metadata["status"], "approved")
+        self.assertEqual(metadata["revision"], revision)
+        self.assertIn(
+            "Promoted to approved by Kevin: Manual family decision",
+            body,
+        )
+        self.assertIn(
+            f"| FDP-0012 | [10 Minute Pasta](10-minute-pasta.md) | "
+            f"{revision} | approved |",
+            index,
+        )
+
+    def test_promotion_validation_failure_rolls_back_recipe_and_index(
+        self,
+    ) -> None:
+        temporary, root = self.make_root()
+        with temporary:
+            recipe_path = root / "recipes" / "10-minute-pasta.md"
+            index_path = root / "recipes" / "index.md"
+            text = re.sub(
+                r"(?m)^- \*\*Cook time:\*\* \d+ minutes$",
+                "- **Cook time:** 999 minutes",
+                recipe_path.read_text(encoding="utf-8"),
+                count=1,
+            )
+            recipe_path.write_text(text, encoding="utf-8", newline="\n")
+            before_recipe = recipe_path.read_text(encoding="utf-8")
+            before_index = index_path.read_text(encoding="utf-8")
+
+            with self.assertRaisesRegex(
+                ValueError,
+                "cook_time_minutes",
+            ):
+                promote_imported_recipe(
+                    "FDP-0012",
+                    actor="Kevin",
+                    note="Should roll back",
+                    root=root,
+                )
+
+            self.assertEqual(
+                recipe_path.read_text(encoding="utf-8"),
                 before_recipe,
             )
             self.assertEqual(

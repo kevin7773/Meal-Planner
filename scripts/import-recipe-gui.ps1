@@ -1,6 +1,7 @@
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent $PSScriptRoot
+. (Join-Path $PSScriptRoot 'gui-backup.ps1')
 $importer = Join-Path $PSScriptRoot 'import_recipe.py'
 $recipeEditor = Join-Path $PSScriptRoot 'edit_recipe.py'
 $ideaManager = Join-Path $PSScriptRoot 'recipe_ideas.py'
@@ -239,6 +240,14 @@ $saveIdeaButton.Location = New-Object System.Drawing.Point(455, 735)
 $saveIdeaButton.Size = New-Object System.Drawing.Size(150, 42)
 $form.Controls.Add($saveIdeaButton)
 
+$promoteButton = New-Object System.Windows.Forms.Button
+$promoteButton.Text = 'Promote to Approved'
+$promoteButton.Location = New-Object System.Drawing.Point(455, 735)
+$promoteButton.Size = New-Object System.Drawing.Size(150, 42)
+$promoteButton.Enabled = $false
+$promoteButton.Visible = $false
+$form.Controls.Add($promoteButton)
+
 $importButton = New-Object System.Windows.Forms.Button
 $importButton.Text = 'Import Candidate'
 $importButton.Location = New-Object System.Drawing.Point(620, 735)
@@ -254,12 +263,14 @@ $form.Controls.Add($closeButton)
 
 $script:pastedText = ''
 $script:editingRecipeId = $null
+$script:editingOriginalRecipe = $null
 $script:editingCardSections = $null
 $script:cardModified = $false
 
 function Reset-ImportForm {
     $script:pastedText = ''
     $script:editingRecipeId = $null
+    $script:editingOriginalRecipe = $null
     $script:editingCardSections = $null
     $script:cardModified = $false
     $sourceText.Clear()
@@ -290,6 +301,9 @@ function Reset-ImportForm {
     $ideaText.Enabled = $true
     $mexicanMonday.Enabled = $true
     $saveIdeaButton.Enabled = $true
+    $saveIdeaButton.Visible = $true
+    $promoteButton.Enabled = $false
+    $promoteButton.Visible = $false
     $note.Text = $defaultNoteText
     $sourceText.Focus()
 }
@@ -301,6 +315,58 @@ function Get-SelectedSeasons {
     }
     if ($selected.Count -eq 0) { throw 'Select at least one season.' }
     return $selected -join ','
+}
+
+function Get-RecipeEditDiff {
+    $original = $script:editingOriginalRecipe
+    if ($null -eq $original) {
+        throw 'The original recipe revision is unavailable.'
+    }
+    $lines = New-Object System.Collections.Generic.List[string]
+    $comparisons = @(
+        @('Name', [string]$original.name, $nameText.Text.Trim()),
+        @('Protein', [string]$original.protein, [string]$proteinCombo.SelectedItem),
+        @('Meal coverage', [string]$original.meal_scope, [string]$mealScopeCombo.SelectedItem),
+        @('Prep time', "$([int]$original.prep_minutes) min", "$([int]$prepMinutes.Value) min"),
+        @('Cook time', "$([int]$original.cook_minutes) min", "$([int]$cookMinutes.Value) min"),
+        @('Fiber', "$([double]$original.fiber_grams) g", "$([double]$fiberInput.Value) g"),
+        @('Cost', ('$' + ([double]$original.estimated_cost_usd).ToString('0.00')), ('$' + ([double]$costInput.Value).ToString('0.00'))),
+        @('Kid-friendly reason', [string]$original.kid_friendly_reason, $kidReason.Text),
+        @('Method', [string]$original.cooking_method, [string]$methodCombo.SelectedItem),
+        @('Seasons', (@($original.seasons) -join ', '), ((Get-SelectedSeasons) -replace ',', ', '))
+    )
+    foreach ($comparison in $comparisons) {
+        if ($comparison[1] -ne $comparison[2]) {
+            $lines.Add(
+                "$($comparison[0]): $($comparison[1]) -> $($comparison[2])"
+            )
+        }
+    }
+    $originalIngredients = (
+        [string]$original.card_sections.ingredients
+    ) -replace '\r\n', "`n"
+    $editedIngredients = (
+        [string]$script:editingCardSections.ingredients
+    ) -replace '\r\n', "`n"
+    if ($originalIngredients -ne $editedIngredients) {
+        $lines.Add('Ingredients changed')
+    }
+    $originalDirections = (
+        [string]$original.card_sections.directions
+    ) -replace '\r\n', "`n"
+    $editedDirections = (
+        [string]$script:editingCardSections.directions
+    ) -replace '\r\n', "`n"
+    if ($originalDirections -ne $editedDirections) {
+        $lines.Add('Directions changed')
+    }
+    if ($lines.Count -eq 0) {
+        $lines.Add('No recipe fields changed')
+    }
+    $lines.Add(
+        "Revision: $([int]$original.revision) -> $([int]$original.revision + 1)"
+    )
+    return $lines -join [Environment]::NewLine
 }
 
 function Show-PasteEditor {
@@ -417,6 +483,7 @@ function Load-ImportedRecipe {
     param($Recipe)
 
     $script:editingRecipeId = [string]$Recipe.id
+    $script:editingOriginalRecipe = $Recipe
     $script:editingCardSections = [ordered]@{
         ingredients = [string]$Recipe.card_sections.ingredients
         directions = [string]$Recipe.card_sections.directions
@@ -470,6 +537,9 @@ function Load-ImportedRecipe {
     $ideaText.Enabled = $false
     $mexicanMonday.Enabled = $false
     $saveIdeaButton.Enabled = $false
+    $saveIdeaButton.Visible = $false
+    $promoteButton.Visible = $true
+    $promoteButton.Enabled = [string]$Recipe.status -eq 'candidate'
     $editCardButton.Enabled = $true
     $importButton.Text = 'Save Recipe Revision'
     $importButton.Enabled = $true
@@ -592,6 +662,85 @@ function Show-RecipeCardEditor {
     }
 }
 
+function Show-PromotionDialog {
+    if ($null -eq $script:editingOriginalRecipe) {
+        throw 'Select an imported recipe before promotion.'
+    }
+    if ([string]$script:editingOriginalRecipe.status -ne 'candidate') {
+        throw 'Only candidate recipes can be promoted.'
+    }
+
+    $dialog = New-Object System.Windows.Forms.Form
+    $dialog.Text = "Approve Recipe - $($script:editingRecipeId)"
+    $dialog.ClientSize = New-Object System.Drawing.Size(560, 245)
+    $dialog.StartPosition = 'CenterParent'
+    $dialog.FormBorderStyle = 'FixedDialog'
+    $dialog.MaximizeBox = $false
+    $dialog.MinimizeBox = $false
+    $dialog.Font = New-Object System.Drawing.Font('Segoe UI', 10)
+    Set-MealPlannerFormSurface -Form $dialog -Palette $colors
+
+    $actorLabel = New-Object System.Windows.Forms.Label
+    $actorLabel.Text = 'Approved by'
+    $actorLabel.Location = New-Object System.Drawing.Point(20, 25)
+    $actorLabel.Size = New-Object System.Drawing.Size(110, 28)
+    $dialog.Controls.Add($actorLabel)
+
+    $actorInput = New-Object System.Windows.Forms.TextBox
+    $actorInput.Location = New-Object System.Drawing.Point(135, 23)
+    $actorInput.Size = New-Object System.Drawing.Size(400, 28)
+    $actorInput.Text = $env:USERNAME
+    $dialog.Controls.Add($actorInput)
+
+    $reasonLabel = New-Object System.Windows.Forms.Label
+    $reasonLabel.Text = 'Approval reason'
+    $reasonLabel.Location = New-Object System.Drawing.Point(20, 70)
+    $reasonLabel.Size = New-Object System.Drawing.Size(110, 28)
+    $dialog.Controls.Add($reasonLabel)
+
+    $reasonInput = New-Object System.Windows.Forms.TextBox
+    $reasonInput.Location = New-Object System.Drawing.Point(135, 68)
+    $reasonInput.Size = New-Object System.Drawing.Size(400, 90)
+    $reasonInput.Multiline = $true
+    $reasonInput.ScrollBars = 'Vertical'
+    $dialog.Controls.Add($reasonInput)
+
+    $approveButton = New-Object System.Windows.Forms.Button
+    $approveButton.Text = 'Promote'
+    $approveButton.Location = New-Object System.Drawing.Point(325, 185)
+    $approveButton.Size = New-Object System.Drawing.Size(100, 38)
+    $approveButton.DialogResult = [System.Windows.Forms.DialogResult]::OK
+    $dialog.Controls.Add($approveButton)
+    Set-MealPlannerButtonStyle -Button $approveButton -Color $colors.Planner
+
+    $cancel = New-Object System.Windows.Forms.Button
+    $cancel.Text = 'Cancel'
+    $cancel.Location = New-Object System.Drawing.Point(435, 185)
+    $cancel.Size = New-Object System.Drawing.Size(100, 38)
+    $cancel.DialogResult = [System.Windows.Forms.DialogResult]::Cancel
+    $dialog.Controls.Add($cancel)
+    Set-MealPlannerNeutralButtonStyle -Button $cancel -Palette $colors
+
+    $dialog.AcceptButton = $approveButton
+    $dialog.CancelButton = $cancel
+    if (
+        $dialog.ShowDialog($form) -ne
+        [System.Windows.Forms.DialogResult]::OK
+    ) {
+        return $null
+    }
+    if ([string]::IsNullOrWhiteSpace($actorInput.Text)) {
+        throw 'Approved by is required.'
+    }
+    if ([string]::IsNullOrWhiteSpace($reasonInput.Text)) {
+        throw 'Approval reason is required.'
+    }
+    return [pscustomobject]@{
+        Actor = $actorInput.Text.Trim()
+        Reason = $reasonInput.Text.Trim()
+    }
+}
+
 $browseButton.Add_Click({
     $dialog = New-Object System.Windows.Forms.OpenFileDialog
     $dialog.Filter = 'Text and Markdown|*.txt;*.md|All files|*.*'
@@ -628,6 +777,42 @@ $editCardButton.Add_Click({
         [System.Windows.Forms.MessageBox]::Show(
             $_.Exception.Message,
             'Unable to Edit Recipe Card',
+            'OK',
+            'Error'
+        ) | Out-Null
+    }
+})
+$promoteButton.Add_Click({
+    try {
+        $approval = Show-PromotionDialog
+        if ($null -eq $approval) {
+            return
+        }
+        New-MealPlannerGuiBackup `
+            -ProjectRoot $projectRoot `
+            -Operation "recipe-promote-$($script:editingRecipeId)" |
+            Out-Null
+        $result = & $python $recipeEditor promote `
+            --id $script:editingRecipeId `
+            --actor $approval.Actor `
+            --note $approval.Reason 2>&1
+        if ($LASTEXITCODE -ne 0) {
+            throw ($result -join [Environment]::NewLine)
+        }
+        [System.Windows.Forms.MessageBox]::Show(
+            (
+                "Recipe promoted to approved:`r`n$($result -join '')`r`n`r`n" +
+                'The status, revision history, and recipe index were updated.'
+            ),
+            'Recipe Approved',
+            'OK',
+            'Information'
+        ) | Out-Null
+        Reset-ImportForm
+    } catch {
+        [System.Windows.Forms.MessageBox]::Show(
+            $_.Exception.Message,
+            'Unable to Promote Recipe',
             'OK',
             'Error'
         ) | Out-Null
@@ -676,6 +861,19 @@ $importButton.Add_Click({
         if ($proteinCombo.SelectedIndex -eq 0) { throw 'Select a protein.' }
         if ([string]::IsNullOrWhiteSpace($kidReason.Text)) { throw 'Kid-friendly reason is required.' }
         if ($null -ne $script:editingRecipeId) {
+            $diff = Get-RecipeEditDiff
+            $answer = [System.Windows.Forms.MessageBox]::Show(
+                (
+                    "Review changes before saving:`r`n`r`n$diff`r`n`r`n" +
+                    'Create this recipe revision?'
+                ),
+                'Confirm Recipe Revision',
+                'YesNo',
+                'Warning'
+            )
+            if ($answer -ne [System.Windows.Forms.DialogResult]::Yes) {
+                return
+            }
             $temporaryCardPath = $null
             $arguments = @(
                 $recipeEditor,
@@ -708,6 +906,10 @@ $importButton.Add_Click({
                         'Updated imported recipe metadata and recipe card through the GUI'
                     )
                 }
+                New-MealPlannerGuiBackup `
+                    -ProjectRoot $projectRoot `
+                    -Operation "recipe-edit-$($script:editingRecipeId)" |
+                    Out-Null
                 $result = & $python @arguments 2>&1
             } finally {
                 if (
@@ -755,6 +957,9 @@ $importButton.Add_Click({
             '--kid-reason',$kidReason.Text,
             '--seasons',(Get-SelectedSeasons)
         )
+        New-MealPlannerGuiBackup `
+            -ProjectRoot $projectRoot `
+            -Operation 'recipe-import' | Out-Null
         if ($usingPastedText) {
             $result = $script:pastedText | & $python @arguments 2>&1
         } else {
@@ -791,6 +996,9 @@ $saveIdeaButton.Add_Click({
             '--seasons',(Get-SelectedSeasons)
         )
         if ($mexicanMonday.Checked) { $arguments += '--mexican-monday' }
+        New-MealPlannerGuiBackup `
+            -ProjectRoot $projectRoot `
+            -Operation 'recipe-idea-save' | Out-Null
         $result = & $python @arguments 2>&1
         if ($LASTEXITCODE -ne 0) { throw ($result -join [Environment]::NewLine) }
         [System.Windows.Forms.MessageBox]::Show(
@@ -819,6 +1027,7 @@ Set-MealPlannerButtonStyle -Button $pasteButton -Color $colors.Email
 Set-MealPlannerButtonStyle -Button $previewButton -Color $colors.Planner
 Set-MealPlannerButtonStyle -Button $editRecipeButton -Color $colors.Review
 Set-MealPlannerButtonStyle -Button $editCardButton -Color $colors.Review
+Set-MealPlannerButtonStyle -Button $promoteButton -Color $colors.Planner
 Set-MealPlannerButtonStyle -Button $saveIdeaButton -Color $colors.Pantry
 Set-MealPlannerButtonStyle -Button $importButton -Color $colors.Email
 Set-MealPlannerNeutralButtonStyle -Button $closeButton -Palette $colors

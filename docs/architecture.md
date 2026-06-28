@@ -134,6 +134,7 @@ The `planner/` package separates planning responsibilities.
 | `planner/telemetry.py` | Aggregate timing, constraint pressure, recipe utilization, and recommendation drift |
 | `planner/simulation.py` | Seeded multi-week scenario simulation using the production assignment engine |
 | `planner/performance_gate.py` | Baseline validation and objective simulation metric comparisons |
+| `planner/inventory_mapping.py` | Ingredient-mapping completeness and invalid catalog-reference reporting |
 | `planner/recipe_editor.py` | Guardrailed imported-recipe metadata and card revisions with validation and rollback |
 | `planner/scoring.py` | Proposal validation and orchestration |
 | `planner/metrics.py` | Pure cost, fiber, kid-fit, inventory-demand, and rotation calculations |
@@ -239,6 +240,8 @@ counts. It:
 7. Writes the three Monday-Tuesday, Wednesday-Friday, and Saturday-Sunday email
    files.
 8. Recalculates weather, cost, fiber, inventory, and candidate summaries.
+9. Preserves the committed **Why This Menu** rationale in readable and email
+   artifacts.
 
 ## Planning Lifecycle
 

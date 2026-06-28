@@ -2,6 +2,7 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
 $projectRoot = Split-Path -Parent $PSScriptRoot
+. (Join-Path $PSScriptRoot 'gui-backup.ps1')
 $plannerScript = Join-Path $PSScriptRoot 'planner_cli.py'
 $workflowScript = Join-Path $PSScriptRoot 'week_workflow.py'
 $emailSettingsPath = Join-Path $projectRoot 'preferences\email-settings.json'
@@ -62,6 +63,9 @@ function Save-EmailSettings {
         [string]$OnePasswordReference
     )
 
+    New-MealPlannerGuiBackup `
+        -ProjectRoot $projectRoot `
+        -Operation 'email-settings-save' | Out-Null
     $settings = [ordered]@{
         schema_version = 1
         sender_email = $Sender
@@ -1094,6 +1098,9 @@ $commitButton.Add_Click({
         if (@($proposal.warnings).Count -gt 0) {
             $arguments += '--accept-warnings'
         }
+        New-MealPlannerGuiBackup `
+            -ProjectRoot $projectRoot `
+            -Operation "plan-commit-$week" | Out-Null
         $result = & $python @arguments 2>&1
         if ($LASTEXITCODE -ne 0) {
             throw ($result -join [Environment]::NewLine)
@@ -1155,6 +1162,11 @@ $generatePackageButton.Add_Click({
             return
         }
         $form.UseWaitCursor = $true
+        New-MealPlannerGuiBackup `
+            -ProjectRoot $projectRoot `
+            -Operation (
+                "review-package-$($weekPicker.Value.ToString('yyyy-MM-dd'))"
+            ) | Out-Null
         $package = Invoke-WeekWorkflow -Command 'generate'
         Update-ExistingPlanState
         $reportText.Text = (
@@ -1209,6 +1221,11 @@ $approvePackageButton.Add_Click({
         if ($answer -ne [System.Windows.Forms.DialogResult]::Yes) {
             return
         }
+        New-MealPlannerGuiBackup `
+            -ProjectRoot $projectRoot `
+            -Operation (
+                "package-approve-$($weekPicker.Value.ToString('yyyy-MM-dd'))"
+            ) | Out-Null
         $package = Invoke-WeekWorkflow `
             -Command 'approve' `
             -Actor $actorText.Text
@@ -1266,6 +1283,11 @@ $sendEmailsButton.Add_Click({
                 'Process'
             )
             $form.UseWaitCursor = $true
+            New-MealPlannerGuiBackup `
+                -ProjectRoot $projectRoot `
+                -Operation (
+                    "email-send-$($weekPicker.Value.ToString('yyyy-MM-dd'))"
+                ) | Out-Null
             $package = Invoke-WeekWorkflow `
                 -Command 'send' `
                 -Actor $actorText.Text `

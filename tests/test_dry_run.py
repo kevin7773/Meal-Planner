@@ -163,6 +163,10 @@ class DryRunTests(unittest.TestCase):
         )
         self.assertIn("**Diner Schedule:** Monday 6;", text)
         self.assertIn("**Planned Diners:** 8", text)
+        self.assertIn("## Why This Menu", text)
+        self.assertIn("- Inventory fit:", text)
+        self.assertIn("### Monday -", text)
+        self.assertIn("Inventory coverage:", text)
 
     def test_selection_explanation_reports_expiring_refrigerated_stock(self) -> None:
         stock_path = self.root / "inventory" / "stock.json"
