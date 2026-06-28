@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 
 from planner.constants import ROOT
-from planner.monte_carlo import run_simulation
+from planner.simulation import run_simulation
 
 
 BASELINE_PATH = ROOT / "planner-data" / "performance-baseline.json"

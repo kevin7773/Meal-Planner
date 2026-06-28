@@ -72,7 +72,7 @@ Run `python scripts/planner_cli.py telemetry --drift` to inspect protein,
 cooking-method, seasonal, Blackstone, prep-time, cost, and fiber trends.
 Run `python scripts/planner_cli.py telemetry --rules` to inspect registered,
 tested, monthly-used, and unused planning rules.
-Run `python scripts/planner_monte_carlo.py run --iterations 10000 --seed 42`
+Run `python scripts/planner_simulation.py run --iterations 10000 --seed 42`
 to statistically test planner cost, fiber, distribution, utilization, and
 constraint behavior.
 Run `python scripts/performance_gate.py check` to reproduce the checked-in

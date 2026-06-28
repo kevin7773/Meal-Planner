@@ -4,10 +4,10 @@ import datetime as dt
 import unittest
 from unittest.mock import patch
 
-from planner.monte_carlo import format_simulation_report, run_simulation
+from planner.simulation import format_simulation_report, run_simulation
 
 
-class MonteCarloTests(unittest.TestCase):
+class SimulationTests(unittest.TestCase):
     def run_sample(self) -> dict:
         return run_simulation(
             iterations=12,
@@ -23,6 +23,15 @@ class MonteCarloTests(unittest.TestCase):
         metrics.pop("elapsed_seconds")
         metrics.pop("weeks_per_second")
         return metrics
+
+    def test_legacy_module_reexports_simulation_api(self) -> None:
+        from planner.monte_carlo import (
+            format_simulation_report as legacy_format,
+        )
+        from planner.monte_carlo import run_simulation as legacy_run
+
+        self.assertIs(legacy_run, run_simulation)
+        self.assertIs(legacy_format, format_simulation_report)
 
     def test_simulation_aggregates_expected_observation_counts(self) -> None:
         report = self.run_sample()
@@ -127,7 +136,7 @@ class MonteCarloTests(unittest.TestCase):
         report = self.run_sample()
         rendered = format_simulation_report(report)
 
-        self.assertIn("Planner Monte Carlo Test", rendered)
+        self.assertIn("Planner Simulation", rendered)
         self.assertIn("Average estimated grocery bill:", rendered)
         self.assertIn("Average inventory coverage:", rendered)
         self.assertIn("Recipe diversity:", rendered)
@@ -158,7 +167,7 @@ class MonteCarloTests(unittest.TestCase):
         updates: list[tuple[int, int]] = []
 
         with patch(
-            "planner.monte_carlo.constrained_assignments",
+            "planner.simulation.constrained_assignments",
             return_value=None,
         ):
             report = run_simulation(
