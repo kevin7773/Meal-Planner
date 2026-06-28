@@ -99,6 +99,20 @@ def validate_menu(path: Path) -> list[str]:
         errors.append(f"status must be one of {list(STATUSES)}")
     if parse_timestamp(metadata.get("status_updated_at")) is None:
         errors.append("status_updated_at must be a timezone-aware ISO timestamp")
+    planned_diners = metadata.get("planned_diners")
+    if planned_diners is not None and (
+        not isinstance(planned_diners, list)
+        or len(planned_diners) != 7
+        or any(
+            not isinstance(value, int)
+            or isinstance(value, bool)
+            or not 1 <= value <= 20
+            for value in planned_diners
+        )
+    ):
+        errors.append(
+            "planned_diners must contain seven integers from 1 to 20"
+        )
 
     rows = history_rows(body)
     if not rows:

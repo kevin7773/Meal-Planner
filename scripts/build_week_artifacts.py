@@ -6,6 +6,7 @@ import datetime as dt
 import json
 import math
 import re
+import tomllib
 from pathlib import Path
 
 try:
@@ -257,7 +258,12 @@ def build_artifacts(
     if not week_match:
         raise ValueError("Menu is missing week_of metadata")
     week_of = dt.date.fromisoformat(week_match.group(1))
-    planned_diners = planned_diners or [4] * 7
+    menu_metadata = tomllib.loads(front_matter)
+    planned_diners = (
+        planned_diners
+        or menu_metadata.get("planned_diners")
+        or [4] * 7
+    )
     if len(planned_diners) != 7 or any(value < 1 for value in planned_diners):
         raise ValueError("planned_diners must contain seven positive values")
     history_match = re.search(
@@ -471,7 +477,7 @@ def main() -> int:
     parser.add_argument("--recipes", required=True)
     parser.add_argument(
         "--diners",
-        default="4,4,4,4,4,4,4",
+        default=None,
         help="Comma-separated diner counts for Monday through Sunday",
     )
     args = parser.parse_args()
@@ -479,7 +485,15 @@ def main() -> int:
         args.menu,
         args.grocery,
         [value.strip() for value in args.recipes.split(",") if value.strip()],
-        [int(value.strip()) for value in args.diners.split(",") if value.strip()],
+        (
+            [
+                int(value.strip())
+                for value in args.diners.split(",")
+                if value.strip()
+            ]
+            if args.diners
+            else None
+        ),
     )
     return 0
 

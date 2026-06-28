@@ -2,12 +2,13 @@
 week_of = "YYYY-MM-DD"
 status = "draft"
 status_updated_at = "YYYY-MM-DDTHH:MM:SSZ"
+planned_diners = [4, 4, 4, 4, 4, 4, 4]
 +++
 
 # Weekly Dinner Menu
 
 **Week of:** YYYY-MM-DD  
-**Family Size:** 4  
+**Diner Schedule:** Monday 4; Tuesday 4; Wednesday 4; Thursday 4; Friday 4; Saturday 4; Sunday 4
 **Season:** Season
 
 Use `recipe-template.md` for Monday through Sunday. Include recipe ID, revision,

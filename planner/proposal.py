@@ -154,6 +154,7 @@ def generate_proposals(
     week_of: dt.date,
     count: int = 3,
     *,
+    planned_diners: list[int] | None = None,
     root: Path = ROOT,
 ) -> list[dict]:
     if week_of.weekday() != 0:
@@ -235,6 +236,7 @@ def generate_proposals(
             week_of,
             assignments,
             proposal_recipes,
+            planned_diners=planned_diners,
             root=root,
         )
         planning_trace["rejected_proposal_attempts"] = len(

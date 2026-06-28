@@ -55,6 +55,7 @@ $grid.SelectionMode = 'FullRowSelect'
 $grid.AutoSizeColumnsMode = 'Fill'
 foreach ($columnName in @(
     'Lot ID',
+    'Item ID',
     'Ingredient',
     'Class',
     'On Hand',
@@ -67,6 +68,7 @@ foreach ($columnName in @(
     [void]$grid.Columns.Add(($columnName -replace ' ', ''), $columnName)
 }
 $grid.Columns['LotID'].Visible = $false
+$grid.Columns['ItemID'].Visible = $false
 $grid.Columns['Attention'].FillWeight = 150
 $form.Controls.Add($grid)
 
@@ -146,7 +148,7 @@ $newButton.Size = New-Object System.Drawing.Size(110, 38)
 $form.Controls.Add($newButton)
 
 $addButton = New-Object System.Windows.Forms.Button
-$addButton.Text = 'Add / Update'
+$addButton.Text = 'Add to Inventory'
 $addButton.Location = New-Object System.Drawing.Point(145, 585)
 $addButton.Size = New-Object System.Drawing.Size(130, 38)
 $form.Controls.Add($addButton)
@@ -155,6 +157,7 @@ $removeButton = New-Object System.Windows.Forms.Button
 $removeButton.Text = 'Remove'
 $removeButton.Location = New-Object System.Drawing.Point(290, 585)
 $removeButton.Size = New-Object System.Drawing.Size(110, 38)
+$removeButton.Enabled = $false
 $form.Controls.Add($removeButton)
 
 $saveButton = New-Object System.Windows.Forms.Button
@@ -278,11 +281,13 @@ function Refresh-Grid {
     $grid.Rows.Clear()
     $quantityTotals = Get-QuantityTotals
     $ordered = @($script:lots | Sort-Object item_id, acquired_on)
+    $trackedItemIds = @{}
     $attentionCount = 0
     foreach ($lot in $ordered) {
         if (-not $catalogById.ContainsKey($lot.item_id)) {
             continue
         }
+        $trackedItemIds[[string]$lot.item_id] = $true
         $item = $catalogById[$lot.item_id]
         $reasons = @(
             Get-AttentionReasons `
@@ -300,6 +305,7 @@ function Refresh-Grid {
         $levelText = if ($null -ne $lot.level) { [string]$lot.level } else { '' }
         $rowIndex = $grid.Rows.Add(
             $lot.lot_id,
+            $item.id,
             $item.name,
             $item.class,
             $quantityText,
@@ -315,14 +321,65 @@ function Refresh-Grid {
             )
         }
     }
+    $untrackedCount = 0
+    foreach ($item in @($catalogDocument.items | Sort-Object name)) {
+        if ($trackedItemIds.ContainsKey([string]$item.id)) {
+            continue
+        }
+        $untrackedCount++
+        $minimumProperty = $item.PSObject.Properties['minimum_quantity']
+        $minimum = if (
+            $null -ne $minimumProperty -and
+            $null -ne $minimumProperty.Value
+        ) {
+            [double]$item.minimum_quantity
+        } else {
+            0.0
+        }
+        $needsAttention = $item.class -ne 'consumable' -and $minimum -gt 0
+        if ($needsAttention) {
+            $attentionCount++
+        }
+        if ($script:attentionOnly -and -not $needsAttention) {
+            continue
+        }
+        $quantityText = if ($item.class -eq 'consumable') { '' } else { '0' }
+        $levelText = if ($item.class -eq 'consumable') { 'not tracked' } else { '' }
+        $attentionText = if ($needsAttention) {
+            "Not stocked; minimum $minimum $($item.unit)"
+        } else {
+            'Not in inventory'
+        }
+        $rowIndex = $grid.Rows.Add(
+            '',
+            $item.id,
+            $item.name,
+            $item.class,
+            $quantityText,
+            $item.unit,
+            $levelText,
+            '',
+            '',
+            $attentionText
+        )
+        $grid.Rows[$rowIndex].DefaultCellStyle.ForeColor = (
+            [System.Drawing.Color]::DimGray
+        )
+        if ($needsAttention) {
+            $grid.Rows[$rowIndex].DefaultCellStyle.BackColor = (
+                [System.Drawing.Color]::LightYellow
+            )
+        }
+    }
     if ($script:attentionOnly) {
         $statusLabel.Text = (
-            "$attentionCount low-stock or expiring lot(s) shown. " +
+            "$attentionCount low-stock, missing, or expiring item(s) shown. " +
             'Unsaved changes remain until Save Inventory is clicked.'
         )
     } else {
         $statusLabel.Text = (
-            "$($script:lots.Count) inventory lot(s). " +
+            "$($catalogDocument.items.Count) catalog item(s); " +
+            "$($trackedItemIds.Count) tracked, $untrackedCount not tracked. " +
             "$attentionCount need attention. " +
             'Unsaved changes remain until Save Inventory is clicked.'
         )
@@ -331,6 +388,8 @@ function Refresh-Grid {
 
 function Reset-Editor {
     $script:editingLotId = $null
+    $addButton.Text = 'Add to Inventory'
+    $removeButton.Enabled = $false
     $quantity.Value = 0
     $levelCombo.SelectedIndex = 0
     $acquiredPicker.Checked = $false
@@ -367,17 +426,28 @@ $grid.Add_SelectionChanged({
         return
     }
     $lotId = [string]$grid.SelectedRows[0].Cells['LotID'].Value
-    $lot = $script:lots | Where-Object { $_.lot_id -eq $lotId } | Select-Object -First 1
-    if ($null -eq $lot) {
-        return
-    }
-    $script:editingLotId = $lotId
+    $itemId = [string]$grid.SelectedRows[0].Cells['ItemID'].Value
     for ($index = 0; $index -lt $ingredientCombo.Items.Count; $index++) {
-        if ($ingredientCombo.Items[$index].id -eq $lot.item_id) {
+        if ($ingredientCombo.Items[$index].id -eq $itemId) {
             $ingredientCombo.SelectedIndex = $index
             break
         }
     }
+    $lot = $script:lots | Where-Object { $_.lot_id -eq $lotId } | Select-Object -First 1
+    if ($null -eq $lot) {
+        $script:editingLotId = $null
+        $addButton.Text = 'Add to Inventory'
+        $removeButton.Enabled = $false
+        $quantity.Value = 0
+        $levelCombo.SelectedIndex = 0
+        $acquiredPicker.Checked = $false
+        $expiresPicker.Checked = $false
+        Refresh-Editor
+        return
+    }
+    $script:editingLotId = $lotId
+    $addButton.Text = 'Update Lot'
+    $removeButton.Enabled = $true
     if ($null -ne $lot.quantity) {
         $quantity.Value = [decimal]$lot.quantity
     }
@@ -458,6 +528,9 @@ $removeButton.Add_Click({
         return
     }
     $lotId = [string]$grid.SelectedRows[0].Cells['LotID'].Value
+    if ([string]::IsNullOrWhiteSpace($lotId)) {
+        return
+    }
     for ($index = $script:lots.Count - 1; $index -ge 0; $index--) {
         if ($script:lots[$index].lot_id -eq $lotId) {
             $script:lots.RemoveAt($index)

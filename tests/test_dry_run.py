@@ -124,6 +124,46 @@ class DryRunTests(unittest.TestCase):
             )
         )
 
+    def test_diner_schedule_scales_cost_and_commits_to_menu(self) -> None:
+        default = generate_proposals(
+            self.week,
+            1,
+            planned_diners=[4] * 7,
+            root=self.root,
+        )[0]
+        schedule = [6, 4, 3, 2, 5, 8, 4]
+        adjusted = generate_proposals(
+            self.week,
+            1,
+            planned_diners=schedule,
+            root=self.root,
+        )[0]
+
+        self.assertEqual(default["assignments"], adjusted["assignments"])
+        self.assertEqual(adjusted["planned_diners"], schedule)
+        self.assertEqual(
+            [meal["planned_diners"] for meal in adjusted["meals"]],
+            schedule,
+        )
+        self.assertNotEqual(
+            default["estimated_cost_usd"],
+            adjusted["estimated_cost_usd"],
+        )
+
+        output = apply_proposal(
+            adjusted,
+            actor="Kevin",
+            accept_warnings=True,
+            root=self.root,
+        )
+        text = output.read_text(encoding="utf-8")
+        self.assertIn(
+            "planned_diners = [6, 4, 3, 2, 5, 8, 4]",
+            text,
+        )
+        self.assertIn("**Diner Schedule:** Monday 6;", text)
+        self.assertIn("**Planned Diners:** 8", text)
+
     def test_selection_explanation_reports_expiring_refrigerated_stock(self) -> None:
         stock_path = self.root / "inventory" / "stock.json"
         stock = json.loads(stock_path.read_text(encoding="utf-8"))

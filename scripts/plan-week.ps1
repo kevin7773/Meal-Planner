@@ -78,14 +78,50 @@ $viewExistingButton.Size = New-Object System.Drawing.Size(155, 32)
 $viewExistingButton.Enabled = $false
 $existingPlanPanel.Controls.Add($viewExistingButton)
 
+$dinersLabel = New-Object System.Windows.Forms.Label
+$dinersLabel.Text = 'Diners'
+$dinersLabel.Location = New-Object System.Drawing.Point(20, 126)
+$dinersLabel.Size = New-Object System.Drawing.Size(60, 28)
+$dinersLabel.TextAlign = 'MiddleLeft'
+$form.Controls.Add($dinersLabel)
+
+$script:dinerInputs = New-Object System.Collections.ArrayList
+$dinerDays = @(
+    @{ Name = 'Mon'; X = 85 },
+    @{ Name = 'Tue'; X = 195 },
+    @{ Name = 'Wed'; X = 305 },
+    @{ Name = 'Thu'; X = 415 },
+    @{ Name = 'Fri'; X = 525 },
+    @{ Name = 'Sat'; X = 635 },
+    @{ Name = 'Sun'; X = 745 }
+)
+foreach ($day in $dinerDays) {
+    $label = New-Object System.Windows.Forms.Label
+    $label.Text = $day.Name
+    $label.Location = New-Object System.Drawing.Point($day.X, 119)
+    $label.Size = New-Object System.Drawing.Size(45, 20)
+    $label.TextAlign = 'MiddleCenter'
+    $form.Controls.Add($label)
+
+    $input = New-Object System.Windows.Forms.NumericUpDown
+    $input.Location = New-Object System.Drawing.Point($day.X, 140)
+    $input.Size = New-Object System.Drawing.Size(70, 28)
+    $input.Minimum = 1
+    $input.Maximum = 20
+    $input.Value = 4
+    $input.TextAlign = 'Center'
+    $form.Controls.Add($input)
+    [void]$script:dinerInputs.Add($input)
+}
+
 $optionList = New-Object System.Windows.Forms.ListBox
-$optionList.Location = New-Object System.Drawing.Point(20, 126)
-$optionList.Size = New-Object System.Drawing.Size(280, 472)
+$optionList.Location = New-Object System.Drawing.Point(20, 184)
+$optionList.Size = New-Object System.Drawing.Size(280, 414)
 $form.Controls.Add($optionList)
 
 $reportText = New-Object System.Windows.Forms.TextBox
-$reportText.Location = New-Object System.Drawing.Point(320, 126)
-$reportText.Size = New-Object System.Drawing.Size(555, 472)
+$reportText.Location = New-Object System.Drawing.Point(320, 184)
+$reportText.Size = New-Object System.Drawing.Size(555, 414)
 $reportText.Multiline = $true
 $reportText.ReadOnly = $true
 $reportText.ScrollBars = 'Vertical'
@@ -128,7 +164,29 @@ function Get-SelectedMenuPath {
     )
 }
 
+function Get-PlannedDiners {
+    return @(
+        $script:dinerInputs |
+        ForEach-Object { [int]$_.Value }
+    )
+}
+
+function Set-PlannedDiners {
+    param([int[]]$Values)
+
+    if ($Values.Count -ne 7) {
+        return
+    }
+    for ($index = 0; $index -lt 7; $index++) {
+        if ($Values[$index] -ge 1 -and $Values[$index] -le 20) {
+            $script:dinerInputs[$index].Value = $Values[$index]
+        }
+    }
+}
+
 function Update-ExistingPlanState {
+    param([switch]$LoadDiners)
+
     $path = Get-SelectedMenuPath
     if (Test-Path -LiteralPath $path) {
         $script:existingMenuPath = $path
@@ -148,12 +206,27 @@ function Update-ExistingPlanState {
         $existingPlanLabel.ForeColor = [System.Drawing.Color]::DarkRed
         $existingPlanPanel.BackColor = [System.Drawing.Color]::Moccasin
         $viewExistingButton.Enabled = $true
+        if ($LoadDiners) {
+            $dinersMatch = [regex]::Match(
+                $text,
+                '(?m)^planned_diners = \[([0-9,\s]+)\]$'
+            )
+            if ($dinersMatch.Success) {
+                Set-PlannedDiners -Values @(
+                    $dinersMatch.Groups[1].Value.Split(',') |
+                    ForEach-Object { [int]$_.Trim() }
+                )
+            }
+        }
     } else {
         $script:existingMenuPath = $null
         $existingPlanLabel.Text = 'No existing plan found for this week.'
         $existingPlanLabel.ForeColor = [System.Drawing.Color]::DarkGreen
         $existingPlanPanel.BackColor = [System.Drawing.Color]::Honeydew
         $viewExistingButton.Enabled = $false
+        if ($LoadDiners) {
+            Set-PlannedDiners -Values @(4, 4, 4, 4, 4, 4, 4)
+        }
     }
 }
 
@@ -162,6 +235,9 @@ function Format-Proposal {
     $lines = New-Object System.Collections.Generic.List[string]
     $lines.Add("OPTION $Number")
     $lines.Add("Week of: $($Proposal.week_of)")
+    $lines.Add(
+        "Diners (Mon-Sun): $(@($Proposal.planned_diners) -join ', ')"
+    )
     $lines.Add(('Estimated cost: ${0:N2}' -f [double]$Proposal.estimated_cost_usd))
     $lines.Add(('After inventory: ${0:N2}' -f [double]$Proposal.estimated_shopping_cost_usd))
     $lines.Add("Inventory coverage: $($Proposal.inventory_coverage_score)/100")
@@ -172,7 +248,10 @@ function Format-Proposal {
     $lines.Add("Weather: $($Proposal.weather_category) ($($Proposal.heat_friendly_meals) heat-friendly meals)")
     $lines.Add('')
     foreach ($meal in $Proposal.meals) {
-        $lines.Add("$($meal.day): $($meal.recipe_id) rev $($meal.revision) - $($meal.name)")
+        $lines.Add(
+            "$($meal.day) ($($meal.planned_diners) diners): " +
+            "$($meal.recipe_id) rev $($meal.revision) - $($meal.name)"
+        )
         $lines.Add("  $($meal.cooking_method), $($meal.fiber_grams)g fiber, `$$($meal.estimated_cost_usd)")
         $lines.Add("  Kid-friendly: $($meal.kid_friendly_reason)")
         $lines.Add('  Why selected:')
@@ -312,7 +391,12 @@ $generateButton.Add_Click({
             }
         }
         $week = $weekPicker.Value.ToString('yyyy-MM-dd')
-        $raw = & $python $plannerScript generate --week $week --count 3 --json 2>&1
+        $diners = (Get-PlannedDiners) -join ','
+        $raw = & $python $plannerScript generate `
+            --week $week `
+            --count 3 `
+            --diners $diners `
+            --json 2>&1
         if ($LASTEXITCODE -ne 0) {
             throw ($raw -join [Environment]::NewLine)
         }
@@ -413,7 +497,8 @@ $commitButton.Add_Click({
             'apply',
             '--week', $week,
             '--recipes', $assignments,
-            '--actor', $actorText.Text
+            '--actor', $actorText.Text,
+            '--diners', (@($proposal.planned_diners) -join ',')
         )
         if (@($proposal.warnings).Count -gt 0) {
             $arguments += '--accept-warnings'
@@ -440,12 +525,12 @@ $commitButton.Add_Click({
 })
 
 $weekPicker.Add_ValueChanged({
-    Update-ExistingPlanState
+    Update-ExistingPlanState -LoadDiners
 })
 
 $form.CancelButton = $closeButton
 $form.Add_Shown({
-    Update-ExistingPlanState
+    Update-ExistingPlanState -LoadDiners
 })
 . (Join-Path $PSScriptRoot 'gui-branding.ps1')
 Add-MealPlannerBranding `

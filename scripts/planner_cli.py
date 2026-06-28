@@ -66,6 +66,24 @@ def parse_week(value: str) -> dt.date:
     return parsed
 
 
+def parse_diners(value: str) -> list[int]:
+    try:
+        diners = [
+            int(item.strip())
+            for item in value.split(",")
+            if item.strip()
+        ]
+    except ValueError as error:
+        raise argparse.ArgumentTypeError(
+            "diners must be comma-separated integers"
+        ) from error
+    if len(diners) != 7 or any(not 1 <= diner <= 20 for diner in diners):
+        raise argparse.ArgumentTypeError(
+            "diners must contain seven values from 1 to 20"
+        )
+    return diners
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Plan weekly menus without side effects.")
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -73,6 +91,11 @@ def main() -> int:
     generate_parser = subparsers.add_parser("generate")
     generate_parser.add_argument("--week", required=True, type=parse_week)
     generate_parser.add_argument("--count", type=int, default=3)
+    generate_parser.add_argument(
+        "--diners",
+        type=parse_diners,
+        default=[4] * 7,
+    )
     generate_parser.add_argument("--json", action="store_true")
     generate_parser.add_argument("--no-telemetry", action="store_true")
 
@@ -88,6 +111,11 @@ def main() -> int:
     apply_parser.add_argument("--week", required=True, type=parse_week)
     apply_parser.add_argument("--recipes", required=True)
     apply_parser.add_argument("--actor", required=True)
+    apply_parser.add_argument(
+        "--diners",
+        type=parse_diners,
+        default=[4] * 7,
+    )
     apply_parser.add_argument("--accept-warnings", action="store_true")
 
     args = parser.parse_args()
@@ -128,7 +156,11 @@ def main() -> int:
     if args.command == "generate":
         started = time.perf_counter()
         try:
-            proposals = generate_proposals(args.week, args.count)
+            proposals = generate_proposals(
+                args.week,
+                args.count,
+                planned_diners=args.diners,
+            )
         except ProposalGenerationError as exc:
             if not args.no_telemetry:
                 try:
@@ -172,6 +204,7 @@ def main() -> int:
             args.week,
             assignments,
             actor=args.actor,
+            planned_diners=args.diners,
             accept_warnings=args.accept_warnings,
         )
     except (ValueError, FileExistsError) as exc:

@@ -4,7 +4,7 @@ import datetime as dt
 import re
 from pathlib import Path
 
-from planner.constants import ROOT
+from planner.constants import DAYS, ROOT
 from planner.eligibility import load_recipes, override_constraints
 from planner.proposal import generated_ideas, user_idea_recipes
 from planner.scoring import evaluate_proposal
@@ -50,12 +50,20 @@ def apply_proposal(
         f'week_of = "{week_of.isoformat()}"',
         'status = "draft"',
         f'status_updated_at = "{timestamp}"',
+        "planned_diners = ["
+        + ", ".join(str(value) for value in proposal["planned_diners"])
+        + "]",
         "+++",
         "",
         "# Weekly Dinner Menu",
         "",
         f"**Week of:** {week_of.isoformat()}  ",
-        "**Family Size:** 4  ",
+        "**Diner Schedule:** "
+        + "; ".join(
+            f"{day} {proposal['planned_diners'][index]}"
+            for index, day in enumerate(DAYS)
+        )
+        + "  ",
         f"**Season:** {proposal['season'].title()}",
         "",
     ]
@@ -66,6 +74,7 @@ def apply_proposal(
                 f"## {meal['day']}, {meal_date.strftime('%B %d')} - {meal['name']}",
                 "",
                 f"**Recipe:** {meal['recipe_id']} rev {meal['revision']} ({meal['status']})  ",
+                f"**Planned Diners:** {meal['planned_diners']}  ",
                 f"**Estimated Fiber:** {meal['fiber_grams']} grams per serving  ",
                 f"**Estimated Cost:** ${float(meal['estimated_cost_usd']):.2f}  ",
                 f"**Kid-Friendly Design:** {meal['kid_friendly_reason']}  ",
@@ -136,6 +145,7 @@ def commit_assignments(
     assignments: list[str],
     *,
     actor: str,
+    planned_diners: list[int] | None = None,
     accept_warnings: bool = False,
     root: Path = ROOT,
     now: dt.datetime | None = None,
@@ -151,6 +161,7 @@ def commit_assignments(
         week_of,
         assignments,
         recipe_universe,
+        planned_diners=planned_diners,
         root=root,
     )
     return apply_proposal(

@@ -94,6 +94,11 @@ status and can display the existing menu before generation. Starting another
 dry run for that week requires confirmation and does not modify the existing
 plan.
 
+Plan Week also accepts a separate diner count for every day from Monday through
+Sunday. Use it for guests, sleepovers, camp, travel, or children being away.
+Dry-run costs and inventory requirements scale to those counts, and the chosen
+schedule is preserved in the committed menu for grocery and email generation.
+
 Every proposed meal also includes a **Why selected** block with its own
 inventory coverage, expiring refrigerated ingredients, day-rule fit, recent
 rotation result, weather fit, and kid score.

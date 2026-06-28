@@ -18,6 +18,9 @@ from planner.metrics import (
     estimated_menu_cost,
     estimated_shopping_cost as calculate_shopping_cost,
     recipe_rotation_score,
+    scale_recipe_for_diners,
+    scale_sides_for_diners,
+    validate_planned_diners,
 )
 from planner.quick_meal_planning import (
     plan_quick_meals,
@@ -39,9 +42,11 @@ def evaluate_proposal(
     assignments: list[str],
     recipes: dict[str, dict] | None = None,
     *,
+    planned_diners: list[int] | None = None,
     root: Path = ROOT,
 ) -> dict:
     recipes = recipes or load_recipes(root)
+    planned_diners = validate_planned_diners(planned_diners)
     errors: list[str] = []
     warnings: list[str] = []
     season = season_for(week_of)
@@ -172,9 +177,27 @@ def evaluate_proposal(
         week_of=week_of,
         root=root,
     )
+    scaled_entries = [
+        (
+            index,
+            scale_recipe_for_diners(
+                recipe,
+                planned_diners[index],
+            ),
+        )
+        for index, recipe in scored_entries
+    ]
+    scaled_meals = [recipe for _, recipe in scaled_entries]
+    scaled_side_map = {
+        recipe["id"]: scale_sides_for_diners(
+            side_map.get(recipe["id"], []),
+            planned_diners[index],
+        )
+        for index, recipe in scored_entries
+    }
     estimated_cost = estimated_menu_cost(
-        scored_meals,
-        side_map,
+        scaled_meals,
+        scaled_side_map,
         quick_meal_map,
     )
     average_fiber = average_fiber_grams(scored_meals, side_map)
@@ -183,8 +206,8 @@ def evaluate_proposal(
         quick_meal_map,
     )
     inventory_requirements = collect_inventory_requirements(
-        scored_meals,
-        side_map,
+        scaled_meals,
+        scaled_side_map,
         quick_meal_map,
     )
     inventory = assess_inventory(
@@ -205,8 +228,18 @@ def evaluate_proposal(
 
     meals = []
     for index, recipe in enumerate(selected):
-        meal_requirements = list(recipe.get("inventory_requirements", []))
-        meal_requirements.extend(side_requirements(side_map.get(recipe["id"], [])))
+        scaled_recipe = scale_recipe_for_diners(
+            recipe,
+            planned_diners[index],
+        )
+        scaled_sides = scale_sides_for_diners(
+            side_map.get(recipe["id"], []),
+            planned_diners[index],
+        )
+        meal_requirements = list(
+            scaled_recipe.get("inventory_requirements", [])
+        )
+        meal_requirements.extend(side_requirements(scaled_sides))
         meal_requirements.extend(
             quick_meal_requirements(quick_meal_map.get(index))
         )
@@ -226,6 +259,7 @@ def evaluate_proposal(
             {
                 "day": DAYS[index],
                 "date": (week_of + dt.timedelta(days=index)).isoformat(),
+                "planned_diners": planned_diners[index],
                 "recipe_id": recipe["id"],
                 "revision": recipe["revision"],
                 "status": recipe["status"],
@@ -234,13 +268,15 @@ def evaluate_proposal(
                 "cooking_method": recipe["cooking_method"],
                 "cook_time_minutes": recipe.get("cook_time_minutes", 0),
                 "fiber_grams": recipe["fiber_grams"],
-                "estimated_cost_usd": recipe["estimated_cost_usd"],
+                "estimated_cost_usd": scaled_recipe[
+                    "estimated_cost_usd"
+                ],
                 "kid_friendly_score": recipe["kid_friendly_score"],
                 "kid_friendly_reason": recipe["kid_friendly_reason"],
                 "meal_scope": recipe.get("meal_scope", "complete-meal"),
                 "selection_explanation": explanation,
                 "side_suggestions": public_side_suggestions(
-                    side_map.get(recipe["id"], [])
+                    scaled_sides
                 ),
                 "kids_quick_meal": public_quick_meal(
                     quick_meal_map.get(index)
@@ -255,6 +291,7 @@ def evaluate_proposal(
         "weather_note": weather.get("note", ""),
         "heat_friendly_meals": heat_friendly_count,
         "assignments": assignments,
+        "planned_diners": planned_diners,
         "meals": meals,
         "estimated_cost_usd": estimated_cost,
         "estimated_shopping_cost_usd": estimated_shopping_cost,

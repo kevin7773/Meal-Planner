@@ -37,6 +37,14 @@ class PlanWeekExistingMenuTests(unittest.TestCase):
             "Generating dry runs will not change the existing plan",
             self.script,
         )
+
+    def test_plan_week_collects_seven_daily_diner_counts(self) -> None:
+        self.assertIn("$script:dinerInputs", self.script)
+        self.assertIn("function Get-PlannedDiners", self.script)
+        self.assertIn("function Set-PlannedDiners", self.script)
+        self.assertIn("'--diners'", self.script)
+        for day in ("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"):
+            self.assertIn(f"Name = '{day}'", self.script)
         self.assertIn(
             "[System.Windows.Forms.DialogResult]::Yes",
             self.script,

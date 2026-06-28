@@ -49,6 +49,31 @@ class InventoryAttentionFilterTests(unittest.TestCase):
             self.script,
         )
 
+    def test_full_view_includes_untracked_catalog_items(self) -> None:
+        self.assertIn("'Item ID'", self.script)
+        self.assertIn(
+            "foreach ($item in @($catalogDocument.items | Sort-Object name))",
+            self.script,
+        )
+        self.assertIn(
+            "$trackedItemIds.ContainsKey([string]$item.id)",
+            self.script,
+        )
+        self.assertIn("'Not in inventory'", self.script)
+        self.assertIn(
+            "$grid.SelectedRows[0].Cells['ItemID'].Value",
+            self.script,
+        )
+
+    def test_untracked_rows_are_added_but_cannot_be_removed(self) -> None:
+        self.assertIn("$removeButton.Enabled = $false", self.script)
+        self.assertIn(
+            "if ([string]::IsNullOrWhiteSpace($lotId))",
+            self.script,
+        )
+        self.assertIn("$addButton.Text = 'Add to Inventory'", self.script)
+        self.assertIn("$addButton.Text = 'Update Lot'", self.script)
+
 
 if __name__ == "__main__":
     unittest.main()

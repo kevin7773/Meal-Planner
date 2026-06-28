@@ -152,8 +152,10 @@ The `planner/` package separates planning responsibilities.
 `planner/proposal.py` coordinates loading canonical recipes, queued user ideas,
 and ephemeral idea pools. `planner/eligibility.py` loads recent meal history
 and weekly overrides. Scoring loads inventory requirements, weather context,
-side dishes, and kids' quick meals. Optional recipe fields receive safe
-defaults during loading.
+side dishes, kids' quick meals, and the Monday-through-Sunday diner schedule.
+Recipe and side costs and inventory quantities scale from their base servings
+to each day's planned diners. Optional recipe fields receive safe defaults
+during loading.
 
 When fewer than seven canonical recipes are active, generated ideas supplement
 the canonical library rather than replace it. Known recipes and generated

@@ -5,6 +5,78 @@ import collections
 from planner.constants import MAX_PROTEIN_PER_WEEK
 
 
+def validate_planned_diners(
+    planned_diners: list[int] | None,
+) -> list[int]:
+    values = list(planned_diners or [4] * 7)
+    if (
+        len(values) != 7
+        or any(
+            not isinstance(value, int)
+            or isinstance(value, bool)
+            or not 1 <= value <= 20
+            for value in values
+        )
+    ):
+        raise ValueError(
+            "planned_diners must contain seven integers from 1 to 20"
+        )
+    return values
+
+
+def scale_requirements(
+    requirements: list[dict],
+    factor: float,
+) -> list[dict]:
+    return [
+        {
+            **requirement,
+            "quantity": round(
+                float(requirement["quantity"]) * factor,
+                3,
+            ),
+        }
+        for requirement in requirements
+    ]
+
+
+def scale_recipe_for_diners(recipe: dict, diners: int) -> dict:
+    servings = int(recipe.get("servings", 4))
+    factor = diners / servings
+    return {
+        **recipe,
+        "estimated_cost_usd": round(
+            float(recipe["estimated_cost_usd"]) * factor,
+            2,
+        ),
+        "inventory_requirements": scale_requirements(
+            recipe.get("inventory_requirements", []),
+            factor,
+        ),
+    }
+
+
+def scale_sides_for_diners(
+    sides: list[dict],
+    diners: int,
+) -> list[dict]:
+    factor = diners / 4
+    return [
+        {
+            **side,
+            "estimated_cost_usd": round(
+                float(side["estimated_cost_usd"]) * factor,
+                2,
+            ),
+            "requirements": scale_requirements(
+                side.get("requirements", []),
+                factor,
+            ),
+        }
+        for side in sides
+    ]
+
+
 def estimated_menu_cost(
     scored_meals: list[dict],
     side_map: dict[str, list[dict]],
