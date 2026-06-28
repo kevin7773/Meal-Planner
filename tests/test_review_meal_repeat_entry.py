@@ -87,6 +87,12 @@ class ReviewMealRepeatEntryTests(unittest.TestCase):
             self.script,
         )
         self.assertIn(
+            "New-Object System.Windows.Forms.PrintPreviewControl",
+            self.script,
+        )
+        self.assertIn("$document.Add_BeginPrint", self.script)
+        self.assertIn("$printButton.Text = 'Print'", self.script)
+        self.assertIn(
             "New-Object System.Windows.Forms.PrintDialog",
             self.script,
         )
@@ -96,6 +102,24 @@ class ReviewMealRepeatEntryTests(unittest.TestCase):
             self.script,
         )
         self.assertIn("Serves $servings", self.script)
+
+    def test_recipe_card_can_export_deterministic_printable_html(self) -> None:
+        self.assertIn("$exportRecipeButton.Text = 'Export HTML'", self.script)
+        self.assertIn("function Export-SelectedRecipeHtml", self.script)
+        self.assertIn(
+            "[System.Net.WebUtility]::HtmlEncode",
+            self.script,
+        )
+        self.assertIn("<!doctype html>", self.script)
+        self.assertIn("@media print", self.script)
+        self.assertIn(
+            "New-Object System.Windows.Forms.SaveFileDialog",
+            self.script,
+        )
+        self.assertIn(
+            "New-Object System.Text.UTF8Encoding($false)",
+            self.script,
+        )
 
 
 if __name__ == "__main__":

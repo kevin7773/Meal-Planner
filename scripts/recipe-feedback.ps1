@@ -246,7 +246,7 @@ function Add-Label {
 Add-Label 'Recipe' 20 22 | Out-Null
 $recipeCombo = New-Object System.Windows.Forms.ComboBox
 $recipeCombo.Location = New-Object System.Drawing.Point(180, 22)
-$recipeCombo.Size = New-Object System.Drawing.Size(300, 28)
+$recipeCombo.Size = New-Object System.Drawing.Size(220, 28)
 $recipeCombo.DropDownStyle = 'DropDownList'
 $recipeCombo.DisplayMember = 'Display'
 foreach ($recipe in $recipes) {
@@ -259,8 +259,8 @@ $form.Controls.Add($recipeCombo)
 
 $viewRecipeButton = New-Object System.Windows.Forms.Button
 $viewRecipeButton.Text = 'View Recipe'
-$viewRecipeButton.Location = New-Object System.Drawing.Point(490, 19)
-$viewRecipeButton.Size = New-Object System.Drawing.Size(95, 34)
+$viewRecipeButton.Location = New-Object System.Drawing.Point(410, 19)
+$viewRecipeButton.Size = New-Object System.Drawing.Size(85, 34)
 $form.Controls.Add($viewRecipeButton)
 Set-MealPlannerButtonStyle -Button $viewRecipeButton -Color $colors.Review
 
@@ -281,10 +281,17 @@ function Get-CurrentSelectedRecipe {
 
 $printRecipeButton = New-Object System.Windows.Forms.Button
 $printRecipeButton.Text = 'Print Recipe'
-$printRecipeButton.Location = New-Object System.Drawing.Point(595, 19)
-$printRecipeButton.Size = New-Object System.Drawing.Size(95, 34)
+$printRecipeButton.Location = New-Object System.Drawing.Point(505, 19)
+$printRecipeButton.Size = New-Object System.Drawing.Size(85, 34)
 $form.Controls.Add($printRecipeButton)
 Set-MealPlannerButtonStyle -Button $printRecipeButton -Color $colors.Pantry
+
+$exportRecipeButton = New-Object System.Windows.Forms.Button
+$exportRecipeButton.Text = 'Export HTML'
+$exportRecipeButton.Location = New-Object System.Drawing.Point(600, 19)
+$exportRecipeButton.Size = New-Object System.Drawing.Size(90, 34)
+$form.Controls.Add($exportRecipeButton)
+Set-MealPlannerButtonStyle -Button $exportRecipeButton -Color $colors.Email
 
 function Get-PrintableRecipeLines {
     param([pscustomobject]$Recipe)
@@ -377,6 +384,10 @@ function Print-SelectedRecipe {
     $brush = [System.Drawing.Brushes]::Black
     $state = [pscustomobject]@{ Index = 0; Page = 0 }
 
+    $document.Add_BeginPrint({
+        $state.Index = 0
+        $state.Page = 0
+    })
     $document.Add_PrintPage({
         param($sender, $eventArgs)
 
@@ -449,24 +460,179 @@ function Print-SelectedRecipe {
         }
     })
 
-    $printDialog = New-Object System.Windows.Forms.PrintDialog
-    $printDialog.Document = $document
-    $printDialog.UseEXDialog = $true
-    try {
-        if (
-            $printDialog.ShowDialog($form) -eq
-            [System.Windows.Forms.DialogResult]::OK
-        ) {
-            $document.Print()
+    $previewForm = New-Object System.Windows.Forms.Form
+    $previewForm.Text = "Print Preview - $($recipe.Name)"
+    $previewForm.ClientSize = New-Object System.Drawing.Size(960, 680)
+    $previewForm.StartPosition = 'CenterParent'
+    $previewForm.MinimumSize = New-Object System.Drawing.Size(760, 560)
+    $previewForm.Font = New-Object System.Drawing.Font('Segoe UI', 10)
+    Set-MealPlannerFormSurface -Form $previewForm -Palette $colors
+
+    $preview = New-Object System.Windows.Forms.PrintPreviewControl
+    $preview.Location = New-Object System.Drawing.Point(0, 0)
+    $preview.Size = New-Object System.Drawing.Size(960, 620)
+    $preview.Anchor = 'Top,Bottom,Left,Right'
+    $preview.AutoZoom = $true
+    $preview.UseAntiAlias = $true
+    $preview.Document = $document
+    $previewForm.Controls.Add($preview)
+
+    $printButton = New-Object System.Windows.Forms.Button
+    $printButton.Text = 'Print'
+    $printButton.Location = New-Object System.Drawing.Point(730, 632)
+    $printButton.Size = New-Object System.Drawing.Size(100, 36)
+    $printButton.Anchor = 'Bottom,Right'
+    $previewForm.Controls.Add($printButton)
+    Set-MealPlannerButtonStyle -Button $printButton -Color $colors.Pantry
+
+    $closePreviewButton = New-Object System.Windows.Forms.Button
+    $closePreviewButton.Text = 'Close'
+    $closePreviewButton.Location = New-Object System.Drawing.Point(840, 632)
+    $closePreviewButton.Size = New-Object System.Drawing.Size(100, 36)
+    $closePreviewButton.Anchor = 'Bottom,Right'
+    $closePreviewButton.Add_Click({ $previewForm.Close() })
+    $previewForm.Controls.Add($closePreviewButton)
+    Set-MealPlannerNeutralButtonStyle `
+        -Button $closePreviewButton `
+        -Palette $colors
+
+    $printButton.Add_Click({
+        $printDialog = New-Object System.Windows.Forms.PrintDialog
+        $printDialog.Document = $document
+        $printDialog.UseEXDialog = $true
+        try {
+            if (
+                $printDialog.ShowDialog($previewForm) -eq
+                [System.Windows.Forms.DialogResult]::OK
+            ) {
+                $document.Print()
+            }
+        } catch {
+            [System.Windows.Forms.MessageBox]::Show(
+                $_.Exception.Message,
+                'Unable to Print Recipe',
+                'OK',
+                'Error'
+            ) | Out-Null
+        } finally {
+            $printDialog.Dispose()
         }
+    })
+
+    $previewForm.CancelButton = $closePreviewButton
+    try {
+        [void]$previewForm.ShowDialog($form)
     } finally {
-        $printDialog.Dispose()
+        $preview.Dispose()
+        $previewForm.Dispose()
         $document.Dispose()
         $titleFont.Dispose()
         $headingFont.Dispose()
         $bodyFont.Dispose()
         $metaFont.Dispose()
         $footerFont.Dispose()
+    }
+}
+
+function Export-SelectedRecipeHtml {
+    $recipe = Get-CurrentSelectedRecipe
+    $lines = Get-PrintableRecipeLines -Recipe $recipe
+    $htmlBody = New-Object System.Text.StringBuilder
+    foreach ($line in $lines) {
+        $encoded = [System.Net.WebUtility]::HtmlEncode(
+            [string]$line.Text
+        )
+        switch ($line.Kind) {
+            'Title' {
+                [void]$htmlBody.AppendLine("<h1>$encoded</h1>")
+            }
+            'Meta' {
+                [void]$htmlBody.AppendLine(
+                    "<div class=`"meta`">$encoded</div>"
+                )
+            }
+            'Heading' {
+                [void]$htmlBody.AppendLine("<h2>$encoded</h2>")
+            }
+            'Spacer' {
+                [void]$htmlBody.AppendLine('<div class="spacer"></div>')
+            }
+            default {
+                [void]$htmlBody.AppendLine(
+                    "<div class=`"body-line`">$encoded</div>"
+                )
+            }
+        }
+    }
+    $title = [System.Net.WebUtility]::HtmlEncode($recipe.Name)
+    $html = @"
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>$title</title>
+  <style>
+    :root { color-scheme: light; }
+    body {
+      margin: 0 auto;
+      max-width: 8in;
+      padding: 0.45in;
+      color: #202624;
+      background: #fff;
+      font: 11pt/1.42 "Segoe UI", Arial, sans-serif;
+    }
+    h1 { margin: 0 0 0.08in; font-size: 24pt; }
+    h2 {
+      margin: 0.22in 0 0.08in;
+      border-bottom: 1px solid #cfd8d4;
+      padding-bottom: 0.04in;
+      font-size: 14pt;
+      break-after: avoid;
+    }
+    .meta { color: #5c6662; font-style: italic; }
+    .body-line { margin: 0.035in 0; white-space: pre-wrap; }
+    .spacer { height: 0.08in; }
+    @page { margin: 0.55in; }
+    @media print {
+      body { max-width: none; padding: 0; }
+      h1, h2 { break-after: avoid; }
+      .body-line { orphans: 2; widows: 2; }
+    }
+  </style>
+</head>
+<body>
+$($htmlBody.ToString())
+</body>
+</html>
+"@
+
+    $safeName = ($recipe.Name -replace '[^A-Za-z0-9]+', '-').Trim('-')
+    $saveDialog = New-Object System.Windows.Forms.SaveFileDialog
+    $saveDialog.Title = 'Export Printable Recipe Card'
+    $saveDialog.Filter = 'HTML document (*.html)|*.html'
+    $saveDialog.DefaultExt = 'html'
+    $saveDialog.AddExtension = $true
+    $saveDialog.FileName = "$($recipe.Id)-$safeName.html"
+    try {
+        if (
+            $saveDialog.ShowDialog($form) -eq
+            [System.Windows.Forms.DialogResult]::OK
+        ) {
+            [System.IO.File]::WriteAllText(
+                $saveDialog.FileName,
+                $html,
+                (New-Object System.Text.UTF8Encoding($false))
+            )
+            [System.Windows.Forms.MessageBox]::Show(
+                "Printable recipe exported:`r`n$($saveDialog.FileName)",
+                'Recipe Exported',
+                'OK',
+                'Information'
+            ) | Out-Null
+        }
+    } finally {
+        $saveDialog.Dispose()
     }
 }
 
@@ -552,6 +718,19 @@ $printRecipeButton.Add_Click({
         [System.Windows.Forms.MessageBox]::Show(
             $_.Exception.Message,
             'Unable to Print Recipe',
+            'OK',
+            'Error'
+        ) | Out-Null
+    }
+})
+
+$exportRecipeButton.Add_Click({
+    try {
+        Export-SelectedRecipeHtml
+    } catch {
+        [System.Windows.Forms.MessageBox]::Show(
+            $_.Exception.Message,
+            'Unable to Export Recipe',
             'OK',
             'Error'
         ) | Out-Null
