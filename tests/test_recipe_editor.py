@@ -66,6 +66,21 @@ class RecipeEditorTests(unittest.TestCase):
         self.assertEqual(recipes[0]["id"], "FDP-0012")
         self.assertFalse(recipes[0]["kid_reason_is_current"])
 
+    def test_malformed_card_does_not_break_recipe_list(self) -> None:
+        temporary, root = self.make_root()
+        with temporary:
+            path = root / "recipes" / "10-minute-pasta.md"
+            text = path.read_text(encoding="utf-8").replace(
+                "## Leftover Plan",
+                "Leftover Plan",
+                1,
+            )
+            path.write_text(text, encoding="utf-8", newline="\n")
+
+            recipes = imported_recipes(root)
+
+        self.assertEqual(recipes, [])
+
     def test_update_creates_valid_revision_and_preserves_recipe_body(self) -> None:
         temporary, root = self.make_root()
         with temporary:
@@ -172,6 +187,44 @@ class RecipeEditorTests(unittest.TestCase):
             "Removed excess heat and simplified directions",
             body,
         )
+
+    def test_legacy_ingredients_heading_loads_and_is_repaired(self) -> None:
+        temporary, root = self.make_root()
+        with temporary:
+            path = root / "recipes" / "10-minute-pasta.md"
+            text = path.read_text(encoding="utf-8").replace(
+                "## Ingredients",
+                "### Ingredients",
+                1,
+            )
+            path.write_text(text, encoding="utf-8", newline="\n")
+
+            current = find_imported_recipe("FDP-0012", root)
+            self.assertIn(
+                "### Main Ingredients",
+                current["card_sections"]["ingredients"],
+            )
+
+            _, repaired_path = update_imported_recipe(
+                "FDP-0012",
+                name="10 Minute Pasta",
+                protein="vegetarian",
+                meal_scope="complete-meal",
+                prep_minutes=5,
+                cook_minutes=10,
+                fiber_grams=8,
+                estimated_cost_usd=6,
+                kid_friendly_reason="Both children like/love it",
+                cooking_method="stovetop",
+                seasons=["spring", "summer", "fall", "winter"],
+                card_sections=current["card_sections"],
+                change_note="Repaired legacy recipe card structure",
+                root=root,
+            )
+            _, _, body, errors = validate_recipe(repaired_path)
+
+        self.assertEqual(errors, [])
+        self.assertIn("## Ingredients\n\n### Main Ingredients", body)
 
     def test_invalid_card_edit_rolls_back_recipe_and_index(self) -> None:
         temporary, root = self.make_root()

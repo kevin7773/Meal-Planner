@@ -54,7 +54,11 @@ def imported_recipes(root: Path = ROOT) -> list[dict]:
             continue
         if "imported" not in metadata.get("tags", []):
             continue
-        records.append(recipe_payload(path, metadata, body))
+        try:
+            records.append(recipe_payload(path, metadata, body))
+        except ValueError:
+            # A damaged legacy card must not disable editing every other card.
+            continue
     return sorted(records, key=lambda item: item["id"])
 
 
@@ -309,6 +313,23 @@ def _body_section(
         rf"(?ms)^{re.escape(heading)}\s*\n(.*?)(?=^{re.escape(next_heading)}\s*$)",
         body,
     )
+    if match is None and heading == "## Ingredients":
+        legacy = re.search(
+            rf"(?ms)^### Ingredients\s*\n"
+            rf"(.*?)(?=^{re.escape(next_heading)}\s*$)",
+            body,
+        )
+        if legacy is not None:
+            return legacy.group(1).strip()
+        legacy = re.search(
+            rf"(?ms)^(### Main Ingredients)\s*\n"
+            rf"(.*?)(?=^{re.escape(next_heading)}\s*$)",
+            body,
+        )
+        if legacy is not None:
+            return (
+                legacy.group(1) + "\n" + legacy.group(2)
+            ).strip()
     if match is None:
         raise ValueError(f"Recipe body is missing {heading}")
     return match.group(1).strip()
@@ -339,6 +360,23 @@ def _set_body_section(
         rf".*?(?=^{re.escape(next_heading)}\s*$)"
     )
     if re.search(pattern, content) is None:
+        if heading == "## Ingredients":
+            legacy_pattern = (
+                rf"(?ms)^### Ingredients\s*\n"
+                rf".*?(?=^{re.escape(next_heading)}\s*$)"
+            )
+            if re.search(legacy_pattern, content) is None:
+                legacy_pattern = (
+                    rf"(?ms)^### Main Ingredients\s*\n"
+                    rf".*?(?=^{re.escape(next_heading)}\s*$)"
+                )
+            if re.search(legacy_pattern, content) is not None:
+                return re.sub(
+                    legacy_pattern,
+                    heading + "\n\n" + value + "\n\n",
+                    content,
+                    count=1,
+                )
         raise ValueError(f"Recipe body is missing {heading}")
     return re.sub(
         pattern,

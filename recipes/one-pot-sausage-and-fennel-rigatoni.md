@@ -34,7 +34,7 @@ source = "https://heresyourbite.substack.com/p/ina-inspired-sausage-and-fennel-r
 - **Best seasons:** Spring, Summer, Fall, Winter
 - **Schedule fit:** Imported candidate; review before scheduling
 
-### Ingredients
+## Ingredients
 
 ### Main Ingredients
 
@@ -75,3 +75,28 @@ source = "https://heresyourbite.substack.com/p/ina-inspired-sausage-and-fennel-r
 9. Add the reserved sausage, Parmesan cheese, lemon zest, and parsley. Stir until the cheese has melted and the sauce is silky and glossy. If desired, stir in 1 tablespoon of butter for extra richness.
 10. Taste and adjust the seasoning with additional salt and pepper as needed.
 11. Divide among bowls and serve topped with extra Parmesan, parsley, and freshly cracked black pepper.
+
+## Leftover Plan
+
+- Decide after the first family test.
+
+## Family Notes
+
+- **Verdict:** Tested on 2026-06-28; changes requested before approval
+- **Keep:** None
+- **Change next time:** Remove Fennel and sub another veg
+
+## Ratings
+
+| Date | Rating | Rater | Notes |
+| --- | ---: | --- | --- |
+| 2026-06-27 | 4 | Family | Again: Yes; Kids: Tried it; Effort: Fine; Keep: Everything was delicious but kids thought it was too spicy.; Change: Leave out the red pepper flakes and use half the lemon zest |
+| 2026-06-28 | 3 | Family | Again: No; Kids: Tried it; Effort: Fine; Keep: None; Change: Remove Fennel and sub another veg |
+
+## Revision History
+
+| Revision | Date | Status | Change |
+| ---: | --- | --- | --- |
+| 3 | 2026-06-28 | candidate | Updated imported recipe metadata and recipe card through the GUI |
+| 2 | 2026-06-28 | candidate | Updated imported recipe metadata and recipe card through the GUI |
+| 1 | 2026-06-27 | candidate | Imported from https://heresyourbite.substack.com/p/ina-inspired-sausage-and-fennel-rigatoni using plain text sections |
