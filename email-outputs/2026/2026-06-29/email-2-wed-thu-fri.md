@@ -4,57 +4,55 @@ Subject: Weekly Dinner Menu: Wednesday-Friday, 2026-06-29
 
 
 
-## Wednesday, July 01 - Hot Dogs with Macaroni and Cheese and Baked Beans
+## Wednesday, July 01 - Grilled frozen hamburger patties with pasta salad and sliced cucumbers
 
-**Recipe:** FDP-0039 rev 1 (candidate)
+**Recipe:** OVERRIDE-20260629-WED rev 0 (override)
 **Planned Diners:** 4
 
-## Recipe Card
+## Meal Plan
 
-- **Active prep:** 5 minutes
-- **Cook time:** 20 minutes
-- **Cooking method:** Stovetop
-- **Estimated fiber:** 8 grams per serving
-- **Kid-friendly design:** Both children like/love it
-- **Best seasons:** Spring, Summer, Fall, Winter
-- **Schedule fit:** Familiar complete meal for a standard weeknight
+- Ingredients:
+3 Frozen hamburger patties
+2 hot dogs (thawed)
+3 hamburrger buns
+2 provolone cheese slices
+store bought oil-based pasta salad
+sliced cucumbers
 
-## Ingredients
+Directions:
 
-### Main Ingredients
+1) grill burgers and hot dogs
+2) melt cheese on two of the burgers
+3) put burgers on buns
+4) serve with pasta side and cucumbers
+- Planned diners: 4
 
-- 8 hot dogs
-- 8 whole-wheat hot dog buns
-- 2 boxes (7.25 ounces each) macaroni and cheese
-- 2 cans (15 ounces each) vegetarian baked beans
-- 1/2 cup milk, or the amount required by the macaroni packages
-- 4 tablespoons butter, or the amount required by the macaroni packages
+**Meal Override:** custom
+**Original Recipe:** FDP-0039
+**Override Note:** Ingredients:
+3 Frozen hamburger patties
+2 hot dogs (thawed)
+3 hamburrger buns
+2 provolone cheese slices
+store bought oil-based pasta salad
+sliced cucumbers
 
-### Seasonings
+Directions:
 
-- No additional seasoning; prepare each familiar component as packaged
-
-## Directions
-
-1. Bring a large pot of water to a boil and cook the macaroni for the time listed on the package.
-2. While the macaroni cooks, warm the baked beans in a saucepan over medium-low heat for 8 to 10 minutes, stirring occasionally.
-3. Place the hot dogs in a skillet with 1/2 cup water. Cover and simmer over medium heat for 6 minutes, turning once, until heated to 165 F.
-4. Drain the macaroni. Stir in the packaged cheese mix, milk, and butter until smooth.
-5. Place the hot dogs in the buns and serve two per person with macaroni and cheese and baked beans.
-
-## Leftover Plan
-
-- Refrigerate leftover macaroni, beans, and hot dogs separately for up to 3 days.
+1) grill burgers and hot dogs
+2) melt cheese on two of the burgers
+3) put burgers on buns
+4) serve with pasta side and cucumbers
 
 ## Thursday, July 02 - Chinese Carryout
 
 **Recipe:** OVERRIDE-20260629-THU rev 0 (override)
-**Planned Diners:** 3
+**Planned Diners:** 4
 
 ## Meal Plan
 
 - Extreme-heat carryout night; likely Chinese. Plan for 3 diners.
-- Planned diners: 3
+- Planned diners: 4
 
 **Meal Override:** custom
 **Original Recipe:** FDP-0008
@@ -63,7 +61,7 @@ Subject: Weekly Dinner Menu: Wednesday-Friday, 2026-06-29
 ## Friday, July 03 - Blackstone Breakfast for Dinner
 
 **Recipe:** FDP-0041 rev 1 (candidate)
-**Planned Diners:** 3
+**Planned Diners:** 4
 
 ## Recipe Card
 

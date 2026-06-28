@@ -167,10 +167,14 @@ $applyButton.Add_Click({
             '--menu',$menuCombo.SelectedItem.FullName,
             '--day',$dayCombo.SelectedItem.day,
             '--type',[string]$typeCombo.SelectedItem,
-            '--title',$titleText.Text,
-            '--note',$noteText.Text,
             '--actor',$actorText.Text
         )
+        if (-not [string]::IsNullOrWhiteSpace($titleText.Text)) {
+            $arguments += @('--title', $titleText.Text)
+        }
+        if (-not [string]::IsNullOrWhiteSpace($noteText.Text)) {
+            $arguments += @('--note', $noteText.Text)
+        }
         if ([string]$typeCombo.SelectedItem -eq 'alternate-recipe') {
             if ($null -eq $recipeCombo.SelectedItem) { throw 'Select a replacement recipe.' }
             $arguments += @('--recipe-id',$recipeCombo.SelectedItem.id)

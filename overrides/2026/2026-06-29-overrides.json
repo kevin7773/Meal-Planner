@@ -23,6 +23,16 @@
       "replacement_recipe_id": "FDP-0038"
     },
     {
+      "day": "Wednesday",
+      "type": "custom",
+      "title": "Grilled frozen hamburger patties with pasta salad and sliced cucumbers",
+      "note": "Ingredients:\r\n3 Frozen hamburger patties\r\n2 hot dogs (thawed)\r\n3 hamburrger buns\r\n2 provolone cheese slices\r\nstore bought oil-based pasta salad\r\nsliced cucumbers\r\n\r\nDirections:\r\n\r\n1) grill burgers and hot dogs\r\n2) melt cheese on two of the burgers\r\n3) put burgers on buns\r\n4) serve with pasta side and cucumbers",
+      "actor": "kevsm",
+      "applied_at": "2026-06-28T20:35:10.899567+00:00",
+      "original_recipe_id": "FDP-0039",
+      "replacement_recipe_id": null
+    },
+    {
       "day": "Thursday",
       "type": "custom",
       "title": "Chinese Carryout",

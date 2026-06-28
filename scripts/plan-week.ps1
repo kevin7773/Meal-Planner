@@ -4,6 +4,7 @@ $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent $PSScriptRoot
 $plannerScript = Join-Path $PSScriptRoot 'planner_cli.py'
 $workflowScript = Join-Path $PSScriptRoot 'week_workflow.py'
+$emailSettingsPath = Join-Path $projectRoot 'preferences\email-settings.json'
 
 function Resolve-Python {
     $bundled = Join-Path $env:USERPROFILE '.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe'
@@ -18,6 +19,91 @@ function Resolve-Python {
 }
 
 $python = Resolve-Python
+
+function Resolve-OnePasswordCli {
+    $command = Get-Command op.exe -ErrorAction SilentlyContinue
+    if ($null -ne $command) {
+        return $command.Source
+    }
+    $wingetPattern = Join-Path $env:LOCALAPPDATA (
+        'Microsoft\WinGet\Packages\AgileBits.1Password.CLI_*\op.exe'
+    )
+    $wingetCli = Get-Item $wingetPattern -ErrorAction SilentlyContinue |
+        Select-Object -First 1
+    if ($null -ne $wingetCli) {
+        return $wingetCli.FullName
+    }
+    return $null
+}
+
+function Get-EmailSettings {
+    if (-not (Test-Path -LiteralPath $emailSettingsPath)) {
+        return [pscustomobject]@{
+            schema_version = 1
+            sender_email = ''
+            password_source = 'manual'
+            onepassword_reference = ''
+        }
+    }
+    $settings = (
+        [System.IO.File]::ReadAllText($emailSettingsPath) |
+            ConvertFrom-Json
+    )
+    if ([int]$settings.schema_version -ne 1) {
+        throw 'Email settings use an unsupported schema version.'
+    }
+    return $settings
+}
+
+function Save-EmailSettings {
+    param(
+        [string]$Sender,
+        [string]$PasswordSource,
+        [string]$OnePasswordReference
+    )
+
+    $settings = [ordered]@{
+        schema_version = 1
+        sender_email = $Sender
+        password_source = $PasswordSource
+        onepassword_reference = $OnePasswordReference
+    }
+    $parent = Split-Path -Parent $emailSettingsPath
+    [System.IO.Directory]::CreateDirectory($parent) | Out-Null
+    [System.IO.File]::WriteAllText(
+        $emailSettingsPath,
+        ($settings | ConvertTo-Json -Depth 3) + [Environment]::NewLine,
+        (New-Object System.Text.UTF8Encoding($false))
+    )
+}
+
+function Read-OnePasswordSecret {
+    param([string]$Reference)
+
+    if (-not $Reference.StartsWith('op://')) {
+        throw 'The 1Password secret reference must start with op://.'
+    }
+    $op = Resolve-OnePasswordCli
+    if ($null -eq $op) {
+        throw '1Password CLI is not installed. Install it with: winget install 1password-cli'
+    }
+    $previousPreference = $ErrorActionPreference
+    try {
+        $ErrorActionPreference = 'Continue'
+        $raw = & $op read $Reference --no-newline 2>&1
+        $exitCode = $LASTEXITCODE
+    } finally {
+        $ErrorActionPreference = $previousPreference
+    }
+    if ($exitCode -ne 0) {
+        throw (
+            '1Password could not read the configured secret. Unlock the ' +
+            '1Password desktop app, enable CLI integration under Settings > ' +
+            'Developer, and verify the secret reference.'
+        )
+    }
+    return (($raw -join '') -replace '\s', '')
+}
 
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
@@ -56,7 +142,7 @@ function Set-SectionButtonStyle {
 
 $form = New-Object System.Windows.Forms.Form
 $form.Text = 'Weekly Meal Planner - Dry Run'
-$form.ClientSize = New-Object System.Drawing.Size(1060, 800)
+$form.ClientSize = New-Object System.Drawing.Size(1060, 680)
 $form.StartPosition = 'CenterScreen'
 $form.FormBorderStyle = 'FixedDialog'
 $form.MaximizeBox = $false
@@ -171,12 +257,12 @@ foreach ($day in $dinerDays) {
 
 $optionList = New-Object System.Windows.Forms.ListBox
 $optionList.Location = New-Object System.Drawing.Point(20, 184)
-$optionList.Size = New-Object System.Drawing.Size(300, 414)
+$optionList.Size = New-Object System.Drawing.Size(300, 330)
 $form.Controls.Add($optionList)
 
 $reportText = New-Object System.Windows.Forms.TextBox
 $reportText.Location = New-Object System.Drawing.Point(340, 184)
-$reportText.Size = New-Object System.Drawing.Size(700, 414)
+$reportText.Size = New-Object System.Drawing.Size(700, 330)
 $reportText.Multiline = $true
 $reportText.ReadOnly = $true
 $reportText.ScrollBars = 'Vertical'
@@ -185,32 +271,32 @@ $form.Controls.Add($reportText)
 
 $actorLabel = New-Object System.Windows.Forms.Label
 $actorLabel.Text = 'Selected by'
-$actorLabel.Location = New-Object System.Drawing.Point(340, 623)
+$actorLabel.Location = New-Object System.Drawing.Point(340, 533)
 $actorLabel.Size = New-Object System.Drawing.Size(90, 28)
 $form.Controls.Add($actorLabel)
 
 $actorText = New-Object System.Windows.Forms.TextBox
-$actorText.Location = New-Object System.Drawing.Point(435, 620)
+$actorText.Location = New-Object System.Drawing.Point(435, 530)
 $actorText.Size = New-Object System.Drawing.Size(180, 28)
 $actorText.Text = $env:USERNAME
 $form.Controls.Add($actorText)
 
 $commitButton = New-Object System.Windows.Forms.Button
 $commitButton.Text = 'Commit Selected'
-$commitButton.Location = New-Object System.Drawing.Point(690, 615)
+$commitButton.Location = New-Object System.Drawing.Point(690, 525)
 $commitButton.Size = New-Object System.Drawing.Size(145, 40)
 $commitButton.Enabled = $false
 $form.Controls.Add($commitButton)
 
 $closeButton = New-Object System.Windows.Forms.Button
 $closeButton.Text = 'Close'
-$closeButton.Location = New-Object System.Drawing.Point(935, 615)
+$closeButton.Location = New-Object System.Drawing.Point(935, 525)
 $closeButton.Size = New-Object System.Drawing.Size(105, 40)
 $closeButton.Add_Click({ $form.Close() })
 $form.Controls.Add($closeButton)
 
 $workflowStatusLabel = New-Object System.Windows.Forms.Label
-$workflowStatusLabel.Location = New-Object System.Drawing.Point(20, 675)
+$workflowStatusLabel.Location = New-Object System.Drawing.Point(20, 575)
 $workflowStatusLabel.Size = New-Object System.Drawing.Size(1020, 28)
 $workflowStatusLabel.TextAlign = 'MiddleLeft'
 $workflowStatusLabel.ForeColor = [System.Drawing.Color]::DimGray
@@ -218,21 +304,21 @@ $form.Controls.Add($workflowStatusLabel)
 
 $generatePackageButton = New-Object System.Windows.Forms.Button
 $generatePackageButton.Text = 'Generate Review Package'
-$generatePackageButton.Location = New-Object System.Drawing.Point(20, 715)
+$generatePackageButton.Location = New-Object System.Drawing.Point(20, 615)
 $generatePackageButton.Size = New-Object System.Drawing.Size(210, 40)
 $generatePackageButton.Enabled = $false
 $form.Controls.Add($generatePackageButton)
 
 $approvePackageButton = New-Object System.Windows.Forms.Button
 $approvePackageButton.Text = 'Approve Package'
-$approvePackageButton.Location = New-Object System.Drawing.Point(245, 715)
+$approvePackageButton.Location = New-Object System.Drawing.Point(245, 615)
 $approvePackageButton.Size = New-Object System.Drawing.Size(175, 40)
 $approvePackageButton.Enabled = $false
 $form.Controls.Add($approvePackageButton)
 
 $sendEmailsButton = New-Object System.Windows.Forms.Button
 $sendEmailsButton.Text = 'Send Approved Emails'
-$sendEmailsButton.Location = New-Object System.Drawing.Point(435, 715)
+$sendEmailsButton.Location = New-Object System.Drawing.Point(435, 615)
 $sendEmailsButton.Size = New-Object System.Drawing.Size(205, 40)
 $sendEmailsButton.Enabled = $false
 $form.Controls.Add($sendEmailsButton)
@@ -263,10 +349,15 @@ $workflowStatusLabel.Padding = New-Object System.Windows.Forms.Padding(10, 0, 0,
 $script:proposals = @()
 $script:existingMenuPath = $null
 $script:existingStatus = $null
+$script:hasMealOverrides = $false
+$script:emailSettings = Get-EmailSettings
 $script:lastEmailSender = [Environment]::GetEnvironmentVariable(
     'MEAL_PLANNER_EMAIL_FROM',
     'Process'
 )
+if ([string]::IsNullOrWhiteSpace($script:lastEmailSender)) {
+    $script:lastEmailSender = [string]$script:emailSettings.sender_email
+}
 
 function Get-SelectedMenuPath {
     $week = $weekPicker.Value.Date
@@ -343,7 +434,7 @@ function Show-WorkflowContent {
 function Show-EmailCredentialDialog {
     $dialog = New-Object System.Windows.Forms.Form
     $dialog.Text = 'Send Approved Meal Plan Emails'
-    $dialog.ClientSize = New-Object System.Drawing.Size(520, 235)
+    $dialog.ClientSize = New-Object System.Drawing.Size(570, 335)
     $dialog.StartPosition = 'CenterParent'
     $dialog.FormBorderStyle = 'FixedDialog'
     $dialog.MaximizeBox = $false
@@ -352,47 +443,103 @@ function Show-EmailCredentialDialog {
 
     $note = New-Object System.Windows.Forms.Label
     $note.Text = (
-        'Enter the Gmail account that will send the three approved drafts. ' +
-        'Use a Google app password, not the account password. Nothing is saved.'
+        'Use a saved 1Password secret reference or enter the Google app ' +
+        'password manually. Plaintext passwords are never saved.'
     )
     $note.Location = New-Object System.Drawing.Point(20, 18)
-    $note.Size = New-Object System.Drawing.Size(480, 55)
+    $note.Size = New-Object System.Drawing.Size(530, 45)
     $dialog.Controls.Add($note)
+
+    $sourceLabel = New-Object System.Windows.Forms.Label
+    $sourceLabel.Text = 'Password source'
+    $sourceLabel.Location = New-Object System.Drawing.Point(20, 72)
+    $sourceLabel.Size = New-Object System.Drawing.Size(130, 28)
+    $dialog.Controls.Add($sourceLabel)
+
+    $sourceCombo = New-Object System.Windows.Forms.ComboBox
+    $sourceCombo.Location = New-Object System.Drawing.Point(155, 70)
+    $sourceCombo.Size = New-Object System.Drawing.Size(390, 28)
+    $sourceCombo.DropDownStyle = 'DropDownList'
+    [void]$sourceCombo.Items.Add('1Password')
+    [void]$sourceCombo.Items.Add('Enter manually')
+    $sourceCombo.SelectedItem = if (
+        $script:emailSettings.password_source -eq '1password' -or
+        -not [string]::IsNullOrWhiteSpace(
+            [string]$script:emailSettings.onepassword_reference
+        ) -or
+        $null -ne (Resolve-OnePasswordCli)
+    ) {
+        '1Password'
+    } else {
+        'Enter manually'
+    }
+    $dialog.Controls.Add($sourceCombo)
 
     $senderLabel = New-Object System.Windows.Forms.Label
     $senderLabel.Text = 'Sender email'
-    $senderLabel.Location = New-Object System.Drawing.Point(20, 90)
-    $senderLabel.Size = New-Object System.Drawing.Size(120, 28)
+    $senderLabel.Location = New-Object System.Drawing.Point(20, 112)
+    $senderLabel.Size = New-Object System.Drawing.Size(130, 28)
     $dialog.Controls.Add($senderLabel)
 
     $senderText = New-Object System.Windows.Forms.TextBox
-    $senderText.Location = New-Object System.Drawing.Point(145, 88)
-    $senderText.Size = New-Object System.Drawing.Size(350, 28)
+    $senderText.Location = New-Object System.Drawing.Point(155, 110)
+    $senderText.Size = New-Object System.Drawing.Size(390, 28)
     $senderText.Text = [string]$script:lastEmailSender
     $dialog.Controls.Add($senderText)
 
+    $referenceLabel = New-Object System.Windows.Forms.Label
+    $referenceLabel.Text = 'Secret reference'
+    $referenceLabel.Location = New-Object System.Drawing.Point(20, 152)
+    $referenceLabel.Size = New-Object System.Drawing.Size(130, 28)
+    $dialog.Controls.Add($referenceLabel)
+
+    $referenceText = New-Object System.Windows.Forms.TextBox
+    $referenceText.Location = New-Object System.Drawing.Point(155, 150)
+    $referenceText.Size = New-Object System.Drawing.Size(390, 28)
+    $referenceText.Text = [string]$script:emailSettings.onepassword_reference
+    $dialog.Controls.Add($referenceText)
+
     $passwordLabel = New-Object System.Windows.Forms.Label
     $passwordLabel.Text = 'App password'
-    $passwordLabel.Location = New-Object System.Drawing.Point(20, 135)
-    $passwordLabel.Size = New-Object System.Drawing.Size(120, 28)
+    $passwordLabel.Location = New-Object System.Drawing.Point(20, 192)
+    $passwordLabel.Size = New-Object System.Drawing.Size(130, 28)
     $dialog.Controls.Add($passwordLabel)
 
     $passwordText = New-Object System.Windows.Forms.TextBox
-    $passwordText.Location = New-Object System.Drawing.Point(145, 133)
-    $passwordText.Size = New-Object System.Drawing.Size(350, 28)
+    $passwordText.Location = New-Object System.Drawing.Point(155, 190)
+    $passwordText.Size = New-Object System.Drawing.Size(390, 28)
     $passwordText.UseSystemPasswordChar = $true
     $dialog.Controls.Add($passwordText)
 
+    $sourceHelp = New-Object System.Windows.Forms.Label
+    $sourceHelp.Location = New-Object System.Drawing.Point(155, 225)
+    $sourceHelp.Size = New-Object System.Drawing.Size(390, 35)
+    $sourceHelp.ForeColor = [System.Drawing.Color]::DimGray
+    $dialog.Controls.Add($sourceHelp)
+
+    $updateSourceControls = {
+        $usingOnePassword = $sourceCombo.SelectedItem -eq '1Password'
+        $referenceText.Enabled = $usingOnePassword
+        $passwordText.Enabled = -not $usingOnePassword
+        $sourceHelp.Text = if ($usingOnePassword) {
+            'Example: op://Private/Meal Planner Gmail/password'
+        } else {
+            'Use the 16-character Google app password. Spaces are ignored.'
+        }
+    }
+    $sourceCombo.Add_SelectedIndexChanged($updateSourceControls)
+    & $updateSourceControls
+
     $sendButton = New-Object System.Windows.Forms.Button
     $sendButton.Text = 'Send'
-    $sendButton.Location = New-Object System.Drawing.Point(305, 185)
+    $sendButton.Location = New-Object System.Drawing.Point(355, 280)
     $sendButton.Size = New-Object System.Drawing.Size(90, 34)
     $sendButton.DialogResult = [System.Windows.Forms.DialogResult]::OK
     $dialog.Controls.Add($sendButton)
 
     $cancelButton = New-Object System.Windows.Forms.Button
     $cancelButton.Text = 'Cancel'
-    $cancelButton.Location = New-Object System.Drawing.Point(405, 185)
+    $cancelButton.Location = New-Object System.Drawing.Point(455, 280)
     $cancelButton.Size = New-Object System.Drawing.Size(90, 34)
     $cancelButton.DialogResult = [System.Windows.Forms.DialogResult]::Cancel
     $dialog.Controls.Add($cancelButton)
@@ -402,16 +549,44 @@ function Show-EmailCredentialDialog {
     if ($dialog.ShowDialog($form) -ne [System.Windows.Forms.DialogResult]::OK) {
         return $null
     }
-    if (
-        [string]::IsNullOrWhiteSpace($senderText.Text) -or
-        [string]::IsNullOrWhiteSpace($passwordText.Text)
-    ) {
-        throw 'Sender email and app password are required.'
+    if ([string]::IsNullOrWhiteSpace($senderText.Text)) {
+        throw 'Sender email is required.'
+    }
+    $passwordSource = if ($sourceCombo.SelectedItem -eq '1Password') {
+        '1password'
+    } else {
+        'manual'
+    }
+    if ($passwordSource -eq '1password') {
+        if ([string]::IsNullOrWhiteSpace($referenceText.Text)) {
+            throw 'Enter a 1Password secret reference.'
+        }
+        $appPassword = Read-OnePasswordSecret -Reference $referenceText.Text.Trim()
+    } else {
+        if ([string]::IsNullOrWhiteSpace($passwordText.Text)) {
+            throw 'Enter the Google app password.'
+        }
+        $appPassword = $passwordText.Text -replace '\s', ''
+    }
+    if ($appPassword.Length -ne 16) {
+        throw (
+            'Google app passwords contain 16 characters. Generate one in ' +
+            'Google Account Security after enabling 2-Step Verification.'
+        )
     }
     $script:lastEmailSender = $senderText.Text.Trim()
+    Save-EmailSettings `
+        -Sender $script:lastEmailSender `
+        -PasswordSource $passwordSource `
+        -OnePasswordReference $(if ($passwordSource -eq '1password') {
+            $referenceText.Text.Trim()
+        } else {
+            ''
+        })
+    $script:emailSettings = Get-EmailSettings
     return [pscustomobject]@{
         Sender = $senderText.Text.Trim()
-        Password = $passwordText.Text
+        Password = $appPassword
     }
 }
 
@@ -485,6 +660,19 @@ function Update-ExistingPlanState {
         $viewEmailsButton.Enabled = (
             @($emailDraftsComplete | Where-Object { -not $_ }).Count -eq 0
         )
+        $overridePath = Join-Path $projectRoot (
+            "overrides\{0}\{1}-overrides.json" -f
+                $weekPicker.Value.Year,
+                $weekPicker.Value.ToString('yyyy-MM-dd')
+        )
+        $script:hasMealOverrides = Test-Path -LiteralPath $overridePath
+        $generatePackageButton.Text = if (
+            $status -eq 'draft' -and $script:hasMealOverrides
+        ) {
+            'Revalidate Override'
+        } else {
+            'Generate Review Package'
+        }
         $generatePackageButton.Enabled = $status -in @('draft', 'generated')
         $approvePackageButton.Enabled = (
             $status -in @('validated', 'reviewed') -and
@@ -494,7 +682,11 @@ function Update-ExistingPlanState {
         $sendEmailsButton.Enabled = $status -eq 'approved'
         $workflowStatusLabel.Text = switch ($status) {
             'draft' {
-                'Review the menu summary, then generate the grocery and email review package.'
+                if ($script:hasMealOverrides) {
+                    'Review the overridden menu, then click Revalidate Override before approval.'
+                } else {
+                    'Review the menu summary, then generate the grocery and email review package.'
+                }
             }
             'generated' {
                 'Package generation is incomplete; run Generate Review Package to validate it.'
@@ -533,6 +725,8 @@ function Update-ExistingPlanState {
     } else {
         $script:existingMenuPath = $null
         $script:existingStatus = $null
+        $script:hasMealOverrides = $false
+        $generatePackageButton.Text = 'Generate Review Package'
         $existingPlanLabel.Text = 'No existing plan found for this week.'
         $existingPlanLabel.ForeColor = $colors.Planner
         $existingPlanPanel.BackColor = $colors.SoftPlanner
@@ -911,12 +1105,28 @@ $commitButton.Add_Click({
 
 $generatePackageButton.Add_Click({
     try {
-        $answer = [System.Windows.Forms.MessageBox]::Show(
+        $isOverrideRevalidation = (
+            $script:existingStatus -eq 'draft' -and
+            $script:hasMealOverrides
+        )
+        $confirmation = if ($isOverrideRevalidation) {
+            (
+                'Rebuild the grocery list and email drafts for the overridden ' +
+                'menu, then run automated validation?'
+            )
+        } else {
             (
                 'Generate the grocery list and three email drafts, then run ' +
                 'automated validation?'
-            ),
-            'Generate Review Package',
+            )
+        }
+        $answer = [System.Windows.Forms.MessageBox]::Show(
+            $confirmation,
+            $(if ($isOverrideRevalidation) {
+                'Revalidate Override'
+            } else {
+                'Generate Review Package'
+            }),
             'YesNo',
             'Question'
         )
@@ -934,10 +1144,17 @@ $generatePackageButton.Add_Click({
         $reportText.SelectionStart = 0
         $reportText.ScrollToCaret()
         [System.Windows.Forms.MessageBox]::Show(
-            (
+            $(if ($isOverrideRevalidation) {
+                (
+                    'The overridden menu, grocery list, and email drafts are ' +
+                    'validated. Review each view before approving the package.'
+                )
+            } else {
+                (
                 'The menu, grocery list, and email drafts are validated. ' +
                 'Review each view before approving the package.'
-            ),
+                )
+            }),
             'Review Package Ready',
             'OK',
             'Information'

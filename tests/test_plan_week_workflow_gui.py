@@ -45,6 +45,46 @@ class PlanWeekWorkflowGuiTests(unittest.TestCase):
         )
         self.assertIn("$status -eq 'approved'", self.script)
 
+    def test_overridden_draft_exposes_revalidation_action(self) -> None:
+        self.assertIn(
+            "$script:hasMealOverrides = Test-Path",
+            self.script,
+        )
+        self.assertIn(
+            "$generatePackageButton.Text = if (",
+            self.script,
+        )
+        self.assertIn("'Revalidate Override'", self.script)
+        self.assertIn(
+            "click Revalidate Override before approval",
+            self.script,
+        )
+
+    def test_workflow_controls_fit_above_taskbar(self) -> None:
+        self.assertIn(
+            "System.Drawing.Size(1060, 680)",
+            self.script,
+        )
+        for control in (
+            "$generatePackageButton",
+            "$approvePackageButton",
+            "$sendEmailsButton",
+        ):
+            block = self.script.split(
+                f"{control} = New-Object",
+                1,
+            )[1].split("$form.Controls.Add", 1)[0]
+            self.assertIn(
+                "System.Drawing.Point(",
+                block,
+            )
+            self.assertIn(", 615)", block)
+            self.assertIn(
+                "System.Drawing.Size(",
+                block,
+            )
+            self.assertIn(", 40)", block)
+
     def test_commit_keeps_gui_open_for_review(self) -> None:
         commit_handler = self.script.split(
             "$commitButton.Add_Click({",
@@ -66,6 +106,37 @@ class PlanWeekWorkflowGuiTests(unittest.TestCase):
             "This will immediately send all three approved weekly menu",
             self.script,
         )
+        self.assertIn(
+            "$appPassword = $passwordText.Text -replace '\\s', ''",
+            self.script,
+        )
+        self.assertIn("$appPassword.Length -ne 16", self.script)
+        self.assertIn("Password = $appPassword", self.script)
+
+    def test_send_can_resolve_password_from_onepassword(self) -> None:
+        self.assertIn("function Resolve-OnePasswordCli", self.script)
+        self.assertIn("function Read-OnePasswordSecret", self.script)
+        self.assertIn("& $op read $Reference --no-newline", self.script)
+        self.assertIn("'1Password'", self.script)
+        self.assertIn("'Enter manually'", self.script)
+        self.assertIn(
+            "'Example: op://Private/Meal Planner Gmail/password'",
+            self.script,
+        )
+
+    def test_email_settings_store_reference_but_never_password(self) -> None:
+        settings_writer = self.script.split(
+            "function Save-EmailSettings",
+            1,
+        )[1].split("function Read-OnePasswordSecret", 1)[0]
+
+        self.assertIn("schema_version = 1", settings_writer)
+        self.assertIn("sender_email = $Sender", settings_writer)
+        self.assertIn(
+            "onepassword_reference = $OnePasswordReference",
+            settings_writer,
+        )
+        self.assertNotIn("password =", settings_writer.lower())
 
     def test_uses_dashboard_section_palette(self) -> None:
         for color in (

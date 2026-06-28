@@ -35,15 +35,21 @@ Plan Week drives the active portion of this lifecycle:
 5. `Send Approved Emails` uses Gmail SMTP and advances to `completed` only
    after all three drafts are delivered.
 
-The sender enters a Google app password at delivery time. It remains in process
-memory only. `delivery-status.json` records each successful message ID so a
-retry after partial failure skips messages that already sent.
+The sender can retrieve a Google app password from a saved 1Password secret
+reference or enter it manually. The resolved password remains in process memory
+only. `delivery-status.json` records each successful message ID so a retry
+after partial failure skips messages that already sent.
 
 A week in `generated`, `validated`, `reviewed`, or `approved` may return to
 `draft` when changes are requested. The transition must include a reason.
 Completed weeks can return to `draft` only for an explicit human-requested
 rebuild using the reopen option and after preserving an archival snapshot.
 Archived weeks remain terminal.
+
+For an overridden draft, Plan Week shows `Revalidate Override`. This rebuilds
+the grocery list and email drafts while preserving override days, runs the
+validators, and returns the week to `validated`. The normal `Approve Package`
+and `Send Approved Emails` actions then become available again.
 
 ## Commands
 

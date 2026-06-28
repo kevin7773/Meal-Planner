@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import datetime as dt
 import json
+import smtplib
 import shutil
 import tempfile
 import unittest
@@ -14,6 +15,7 @@ from planner.week_workflow import (
     inspect_week,
     send_approved_emails,
 )
+from scripts.meal_override import apply_override
 from scripts.menu_status import split_menu
 
 
@@ -32,6 +34,7 @@ ASSIGNMENTS = [
 
 class FakeSmtp:
     sent_messages = []
+    login_calls = []
     fail_after = None
 
     def __init__(self, *args, **kwargs) -> None:
@@ -45,6 +48,7 @@ class FakeSmtp:
 
     def login(self, sender: str, password: str) -> None:
         self.login_args = (sender, password)
+        self.login_calls.append(self.login_args)
 
     def send_message(self, message) -> None:
         if (
@@ -82,6 +86,7 @@ class WeekWorkflowTests(unittest.TestCase):
             root=self.root,
         )
         FakeSmtp.sent_messages = []
+        FakeSmtp.login_calls = []
         FakeSmtp.fail_after = None
 
     def tearDown(self) -> None:
@@ -115,6 +120,34 @@ class WeekWorkflowTests(unittest.TestCase):
         self.assertIn("| reviewed |", text)
         self.assertIn("| approved |", text)
         self.assertIn("Fixture Reviewer", text)
+
+    def test_overridden_package_can_be_revalidated_and_approved(self) -> None:
+        generate_review_package(WEEK, root=self.root)
+        apply_override(
+            self.root / "menus" / "2026" / "2026-06-29.md",
+            day="Wednesday",
+            override_type="custom",
+            title="Neighborhood Cookout",
+            note="Bring a side dish",
+            actor="Fixture Reviewer",
+            root=self.root,
+        )
+        self.assertEqual(
+            inspect_week(WEEK, self.root)["status"],
+            "draft",
+        )
+
+        package = generate_review_package(WEEK, root=self.root)
+        self.assertEqual(package["status"], "validated")
+        self.assertIn("WEDNESDAY - Neighborhood Cookout", package["menu_summary"])
+        self.assertIn("Neighborhood Cookout", package["email_text"])
+
+        approved = approve_review_package(
+            WEEK,
+            actor="Fixture Reviewer",
+            root=self.root,
+        )
+        self.assertEqual(approved["status"], "approved")
 
     def test_partial_delivery_retry_sends_only_unsent_messages(self) -> None:
         generate_review_package(WEEK, root=self.root)
@@ -167,6 +200,56 @@ class WeekWorkflowTests(unittest.TestCase):
         self.assertEqual(len(FakeSmtp.sent_messages), 3)
         self.assertEqual(len(completed["sent_now"]), 2)
         self.assertEqual(len(completed["message_ids"]), 3)
+
+    def test_google_app_password_spaces_are_ignored(self) -> None:
+        generate_review_package(WEEK, root=self.root)
+        approve_review_package(
+            WEEK,
+            actor="Fixture Reviewer",
+            root=self.root,
+        )
+
+        send_approved_emails(
+            WEEK,
+            actor="Fixture Reviewer",
+            sender="planner@example.com",
+            password="abcd efgh ijkl mnop",
+            root=self.root,
+            smtp_factory=FakeSmtp,
+        )
+
+        self.assertEqual(
+            FakeSmtp.login_calls,
+            [("planner@example.com", "abcdefghijklmnop")],
+        )
+
+    def test_authentication_failure_explains_google_app_password(self) -> None:
+        class RejectingSmtp(FakeSmtp):
+            def login(self, sender: str, password: str) -> None:
+                raise smtplib.SMTPAuthenticationError(
+                    535,
+                    b"Username and Password not accepted",
+                )
+
+        generate_review_package(WEEK, root=self.root)
+        approve_review_package(
+            WEEK,
+            actor="Fixture Reviewer",
+            root=self.root,
+        )
+
+        with self.assertRaisesRegex(
+            ValueError,
+            "16-character Google app password",
+        ):
+            send_approved_emails(
+                WEEK,
+                actor="Fixture Reviewer",
+                sender="planner@example.com",
+                password="abcdefghijklmnop",
+                root=self.root,
+                smtp_factory=RejectingSmtp,
+            )
 
 
 if __name__ == "__main__":

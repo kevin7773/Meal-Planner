@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "week_of": "2026-06-29",
+  "messages": {
+    "email-1-mon-tue.md": {
+      "message_id": "<178268021774.12716.4052717836412527318@gmail.com>",
+      "sent_at": "2026-06-28T20:56:58+00:00",
+      "sender": "klsmallwood73@gmail.com",
+      "recipients": [
+        "klsmallwood73@gmail.com"
+      ],
+      "subject": "Weekly Dinner Menu: Monday-Tuesday, 2026-06-29"
+    },
+    "email-2-wed-thu-fri.md": {
+      "message_id": "<178268021880.12716.15592228128729169474@gmail.com>",
+      "sent_at": "2026-06-28T20:56:59+00:00",
+      "sender": "klsmallwood73@gmail.com",
+      "recipients": [
+        "klsmallwood73@gmail.com"
+      ],
+      "subject": "Weekly Dinner Menu: Wednesday-Friday, 2026-06-29"
+    },
+    "email-3-sat-sun.md": {
+      "message_id": "<178268021934.12716.11748475477826212129@gmail.com>",
+      "sent_at": "2026-06-28T20:57:00+00:00",
+      "sender": "klsmallwood73@gmail.com",
+      "recipients": [
+        "klsmallwood73@gmail.com"
+      ],
+      "subject": "Weekly Dinner Menu: Saturday-Sunday, 2026-06-29"
+    }
+  }
+}

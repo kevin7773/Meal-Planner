@@ -51,6 +51,15 @@ class MealOverrideTests(unittest.TestCase):
             for entry in menu_days(self.menu)
         }
         status = split_menu(self.menu)[0]["status"]
+        if status in {"reviewed", "approved"}:
+            transition_menu(
+                self.menu,
+                "draft",
+                "Test Fixture",
+                "Normalize copied live menu for override tests",
+                run_validators=False,
+            )
+            status = "draft"
         if status == "draft":
             transition_menu(
                 self.menu,

@@ -151,18 +151,49 @@ def split_menu_text(text: str) -> tuple[dict, str]:
 
 
 def _draft_recipe_ids(menu_text: str) -> list[str]:
-    recipe_ids = re.findall(
-        r"(?im)^\*\*Recipe:\*\*\s+([A-Z0-9-]+)",
-        menu_text,
-    )
-    if len(recipe_ids) != 7:
-        raise ValueError(
-            f"weekly menu must contain seven recipe IDs; found {len(recipe_ids)}"
+    recipe_ids: list[str] = []
+    for index, day in enumerate(DAYS):
+        start = re.search(
+            rf"(?m)^## {re.escape(day)}, .+$",
+            menu_text,
         )
-    return [
-        "OVERRIDE" if recipe_id.startswith("OVERRIDE-") else recipe_id
-        for recipe_id in recipe_ids
-    ]
+        if start is None:
+            raise ValueError(f"weekly menu is missing {day}")
+        following = DAYS[index + 1 :]
+        end_pattern = (
+            rf"(?m)^## (?:{'|'.join(map(re.escape, following))}), .+$"
+            if following
+            else r"(?m)^## (?:Weekly Leftover Plan|Rotation Notes|"
+            r"Dry Run Summary|Planning Status History)\s*$"
+        )
+        end = re.search(end_pattern, menu_text[start.end() :])
+        section_end = (
+            start.end() + end.start()
+            if end is not None
+            else len(menu_text)
+        )
+        section = menu_text[start.start() : section_end]
+        recipe = re.search(
+            r"(?im)^\*\*Recipe:\*\*\s+([A-Z0-9-]+)",
+            section,
+        )
+        if recipe is not None:
+            recipe_id = recipe.group(1)
+            recipe_ids.append(
+                "OVERRIDE"
+                if recipe_id.startswith("OVERRIDE-")
+                else recipe_id
+            )
+        elif re.search(
+            r"(?im)^\*\*Meal Override:\*\*\s+",
+            section,
+        ):
+            recipe_ids.append("OVERRIDE")
+        else:
+            raise ValueError(
+                f"{day} must contain a recipe ID or meal override"
+            )
+    return recipe_ids
 
 
 def inspect_week(
@@ -353,6 +384,7 @@ def send_approved_emails(
         )
     if not sender.strip():
         raise ValueError("sender email is required")
+    password = "".join(password.split())
     if not password:
         raise ValueError("email app password is required")
     missing = [path.name for path in email_paths if not path.exists()]
@@ -378,37 +410,44 @@ def send_approved_emails(
     port = int(os.environ.get("MEAL_PLANNER_SMTP_PORT", "465"))
     if pending:
         context = ssl.create_default_context()
-        with smtp_factory(
-            host,
-            port,
-            context=context,
-            timeout=30,
-        ) as smtp:
-            smtp.login(sender, password)
-            for path in pending:
-                recipients, subject, body = parse_email_draft(path)
-                message = EmailMessage()
-                message["From"] = sender
-                message["To"] = ", ".join(recipients)
-                message["Subject"] = subject
-                message_id = make_msgid(
-                    domain=sender.rsplit("@", 1)[-1]
-                )
-                message["Message-ID"] = message_id
-                message.set_content(body)
-                smtp.send_message(message)
-                sent_at = dt.datetime.now(dt.timezone.utc).isoformat(
-                    timespec="seconds"
-                )
-                delivery.setdefault("messages", {})[path.name] = {
-                    "message_id": message_id,
-                    "sent_at": sent_at,
-                    "sender": sender,
-                    "recipients": recipients,
-                    "subject": subject,
-                }
-                _write_delivery_log(delivery_path, delivery)
-                sent_now.append(path.name)
+        try:
+            with smtp_factory(
+                host,
+                port,
+                context=context,
+                timeout=30,
+            ) as smtp:
+                smtp.login(sender, password)
+                for path in pending:
+                    recipients, subject, body = parse_email_draft(path)
+                    message = EmailMessage()
+                    message["From"] = sender
+                    message["To"] = ", ".join(recipients)
+                    message["Subject"] = subject
+                    message_id = make_msgid(
+                        domain=sender.rsplit("@", 1)[-1]
+                    )
+                    message["Message-ID"] = message_id
+                    message.set_content(body)
+                    smtp.send_message(message)
+                    sent_at = dt.datetime.now(dt.timezone.utc).isoformat(
+                        timespec="seconds"
+                    )
+                    delivery.setdefault("messages", {})[path.name] = {
+                        "message_id": message_id,
+                        "sent_at": sent_at,
+                        "sender": sender,
+                        "recipients": recipients,
+                        "subject": subject,
+                    }
+                    _write_delivery_log(delivery_path, delivery)
+                    sent_now.append(path.name)
+        except smtplib.SMTPAuthenticationError as exc:
+            raise ValueError(
+                "Gmail rejected the login. Use the sender's 16-character "
+                "Google app password, not the normal account password. "
+                "Create a new app password if the account password changed."
+            ) from exc
 
     if len(delivery.get("messages", {})) != len(EMAIL_FILENAMES):
         raise RuntimeError("Not all approved emails were delivered")

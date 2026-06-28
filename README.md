@@ -26,6 +26,23 @@ Plan Week never stores the Gmail app password. Successful deliveries are
 recorded per draft so retrying after a partial SMTP failure sends only messages
 that remain unsent.
 
+### 1Password email credentials
+
+Plan Week can resolve the Gmail app password from 1Password at send time:
+
+1. Install 1Password CLI with `winget install 1password-cli`.
+2. In the unlocked 1Password desktop app, open **Settings > Developer** and
+   enable **Integrate with 1Password CLI**.
+3. Store the Gmail app password in a 1Password item, then copy that field's
+   secret reference, such as `op://Private/Meal Planner Gmail/password`.
+4. In Plan Week's send dialog, select **1Password**, enter the sender email and
+   secret reference, and send.
+
+The project stores only the sender email and `op://` reference in
+`preferences/email-settings.json`. The secret is read by `op read` for the
+current send operation and is never written to project files. Manual entry
+remains available as a fallback.
+
 ## Planning Suite
 
 `Meal Planner Suite.cmd` is the common desktop entry point for weekly planning,
