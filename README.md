@@ -74,12 +74,14 @@ Run `python scripts/planner_cli.py telemetry --rules` to inspect registered,
 tested, monthly-used, and unused planning rules.
 Run `python scripts/planner_simulation.py run --iterations 10000 --seed 42`
 to statistically test planner cost, fiber, distribution, utilization, and
-constraint behavior.
+constraint behavior. See [Simulation](docs/simulation.md) for scenario,
+cache, metric, and performance-gate details.
 Run `python scripts/performance_gate.py check` to reproduce the checked-in
 10,000-week baseline and enforce cost, fiber, inventory coverage, diversity,
 and final-constraint policies. Intentional baseline changes require
 `python scripts/performance_gate.py update-baseline --reason "review note"`
-and normal review of the resulting JSON diff.
+and normal review of the resulting JSON diff. GitHub Actions retains the full
+JSON run as the `planner-simulation-report` artifact, including failed gates.
 
 ## Dry Run
 

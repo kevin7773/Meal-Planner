@@ -15,7 +15,30 @@ from planner.performance_gate import (
     run_performance_gate,
     update_approved_metrics,
     write_baseline,
+    write_simulation_report,
 )
+
+
+DISPLAY_NAMES = {
+    "average_grocery_bill_usd": "average_recipe_cost_usd",
+    "recipe_diversity_percentage": "recipe_diversity",
+}
+
+
+def format_metric_value(
+    metric: str,
+    value: float,
+    *,
+    signed: bool = False,
+) -> str:
+    if metric == "average_grocery_bill_usd":
+        sign = "+" if signed and value > 0 else "-" if value < 0 else ""
+        return f"{sign}${abs(value):.2f}"
+    if metric == "recipe_diversity_percentage":
+        return f"{value:+.1f}%" if signed else f"{value:.1f}%"
+    if metric == "final_constraint_violations":
+        return f"{value:+g}" if signed else f"{value:g}"
+    return f"{value:+.1f}" if signed else f"{value:.1f}"
 
 
 def format_result(result: dict) -> str:
@@ -28,10 +51,25 @@ def format_result(result: dict) -> str:
     ]
     for check in result["checks"]:
         status = "PASS" if check["passed"] else "FAIL"
-        lines.append(
-            f"[{status}] {check['metric']}: {check['actual']} "
-            f"({check['requirement']})"
-        )
+        metric = check["metric"]
+        display_name = DISPLAY_NAMES.get(metric, metric)
+        actual = format_metric_value(metric, check["actual"])
+        if not check["passed"] and "approved" in check:
+            approved = format_metric_value(metric, check["approved"])
+            delta = format_metric_value(
+                metric,
+                check["delta"],
+                signed=True,
+            )
+            lines.append(
+                f"[{status}] {display_name}: {approved} -> {actual} "
+                f"({delta}); {check['requirement']}"
+            )
+        else:
+            lines.append(
+                f"[{status}] {display_name}: {actual} "
+                f"({check['requirement']})"
+            )
     return "\n".join(lines)
 
 
@@ -53,6 +91,11 @@ def main() -> int:
         help="Required review note for update-baseline.",
     )
     parser.add_argument("--json", action="store_true")
+    parser.add_argument(
+        "--report-output",
+        type=Path,
+        help="Write the complete simulation report as JSON.",
+    )
     args = parser.parse_args()
 
     if args.command == "validate":
@@ -64,6 +107,8 @@ def main() -> int:
         parser.error("update-baseline requires --reason")
 
     result = run_performance_gate(baseline_path=args.baseline)
+    if args.report_output:
+        write_simulation_report(args.report_output, result["report"])
     if args.command == "update-baseline":
         baseline = load_baseline(args.baseline)
         updated = update_approved_metrics(

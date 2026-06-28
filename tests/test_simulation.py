@@ -4,7 +4,13 @@ import datetime as dt
 import unittest
 from unittest.mock import patch
 
-from planner.simulation import format_simulation_report, run_simulation
+from planner.simulation import (
+    SELECTED_RECIPE_SOURCES,
+    format_simulation_report,
+    run_simulation,
+    selected_recipe_source,
+    underutilized_high_scoring_recipes,
+)
 
 
 class SimulationTests(unittest.TestCase):
@@ -49,6 +55,12 @@ class SimulationTests(unittest.TestCase):
             ),
             meals,
         )
+        sources = results["selected_recipe_source_distribution"]
+        self.assertEqual(tuple(sources), SELECTED_RECIPE_SOURCES)
+        self.assertEqual(
+            sum(item["count"] for item in sources.values()),
+            meals,
+        )
         self.assertEqual(
             sum(
                 item["count"]
@@ -65,13 +77,101 @@ class SimulationTests(unittest.TestCase):
             ),
             meals,
         )
-        self.assertGreater(results["average_grocery_bill_usd"], 0)
+        self.assertGreater(results["average_recipe_cost_usd"], 0)
+        self.assertEqual(
+            results["average_recipe_cost_usd"],
+            results["average_grocery_bill_usd"],
+        )
         self.assertGreater(results["average_fiber_grams"], 0)
         self.assertGreater(
             results["average_inventory_coverage_score"],
             0,
         )
         self.assertGreater(results["recipe_diversity"]["percentage"], 0)
+
+    def test_selected_recipe_source_classification(self) -> None:
+        cases = (
+            ({"id": "A", "status": "approved"}, "approved"),
+            ({"id": "B", "status": "candidate"}, "candidate"),
+            (
+                {
+                    "id": "C",
+                    "status": "proposed",
+                    "source": "generated-idea",
+                },
+                "generated-idea",
+            ),
+            (
+                {
+                    "id": "D",
+                    "status": "proposed",
+                    "source": "user-idea",
+                },
+                "user-idea",
+            ),
+            (
+                {
+                    "id": "E",
+                    "status": "override",
+                    "source": "meal-override",
+                },
+                "override",
+            ),
+        )
+
+        for recipe, expected in cases:
+            with self.subTest(expected=expected):
+                self.assertEqual(selected_recipe_source(recipe), expected)
+
+    def test_unknown_selected_recipe_source_fails_loudly(self) -> None:
+        with self.assertRaisesRegex(ValueError, "Cannot classify"):
+            selected_recipe_source({"id": "UNKNOWN", "status": "proposed"})
+
+    def test_underutilized_high_scoring_filter(self) -> None:
+        rows = [
+            {
+                "recipe_id": "MATCH",
+                "name": "Strong but Blocked",
+                "times_eligible": 100,
+                "times_selected": 10,
+                "selection_rate": 10.0,
+                "average_score": 90.0,
+            },
+            {
+                "recipe_id": "LOW-SCORE",
+                "name": "Low Score",
+                "times_eligible": 100,
+                "times_selected": 5,
+                "selection_rate": 5.0,
+                "average_score": 70.0,
+            },
+            {
+                "recipe_id": "OFTEN-SELECTED",
+                "name": "Often Selected",
+                "times_eligible": 100,
+                "times_selected": 25,
+                "selection_rate": 25.0,
+                "average_score": 95.0,
+            },
+            {
+                "recipe_id": "TOO-FEW",
+                "name": "Too Few Observations",
+                "times_eligible": 4,
+                "times_selected": 0,
+                "selection_rate": 0.0,
+                "average_score": 100.0,
+            },
+        ]
+
+        matches = underutilized_high_scoring_recipes(
+            rows,
+            minimum_eligible_observations=5,
+        )
+
+        self.assertEqual(
+            [row["recipe_id"] for row in matches],
+            ["MATCH"],
+        )
 
     def test_same_seed_and_baseline_produce_identical_metrics(self) -> None:
         first = self.deterministic_metrics(self.run_sample())
@@ -137,16 +237,34 @@ class SimulationTests(unittest.TestCase):
         rendered = format_simulation_report(report)
 
         self.assertIn("Planner Simulation", rendered)
-        self.assertIn("Average estimated grocery bill:", rendered)
+        self.assertIn("Average estimated recipe cost:", rendered)
         self.assertIn("Average inventory coverage:", rendered)
         self.assertIn("Recipe diversity:", rendered)
         self.assertIn("Final constraint violations: 0", rendered)
+        self.assertIn("Selected recipe sources", rendered)
+        self.assertIn("generated-idea:", rendered)
+        self.assertIn("user-idea:", rendered)
+        self.assertIn("override:", rendered)
         self.assertIn("Protein distribution", rendered)
         self.assertIn("Constraint failures", rendered)
+        self.assertIn("Underutilized high-scoring recipes", rendered)
         self.assertIn("Lowest recipe selection rates", rendered)
         self.assertIn("Cost basis:", rendered)
         self.assertIn("Fiber basis:", rendered)
         self.assertIn("Constraint basis:", rendered)
+
+    def test_report_accepts_legacy_grocery_cost_field(self) -> None:
+        report = self.run_sample()
+        legacy_cost = report["results"].pop("average_recipe_cost_usd")
+        report["results"].pop("underutilized_high_scoring_recipes")
+
+        rendered = format_simulation_report(report)
+
+        self.assertIn(
+            f"Average estimated recipe cost: ${legacy_cost:.2f}",
+            rendered,
+        )
+        self.assertIn("Underutilized high-scoring recipes", rendered)
 
     def test_rejects_invalid_simulation_dimensions(self) -> None:
         with self.assertRaisesRegex(ValueError, "iterations"):

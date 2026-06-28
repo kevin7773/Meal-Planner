@@ -61,6 +61,15 @@ CONSTRAINT_KEYS = (
     "heat_friendly",
     "search_limit",
 )
+SELECTED_RECIPE_SOURCES = (
+    "approved",
+    "candidate",
+    "generated-idea",
+    "user-idea",
+    "override",
+)
+UNDERUTILIZED_MINIMUM_AVERAGE_SCORE = 75.0
+UNDERUTILIZED_MAXIMUM_SELECTION_RATE = 20.0
 
 
 def next_monday(today: dt.date | None = None) -> dt.date:
@@ -78,6 +87,52 @@ def choose_weather_category(
         weights=list(weights.values()),
         k=1,
     )[0]
+
+
+def selected_recipe_source(recipe: dict) -> str:
+    status = recipe.get("status")
+    source = recipe.get("source")
+    if status == "override" or source == "meal-override":
+        return "override"
+    if source == "generated-idea":
+        return "generated-idea"
+    if source == "user-idea":
+        return "user-idea"
+    if status == "approved":
+        return "approved"
+    if status == "candidate":
+        return "candidate"
+    raise ValueError(
+        f"Cannot classify selected recipe {recipe.get('id', '<unknown>')}: "
+        f"status={status!r}, source={source!r}"
+    )
+
+
+def underutilized_high_scoring_recipes(
+    utilization_rows: list[dict],
+    *,
+    minimum_eligible_observations: int,
+) -> list[dict]:
+    matches = [
+        row
+        for row in utilization_rows
+        if (
+            row["times_eligible"] >= minimum_eligible_observations
+            and row["average_score"]
+            >= UNDERUTILIZED_MINIMUM_AVERAGE_SCORE
+            and row["selection_rate"]
+            < UNDERUTILIZED_MAXIMUM_SELECTION_RATE
+        )
+    ]
+    return sorted(
+        matches,
+        key=lambda row: (
+            -row["average_score"],
+            row["selection_rate"],
+            -row["times_eligible"],
+            row["name"].casefold(),
+        ),
+    )
 
 
 def _constraint_counts(trace: dict) -> dict[str, int]:
@@ -228,6 +283,9 @@ def run_simulation(
     fiber_total = 0.0
     meal_count = 0
     protein_counts: collections.Counter[str] = collections.Counter()
+    source_counts: collections.Counter[str] = collections.Counter(
+        {source: 0 for source in SELECTED_RECIPE_SOURCES}
+    )
     method_counts: collections.Counter[str] = collections.Counter()
     season_counts: collections.Counter[str] = collections.Counter()
     weather_counts: collections.Counter[str] = collections.Counter()
@@ -357,6 +415,9 @@ def run_simulation(
             )
             meal_count += len(selected)
             protein_counts.update(recipe["protein"] for recipe in selected)
+            source_counts.update(
+                selected_recipe_source(recipe) for recipe in selected
+            )
             method_counts.update(
                 recipe["cooking_method"] for recipe in selected
             )
@@ -440,6 +501,11 @@ def run_simulation(
             row["name"].casefold(),
         )
     )
+    minimum_eligible_observations = max(5, iterations // 100)
+    underutilized_recipes = underutilized_high_scoring_recipes(
+        utilization_rows,
+        minimum_eligible_observations=minimum_eligible_observations,
+    )
 
     def distribution(counter: collections.Counter[str], total: int) -> dict:
         return {
@@ -453,7 +519,23 @@ def run_simulation(
             )
         }
 
+    def selected_source_distribution(total: int) -> dict:
+        return {
+            source: {
+                "count": source_counts[source],
+                "percentage": (
+                    round(source_counts[source] / total * 100, 1)
+                    if total
+                    else 0.0
+                ),
+            }
+            for source in SELECTED_RECIPE_SOURCES
+        }
+
     elapsed = time.perf_counter() - started
+    average_recipe_cost_usd = (
+        round(cost_total / successful, 2) if successful else 0.0
+    )
     return {
         "schema_version": 1,
         "simulation": {
@@ -480,9 +562,8 @@ def run_simulation(
             "successful_weeks": successful,
             "failed_weeks": failed,
             "success_rate": round(successful / iterations * 100, 2),
-            "average_grocery_bill_usd": (
-                round(cost_total / successful, 2) if successful else 0.0
-            ),
+            "average_recipe_cost_usd": average_recipe_cost_usd,
+            "average_grocery_bill_usd": average_recipe_cost_usd,
             "average_fiber_grams": (
                 round(fiber_total / meal_count, 1) if meal_count else 0.0
             ),
@@ -499,6 +580,9 @@ def run_simulation(
                 protein_counts,
                 meal_count,
             ),
+            "selected_recipe_source_distribution": (
+                selected_source_distribution(meal_count)
+            ),
             "cooking_method_distribution": distribution(
                 method_counts,
                 meal_count,
@@ -512,6 +596,18 @@ def run_simulation(
                 successful,
             ),
             "recipe_utilization": utilization_rows,
+            "underutilized_high_scoring_recipes": {
+                "minimum_eligible_observations": (
+                    minimum_eligible_observations
+                ),
+                "minimum_average_score": (
+                    UNDERUTILIZED_MINIMUM_AVERAGE_SCORE
+                ),
+                "maximum_selection_rate": (
+                    UNDERUTILIZED_MAXIMUM_SELECTION_RATE
+                ),
+                "recipes": underutilized_recipes,
+            },
             "recipe_diversity": {
                 "eligible_recipes": len(utilization_rows),
                 "selected_recipes": len(selected_recipe_ids),
@@ -557,6 +653,28 @@ def run_simulation(
 def format_simulation_report(report: dict) -> str:
     simulation = report["simulation"]
     results = report["results"]
+    average_recipe_cost_usd = results.get(
+        "average_recipe_cost_usd",
+        results["average_grocery_bill_usd"],
+    )
+    minimum_eligible_observations = max(
+        5,
+        simulation["iterations"] // 100,
+    )
+    underutilized = results.get(
+        "underutilized_high_scoring_recipes",
+        {
+            "minimum_eligible_observations": minimum_eligible_observations,
+            "minimum_average_score": UNDERUTILIZED_MINIMUM_AVERAGE_SCORE,
+            "maximum_selection_rate": UNDERUTILIZED_MAXIMUM_SELECTION_RATE,
+            "recipes": underutilized_high_scoring_recipes(
+                results["recipe_utilization"],
+                minimum_eligible_observations=(
+                    minimum_eligible_observations
+                ),
+            ),
+        },
+    )
     lines = [
         "Planner Simulation",
         "",
@@ -565,8 +683,8 @@ def format_simulation_report(report: dict) -> str:
         f"Failed weeks: {results['failed_weeks']:,}",
         f"Success rate: {results['success_rate']:.2f}%",
         (
-            "Average estimated grocery bill: "
-            f"${results['average_grocery_bill_usd']:.2f}"
+            "Average estimated recipe cost: "
+            f"${average_recipe_cost_usd:.2f}"
         ),
         f"Average fiber: {results['average_fiber_grams']:.1f} g/serving",
         (
@@ -593,8 +711,15 @@ def format_simulation_report(report: dict) -> str:
             f"({results['scenario_cache_hit_rate']:.1f}% cache hit rate)"
         ),
         "",
-        "Protein distribution",
+        "Selected recipe sources",
     ]
+    lines.extend(
+        f"{name}: {data['count']:,} ({data['percentage']:.1f}%)"
+        for name, data in results[
+            "selected_recipe_source_distribution"
+        ].items()
+    )
+    lines.extend(["", "Protein distribution"])
     lines.extend(
         f"{name}: {data['count']:,} ({data['percentage']:.1f}%)"
         for name, data in results["protein_distribution"].items()
@@ -604,7 +729,33 @@ def format_simulation_report(report: dict) -> str:
         f"{name.replace('_', ' ').title()}: {count:,}"
         for name, count in results["constraint_failures"].items()
     )
-    minimum_eligible = max(5, simulation["iterations"] // 100)
+    lines.extend(
+        [
+            "",
+            (
+                "Underutilized high-scoring recipes "
+                f"(score >= {underutilized['minimum_average_score']:.1f}, "
+                f"selection < {underutilized['maximum_selection_rate']:.1f}%, "
+                "minimum "
+                f"{underutilized['minimum_eligible_observations']:,} "
+                "eligible observations)"
+            ),
+        ]
+    )
+    if underutilized["recipes"]:
+        lines.extend(
+            (
+                f"{row['recipe_id']} {row['name']}: "
+                f"score {row['average_score']:.1f}, "
+                f"{row['times_selected']:,}/{row['times_eligible']:,} "
+                f"selected ({row['selection_rate']:.1f}%)"
+            )
+            for row in underutilized["recipes"][:10]
+        )
+    else:
+        lines.append("No recipes met the underutilization thresholds.")
+
+    minimum_eligible = underutilized["minimum_eligible_observations"]
     underused = [
         row
         for row in results["recipe_utilization"]

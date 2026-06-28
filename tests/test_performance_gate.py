@@ -1,13 +1,18 @@
 from __future__ import annotations
 
 import copy
+import json
+import tempfile
 import unittest
+from pathlib import Path
 
 from planner.performance_gate import (
     evaluate_performance,
     update_approved_metrics,
     validate_baseline,
+    write_simulation_report,
 )
+from scripts.performance_gate import format_result
 
 
 class PerformanceGateTests(unittest.TestCase):
@@ -96,6 +101,31 @@ class PerformanceGateTests(unittest.TestCase):
             {"final_constraint_violations"},
         )
 
+    def test_failed_gate_reports_approved_value_and_delta(self) -> None:
+        current = {
+            **self.current,
+            "average_fiber_grams": 7.9,
+            "recipe_diversity_percentage": 27.9,
+        }
+        checks = evaluate_performance(current, self.baseline)
+        rendered = format_result({"passed": False, "checks": checks})
+
+        self.assertIn(
+            "[FAIL] average_fiber_grams: 9.0 -> 7.9 (-1.1);",
+            rendered,
+        )
+        self.assertIn(
+            "[FAIL] recipe_diversity: 35.0% -> 27.9% (-7.1%);",
+            rendered,
+        )
+        fiber = next(
+            check
+            for check in checks
+            if check["metric"] == "average_fiber_grams"
+        )
+        self.assertEqual(fiber["approved"], 9.0)
+        self.assertEqual(fiber["delta"], -1.1)
+
     def test_baseline_validator_rejects_incomplete_policy(self) -> None:
         invalid = copy.deepcopy(self.baseline)
         del invalid["thresholds"]["minimum_average_fiber_grams"]
@@ -118,6 +148,38 @@ class PerformanceGateTests(unittest.TestCase):
                 report,
                 reason=" ",
             )
+
+    def test_simulation_report_writer_preserves_full_report(self) -> None:
+        report = {
+            "schema_version": 1,
+            "simulation": {"iterations": 10},
+            "results": {"successful_weeks": 10},
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "artifacts" / "simulation.json"
+
+            write_simulation_report(path, report)
+
+            self.assertEqual(
+                json.loads(path.read_text(encoding="utf-8")),
+                report,
+            )
+
+    def test_ci_uploads_simulation_report_even_when_gate_fails(self) -> None:
+        workflow = (
+            Path(__file__).resolve().parents[1]
+            / ".github"
+            / "workflows"
+            / "validate-recipes.yml"
+        ).read_text(encoding="utf-8")
+
+        self.assertIn(
+            "--report-output artifacts/planner-simulation-report.json",
+            workflow,
+        )
+        self.assertIn("uses: actions/upload-artifact@v4", workflow)
+        self.assertIn("if: always()", workflow)
+        self.assertIn("name: planner-simulation-report", workflow)
 
 
 if __name__ == "__main__":

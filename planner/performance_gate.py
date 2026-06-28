@@ -149,6 +149,7 @@ def evaluate_performance(
             current["average_grocery_bill_usd"] <= cost_limit,
             current["average_grocery_bill_usd"],
             f"must be <= ${cost_limit:.2f}",
+            approved=approved["average_grocery_bill_usd"],
         )
     )
     checks.append(
@@ -161,6 +162,7 @@ def evaluate_performance(
                 "must be >= "
                 f"{thresholds['minimum_average_fiber_grams']:.1f} g"
             ),
+            approved=approved["average_fiber_grams"],
         )
     )
     checks.append(
@@ -173,6 +175,7 @@ def evaluate_performance(
                 "must be >= "
                 f"{thresholds['minimum_inventory_coverage_score']:.1f}/100"
             ),
+            approved=approved["average_inventory_coverage_score"],
         )
     )
     checks.append(
@@ -185,6 +188,7 @@ def evaluate_performance(
                 "must be >= "
                 f"{thresholds['minimum_recipe_diversity_percentage']:.1f}%"
             ),
+            approved=approved["recipe_diversity_percentage"],
         )
     )
     checks.append(
@@ -197,6 +201,7 @@ def evaluate_performance(
                 "must be <= "
                 f"{thresholds['maximum_final_constraint_violations']}"
             ),
+            approved=approved["final_constraint_violations"],
         )
     )
     return checks
@@ -207,11 +212,15 @@ def _check(
     passed: bool,
     actual: float,
     requirement: str,
+    *,
+    approved: float,
 ) -> dict:
     return {
         "metric": metric,
         "passed": passed,
         "actual": actual,
+        "approved": approved,
+        "delta": round(actual - approved, 4),
         "requirement": requirement,
     }
 
@@ -268,6 +277,15 @@ def update_approved_metrics(
 def write_baseline(path: Path, document: dict) -> None:
     path.write_text(
         json.dumps(document, indent=2) + "\n",
+        encoding="utf-8",
+        newline="\n",
+    )
+
+
+def write_simulation_report(path: Path, report: dict) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(
+        json.dumps(report, indent=2) + "\n",
         encoding="utf-8",
         newline="\n",
     )

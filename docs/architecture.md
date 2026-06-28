@@ -147,6 +147,12 @@ The `planner/` package separates planning responsibilities.
 | `scripts/dry_run.py` | Backward-compatible imports and direct-execution wrapper |
 | `scripts/meal-planner-suite.ps1` | Shared dashboard and launcher for the five desktop workflow GUIs |
 
+Simulation output uses `average_recipe_cost_usd` for the average sum of recipe
+estimates per successful week. The legacy alias `average_grocery_bill_usd`
+contains the same value for compatibility; it is not a post-inventory shopping
+cost. See [Planner Simulation](simulation.md) for sampling, cache, metric, and
+performance-gate semantics.
+
 ### 1. Load and Normalize
 
 `planner/proposal.py` coordinates loading canonical recipes, queued user ideas,
@@ -273,9 +279,12 @@ actor.
 | `menu_status.py check-all` | Lifecycle metadata and transition history |
 | `tests/` | Cross-component behavior and regression coverage |
 
-GitHub Actions runs these checks on pushes and pull requests. Passing structural
-validation does not replace human review of taste, quantities, household
-availability, or whether a candidate recipe is genuinely family-approved.
+GitHub Actions runs these checks on pushes and pull requests. The performance
+gate writes its full JSON simulation output and uploads it as the
+`planner-simulation-report` artifact even when a threshold fails. Passing
+structural validation does not replace human review of taste, quantities,
+household availability, or whether a candidate recipe is genuinely
+family-approved.
 
 ## User Interfaces and Automation
 
