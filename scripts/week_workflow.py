@@ -16,6 +16,7 @@ from planner.week_workflow import (
     generate_review_package,
     inspect_week,
     send_approved_emails,
+    test_email_credentials,
 )
 
 
@@ -32,7 +33,7 @@ def main() -> int:
     )
     parser.add_argument(
         "command",
-        choices=("inspect", "generate", "approve", "send"),
+        choices=("inspect", "generate", "approve", "send", "test-email"),
     )
     parser.add_argument("--week", required=True, type=monday)
     parser.add_argument("--actor")
@@ -52,12 +53,22 @@ def main() -> int:
                 args.week,
                 actor=args.actor,
             )
-        else:
+        elif args.command == "send":
             if not args.actor or not args.sender:
                 parser.error("send requires --actor and --sender")
             result = send_approved_emails(
                 args.week,
                 actor=args.actor,
+                sender=args.sender,
+                password=os.environ.get(
+                    "MEAL_PLANNER_EMAIL_PASSWORD",
+                    "",
+                ),
+            )
+        else:
+            if not args.sender:
+                parser.error("test-email requires --sender")
+            result = test_email_credentials(
                 sender=args.sender,
                 password=os.environ.get(
                     "MEAL_PLANNER_EMAIL_PASSWORD",
@@ -71,10 +82,13 @@ def main() -> int:
     if args.json:
         print(json.dumps(result, indent=2))
     else:
-        print(
-            f"{result['week_of']}: {result['status']} "
-            f"({result['menu_path']})"
-        )
+        if args.command == "test-email":
+            print(f"{result['sender']}: {result['status']}")
+        else:
+            print(
+                f"{result['week_of']}: {result['status']} "
+                f"({result['menu_path']})"
+            )
     return 0
 
 

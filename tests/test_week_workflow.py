@@ -14,6 +14,7 @@ from planner.week_workflow import (
     generate_review_package,
     inspect_week,
     send_approved_emails,
+    test_email_credentials,
 )
 from scripts.meal_override import apply_override
 from scripts.menu_status import split_menu
@@ -222,6 +223,21 @@ class WeekWorkflowTests(unittest.TestCase):
             FakeSmtp.login_calls,
             [("planner@example.com", "abcdefghijklmnop")],
         )
+
+    def test_email_credentials_can_be_tested_without_sending(self) -> None:
+        result = test_email_credentials(
+            sender="planner@example.com",
+            password="abcd efgh ijkl mnop",
+            smtp_factory=FakeSmtp,
+        )
+
+        self.assertEqual(result["status"], "credentials-valid")
+        self.assertEqual(result["messages_sent"], 0)
+        self.assertEqual(
+            FakeSmtp.login_calls,
+            [("planner@example.com", "abcdefghijklmnop")],
+        )
+        self.assertEqual(FakeSmtp.sent_messages, [])
 
     def test_authentication_failure_explains_google_app_password(self) -> None:
         class RejectingSmtp(FakeSmtp):

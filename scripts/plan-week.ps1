@@ -323,6 +323,13 @@ $sendEmailsButton.Size = New-Object System.Drawing.Size(205, 40)
 $sendEmailsButton.Enabled = $false
 $form.Controls.Add($sendEmailsButton)
 
+$testEmailButton = New-Object System.Windows.Forms.Button
+$testEmailButton.Text = 'Test Email Setup'
+$testEmailButton.Location = New-Object System.Drawing.Point(655, 615)
+$testEmailButton.Size = New-Object System.Drawing.Size(185, 40)
+$testEmailButton.Enabled = $true
+$form.Controls.Add($testEmailButton)
+
 Set-SectionButtonStyle -Button $generateButton -Color $colors.Planner
 Set-SectionButtonStyle -Button $viewSummaryButton -Color $colors.Planner
 Set-SectionButtonStyle -Button $viewGroceryButton -Color $colors.Pantry
@@ -332,6 +339,7 @@ Set-SectionButtonStyle -Button $commitButton -Color $colors.Planner
 Set-SectionButtonStyle -Button $generatePackageButton -Color $colors.Planner
 Set-SectionButtonStyle -Button $approvePackageButton -Color $colors.Review
 Set-SectionButtonStyle -Button $sendEmailsButton -Color $colors.Email
+Set-SectionButtonStyle -Button $testEmailButton -Color $colors.Email
 
 $closeButton.FlatStyle = 'Flat'
 $closeButton.FlatAppearance.BorderColor = $colors.Border
@@ -432,8 +440,14 @@ function Show-WorkflowContent {
 }
 
 function Show-EmailCredentialDialog {
+    param([switch]$TestOnly)
+
     $dialog = New-Object System.Windows.Forms.Form
-    $dialog.Text = 'Send Approved Meal Plan Emails'
+    $dialog.Text = if ($TestOnly) {
+        'Test Meal Planner Email Setup'
+    } else {
+        'Send Approved Meal Plan Emails'
+    }
     $dialog.ClientSize = New-Object System.Drawing.Size(570, 335)
     $dialog.StartPosition = 'CenterParent'
     $dialog.FormBorderStyle = 'FixedDialog'
@@ -442,10 +456,17 @@ function Show-EmailCredentialDialog {
     $dialog.Font = New-Object System.Drawing.Font('Segoe UI', 10)
 
     $note = New-Object System.Windows.Forms.Label
-    $note.Text = (
-        'Use a saved 1Password secret reference or enter the Google app ' +
-        'password manually. Plaintext passwords are never saved.'
-    )
+    $note.Text = if ($TestOnly) {
+        (
+            'Authenticate with Gmail without sending a message. Use a saved ' +
+            '1Password reference or enter the app password manually.'
+        )
+    } else {
+        (
+            'Use a saved 1Password secret reference or enter the Google app ' +
+            'password manually. Plaintext passwords are never saved.'
+        )
+    }
     $note.Location = New-Object System.Drawing.Point(20, 18)
     $note.Size = New-Object System.Drawing.Size(530, 45)
     $dialog.Controls.Add($note)
@@ -531,7 +552,7 @@ function Show-EmailCredentialDialog {
     & $updateSourceControls
 
     $sendButton = New-Object System.Windows.Forms.Button
-    $sendButton.Text = 'Send'
+    $sendButton.Text = if ($TestOnly) { 'Test' } else { 'Send' }
     $sendButton.Location = New-Object System.Drawing.Point(355, 280)
     $sendButton.Size = New-Object System.Drawing.Size(90, 34)
     $sendButton.DialogResult = [System.Windows.Forms.DialogResult]::OK
@@ -1283,6 +1304,54 @@ $sendEmailsButton.Add_Click({
             'Error'
         ) | Out-Null
         Update-ExistingPlanState
+    }
+})
+
+$testEmailButton.Add_Click({
+    try {
+        $credentials = Show-EmailCredentialDialog -TestOnly
+        if ($null -eq $credentials) {
+            return
+        }
+        $previousPassword = [Environment]::GetEnvironmentVariable(
+            'MEAL_PLANNER_EMAIL_PASSWORD',
+            'Process'
+        )
+        try {
+            [Environment]::SetEnvironmentVariable(
+                'MEAL_PLANNER_EMAIL_PASSWORD',
+                $credentials.Password,
+                'Process'
+            )
+            $form.UseWaitCursor = $true
+            $result = Invoke-WeekWorkflow `
+                -Command 'test-email' `
+                -Sender $credentials.Sender
+        } finally {
+            [Environment]::SetEnvironmentVariable(
+                'MEAL_PLANNER_EMAIL_PASSWORD',
+                $previousPassword,
+                'Process'
+            )
+            $credentials.Password = ''
+            $form.UseWaitCursor = $false
+        }
+        [System.Windows.Forms.MessageBox]::Show(
+            (
+                "Email authentication succeeded for $($result.sender).`r`n" +
+                'No message was sent.'
+            ),
+            'Email Setup Verified',
+            'OK',
+            'Information'
+        ) | Out-Null
+    } catch {
+        [System.Windows.Forms.MessageBox]::Show(
+            $_.Exception.Message,
+            'Email Setup Test Failed',
+            'OK',
+            'Error'
+        ) | Out-Null
     }
 })
 

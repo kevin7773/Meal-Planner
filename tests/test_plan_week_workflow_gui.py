@@ -124,6 +124,17 @@ class PlanWeekWorkflowGuiTests(unittest.TestCase):
             self.script,
         )
 
+    def test_email_setup_can_be_tested_after_week_completion(self) -> None:
+        self.assertIn("$testEmailButton.Text = 'Test Email Setup'", self.script)
+        self.assertIn("$testEmailButton.Enabled = $true", self.script)
+        self.assertIn(
+            "Show-EmailCredentialDialog -TestOnly",
+            self.script,
+        )
+        self.assertIn("-Command 'test-email'", self.script)
+        self.assertIn("'No message was sent.'", self.script)
+        self.assertIn("$credentials.Password = ''", self.script)
+
     def test_email_settings_store_reference_but_never_password(self) -> None:
         settings_writer = self.script.split(
             "function Save-EmailSettings",

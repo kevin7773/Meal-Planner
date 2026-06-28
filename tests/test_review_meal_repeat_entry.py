@@ -53,13 +53,18 @@ class ReviewMealRepeatEntryTests(unittest.TestCase):
             "function Show-SelectedRecipe",
             1,
         )[1].split("$viewRecipeButton.Add_Click", 1)[0]
+        resolver = self.script.split(
+            "function Get-CurrentSelectedRecipe",
+            1,
+        )[1].split("$printRecipeButton =", 1)[0]
 
-        self.assertIn("$currentRecipes = @(", viewer)
-        self.assertIn("Get-RecipeList |", viewer)
+        self.assertIn("$currentRecipes = @(", resolver)
+        self.assertIn("Get-RecipeList |", resolver)
         self.assertIn(
             "$_.Id -eq $selectedRecipe.Id",
-            viewer,
+            resolver,
         )
+        self.assertIn("$recipe = Get-CurrentSelectedRecipe", viewer)
         self.assertIn(
             "New-Object System.Windows.Forms.RichTextBox",
             viewer,
@@ -72,6 +77,25 @@ class ReviewMealRepeatEntryTests(unittest.TestCase):
             '"$($recipe.Id) | Revision $($recipe.Revision)',
             viewer,
         )
+
+    def test_recipe_list_can_print_a_clean_paginated_card(self) -> None:
+        self.assertIn("$printRecipeButton.Text = 'Print Recipe'", self.script)
+        self.assertIn("function Get-PrintableRecipeLines", self.script)
+        self.assertIn("function Print-SelectedRecipe", self.script)
+        self.assertIn(
+            "New-Object System.Drawing.Printing.PrintDocument",
+            self.script,
+        )
+        self.assertIn(
+            "New-Object System.Windows.Forms.PrintDialog",
+            self.script,
+        )
+        self.assertIn("$eventArgs.HasMorePages = $true", self.script)
+        self.assertIn(
+            "'(?m)^## Family Notes\\s*$'",
+            self.script,
+        )
+        self.assertIn("Serves $servings", self.script)
 
 
 if __name__ == "__main__":

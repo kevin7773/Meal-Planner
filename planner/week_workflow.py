@@ -6,6 +6,7 @@ import os
 import re
 import smtplib
 import ssl
+from contextlib import contextmanager
 from email.message import EmailMessage
 from email.utils import make_msgid
 from pathlib import Path
@@ -361,6 +362,58 @@ def _write_delivery_log(path: Path, document: dict) -> None:
     temporary.replace(path)
 
 
+@contextmanager
+def authenticated_smtp(
+    sender: str,
+    password: str,
+    *,
+    smtp_factory=smtplib.SMTP_SSL,
+):
+    sender = sender.strip()
+    password = "".join(password.split())
+    if not sender:
+        raise ValueError("sender email is required")
+    if not password:
+        raise ValueError("email app password is required")
+    host = os.environ.get("MEAL_PLANNER_SMTP_HOST", "smtp.gmail.com")
+    port = int(os.environ.get("MEAL_PLANNER_SMTP_PORT", "465"))
+    context = ssl.create_default_context()
+    try:
+        with smtp_factory(
+            host,
+            port,
+            context=context,
+            timeout=30,
+        ) as smtp:
+            smtp.login(sender, password)
+            yield smtp
+    except smtplib.SMTPAuthenticationError as exc:
+        raise ValueError(
+            "Gmail rejected the login. Use the sender's 16-character "
+            "Google app password, not the normal account password. "
+            "Create a new app password if the account password changed."
+        ) from exc
+
+
+def test_email_credentials(
+    *,
+    sender: str,
+    password: str,
+    smtp_factory=smtplib.SMTP_SSL,
+) -> dict:
+    with authenticated_smtp(
+        sender,
+        password,
+        smtp_factory=smtp_factory,
+    ):
+        pass
+    return {
+        "status": "credentials-valid",
+        "sender": sender.strip(),
+        "messages_sent": 0,
+    }
+
+
 def send_approved_emails(
     week_of: dt.date,
     *,
@@ -382,11 +435,6 @@ def send_approved_emails(
         raise ValueError(
             f"email delivery requires approved status, found {metadata['status']}"
         )
-    if not sender.strip():
-        raise ValueError("sender email is required")
-    password = "".join(password.split())
-    if not password:
-        raise ValueError("email app password is required")
     missing = [path.name for path in email_paths if not path.exists()]
     if missing:
         raise FileNotFoundError("Missing email drafts: " + ", ".join(missing))
@@ -406,48 +454,36 @@ def send_approved_emails(
         for path in email_paths
         if path.name not in delivery.get("messages", {})
     ]
-    host = os.environ.get("MEAL_PLANNER_SMTP_HOST", "smtp.gmail.com")
-    port = int(os.environ.get("MEAL_PLANNER_SMTP_PORT", "465"))
     if pending:
-        context = ssl.create_default_context()
-        try:
-            with smtp_factory(
-                host,
-                port,
-                context=context,
-                timeout=30,
-            ) as smtp:
-                smtp.login(sender, password)
-                for path in pending:
-                    recipients, subject, body = parse_email_draft(path)
-                    message = EmailMessage()
-                    message["From"] = sender
-                    message["To"] = ", ".join(recipients)
-                    message["Subject"] = subject
-                    message_id = make_msgid(
-                        domain=sender.rsplit("@", 1)[-1]
-                    )
-                    message["Message-ID"] = message_id
-                    message.set_content(body)
-                    smtp.send_message(message)
-                    sent_at = dt.datetime.now(dt.timezone.utc).isoformat(
-                        timespec="seconds"
-                    )
-                    delivery.setdefault("messages", {})[path.name] = {
-                        "message_id": message_id,
-                        "sent_at": sent_at,
-                        "sender": sender,
-                        "recipients": recipients,
-                        "subject": subject,
-                    }
-                    _write_delivery_log(delivery_path, delivery)
-                    sent_now.append(path.name)
-        except smtplib.SMTPAuthenticationError as exc:
-            raise ValueError(
-                "Gmail rejected the login. Use the sender's 16-character "
-                "Google app password, not the normal account password. "
-                "Create a new app password if the account password changed."
-            ) from exc
+        with authenticated_smtp(
+            sender,
+            password,
+            smtp_factory=smtp_factory,
+        ) as smtp:
+            for path in pending:
+                recipients, subject, body = parse_email_draft(path)
+                message = EmailMessage()
+                message["From"] = sender
+                message["To"] = ", ".join(recipients)
+                message["Subject"] = subject
+                message_id = make_msgid(
+                    domain=sender.rsplit("@", 1)[-1]
+                )
+                message["Message-ID"] = message_id
+                message.set_content(body)
+                smtp.send_message(message)
+                sent_at = dt.datetime.now(dt.timezone.utc).isoformat(
+                    timespec="seconds"
+                )
+                delivery.setdefault("messages", {})[path.name] = {
+                    "message_id": message_id,
+                    "sent_at": sent_at,
+                    "sender": sender,
+                    "recipients": recipients,
+                    "subject": subject,
+                }
+                _write_delivery_log(delivery_path, delivery)
+                sent_now.append(path.name)
 
     if len(delivery.get("messages", {})) != len(EMAIL_FILENAMES):
         raise RuntimeError("Not all approved emails were delivered")

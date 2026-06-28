@@ -518,14 +518,23 @@ $form.Add_Activated({ Refresh-SuiteStatus })
 $form.Add_FormClosed({
     $weatherTimer.Stop()
     if ($null -ne $script:weatherSession) {
-        $script:weatherSession.PowerShell.Stop()
-        $script:weatherSession.PowerShell.Dispose()
-        $script:weatherSession.Runspace.Dispose()
+        if ($script:weatherSession.Invocation.IsCompleted) {
+            $script:weatherSession.PowerShell.Dispose()
+            $script:weatherSession.Runspace.Dispose()
+        } else {
+            [void]$script:weatherSession.PowerShell.BeginStop(
+                $null,
+                $null
+            )
+        }
     }
     foreach ($session in @($script:moduleSessions)) {
-        $session.PowerShell.Stop()
-        $session.PowerShell.Dispose()
-        $session.Runspace.Dispose()
+        if ($session.Invocation.IsCompleted) {
+            $session.PowerShell.Dispose()
+            $session.Runspace.Dispose()
+        } else {
+            [void]$session.PowerShell.BeginStop($null, $null)
+        }
     }
     foreach ($row in @($form.Controls | Where-Object {
         $_ -is [System.Windows.Forms.Panel]

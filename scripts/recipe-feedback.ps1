@@ -246,7 +246,7 @@ function Add-Label {
 Add-Label 'Recipe' 20 22 | Out-Null
 $recipeCombo = New-Object System.Windows.Forms.ComboBox
 $recipeCombo.Location = New-Object System.Drawing.Point(180, 22)
-$recipeCombo.Size = New-Object System.Drawing.Size(390, 28)
+$recipeCombo.Size = New-Object System.Drawing.Size(300, 28)
 $recipeCombo.DropDownStyle = 'DropDownList'
 $recipeCombo.DisplayMember = 'Display'
 foreach ($recipe in $recipes) {
@@ -259,14 +259,14 @@ $form.Controls.Add($recipeCombo)
 
 $viewRecipeButton = New-Object System.Windows.Forms.Button
 $viewRecipeButton.Text = 'View Recipe'
-$viewRecipeButton.Location = New-Object System.Drawing.Point(580, 19)
-$viewRecipeButton.Size = New-Object System.Drawing.Size(110, 34)
+$viewRecipeButton.Location = New-Object System.Drawing.Point(490, 19)
+$viewRecipeButton.Size = New-Object System.Drawing.Size(95, 34)
 $form.Controls.Add($viewRecipeButton)
 Set-MealPlannerButtonStyle -Button $viewRecipeButton -Color $colors.Review
 
-function Show-SelectedRecipe {
+function Get-CurrentSelectedRecipe {
     if ($null -eq $recipeCombo.SelectedItem) {
-        throw 'Select a recipe to view.'
+        throw 'Select a recipe.'
     }
     $selectedRecipe = $recipeCombo.SelectedItem
     $currentRecipes = @(
@@ -276,7 +276,202 @@ function Show-SelectedRecipe {
     if ($currentRecipes.Count -ne 1) {
         throw "Could not resolve the current recipe card for $($selectedRecipe.Id)."
     }
-    $recipe = $currentRecipes[0]
+    return $currentRecipes[0]
+}
+
+$printRecipeButton = New-Object System.Windows.Forms.Button
+$printRecipeButton.Text = 'Print Recipe'
+$printRecipeButton.Location = New-Object System.Drawing.Point(595, 19)
+$printRecipeButton.Size = New-Object System.Drawing.Size(95, 34)
+$form.Controls.Add($printRecipeButton)
+Set-MealPlannerButtonStyle -Button $printRecipeButton -Color $colors.Pantry
+
+function Get-PrintableRecipeLines {
+    param([pscustomobject]$Recipe)
+
+    $text = [System.IO.File]::ReadAllText($recipe.Path)
+    $servings = Get-MetadataInteger -Text $text -Name 'servings'
+    $body = [regex]::Replace(
+        $text,
+        '(?s)\A\+\+\+\r?\n.*?\r?\n\+\+\+\s*',
+        ''
+    )
+    $familyNotes = [regex]::Match(
+        $body,
+        '(?m)^## Family Notes\s*$'
+    )
+    if ($familyNotes.Success) {
+        $body = $body.Substring(0, $familyNotes.Index).TrimEnd()
+    }
+    $body = [regex]::Replace(
+        $body,
+        '(?m)^# .+\r?\n+',
+        '',
+        1
+    )
+
+    $lines = New-Object System.Collections.ArrayList
+    [void]$lines.Add([pscustomobject]@{
+        Kind = 'Title'
+        Text = $Recipe.Name
+    })
+    [void]$lines.Add([pscustomobject]@{
+        Kind = 'Meta'
+        Text = (
+            "$($Recipe.Id) | Revision $($Recipe.Revision) | " +
+            "Serves $servings"
+        )
+    })
+    [void]$lines.Add([pscustomobject]@{ Kind = 'Spacer'; Text = '' })
+
+    foreach ($rawLine in ($body -split '\r?\n')) {
+        $line = $rawLine.TrimEnd()
+        if ([string]::IsNullOrWhiteSpace($line)) {
+            [void]$lines.Add(
+                [pscustomobject]@{ Kind = 'Spacer'; Text = '' }
+            )
+            continue
+        }
+        $heading = [regex]::Match($line, '^#{2,6}\s+(.+)$')
+        $kind = if ($heading.Success) { 'Heading' } else { 'Body' }
+        if ($heading.Success) {
+            $line = $heading.Groups[1].Value
+        }
+        $line = [regex]::Replace($line, '\[([^\]]+)\]\([^)]+\)', '$1')
+        $line = $line -replace '\*\*', ''
+        $line = $line -replace '`', ''
+        [void]$lines.Add([pscustomobject]@{
+            Kind = $kind
+            Text = $line
+        })
+    }
+    return @($lines)
+}
+
+function Print-SelectedRecipe {
+    $recipe = Get-CurrentSelectedRecipe
+    $lines = Get-PrintableRecipeLines -Recipe $recipe
+    $document = New-Object System.Drawing.Printing.PrintDocument
+    $document.DocumentName = "$($recipe.Id) - $($recipe.Name)"
+    $document.DefaultPageSettings.Margins = (
+        New-Object System.Drawing.Printing.Margins(55, 55, 55, 55)
+    )
+
+    $titleFont = New-Object System.Drawing.Font(
+        'Segoe UI',
+        18,
+        [System.Drawing.FontStyle]::Bold
+    )
+    $headingFont = New-Object System.Drawing.Font(
+        'Segoe UI',
+        12,
+        [System.Drawing.FontStyle]::Bold
+    )
+    $bodyFont = New-Object System.Drawing.Font('Segoe UI', 10)
+    $metaFont = New-Object System.Drawing.Font(
+        'Segoe UI',
+        9,
+        [System.Drawing.FontStyle]::Italic
+    )
+    $footerFont = New-Object System.Drawing.Font('Segoe UI', 8)
+    $brush = [System.Drawing.Brushes]::Black
+    $state = [pscustomobject]@{ Index = 0; Page = 0 }
+
+    $document.Add_PrintPage({
+        param($sender, $eventArgs)
+
+        $state.Page++
+        $bounds = $eventArgs.MarginBounds
+        $y = [single]$bounds.Top
+        if ($state.Page -gt 1) {
+            $continuation = "$($recipe.Name) - continued"
+            $eventArgs.Graphics.DrawString(
+                $continuation,
+                $metaFont,
+                $brush,
+                [single]$bounds.Left,
+                $y
+            )
+            $y += 28
+        }
+
+        while ($state.Index -lt $lines.Count) {
+            $line = $lines[$state.Index]
+            $font = switch ($line.Kind) {
+                'Title' { $titleFont }
+                'Heading' { $headingFont }
+                'Meta' { $metaFont }
+                default { $bodyFont }
+            }
+            $height = if ($line.Kind -eq 'Spacer') {
+                8
+            } else {
+                [Math]::Ceiling(
+                    $eventArgs.Graphics.MeasureString(
+                        $line.Text,
+                        $font,
+                        $bounds.Width
+                    ).Height
+                ) + 3
+            }
+            if ($y + $height -gt $bounds.Bottom - 18) {
+                $eventArgs.HasMorePages = $true
+                break
+            }
+            if ($line.Kind -ne 'Spacer') {
+                $layout = New-Object System.Drawing.RectangleF(
+                    [single]$bounds.Left,
+                    $y,
+                    [single]$bounds.Width,
+                    [single]$height
+                )
+                $eventArgs.Graphics.DrawString(
+                    $line.Text,
+                    $font,
+                    $brush,
+                    $layout
+                )
+            }
+            $y += $height
+            $state.Index++
+        }
+
+        $footer = "$($recipe.Id) | Page $($state.Page)"
+        $eventArgs.Graphics.DrawString(
+            $footer,
+            $footerFont,
+            [System.Drawing.Brushes]::DimGray,
+            [single]$bounds.Left,
+            [single]($bounds.Bottom + 12)
+        )
+        if ($state.Index -ge $lines.Count) {
+            $eventArgs.HasMorePages = $false
+        }
+    })
+
+    $printDialog = New-Object System.Windows.Forms.PrintDialog
+    $printDialog.Document = $document
+    $printDialog.UseEXDialog = $true
+    try {
+        if (
+            $printDialog.ShowDialog($form) -eq
+            [System.Windows.Forms.DialogResult]::OK
+        ) {
+            $document.Print()
+        }
+    } finally {
+        $printDialog.Dispose()
+        $document.Dispose()
+        $titleFont.Dispose()
+        $headingFont.Dispose()
+        $bodyFont.Dispose()
+        $metaFont.Dispose()
+        $footerFont.Dispose()
+    }
+}
+
+function Show-SelectedRecipe {
+    $recipe = Get-CurrentSelectedRecipe
     $text = [System.IO.File]::ReadAllText($recipe.Path)
     $body = [regex]::Replace(
         $text,
@@ -344,6 +539,19 @@ $viewRecipeButton.Add_Click({
         [System.Windows.Forms.MessageBox]::Show(
             $_.Exception.Message,
             'Unable to View Recipe',
+            'OK',
+            'Error'
+        ) | Out-Null
+    }
+})
+
+$printRecipeButton.Add_Click({
+    try {
+        Print-SelectedRecipe
+    } catch {
+        [System.Windows.Forms.MessageBox]::Show(
+            $_.Exception.Message,
+            'Unable to Print Recipe',
             'OK',
             'Error'
         ) | Out-Null

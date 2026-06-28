@@ -43,6 +43,10 @@ The project stores only the sender email and `op://` reference in
 current send operation and is never written to project files. Manual entry
 remains available as a fallback.
 
+`Test Email Setup` is available in Plan Week regardless of the selected week's
+status. It retrieves the configured secret and authenticates with Gmail without
+sending a message or changing the planning lifecycle.
+
 ## Planning Suite
 
 `Meal Planner Suite.cmd` is the common desktop entry point for weekly planning,

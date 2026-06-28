@@ -36,6 +36,19 @@ class SuiteLauncherTests(unittest.TestCase):
         self.assertIn("-STA", command)
         self.assertIn("meal-planner-suite.ps1", command)
 
+    def test_dashboard_shutdown_never_blocks_on_runspace_stop(self) -> None:
+        script = (
+            ROOT / "scripts" / "meal-planner-suite.ps1"
+        ).read_text(encoding="utf-8")
+        shutdown = script.split(
+            "$form.Add_FormClosed({",
+            1,
+        )[1].split("[void]$form.ShowDialog()", 1)[0]
+
+        self.assertNotIn(".PowerShell.Stop()", shutdown)
+        self.assertIn(".PowerShell.BeginStop(", shutdown)
+        self.assertIn(".Invocation.IsCompleted", shutdown)
+
     def test_launcher_loads_daily_weather_and_kitchen_fact(self) -> None:
         script = (
             ROOT / "scripts" / "meal-planner-suite.ps1"
