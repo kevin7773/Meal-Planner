@@ -45,6 +45,24 @@ class RecipeEditorGuiTests(unittest.TestCase):
         )
         self.assertIn("Recipe card changes are staged", self.script)
 
+    def test_card_editor_wraps_long_recipe_text_for_readability(self) -> None:
+        self.assertIn("function ConvertTo-RecipeEditorText", self.script)
+        self.assertGreaterEqual(
+            self.script.count(
+                "New-Object System.Windows.Forms.RichTextBox"
+            ),
+            2,
+        )
+        self.assertGreaterEqual(
+            self.script.count(".ScrollBars = 'Vertical'"),
+            2,
+        )
+        self.assertGreaterEqual(
+            self.script.count(".WordWrap = $true"),
+            2,
+        )
+        self.assertIn("Long lines wrap visually", self.script)
+
     def test_card_save_uses_guarded_temporary_json(self) -> None:
         self.assertIn("'--card-file'", self.script)
         self.assertIn("[System.IO.Path]::GetTempFileName()", self.script)
@@ -52,10 +70,8 @@ class RecipeEditorGuiTests(unittest.TestCase):
             "Remove-Item -LiteralPath $temporaryCardPath",
             self.script,
         )
-        self.assertIn(
-            "protected history and ratings are not shown",
-            self.script,
-        )
+        self.assertIn("protected history", self.script)
+        self.assertIn("and ratings are not shown", self.script)
 
     def test_edit_save_shows_prewrite_revision_diff(self) -> None:
         self.assertIn("function Get-RecipeEditDiff", self.script)

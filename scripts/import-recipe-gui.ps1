@@ -22,7 +22,7 @@ Add-Type -AssemblyName System.Drawing
 $colors = Get-MealPlannerPalette
 
 $form = New-Object System.Windows.Forms.Form
-$form.Text = 'Import Recipe'
+$form.Text = 'Recipe Cookbook'
 $form.ClientSize = New-Object System.Drawing.Size(900, 820)
 $form.StartPosition = 'CenterScreen'
 $form.FormBorderStyle = 'FixedDialog'
@@ -550,6 +550,13 @@ function Load-ImportedRecipe {
     )
 }
 
+function ConvertTo-RecipeEditorText {
+    param([string]$Text)
+
+    $normalized = $Text.Replace("`r`n", "`n").Replace("`r", "`n")
+    return $normalized.Replace("`n", [Environment]::NewLine)
+}
+
 function Show-RecipeCardEditor {
     if (
         $null -eq $script:editingRecipeId -or
@@ -571,7 +578,8 @@ function Show-RecipeCardEditor {
     $help = New-Object System.Windows.Forms.Label
     $help.Text = (
         'Edit list items and steps directly. Keep the Main Ingredients and ' +
-        'Seasonings subheadings; protected history and ratings are not shown.'
+        'Seasonings subheadings. Long lines wrap visually; protected history ' +
+        'and ratings are not shown.'
     )
     $help.Location = New-Object System.Drawing.Point(20, 18)
     $help.Size = New-Object System.Drawing.Size(780, 42)
@@ -585,17 +593,17 @@ function Show-RecipeCardEditor {
     $ingredientsLabel.ForeColor = $colors.Email
     $dialog.Controls.Add($ingredientsLabel)
 
-    $ingredientsEditor = New-Object System.Windows.Forms.TextBox
+    $ingredientsEditor = New-Object System.Windows.Forms.RichTextBox
     $ingredientsEditor.Location = New-Object System.Drawing.Point(20, 94)
     $ingredientsEditor.Size = New-Object System.Drawing.Size(780, 235)
-    $ingredientsEditor.Multiline = $true
-    $ingredientsEditor.AcceptsReturn = $true
-    $ingredientsEditor.AcceptsTab = $true
-    $ingredientsEditor.ScrollBars = 'Both'
-    $ingredientsEditor.WordWrap = $false
-    $ingredientsEditor.Font = New-Object System.Drawing.Font('Consolas', 10)
+    $ingredientsEditor.AcceptsTab = $false
+    $ingredientsEditor.ScrollBars = 'Vertical'
+    $ingredientsEditor.WordWrap = $true
+    $ingredientsEditor.DetectUrls = $false
+    $ingredientsEditor.Font = New-Object System.Drawing.Font('Segoe UI', 10.5)
     $ingredientsEditor.BackColor = $colors.SoftPantry
-    $ingredientsEditor.Text = $script:editingCardSections.ingredients
+    $ingredientsEditor.Text = ConvertTo-RecipeEditorText `
+        ([string]$script:editingCardSections.ingredients)
     $dialog.Controls.Add($ingredientsEditor)
 
     $directionsLabel = New-Object System.Windows.Forms.Label
@@ -605,17 +613,17 @@ function Show-RecipeCardEditor {
     $directionsLabel.ForeColor = $colors.Email
     $dialog.Controls.Add($directionsLabel)
 
-    $directionsEditor = New-Object System.Windows.Forms.TextBox
+    $directionsEditor = New-Object System.Windows.Forms.RichTextBox
     $directionsEditor.Location = New-Object System.Drawing.Point(20, 371)
     $directionsEditor.Size = New-Object System.Drawing.Size(780, 235)
-    $directionsEditor.Multiline = $true
-    $directionsEditor.AcceptsReturn = $true
-    $directionsEditor.AcceptsTab = $true
-    $directionsEditor.ScrollBars = 'Both'
-    $directionsEditor.WordWrap = $false
-    $directionsEditor.Font = New-Object System.Drawing.Font('Consolas', 10)
+    $directionsEditor.AcceptsTab = $false
+    $directionsEditor.ScrollBars = 'Vertical'
+    $directionsEditor.WordWrap = $true
+    $directionsEditor.DetectUrls = $false
+    $directionsEditor.Font = New-Object System.Drawing.Font('Segoe UI', 10.5)
     $directionsEditor.BackColor = $colors.SoftEmail
-    $directionsEditor.Text = $script:editingCardSections.directions
+    $directionsEditor.Text = ConvertTo-RecipeEditorText `
+        ([string]$script:editingCardSections.directions)
     $dialog.Controls.Add($directionsEditor)
 
     $saveCardButton = New-Object System.Windows.Forms.Button
@@ -640,7 +648,7 @@ function Show-RecipeCardEditor {
         -Form $dialog `
         -Title 'Recipe Card Editor' `
         -Subtitle "$($script:editingRecipeId) ingredients and directions" `
-        -IconName 'import-recipe'
+        -IconName 'recipe-cookbook'
 
     if (
         $dialog.ShowDialog($form) -eq
@@ -1039,8 +1047,8 @@ $note.ForeColor = $colors.Email
 $note.Padding = New-Object System.Windows.Forms.Padding(10)
 Add-MealPlannerBranding `
     -Form $form `
-    -Title 'Import Recipe' `
-    -Subtitle 'Recipe imports, ideas, and guarded revisions' `
-    -IconName 'import-recipe' `
+    -Title 'Recipe Cookbook' `
+    -Subtitle 'Browse, import, edit, and approve family recipes' `
+    -IconName 'recipe-cookbook' `
     -PreserveClientHeight
 [void]$form.ShowDialog()
