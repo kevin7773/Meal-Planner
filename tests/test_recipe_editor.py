@@ -76,6 +76,14 @@ class RecipeEditorTests(unittest.TestCase):
                 ROOT / "recipes" / "chicken-fajitas.md",
                 root / "recipes" / "chicken-fajitas.md",
             )
+            path = root / "recipes" / "chicken-fajitas.md"
+            text = re.sub(
+                r'(?m)^status = ".*"$',
+                'status = "candidate"',
+                path.read_text(encoding="utf-8"),
+                count=1,
+            )
+            path.write_text(text, encoding="utf-8", newline="\n")
 
             recipes = imported_recipes(root)
 
@@ -89,10 +97,11 @@ class RecipeEditorTests(unittest.TestCase):
             (root / "recipes").mkdir()
             path = root / "recipes" / "chicken-fajitas.md"
             shutil.copy2(ROOT / "recipes" / "chicken-fajitas.md", path)
-            text = path.read_text(encoding="utf-8").replace(
-                'status = "candidate"',
+            text = re.sub(
+                r'(?m)^status = ".*"$',
                 'status = "approved"',
-                1,
+                path.read_text(encoding="utf-8"),
+                count=1,
             )
             path.write_text(text, encoding="utf-8", newline="\n")
 

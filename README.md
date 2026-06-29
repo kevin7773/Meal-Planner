@@ -189,9 +189,11 @@ ratings and family feedback. Use **Find** to search by recipe ID or name and
 filter the library by status, protein, cooking method, season, or minimum
 rating. `Review Meal.cmd` remains a legacy wrapper that opens the Cookbook.
 
-An optional recipe photo can be stored as
-`assets/recipes/<RECIPE-ID>.jpg` (also `.jpeg`, `.png`, or `.bmp`). The photo
-appears in the recipe viewer, print preview, and exported printable HTML.
+Recipe photos are stored as `assets/recipes/<RECIPE-ID>.jpg` (also `.jpeg`,
+`.png`, or `.bmp`). The Cookbook includes a generated placeholder for every
+current recipe and shows the selected dish in its default library view. Use
+**Change Image** to replace a placeholder with another image. Photos also
+appear in the recipe viewer, print preview, and exported printable HTML.
 
 ## Recipe Cookbook
 
