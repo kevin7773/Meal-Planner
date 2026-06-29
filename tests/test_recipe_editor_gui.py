@@ -105,6 +105,7 @@ class RecipeEditorGuiTests(unittest.TestCase):
         self.assertIn('-Operation "recipe-image-$recipeId"', self.script)
         self.assertIn("-Paths @('assets\\recipes')", self.script)
         self.assertIn("$recipeId.png", self.script)
+        self.assertIn("*.webp", self.script)
 
     def test_card_save_uses_guarded_temporary_json(self) -> None:
         self.assertIn("'--card-file'", self.script)

@@ -9,7 +9,7 @@ from scripts.validate_recipes import split_recipe
 
 
 SCHEMA_VERSION = 1
-SUPPORTED_EXTENSIONS = (".png", ".jpg", ".jpeg", ".bmp")
+SUPPORTED_EXTENSIONS = (".png", ".jpg", ".jpeg", ".bmp", ".webp")
 
 
 def recipe_image_metadata_path(root: Path = ROOT) -> Path:

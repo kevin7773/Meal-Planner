@@ -154,6 +154,7 @@ class ReviewMealRepeatEntryTests(unittest.TestCase):
         )
         self.assertIn("$eventArgs.Graphics.DrawImage", self.script)
         self.assertIn("data:$mime;base64,$base64", self.script)
+        self.assertIn("'image/webp'", self.script)
 
 
 if __name__ == "__main__":

@@ -7,7 +7,7 @@ FDP-0007.jpg
 FDP-0012.png
 ```
 
-Supported formats are `.jpg`, `.jpeg`, `.png`, and `.bmp`. The Cookbook uses
+Supported formats are `.jpg`, `.jpeg`, `.png`, `.bmp`, and `.webp`. The Cookbook uses
 the image in its library preview, recipe view, print preview, printing, and
 printable HTML export. Use **Change Image** in the Cookbook to replace the
 selected recipe's photo; replacements are normalized to PNG.

@@ -361,7 +361,7 @@ Set-MealPlannerButtonStyle -Button $findRecipeButton -Color $colors.Planner
 function Get-RecipeImagePath {
     param([string]$RecipeId)
 
-    foreach ($extension in @('.png', '.jpg', '.jpeg', '.bmp')) {
+    foreach ($extension in @('.png', '.jpg', '.jpeg', '.bmp', '.webp')) {
         $path = Join-Path $recipeAssetsRoot "$RecipeId$extension"
         if (Test-Path -LiteralPath $path) {
             return $path
@@ -845,6 +845,7 @@ function Export-SelectedRecipeHtml {
         $mime = switch ($extension) {
             '.png' { 'image/png' }
             '.bmp' { 'image/bmp' }
+            '.webp' { 'image/webp' }
             default { 'image/jpeg' }
         }
         $base64 = [Convert]::ToBase64String(

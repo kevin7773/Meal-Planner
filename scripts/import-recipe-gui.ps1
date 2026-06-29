@@ -1269,7 +1269,7 @@ $libraryPreviewPanel.Controls.Add($changeImageButton)
 Set-MealPlannerButtonStyle -Button $changeImageButton -Color $colors.Email
 
 $photoHint = New-Object System.Windows.Forms.Label
-$photoHint.Text = 'JPG, PNG, or BMP'
+$photoHint.Text = 'JPG, PNG, BMP, or WEBP'
 $photoHint.Location = New-Object System.Drawing.Point(175, 312)
 $photoHint.Size = New-Object System.Drawing.Size(145, 24)
 $photoHint.ForeColor = $colors.Muted
@@ -1278,7 +1278,7 @@ $libraryPreviewPanel.Controls.Add($photoHint)
 function Get-CookbookImagePath {
     param([string]$RecipeId)
 
-    foreach ($extension in @('.png', '.jpg', '.jpeg', '.bmp')) {
+    foreach ($extension in @('.png', '.jpg', '.jpeg', '.bmp', '.webp')) {
         $path = Join-Path $recipeAssetsRoot "$RecipeId$extension"
         if (Test-Path -LiteralPath $path) {
             return $path
@@ -1343,7 +1343,7 @@ $changeImageButton.Add_Click({
         $dialog = New-Object System.Windows.Forms.OpenFileDialog
         $dialog.Title = "Choose Image for $recipeId"
         $dialog.Filter = (
-            'Recipe images|*.png;*.jpg;*.jpeg;*.bmp|' +
+            'Recipe images|*.png;*.jpg;*.jpeg;*.bmp;*.webp|' +
             'All files|*.*'
         )
         try {
