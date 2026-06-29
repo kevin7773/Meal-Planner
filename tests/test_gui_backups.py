@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import re
+import shutil
 import subprocess
 import tempfile
 import unittest
@@ -23,15 +24,19 @@ class GuiBackupTests(unittest.TestCase):
             f"New-MealPlannerGuiBackup -ProjectRoot '{root}' "
             f"-Operation '{operation}' -Paths @('recipes','inventory','missing')"
         )
+        powershell = (
+            shutil.which("pwsh")
+            or shutil.which("powershell.exe")
+            or shutil.which("powershell")
+        )
+        if powershell is None:
+            self.skipTest("PowerShell is not available")
+        arguments = [powershell, "-NoProfile", "-NonInteractive"]
+        if Path(powershell).name.lower() == "powershell.exe":
+            arguments.extend(["-ExecutionPolicy", "Bypass"])
+        arguments.extend(["-Command", command])
         result = subprocess.run(
-            [
-                "powershell.exe",
-                "-NoProfile",
-                "-ExecutionPolicy",
-                "Bypass",
-                "-Command",
-                command,
-            ],
+            arguments,
             check=True,
             capture_output=True,
             text=True,

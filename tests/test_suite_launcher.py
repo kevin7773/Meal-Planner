@@ -94,6 +94,27 @@ class SuiteLauncherTests(unittest.TestCase):
         self.assertLessEqual(len(facts["facts"]), 20)
         self.assertTrue(all(fact.strip() for fact in facts["facts"]))
 
+    def test_dashboard_shows_asynchronous_operational_health(self) -> None:
+        script = (
+            ROOT / "scripts" / "meal-planner-suite.ps1"
+        ).read_text(encoding="utf-8")
+
+        self.assertIn("dashboard_status.py", script)
+        self.assertIn("Operational Status", script)
+        for label in (
+            "Validation",
+            "Simulation",
+            "Recipe Library",
+            "Inventory",
+            "Next Menu",
+            "Latest Backup",
+        ):
+            self.assertIn(f"Label = '{label}'", script)
+        self.assertIn("Start-OperationalRefresh", script)
+        self.assertIn("$operationsTimer", script)
+        self.assertIn("$script:operationsSession", script)
+        self.assertIn(".PowerShell.BeginStop(", script)
+
 
 if __name__ == "__main__":
     unittest.main()

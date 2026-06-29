@@ -145,7 +145,9 @@ The `planner/` package separates planning responsibilities.
 | `planner/reporting.py` | Human-readable dry-run comparison output |
 | `planner/commit.py` | Explicit selection persistence and idea canonicalization |
 | `planner/week_workflow.py` | Review-package generation, human-readable views, approval, SMTP delivery, and retry receipts |
+| `planner/dashboard_status.py` | Read-only validation, simulation, recipe, inventory, menu, and backup health aggregation |
 | `scripts/planner_cli.py` | Command parsing and planner operation dispatch |
+| `scripts/dashboard_status.py` | JSON/text operational-status entrypoint for the suite dashboard |
 | `scripts/week_workflow.py` | Plan Week lifecycle and delivery command entrypoint |
 | `scripts/dry_run.py` | Backward-compatible imports and direct-execution wrapper |
 | `scripts/meal-planner-suite.ps1` | Shared dashboard and launcher for the four desktop workflow GUIs |

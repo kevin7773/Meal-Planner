@@ -65,6 +65,13 @@ today's forecast for the configured ZIP code, and a rotating kitchen fact, then
 launches each existing GUI as an independent window. The original command
 shortcuts remain available for direct access.
 
+The dashboard's **Operational Status** column refreshes asynchronously and
+summarizes recipe/inventory validation, deterministic simulation freshness and
+gate results, recipe lifecycle counts, low or expiring inventory, the nearest
+current/future menu status, and the latest GUI backup. Green rows are ready,
+amber rows need attention, and red rows require correction. Refreshing status
+does not run the 10,000-week simulation; it evaluates the latest saved report.
+
 The project also includes illustrated Windows shortcuts for the suite and each
 module. Run `powershell -ExecutionPolicy Bypass -File
 scripts/create-launcher-shortcuts.ps1` to recreate them after moving the

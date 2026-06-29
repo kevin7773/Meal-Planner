@@ -5,8 +5,11 @@ $projectRoot = Split-Path -Parent $PSScriptRoot
 $script:moduleSessions = New-Object System.Collections.ArrayList
 $script:weatherSession = $null
 $script:weatherDate = $null
+$script:operationsSession = $null
+$script:operationsRefreshedAt = $null
 $script:kitchenFactQueue = New-Object System.Collections.ArrayList
 $dailyWeatherScript = Join-Path $PSScriptRoot 'daily_weather.py'
+$dashboardStatusScript = Join-Path $PSScriptRoot 'dashboard_status.py'
 
 function Resolve-Python {
     $bundled = Join-Path $env:USERPROFILE (
@@ -25,6 +28,14 @@ function Resolve-Python {
 
 $python = Resolve-Python
 
+Add-Type @'
+using System.Runtime.InteropServices;
+public static class MealPlannerDpi {
+    [DllImport("user32.dll")]
+    public static extern bool SetProcessDPIAware();
+}
+'@
+[void][MealPlannerDpi]::SetProcessDPIAware()
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 [System.Windows.Forms.Application]::EnableVisualStyles()
@@ -39,6 +50,8 @@ $colors = @{
     Muted = [System.Drawing.ColorTranslator]::FromHtml('#66716D')
     Border = [System.Drawing.ColorTranslator]::FromHtml('#D5DDD9')
     Surface = [System.Drawing.Color]::White
+    Info = [System.Drawing.ColorTranslator]::FromHtml('#48769A')
+    Error = [System.Drawing.ColorTranslator]::FromHtml('#A04E45')
 }
 
 function Get-NextMonday {
@@ -190,8 +203,9 @@ function Start-SuiteModule {
 
 $form = New-Object System.Windows.Forms.Form
 $form.Text = 'Family Meal Planner'
-$form.ClientSize = New-Object System.Drawing.Size(900, 650)
-$form.MinimumSize = New-Object System.Drawing.Size(916, 689)
+$form.AutoScaleMode = 'None'
+$form.ClientSize = New-Object System.Drawing.Size(1100, 690)
+$form.MinimumSize = New-Object System.Drawing.Size(1116, 729)
 $form.StartPosition = 'CenterScreen'
 $form.BackColor = $colors.Background
 $form.Font = New-Object System.Drawing.Font('Segoe UI', 10)
@@ -203,7 +217,7 @@ Set-MealPlannerFormIcon `
 
 $header = New-Object System.Windows.Forms.Panel
 $header.Location = New-Object System.Drawing.Point(0, 0)
-$header.Size = New-Object System.Drawing.Size(900, 112)
+$header.Size = New-Object System.Drawing.Size(1100, 112)
 $header.Anchor = 'Top,Left,Right'
 $header.BackColor = $colors.Header
 $form.Controls.Add($header)
@@ -211,7 +225,7 @@ $form.Controls.Add($header)
 $suiteLabel = New-Object System.Windows.Forms.Label
 $suiteLabel.Text = 'FAMILY MEAL PLANNER'
 $suiteLabel.Location = New-Object System.Drawing.Point(82, 22)
-$suiteLabel.Size = New-Object System.Drawing.Size(390, 38)
+$suiteLabel.Size = New-Object System.Drawing.Size(500, 38)
 $suiteLabel.Font = New-Object System.Drawing.Font(
     'Segoe UI Semibold',
     22,
@@ -239,8 +253,8 @@ $header.Controls.Add($subtitle)
 
 $weatherLabel = New-Object System.Windows.Forms.Label
 $weatherLabel.Text = "Today's weather: Loading..."
-$weatherLabel.Location = New-Object System.Drawing.Point(490, 15)
-$weatherLabel.Size = New-Object System.Drawing.Size(260, 46)
+$weatherLabel.Location = New-Object System.Drawing.Point(670, 15)
+$weatherLabel.Size = New-Object System.Drawing.Size(280, 46)
 $weatherLabel.TextAlign = 'MiddleRight'
 $weatherLabel.ForeColor = [System.Drawing.Color]::White
 $weatherLabel.Font = New-Object System.Drawing.Font('Segoe UI', 9)
@@ -248,8 +262,8 @@ $header.Controls.Add($weatherLabel)
 
 $factLabel = New-Object System.Windows.Forms.Label
 $factLabel.Text = 'Kitchen fact: Loading...'
-$factLabel.Location = New-Object System.Drawing.Point(350, 68)
-$factLabel.Size = New-Object System.Drawing.Size(520, 28)
+$factLabel.Location = New-Object System.Drawing.Point(500, 68)
+$factLabel.Size = New-Object System.Drawing.Size(570, 28)
 $factLabel.TextAlign = 'MiddleRight'
 $factLabel.ForeColor = [System.Drawing.ColorTranslator]::FromHtml('#D9C59C')
 $factLabel.Font = New-Object System.Drawing.Font('Segoe UI', 9)
@@ -257,7 +271,7 @@ $header.Controls.Add($factLabel)
 
 $refreshButton = New-Object System.Windows.Forms.Button
 $refreshButton.Text = 'Refresh'
-$refreshButton.Location = New-Object System.Drawing.Point(770, 36)
+$refreshButton.Location = New-Object System.Drawing.Point(970, 28)
 $refreshButton.Size = New-Object System.Drawing.Size(100, 38)
 $refreshButton.Anchor = 'Top,Right'
 $refreshButton.FlatStyle = 'Flat'
@@ -306,8 +320,8 @@ $rowTop = 132
 foreach ($module in $modules) {
     $row = New-Object System.Windows.Forms.Panel
     $row.Location = New-Object System.Drawing.Point(24, $rowTop)
-    $row.Size = New-Object System.Drawing.Size(852, 86)
-    $row.Anchor = 'Top,Left,Right'
+    $row.Size = New-Object System.Drawing.Size(540, 86)
+    $row.Anchor = 'Top,Left'
     $row.BackColor = $colors.Surface
     $row.BorderStyle = 'FixedSingle'
     $form.Controls.Add($row)
@@ -341,14 +355,15 @@ foreach ($module in $modules) {
 
     $detailLabel = New-Object System.Windows.Forms.Label
     $detailLabel.Text = $module.Detail
-    $detailLabel.Location = New-Object System.Drawing.Point(78, 44)
-    $detailLabel.Size = New-Object System.Drawing.Size(255, 24)
+    $detailLabel.Location = New-Object System.Drawing.Point(78, 40)
+    $detailLabel.Size = New-Object System.Drawing.Size(330, 20)
     $detailLabel.ForeColor = $colors.Muted
     $row.Controls.Add($detailLabel)
 
     $statusLabel = New-Object System.Windows.Forms.Label
-    $statusLabel.Location = New-Object System.Drawing.Point(350, 29)
-    $statusLabel.Size = New-Object System.Drawing.Size(350, 28)
+    $statusLabel.Location = New-Object System.Drawing.Point(78, 63)
+    $statusLabel.Size = New-Object System.Drawing.Size(330, 18)
+    $statusLabel.Font = New-Object System.Drawing.Font('Segoe UI', 8.5)
     $statusLabel.ForeColor = $colors.Muted
     $statusLabel.TextAlign = 'MiddleLeft'
     $statusLabel.Tag = $module.Status
@@ -357,8 +372,8 @@ foreach ($module in $modules) {
 
     $openButton = New-Object System.Windows.Forms.Button
     $openButton.Text = 'Open'
-    $openButton.Location = New-Object System.Drawing.Point(725, 23)
-    $openButton.Size = New-Object System.Drawing.Size(100, 38)
+    $openButton.Location = New-Object System.Drawing.Point(420, 23)
+    $openButton.Size = New-Object System.Drawing.Size(95, 38)
     $openButton.Anchor = 'Top,Right'
     $openButton.FlatStyle = 'Flat'
     $openButton.FlatAppearance.BorderColor = $module.Color
@@ -373,10 +388,101 @@ foreach ($module in $modules) {
     $rowTop += 96
 }
 
+$operationsPanel = New-Object System.Windows.Forms.Panel
+$operationsPanel.Location = New-Object System.Drawing.Point(585, 132)
+$operationsPanel.Size = New-Object System.Drawing.Size(491, 470)
+$operationsPanel.Anchor = 'Top,Left,Right'
+$operationsPanel.BackColor = $colors.Background
+$form.Controls.Add($operationsPanel)
+
+$operationsTitle = New-Object System.Windows.Forms.Label
+$operationsTitle.Text = 'Operational Status'
+$operationsTitle.Location = New-Object System.Drawing.Point(0, 0)
+$operationsTitle.Size = New-Object System.Drawing.Size(300, 30)
+$operationsTitle.Font = New-Object System.Drawing.Font(
+    'Segoe UI Semibold',
+    14,
+    [System.Drawing.FontStyle]::Bold
+)
+$operationsTitle.ForeColor = $colors.Text
+$operationsPanel.Controls.Add($operationsTitle)
+
+$operationsSubtitle = New-Object System.Windows.Forms.Label
+$operationsSubtitle.Text = 'Read-only health and readiness checks'
+$operationsSubtitle.Location = New-Object System.Drawing.Point(2, 31)
+$operationsSubtitle.Size = New-Object System.Drawing.Size(390, 22)
+$operationsSubtitle.ForeColor = $colors.Muted
+$operationsPanel.Controls.Add($operationsSubtitle)
+
+$operationalRows = @{}
+$operationalDefinitions = @(
+    @{ Key = 'validation'; Label = 'Validation' },
+    @{ Key = 'simulation'; Label = 'Simulation' },
+    @{ Key = 'recipes'; Label = 'Recipe Library' },
+    @{ Key = 'inventory'; Label = 'Inventory' },
+    @{ Key = 'menu'; Label = 'Next Menu' },
+    @{ Key = 'backup'; Label = 'Latest Backup' }
+)
+$operationTop = 58
+foreach ($definition in $operationalDefinitions) {
+    $operationRow = New-Object System.Windows.Forms.Panel
+    $operationRow.Location = New-Object System.Drawing.Point(0, $operationTop)
+    $operationRow.Size = New-Object System.Drawing.Size(491, 62)
+    $operationRow.Anchor = 'Top,Left,Right'
+    $operationRow.BackColor = $colors.Surface
+    $operationRow.BorderStyle = 'FixedSingle'
+    $operationsPanel.Controls.Add($operationRow)
+
+    $operationStripe = New-Object System.Windows.Forms.Panel
+    $operationStripe.Location = New-Object System.Drawing.Point(0, 0)
+    $operationStripe.Size = New-Object System.Drawing.Size(6, 60)
+    $operationStripe.BackColor = $colors.Muted
+    $operationRow.Controls.Add($operationStripe)
+
+    $operationName = New-Object System.Windows.Forms.Label
+    $operationName.Text = $definition.Label
+    $operationName.Location = New-Object System.Drawing.Point(17, 8)
+    $operationName.Size = New-Object System.Drawing.Size(150, 23)
+    $operationName.Font = New-Object System.Drawing.Font(
+        'Segoe UI Semibold',
+        10,
+        [System.Drawing.FontStyle]::Bold
+    )
+    $operationName.ForeColor = $colors.Text
+    $operationRow.Controls.Add($operationName)
+
+    $operationValue = New-Object System.Windows.Forms.Label
+    $operationValue.Text = 'Loading...'
+    $operationValue.Location = New-Object System.Drawing.Point(170, 8)
+    $operationValue.Size = New-Object System.Drawing.Size(300, 23)
+    $operationValue.TextAlign = 'MiddleRight'
+    $operationValue.Font = New-Object System.Drawing.Font(
+        'Segoe UI Semibold',
+        10
+    )
+    $operationValue.ForeColor = $colors.Muted
+    $operationRow.Controls.Add($operationValue)
+
+    $operationDetail = New-Object System.Windows.Forms.Label
+    $operationDetail.Text = 'Waiting for status refresh'
+    $operationDetail.Location = New-Object System.Drawing.Point(17, 34)
+    $operationDetail.Size = New-Object System.Drawing.Size(453, 20)
+    $operationDetail.ForeColor = $colors.Muted
+    $operationDetail.Font = New-Object System.Drawing.Font('Segoe UI', 8.5)
+    $operationRow.Controls.Add($operationDetail)
+
+    $operationalRows[$definition.Key] = [pscustomobject]@{
+        Stripe = $operationStripe
+        Value = $operationValue
+        Detail = $operationDetail
+    }
+    $operationTop += 68
+}
+
 $footer = New-Object System.Windows.Forms.Label
 $footer.Text = 'Ready'
-$footer.Location = New-Object System.Drawing.Point(27, 616)
-$footer.Size = New-Object System.Drawing.Size(840, 24)
+$footer.Location = New-Object System.Drawing.Point(27, 656)
+$footer.Size = New-Object System.Drawing.Size(1045, 24)
 $footer.Anchor = 'Bottom,Left,Right'
 $footer.ForeColor = $colors.Muted
 $form.Controls.Add($footer)
@@ -460,6 +566,107 @@ function Start-WeatherRefresh {
     $weatherTimer.Start()
 }
 
+$operationsTimer = New-Object System.Windows.Forms.Timer
+$operationsTimer.Interval = 250
+$operationsTimer.Add_Tick({
+    if (
+        $null -eq $script:operationsSession -or
+        -not $script:operationsSession.Invocation.IsCompleted
+    ) {
+        return
+    }
+    try {
+        $output = @(
+            $script:operationsSession.PowerShell.EndInvoke(
+                $script:operationsSession.Invocation
+            )
+        )
+        $raw = (
+            $output | ForEach-Object { $_.ToString() }
+        ) -join [Environment]::NewLine
+        if ($script:operationsSession.PowerShell.HadErrors) {
+            throw $raw
+        }
+        $report = $raw | ConvertFrom-Json
+        foreach ($item in @($report.items)) {
+            if (-not $operationalRows.ContainsKey([string]$item.key)) {
+                continue
+            }
+            $row = $operationalRows[[string]$item.key]
+            $stateColor = switch ([string]$item.state) {
+                'success' { $colors.Primary }
+                'warning' { $colors.Accent }
+                'error' { $colors.Error }
+                default { $colors.Info }
+            }
+            $row.Stripe.BackColor = $stateColor
+            $row.Value.Text = [string]$item.value
+            $row.Value.ForeColor = $stateColor
+            $row.Detail.Text = [string]$item.detail
+        }
+        $script:operationsRefreshedAt = Get-Date
+    } catch {
+        foreach ($row in $operationalRows.Values) {
+            $row.Stripe.BackColor = $colors.Error
+            $row.Value.Text = 'Unavailable'
+            $row.Value.ForeColor = $colors.Error
+            $row.Detail.Text = 'Operational status could not be loaded'
+        }
+        $footer.Text = "Status error: $($_.Exception.Message)"
+    } finally {
+        $script:operationsSession.PowerShell.Dispose()
+        $script:operationsSession.Runspace.Dispose()
+        $script:operationsSession = $null
+        $operationsTimer.Stop()
+    }
+})
+
+function Start-OperationalRefresh {
+    param([switch]$Force)
+
+    if ($null -ne $script:operationsSession) {
+        return
+    }
+    if (
+        -not $Force -and
+        $null -ne $script:operationsRefreshedAt -and
+        ((Get-Date) - $script:operationsRefreshedAt).TotalMinutes -lt 5
+    ) {
+        return
+    }
+    if ($null -eq $python) {
+        foreach ($row in $operationalRows.Values) {
+            $row.Value.Text = 'Unavailable'
+            $row.Detail.Text = 'Python was not found'
+            $row.Stripe.BackColor = $colors.Error
+        }
+        return
+    }
+
+    foreach ($row in $operationalRows.Values) {
+        $row.Value.Text = 'Checking...'
+        $row.Value.ForeColor = $colors.Muted
+        $row.Detail.Text = 'Refreshing operational status'
+        $row.Stripe.BackColor = $colors.Muted
+    }
+    $runspace = (
+        [System.Management.Automation.Runspaces.RunspaceFactory]
+    )::CreateRunspace()
+    $runspace.Open()
+    $powerShell = [System.Management.Automation.PowerShell]::Create()
+    $powerShell.Runspace = $runspace
+    [void]$powerShell.AddCommand($python)
+    [void]$powerShell.AddArgument($dashboardStatusScript)
+    [void]$powerShell.AddArgument('--json')
+    $invocation = $powerShell.BeginInvoke()
+    $script:operationsSession = [pscustomobject]@{
+        PowerShell = $powerShell
+        Runspace = $runspace
+        Invocation = $invocation
+    }
+    $operationsTimer.Start()
+}
+
 function Refresh-SuiteStatus {
     foreach ($session in @($script:moduleSessions)) {
         if ($session.Invocation.IsCompleted) {
@@ -490,20 +697,37 @@ function Refresh-SuiteStatus {
 $refreshButton.Add_Click({
     Refresh-SuiteStatus
     Start-WeatherRefresh -Force
+    Start-OperationalRefresh -Force
 })
 $form.Add_Shown({
     Refresh-SuiteStatus
     Start-WeatherRefresh
+    Start-OperationalRefresh
 })
-$form.Add_Activated({ Refresh-SuiteStatus })
+$form.Add_Activated({
+    Refresh-SuiteStatus
+    Start-OperationalRefresh
+})
 $form.Add_FormClosed({
     $weatherTimer.Stop()
+    $operationsTimer.Stop()
     if ($null -ne $script:weatherSession) {
         if ($script:weatherSession.Invocation.IsCompleted) {
             $script:weatherSession.PowerShell.Dispose()
             $script:weatherSession.Runspace.Dispose()
         } else {
             [void]$script:weatherSession.PowerShell.BeginStop(
+                $null,
+                $null
+            )
+        }
+    }
+    if ($null -ne $script:operationsSession) {
+        if ($script:operationsSession.Invocation.IsCompleted) {
+            $script:operationsSession.PowerShell.Dispose()
+            $script:operationsSession.Runspace.Dispose()
+        } else {
+            [void]$script:operationsSession.PowerShell.BeginStop(
                 $null,
                 $null
             )
