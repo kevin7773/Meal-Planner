@@ -184,9 +184,10 @@ automatically.
 
 ## Recipe Review
 
-Double-click `Review Meal.cmd` to record ratings and family feedback. Use
-**Find** to search by recipe ID or name and filter the library by status,
-protein, cooking method, season, or minimum rating.
+Open **Recipe Cookbook**, select a recipe, and choose **Review** to record
+ratings and family feedback. Use **Find** to search by recipe ID or name and
+filter the library by status, protein, cooking method, season, or minimum
+rating. `Review Meal.cmd` remains a legacy wrapper that opens the Cookbook.
 
 An optional recipe photo can be stored as
 `assets/recipes/<RECIPE-ID>.jpg` (also `.jpeg`, `.png`, or `.bmp`). The photo
@@ -194,9 +195,16 @@ appears in the recipe viewer, print preview, and exported printable HTML.
 
 ## Recipe Cookbook
 
-Double-click `Recipe Cookbook.cmd` to browse and edit the recipe library,
-preview and import a `.txt`/`.md` recipe or public recipe URL, or paste recipe
-text directly into the editor. `Import Recipe.cmd` remains as a legacy wrapper.
+Double-click `Recipe Cookbook.cmd` to browse, view, print, export, review, and
+edit the recipe library. Import fields remain hidden until **Import Recipe** is
+selected. The import workspace can preview a `.txt`/`.md` recipe or public
+recipe URL, or accept recipe text pasted directly into the editor.
+`Import Recipe.cmd` remains as a legacy wrapper.
+
+The Cookbook's top-level **Edit** action opens the selected candidate directly
+in the guarded revision workspace. Approved recipes are protected from direct
+editing; use Review to record requested changes before creating a new
+candidate revision.
 URL imports prefer schema.org Recipe data. Imports are created as candidates
 with source attribution and must be reviewed for quantities, seasoning
 classification, and inventory mapping before scheduling.

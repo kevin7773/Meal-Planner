@@ -58,7 +58,7 @@ class RecipeEditorTests(unittest.TestCase):
         )
         return temporary, root
 
-    def test_lists_only_imported_recipes_and_flags_legacy_reason(self) -> None:
+    def test_lists_editable_recipes_and_flags_legacy_reason(self) -> None:
         temporary, root = self.make_root()
         with temporary:
             recipes = imported_recipes(root)
@@ -66,6 +66,39 @@ class RecipeEditorTests(unittest.TestCase):
         self.assertEqual(len(recipes), 1)
         self.assertEqual(recipes[0]["id"], "FDP-0012")
         self.assertFalse(recipes[0]["kid_reason_is_current"])
+
+    def test_canonical_recipe_is_available_to_cookbook_editor(self) -> None:
+        temporary = tempfile.TemporaryDirectory()
+        with temporary:
+            root = Path(temporary.name)
+            (root / "recipes").mkdir()
+            shutil.copy2(
+                ROOT / "recipes" / "chicken-fajitas.md",
+                root / "recipes" / "chicken-fajitas.md",
+            )
+
+            recipes = imported_recipes(root)
+
+        self.assertEqual(len(recipes), 1)
+        self.assertEqual(recipes[0]["id"], "FDP-0001")
+
+    def test_approved_recipe_is_protected_from_cookbook_editor(self) -> None:
+        temporary = tempfile.TemporaryDirectory()
+        with temporary:
+            root = Path(temporary.name)
+            (root / "recipes").mkdir()
+            path = root / "recipes" / "chicken-fajitas.md"
+            shutil.copy2(ROOT / "recipes" / "chicken-fajitas.md", path)
+            text = path.read_text(encoding="utf-8").replace(
+                'status = "candidate"',
+                'status = "approved"',
+                1,
+            )
+            path.write_text(text, encoding="utf-8", newline="\n")
+
+            recipes = imported_recipes(root)
+
+        self.assertEqual(recipes, [])
 
     def test_malformed_card_does_not_break_recipe_list(self) -> None:
         temporary, root = self.make_root()

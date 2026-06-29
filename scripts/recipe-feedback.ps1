@@ -1,5 +1,9 @@
 param(
-    [switch]$ListRecipes
+    [switch]$ListRecipes,
+    [switch]$Json,
+    [string]$RecipeId,
+    [ValidateSet('Review', 'Find', 'View', 'Print', 'Export')]
+    [string]$InitialAction = 'Review'
 )
 
 Set-StrictMode -Version Latest
@@ -260,7 +264,13 @@ function Save-RecipeFeedback {
 
 $recipes = Get-RecipeList
 if ($ListRecipes) {
-    $recipes | Select-Object Id, Name, Revision, Status, FileName | Format-Table -AutoSize
+    $records = $recipes | Select-Object `
+        Id, Name, Revision, Status, Protein, Method, Seasons, Rating, FileName
+    if ($Json) {
+        $records | ConvertTo-Json -Depth 4
+    } else {
+        $records | Format-Table -AutoSize
+    }
     return
 }
 
@@ -291,7 +301,7 @@ function Add-Label {
     return $label
 }
 
-Add-Label 'Recipe' 20 22 70 | Out-Null
+$recipeSelectorLabel = Add-Label 'Recipe' 20 22 70
 $recipeCombo = New-Object System.Windows.Forms.ComboBox
 $recipeCombo.Location = New-Object System.Drawing.Point(95, 22)
 $recipeCombo.Size = New-Object System.Drawing.Size(245, 28)
@@ -351,7 +361,7 @@ Set-MealPlannerButtonStyle -Button $findRecipeButton -Color $colors.Planner
 function Get-RecipeImagePath {
     param([string]$RecipeId)
 
-    foreach ($extension in @('.jpg', '.jpeg', '.png', '.bmp')) {
+    foreach ($extension in @('.png', '.jpg', '.jpeg', '.bmp')) {
         $path = Join-Path $recipeAssetsRoot "$RecipeId$extension"
         if (Test-Path -LiteralPath $path) {
             return $path
@@ -1265,10 +1275,70 @@ Set-MealPlannerButtonStyle -Button $saveButton -Color $colors.Review
 Set-MealPlannerNeutralButtonStyle -Button $cancelButton -Palette $colors
 $keepText.BackColor = $colors.SoftPlanner
 $changeText.BackColor = $colors.SoftOverride
+
+if (-not [string]::IsNullOrWhiteSpace($RecipeId)) {
+    $matchedIndex = -1
+    for ($index = 0; $index -lt $recipeCombo.Items.Count; $index++) {
+        if ($recipeCombo.Items[$index].Id -eq $RecipeId) {
+            $matchedIndex = $index
+            break
+        }
+    }
+    if ($matchedIndex -lt 0) {
+        throw "Recipe not found: $RecipeId"
+    }
+    $recipeCombo.SelectedIndex = $matchedIndex
+}
+
+switch ($InitialAction) {
+    'Find' {
+        Show-RecipeFinder
+        if ($null -ne $recipeCombo.SelectedItem) {
+            Write-Output $recipeCombo.SelectedItem.Id
+        }
+        return
+    }
+    'View' {
+        Show-SelectedRecipe
+        return
+    }
+    'Print' {
+        Print-SelectedRecipe
+        return
+    }
+    'Export' {
+        Export-SelectedRecipeHtml
+        return
+    }
+}
+
+if (-not [string]::IsNullOrWhiteSpace($RecipeId)) {
+    foreach ($control in @(
+        $recipeSelectorLabel,
+        $recipeCombo,
+        $findRecipeButton,
+        $viewRecipeButton,
+        $printRecipeButton,
+        $exportRecipeButton
+    )) {
+        $control.Visible = $false
+    }
+    foreach ($control in @($form.Controls)) {
+        if ($control.Top -ge 64) {
+            $control.Top -= 45
+        }
+    }
+    $form.ClientSize = New-Object System.Drawing.Size(720, 655)
+}
+
 Update-Outcome
 Add-MealPlannerBranding `
     -Form $form `
     -Title 'Review Meal' `
-    -Subtitle 'Family ratings and recipe approval' `
+    -Subtitle $(if ($RecipeId) {
+        "$($recipeCombo.SelectedItem.Id) - $($recipeCombo.SelectedItem.Name)"
+    } else {
+        'Family ratings and recipe approval'
+    }) `
     -IconName 'review-meal'
 [void]$form.ShowDialog()

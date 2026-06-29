@@ -148,7 +148,7 @@ The `planner/` package separates planning responsibilities.
 | `scripts/planner_cli.py` | Command parsing and planner operation dispatch |
 | `scripts/week_workflow.py` | Plan Week lifecycle and delivery command entrypoint |
 | `scripts/dry_run.py` | Backward-compatible imports and direct-execution wrapper |
-| `scripts/meal-planner-suite.ps1` | Shared dashboard and launcher for the five desktop workflow GUIs |
+| `scripts/meal-planner-suite.ps1` | Shared dashboard and launcher for the four desktop workflow GUIs |
 
 Simulation output uses `average_recipe_cost_usd` for the average sum of recipe
 estimates per successful week. The legacy alias `average_grocery_bill_usd`
@@ -296,9 +296,9 @@ family-approved.
 - `Plan Week.cmd` launches the dry-run comparison GUI.
 - `Recipe Cookbook.cmd` browses, imports, edits, and approves recipes.
 - `Import Recipe.cmd` is the backward-compatible cookbook launcher.
+- `Review Meal.cmd` is the backward-compatible Cookbook review launcher.
 - `Kitchen Inventory.cmd` edits stock and consumable levels.
 - `Override Meal.cmd` records audited schedule changes.
-- `Review Meal.cmd` collects post-meal feedback.
 - The Saturday automation reads the same files and invokes the same validators
   and dry-run engine; it does not maintain a separate planning model.
 

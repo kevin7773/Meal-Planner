@@ -38,8 +38,8 @@ $launchers = @(
     @{
         Name = 'Review Meal'
         Command = 'Review Meal.cmd'
-        Icon = 'review-meal.ico'
-        Description = 'Review and rate family meals'
+        Icon = 'recipe-cookbook.ico'
+        Description = 'Legacy shortcut for Recipe Cookbook reviews'
     },
     @{
         Name = 'Override Meal'

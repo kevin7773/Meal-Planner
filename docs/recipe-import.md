@@ -5,6 +5,16 @@ text/Markdown imports, public HTTP/HTTPS recipe pages, and text pasted directly
 into an in-memory editor. `Import Recipe.cmd` remains a compatibility wrapper
 for existing shortcuts and habits.
 
+The Cookbook opens in library mode. Select **Import Recipe** to reveal import
+and recipe-idea fields. Selecting **Review** opens the feedback form directly
+for the current recipe. `Review Meal.cmd` is retained as a legacy Cookbook
+launcher.
+
+Select **Edit** to load the current candidate into the guarded revision
+workspace. Approved recipes are canonical and protected from direct edits;
+requested changes should be captured through Review before a new candidate
+revision is created.
+
 The preview stage writes nothing. URL preview prefers schema.org Recipe JSON-LD
 and falls back to visible page text. Downloads are limited to 2 MB, redirects
 are revalidated, and private or local network addresses are rejected.

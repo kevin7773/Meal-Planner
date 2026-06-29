@@ -5,6 +5,8 @@ $projectRoot = Split-Path -Parent $PSScriptRoot
 $importer = Join-Path $PSScriptRoot 'import_recipe.py'
 $recipeEditor = Join-Path $PSScriptRoot 'edit_recipe.py'
 $ideaManager = Join-Path $PSScriptRoot 'recipe_ideas.py'
+$reviewModule = Join-Path $PSScriptRoot 'recipe-feedback.ps1'
+$recipeAssetsRoot = Join-Path $projectRoot 'assets\recipes'
 
 function Resolve-Python {
     $bundled = Join-Path $env:USERPROFILE '.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe'
@@ -225,6 +227,7 @@ $editRecipeButton = New-Object System.Windows.Forms.Button
 $editRecipeButton.Text = 'Edit Imported Recipe'
 $editRecipeButton.Location = New-Object System.Drawing.Point(20, 735)
 $editRecipeButton.Size = New-Object System.Drawing.Size(190, 42)
+$editRecipeButton.Visible = $false
 $form.Controls.Add($editRecipeButton)
 
 $editCardButton = New-Object System.Windows.Forms.Button
@@ -294,6 +297,7 @@ function Reset-ImportForm {
     $importButton.Enabled = $false
     $importButton.Text = 'Import Candidate'
     $editRecipeButton.Text = 'Edit Imported Recipe'
+    $cookbookEditButton.Text = 'Edit'
     $editCardButton.Enabled = $false
     $browseButton.Enabled = $true
     $pasteButton.Enabled = $true
@@ -408,7 +412,7 @@ function Show-PasteEditor {
     }
 }
 
-function Select-ImportedRecipe {
+function Get-ImportedRecipeList {
     $raw = & $python $recipeEditor list --json 2>&1
     if ($LASTEXITCODE -ne 0) {
         throw ($raw -join [Environment]::NewLine)
@@ -416,7 +420,11 @@ function Select-ImportedRecipe {
     $parsedRecipes = (
         $raw -join [Environment]::NewLine
     ) | ConvertFrom-Json
-    $recipes = @($parsedRecipes)
+    return @($parsedRecipes | ForEach-Object { $_ })
+}
+
+function Select-ImportedRecipe {
+    $recipes = @(Get-ImportedRecipeList)
     if ($recipes.Count -eq 0) {
         throw 'No imported recipes are available to edit.'
     }
@@ -544,6 +552,7 @@ function Load-ImportedRecipe {
     $importButton.Text = 'Save Recipe Revision'
     $importButton.Enabled = $true
     $editRecipeButton.Text = 'Cancel Edit'
+    $cookbookEditButton.Text = 'Cancel Edit'
     $note.Text = (
         "Saving creates revision $([int]$Recipe.revision + 1). " +
         'Recipe ID, source, ratings, and history are preserved.'
@@ -1045,6 +1054,410 @@ $ideaText.BackColor = $colors.SoftPantry
 $note.BackColor = $colors.SoftEmail
 $note.ForeColor = $colors.Email
 $note.Padding = New-Object System.Windows.Forms.Padding(10)
+
+$importControls = @($form.Controls)
+$importPanel = New-Object System.Windows.Forms.Panel
+$importPanel.Location = New-Object System.Drawing.Point(0, 58)
+$importPanel.Size = New-Object System.Drawing.Size(900, 700)
+$importPanel.AutoScroll = $true
+$importPanel.Visible = $false
+foreach ($control in $importControls) {
+    $importPanel.Controls.Add($control)
+}
+$form.Controls.Add($importPanel)
+
+function Get-CookbookRecipes {
+    $json = @(
+        & $reviewModule -ListRecipes -Json
+    ) -join [Environment]::NewLine
+    if ([string]::IsNullOrWhiteSpace($json)) {
+        return @()
+    }
+    $parsed = $json | ConvertFrom-Json
+    $records = @($parsed | ForEach-Object { $_ })
+    foreach ($record in $records) {
+        $record | Add-Member `
+            -NotePropertyName Display `
+            -NotePropertyValue (
+                "$($record.Id) - $($record.Name) " +
+                "(rev $($record.Revision), $($record.Status))"
+            ) `
+            -Force
+    }
+    return $records
+}
+
+$cookbookLabel = New-Object System.Windows.Forms.Label
+$cookbookLabel.Text = 'Recipe'
+$cookbookLabel.Location = New-Object System.Drawing.Point(20, 20)
+$cookbookLabel.Size = New-Object System.Drawing.Size(60, 30)
+$cookbookLabel.TextAlign = 'MiddleLeft'
+$form.Controls.Add($cookbookLabel)
+
+$cookbookRecipeCombo = New-Object System.Windows.Forms.ComboBox
+$cookbookRecipeCombo.Location = New-Object System.Drawing.Point(82, 20)
+$cookbookRecipeCombo.Size = New-Object System.Drawing.Size(260, 28)
+$cookbookRecipeCombo.DropDownStyle = 'DropDownList'
+$cookbookRecipeCombo.DisplayMember = 'Display'
+$form.Controls.Add($cookbookRecipeCombo)
+
+function Refresh-CookbookRecipes {
+    param([string]$SelectedId)
+
+    $cookbookRecipeCombo.BeginUpdate()
+    try {
+        $cookbookRecipeCombo.Items.Clear()
+        foreach ($recipe in Get-CookbookRecipes) {
+            [void]$cookbookRecipeCombo.Items.Add($recipe)
+        }
+    } finally {
+        $cookbookRecipeCombo.EndUpdate()
+    }
+    if ($cookbookRecipeCombo.Items.Count -eq 0) {
+        return
+    }
+    $selectedIndex = 0
+    if (-not [string]::IsNullOrWhiteSpace($SelectedId)) {
+        for (
+            $index = 0;
+            $index -lt $cookbookRecipeCombo.Items.Count;
+            $index++
+        ) {
+            if ($cookbookRecipeCombo.Items[$index].Id -eq $SelectedId) {
+                $selectedIndex = $index
+                break
+            }
+        }
+    }
+    $cookbookRecipeCombo.SelectedIndex = $selectedIndex
+}
+
+function Get-SelectedCookbookRecipeId {
+    if ($null -eq $cookbookRecipeCombo.SelectedItem) {
+        throw 'Select a recipe.'
+    }
+    return [string]$cookbookRecipeCombo.SelectedItem.Id
+}
+
+function Invoke-CookbookRecipeAction {
+    param(
+        [ValidateSet('View', 'Print', 'Export', 'Review')]
+        [string]$Action
+    )
+
+    $recipeId = Get-SelectedCookbookRecipeId
+    & $reviewModule -RecipeId $recipeId -InitialAction $Action
+    if ($Action -eq 'Review') {
+        Refresh-CookbookRecipes -SelectedId $recipeId
+    }
+}
+
+function Set-ImportWorkspaceVisible {
+    param([bool]$Visible)
+
+    $importPanel.Visible = $Visible
+    $libraryPreviewPanel.Visible = -not $Visible
+    if ($Visible) {
+        $showImportButton.Text = 'Hide Import'
+        $form.ClientSize = New-Object System.Drawing.Size(900, 820)
+    } else {
+        $showImportButton.Text = 'Import Recipe'
+        $form.ClientSize = New-Object System.Drawing.Size(900, 500)
+    }
+}
+
+function Edit-SelectedCookbookRecipe {
+    if ($null -ne $script:editingRecipeId) {
+        Reset-ImportForm
+        return
+    }
+
+    $selectedRecipe = $cookbookRecipeCombo.SelectedItem
+    $recipeId = Get-SelectedCookbookRecipeId
+    if ([string]$selectedRecipe.Status -eq 'approved') {
+        throw (
+            "$recipeId is approved and protected from direct editing. " +
+            'Use Review to record requested changes before creating a new ' +
+            'candidate revision.'
+        )
+    }
+    $editableRecipes = @(Get-ImportedRecipeList)
+    $recipe = @(
+        $editableRecipes |
+            Where-Object { [string]$_.id -eq $recipeId }
+    ) | Select-Object -First 1
+    if ($null -eq $recipe) {
+        throw (
+            "$recipeId could not be loaded by the guarded recipe editor. " +
+            'Validate or repair its recipe-card structure before editing.'
+        )
+    }
+    Load-ImportedRecipe -Recipe $recipe
+    Set-ImportWorkspaceVisible -Visible $true
+}
+
+function New-CookbookButton {
+    param(
+        [string]$Text,
+        [int]$X,
+        [int]$Width,
+        [System.Drawing.Color]$Color
+    )
+
+    $button = New-Object System.Windows.Forms.Button
+    $button.Text = $Text
+    $button.Location = New-Object System.Drawing.Point($X, 17)
+    $button.Size = New-Object System.Drawing.Size($Width, 36)
+    $form.Controls.Add($button)
+    Set-MealPlannerButtonStyle -Button $button -Color $Color
+    return $button
+}
+
+$cookbookFindButton = New-CookbookButton `
+    -Text 'Find' -X 350 -Width 58 -Color $colors.Planner
+$cookbookViewButton = New-CookbookButton `
+    -Text 'View' -X 414 -Width 58 -Color $colors.Review
+$cookbookPrintButton = New-CookbookButton `
+    -Text 'Print' -X 478 -Width 58 -Color $colors.Pantry
+$cookbookExportButton = New-CookbookButton `
+    -Text 'Export' -X 542 -Width 64 -Color $colors.Email
+$cookbookReviewButton = New-CookbookButton `
+    -Text 'Review' -X 612 -Width 70 -Color $colors.Review
+$cookbookEditButton = New-CookbookButton `
+    -Text 'Edit' -X 688 -Width 70 -Color $colors.Planner
+$showImportButton = New-CookbookButton `
+    -Text 'Import Recipe' -X 764 -Width 116 -Color $colors.Email
+
+$libraryPreviewPanel = New-Object System.Windows.Forms.Panel
+$libraryPreviewPanel.Location = New-Object System.Drawing.Point(0, 58)
+$libraryPreviewPanel.Size = New-Object System.Drawing.Size(900, 365)
+$libraryPreviewPanel.BackColor = $colors.Surface
+$form.Controls.Add($libraryPreviewPanel)
+
+$cookbookPhoto = New-Object System.Windows.Forms.PictureBox
+$cookbookPhoto.Location = New-Object System.Drawing.Point(20, 20)
+$cookbookPhoto.Size = New-Object System.Drawing.Size(300, 270)
+$cookbookPhoto.SizeMode = 'Zoom'
+$cookbookPhoto.BorderStyle = 'FixedSingle'
+$cookbookPhoto.BackColor = $colors.SoftMuted
+$libraryPreviewPanel.Controls.Add($cookbookPhoto)
+
+$cookbookTitle = New-Object System.Windows.Forms.Label
+$cookbookTitle.Location = New-Object System.Drawing.Point(345, 22)
+$cookbookTitle.Size = New-Object System.Drawing.Size(525, 48)
+$cookbookTitle.Font = New-Object System.Drawing.Font(
+    'Segoe UI Semibold',
+    17,
+    [System.Drawing.FontStyle]::Bold
+)
+$cookbookTitle.ForeColor = $colors.Text
+$libraryPreviewPanel.Controls.Add($cookbookTitle)
+
+$cookbookDetails = New-Object System.Windows.Forms.Label
+$cookbookDetails.Location = New-Object System.Drawing.Point(345, 85)
+$cookbookDetails.Size = New-Object System.Drawing.Size(525, 175)
+$cookbookDetails.Font = New-Object System.Drawing.Font('Segoe UI', 11)
+$cookbookDetails.ForeColor = $colors.Text
+$libraryPreviewPanel.Controls.Add($cookbookDetails)
+
+$changeImageButton = New-Object System.Windows.Forms.Button
+$changeImageButton.Text = 'Change Image'
+$changeImageButton.Location = New-Object System.Drawing.Point(20, 305)
+$changeImageButton.Size = New-Object System.Drawing.Size(140, 38)
+$libraryPreviewPanel.Controls.Add($changeImageButton)
+Set-MealPlannerButtonStyle -Button $changeImageButton -Color $colors.Email
+
+$photoHint = New-Object System.Windows.Forms.Label
+$photoHint.Text = 'JPG, PNG, or BMP'
+$photoHint.Location = New-Object System.Drawing.Point(175, 312)
+$photoHint.Size = New-Object System.Drawing.Size(145, 24)
+$photoHint.ForeColor = $colors.Muted
+$libraryPreviewPanel.Controls.Add($photoHint)
+
+function Get-CookbookImagePath {
+    param([string]$RecipeId)
+
+    foreach ($extension in @('.png', '.jpg', '.jpeg', '.bmp')) {
+        $path = Join-Path $recipeAssetsRoot "$RecipeId$extension"
+        if (Test-Path -LiteralPath $path) {
+            return $path
+        }
+    }
+    return $null
+}
+
+function Set-CookbookPhoto {
+    param([string]$Path)
+
+    if ($null -ne $cookbookPhoto.Image) {
+        $cookbookPhoto.Image.Dispose()
+        $cookbookPhoto.Image = $null
+    }
+    if ([string]::IsNullOrWhiteSpace($Path)) {
+        return
+    }
+    $source = [System.Drawing.Image]::FromFile($Path)
+    try {
+        $cookbookPhoto.Image = New-Object System.Drawing.Bitmap($source)
+    } finally {
+        $source.Dispose()
+    }
+}
+
+function Update-CookbookPreview {
+    if ($null -eq $cookbookRecipeCombo.SelectedItem) {
+        $cookbookTitle.Text = 'No recipes available'
+        $cookbookDetails.Text = ''
+        Set-CookbookPhoto -Path $null
+        return
+    }
+    $recipe = $cookbookRecipeCombo.SelectedItem
+    $cookbookTitle.Text = [string]$recipe.Name
+    $rating = if ([double]$recipe.Rating -gt 0) {
+        "$([double]$recipe.Rating) / 5"
+    } else {
+        'Not rated'
+    }
+    $cookbookDetails.Text = @(
+        "Recipe ID: $($recipe.Id)",
+        "Status: $($recipe.Status)",
+        "Revision: $($recipe.Revision)",
+        "Protein: $($recipe.Protein)",
+        "Cooking method: $($recipe.Method)",
+        "Seasons: $(@($recipe.Seasons) -join ', ')",
+        "Family rating: $rating"
+    ) -join [Environment]::NewLine
+    Set-CookbookPhoto -Path (
+        Get-CookbookImagePath -RecipeId ([string]$recipe.Id)
+    )
+}
+
+$cookbookRecipeCombo.Add_SelectedIndexChanged({
+    Update-CookbookPreview
+})
+
+$changeImageButton.Add_Click({
+    try {
+        $recipeId = Get-SelectedCookbookRecipeId
+        $dialog = New-Object System.Windows.Forms.OpenFileDialog
+        $dialog.Title = "Choose Image for $recipeId"
+        $dialog.Filter = (
+            'Recipe images|*.png;*.jpg;*.jpeg;*.bmp|' +
+            'All files|*.*'
+        )
+        try {
+            if (
+                $dialog.ShowDialog($form) -ne
+                [System.Windows.Forms.DialogResult]::OK
+            ) {
+                return
+            }
+            New-MealPlannerGuiBackup `
+                -ProjectRoot $projectRoot `
+                -Operation "recipe-image-$recipeId" `
+                -Paths @('assets\recipes') | Out-Null
+            [System.IO.Directory]::CreateDirectory(
+                $recipeAssetsRoot
+            ) | Out-Null
+            $target = Join-Path $recipeAssetsRoot "$recipeId.png"
+            $temporary = Join-Path $recipeAssetsRoot "$recipeId.new.png"
+            $source = [System.Drawing.Image]::FromFile($dialog.FileName)
+            try {
+                $bitmap = New-Object System.Drawing.Bitmap($source)
+            } finally {
+                $source.Dispose()
+            }
+            try {
+                $bitmap.Save(
+                    $temporary,
+                    [System.Drawing.Imaging.ImageFormat]::Png
+                )
+            } finally {
+                $bitmap.Dispose()
+            }
+            Move-Item -LiteralPath $temporary -Destination $target -Force
+            Set-CookbookPhoto -Path $target
+        } finally {
+            $dialog.Dispose()
+        }
+    } catch {
+        [System.Windows.Forms.MessageBox]::Show(
+            $_.Exception.Message,
+            'Unable to Change Recipe Image',
+            'OK',
+            'Error'
+        ) | Out-Null
+    }
+})
+
+$cookbookFindButton.Add_Click({
+    try {
+        $selectedId = @(
+            & $reviewModule -InitialAction Find
+        ) | Select-Object -Last 1
+        if (-not [string]::IsNullOrWhiteSpace($selectedId)) {
+            Refresh-CookbookRecipes -SelectedId ([string]$selectedId)
+        }
+    } catch {
+        [System.Windows.Forms.MessageBox]::Show(
+            $_.Exception.Message,
+            'Unable to Find Recipe',
+            'OK',
+            'Error'
+        ) | Out-Null
+    }
+})
+$cookbookViewButton.Add_Click({
+    try { Invoke-CookbookRecipeAction -Action View }
+    catch {
+        [System.Windows.Forms.MessageBox]::Show(
+            $_.Exception.Message, 'Unable to View Recipe', 'OK', 'Error'
+        ) | Out-Null
+    }
+})
+$cookbookPrintButton.Add_Click({
+    try { Invoke-CookbookRecipeAction -Action Print }
+    catch {
+        [System.Windows.Forms.MessageBox]::Show(
+            $_.Exception.Message, 'Unable to Print Recipe', 'OK', 'Error'
+        ) | Out-Null
+    }
+})
+$cookbookExportButton.Add_Click({
+    try { Invoke-CookbookRecipeAction -Action Export }
+    catch {
+        [System.Windows.Forms.MessageBox]::Show(
+            $_.Exception.Message, 'Unable to Export Recipe', 'OK', 'Error'
+        ) | Out-Null
+    }
+})
+$cookbookReviewButton.Add_Click({
+    try { Invoke-CookbookRecipeAction -Action Review }
+    catch {
+        [System.Windows.Forms.MessageBox]::Show(
+            $_.Exception.Message, 'Unable to Review Recipe', 'OK', 'Error'
+        ) | Out-Null
+    }
+})
+$cookbookEditButton.Add_Click({
+    try { Edit-SelectedCookbookRecipe }
+    catch {
+        [System.Windows.Forms.MessageBox]::Show(
+            $_.Exception.Message, 'Unable to Edit Recipe', 'OK', 'Information'
+        ) | Out-Null
+    }
+})
+$showImportButton.Add_Click({
+    Set-ImportWorkspaceVisible -Visible (-not $importPanel.Visible)
+})
+
+Refresh-CookbookRecipes
+$form.Add_FormClosed({
+    if ($null -ne $cookbookPhoto.Image) {
+        $cookbookPhoto.Image.Dispose()
+    }
+})
+$form.ClientSize = New-Object System.Drawing.Size(900, 500)
 Add-MealPlannerBranding `
     -Form $form `
     -Title 'Recipe Cookbook' `

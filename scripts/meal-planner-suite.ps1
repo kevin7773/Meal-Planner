@@ -117,17 +117,6 @@ function Get-InventorySummary {
     return "$($lots.Count) tracked lots | $lowCount low-stock $lowLabel"
 }
 
-function Get-FeedbackSummary {
-    $feedbackRoot = Join-Path $projectRoot 'feedback'
-    $feedbackCount = @(
-        Get-ChildItem -LiteralPath $feedbackRoot -File -ErrorAction SilentlyContinue
-    ).Count
-    $recipeCount = (
-        (Get-RecipeSummary) -split ' '
-    )[0]
-    return "$recipeCount recipes available | $feedbackCount feedback records"
-}
-
 function Get-OverrideSummary {
     $menuCount = @(
         Get-ChildItem -LiteralPath (Join-Path $projectRoot 'menus') `
@@ -301,14 +290,6 @@ $modules = @(
         Status = { Get-CookbookSummary }
         Color = [System.Drawing.ColorTranslator]::FromHtml('#48769A')
         Icon = 'recipe-cookbook'
-    },
-    [pscustomobject]@{
-        Name = 'Review Meal'
-        Detail = 'Record ratings and family feedback'
-        Script = Join-Path $PSScriptRoot 'recipe-feedback.ps1'
-        Status = { Get-FeedbackSummary }
-        Color = [System.Drawing.ColorTranslator]::FromHtml('#8A5D86')
-        Icon = 'review-meal'
     },
     [pscustomobject]@{
         Name = 'Override Meal'

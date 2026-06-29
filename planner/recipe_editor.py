@@ -52,7 +52,7 @@ def imported_recipes(root: Path = ROOT) -> list[dict]:
             metadata, body = split_recipe(path)
         except ValueError:
             continue
-        if "imported" not in metadata.get("tags", []):
+        if metadata.get("status") == "approved":
             continue
         try:
             records.append(recipe_payload(path, metadata, body))
@@ -66,7 +66,7 @@ def find_imported_recipe(recipe_id: str, root: Path = ROOT) -> dict:
     for recipe in imported_recipes(root):
         if recipe["id"] == recipe_id:
             return recipe
-    raise ValueError(f"Imported recipe not found: {recipe_id}")
+    raise ValueError(f"Editable recipe not found: {recipe_id}")
 
 
 def recipe_payload(path: Path, metadata: dict, body: str) -> dict:

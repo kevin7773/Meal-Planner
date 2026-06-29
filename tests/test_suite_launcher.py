@@ -17,7 +17,6 @@ class SuiteLauncherTests(unittest.TestCase):
             "plan-week.ps1",
             "inventory-gui.ps1",
             "import-recipe-gui.ps1",
-            "recipe-feedback.ps1",
             "meal-override-gui.ps1",
         }
 
@@ -52,6 +51,12 @@ class SuiteLauncherTests(unittest.TestCase):
         self.assertIn("-STA", cookbook)
         self.assertIn("import-recipe-gui.ps1", cookbook)
         self.assertIn("Recipe Cookbook.cmd", legacy)
+
+        review_legacy = (ROOT / "Review Meal.cmd").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("Recipe Cookbook.cmd", review_legacy)
+        self.assertNotIn("Name = 'Review Meal'", dashboard)
 
     def test_dashboard_shutdown_never_blocks_on_runspace_stop(self) -> None:
         script = (

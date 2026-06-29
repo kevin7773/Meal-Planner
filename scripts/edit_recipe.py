@@ -19,7 +19,7 @@ from planner.recipe_editor import (
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Inspect and revise imported recipe runbooks."
+        description="Inspect and revise recipe runbooks."
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
 
@@ -54,7 +54,7 @@ def main() -> int:
     )
     update_parser.add_argument(
         "--change-note",
-        default="Updated imported recipe metadata through the GUI",
+        default="Updated recipe metadata through the GUI",
     )
     args = parser.parse_args()
 

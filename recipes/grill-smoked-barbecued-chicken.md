@@ -1,11 +1,11 @@
 +++
 id = "FDP-0025"
 name = "Grill Smoked Barbecued Chicken"
-revision = 2
+revision = 3
 status = "candidate"
 servings = 4
 created = "2026-06-27"
-updated = "2026-06-27"
+updated = "2026-06-28"
 rating_average = 0.0
 ratings_count = 0
 protein = "chicken"
@@ -14,11 +14,11 @@ fiber_grams = 8
 estimated_cost_usd = 20
 kid_friendly_score = 5
 kid_friendly_reason = "Both children like/love it"
-cooking_method = "stovetop"
+cooking_method = "smoker"
 cook_time_minutes = 120
 seasons = ["spring", "summer"]
 leftover_recipe_ids = []
-tags = ["chicken", "imported", "spring", "stovetop", "summer"]
+tags = ["chicken", "imported", "smoker", "spring", "summer"]
 source = "https://brooklynsupper.com/real-deal-barbecued-chicken/"
 +++
 
@@ -28,7 +28,7 @@ source = "https://brooklynsupper.com/real-deal-barbecued-chicken/"
 
 - **Active prep:** 20 minutes
 - **Cook time:** 120 minutes
-- **Cooking method:** Stovetop
+- **Cooking method:** Smoker
 - **Estimated fiber:** 8 grams per serving
 - **Kid-friendly design:** Both children like/love it
 - **Best seasons:** Spring, Summer
@@ -80,5 +80,6 @@ source = "https://brooklynsupper.com/real-deal-barbecued-chicken/"
 
 | Revision | Date | Status | Change |
 | ---: | --- | --- | --- |
+| 3 | 2026-06-28 | candidate | Updated recipe metadata through the GUI |
 | 2 | 2026-06-27 | candidate | Updated imported recipe metadata through the GUI |
 | 1 | 2026-06-27 | candidate | Imported from https://brooklynsupper.com/real-deal-barbecued-chicken/ using schema.org Recipe JSON-LD |

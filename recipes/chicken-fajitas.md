@@ -1,11 +1,11 @@
 +++
 id = "FDP-0001"
 name = "Chicken Fajitas"
-revision = 1
-status = "candidate"
+revision = 2
+status = "approved"
 servings = 4
 created = "2026-06-26"
-updated = "2026-06-26"
+updated = "2026-06-28"
 rating_average = 5
 ratings_count = 1
 protein = "chicken"
@@ -93,4 +93,5 @@ tags = ["summer", "poultry", "mexican-monday", "blackstone"]
 
 | Revision | Date | Status | Change |
 | ---: | --- | --- | --- |
+| 2 | 2026-06-28 | approved | Promoted to approved by kevsm: Fajitas are well loved in this house |
 | 1 | 2026-06-26 | candidate | Seeded from the migration dry run; awaiting family review |

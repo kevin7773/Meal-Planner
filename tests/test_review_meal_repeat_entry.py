@@ -38,6 +38,15 @@ class ReviewMealRepeatEntryTests(unittest.TestCase):
 
     def test_reviewer_can_open_complete_recipe_without_leaving_form(self) -> None:
         self.assertIn("$viewRecipeButton.Text = 'View'", self.script)
+
+    def test_reviewer_accepts_cookbook_recipe_and_action(self) -> None:
+        self.assertIn("[string]$RecipeId", self.script)
+        self.assertIn("[string]$InitialAction = 'Review'", self.script)
+        self.assertIn("'Find' {", self.script)
+        self.assertIn("'View' {", self.script)
+        self.assertIn("'Print' {", self.script)
+        self.assertIn("'Export' {", self.script)
+        self.assertIn("$control.Visible = $false", self.script)
         self.assertIn("function Show-SelectedRecipe", self.script)
         self.assertIn(
             "[System.IO.File]::ReadAllText($recipe.Path)",
