@@ -4,6 +4,7 @@ $projectRoot = Split-Path -Parent $PSScriptRoot
 . (Join-Path $PSScriptRoot 'gui-backup.ps1')
 $importer = Join-Path $PSScriptRoot 'import_recipe.py'
 $recipeEditor = Join-Path $PSScriptRoot 'edit_recipe.py'
+$recipeImage = Join-Path $PSScriptRoot 'recipe_image.py'
 $ideaManager = Join-Path $PSScriptRoot 'recipe_ideas.py'
 $reviewModule = Join-Path $PSScriptRoot 'recipe-feedback.ps1'
 $recipeAssetsRoot = Join-Path $projectRoot 'assets\recipes'
@@ -1376,6 +1377,12 @@ $changeImageButton.Add_Click({
                 $bitmap.Dispose()
             }
             Move-Item -LiteralPath $temporary -Destination $target -Force
+            & $python $recipeImage `
+                set `
+                --id $recipeId `
+                --source-type user-upload `
+                --source $dialog.FileName `
+                --prompt "User-selected cookbook image for $recipeId" | Out-Null
             Set-CookbookPhoto -Path $target
         } finally {
             $dialog.Dispose()

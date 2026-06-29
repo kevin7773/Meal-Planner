@@ -5,7 +5,9 @@ import json
 import re
 from pathlib import Path
 
+from planner.recipe_audit import write_recipe_audit
 from planner.constants import ROOT
+from planner.recipe_cache import build_recipe_cache, load_recipe_cache
 from scripts.validate_recipes import (
     VALID_PROTEINS,
     VALID_SEASONS,
@@ -42,23 +44,37 @@ CONTROLLED_TAGS = {
 
 def imported_recipes(root: Path = ROOT) -> list[dict]:
     records = []
-    for path in sorted((root / "recipes").glob("*.md")):
-        if path.name.startswith("_") or path.name in {
-            "README.md",
-            "index.md",
-        }:
+    try:
+        cached_recipes = load_recipe_cache(root).get("recipes", [])
+    except (OSError, ValueError, json.JSONDecodeError):
+        cached_recipes = None
+    if cached_recipes is None:
+        for path in sorted((root / "recipes").glob("*.md")):
+            if path.name.startswith("_") or path.name in {
+                "README.md",
+                "index.md",
+            }:
+                continue
+            try:
+                metadata, body = split_recipe(path)
+            except ValueError:
+                continue
+            if metadata.get("status") == "approved":
+                continue
+            try:
+                records.append(recipe_payload(path, metadata, body))
+            except ValueError:
+                continue
+        return sorted(records, key=lambda item: item["id"])
+    for recipe in cached_recipes:
+        if recipe.get("status") == "approved":
             continue
-        try:
-            metadata, body = split_recipe(path)
-        except ValueError:
-            continue
-        if metadata.get("status") == "approved":
-            continue
-        try:
-            records.append(recipe_payload(path, metadata, body))
-        except ValueError:
-            # A damaged legacy card must not disable editing every other card.
-            continue
+        payload = dict(recipe)
+        payload["path"] = str(root / recipe["relative_path"])
+        payload["kid_reason_is_current"] = (
+            payload["kid_friendly_reason"] in VALID_KID_REASONS
+        )
+        records.append(payload)
     return sorted(records, key=lambda item: item["id"])
 
 
@@ -67,6 +83,19 @@ def find_imported_recipe(recipe_id: str, root: Path = ROOT) -> dict:
         if recipe["id"] == recipe_id:
             return recipe
     raise ValueError(f"Editable recipe not found: {recipe_id}")
+
+
+def _recipe_status(recipe_id: str, root: Path) -> str | None:
+    for path in sorted((root / "recipes").glob("*.md")):
+        if path.name.startswith("_") or path.name in {"README.md", "index.md"}:
+            continue
+        try:
+            metadata, _ = split_recipe(path)
+        except ValueError:
+            continue
+        if metadata.get("id") == recipe_id:
+            return str(metadata.get("status"))
+    return None
 
 
 def recipe_payload(path: Path, metadata: dict, body: str) -> dict:
@@ -125,7 +154,14 @@ def update_imported_recipe(
     change_note: str = "Updated imported recipe metadata",
     root: Path = ROOT,
 ) -> tuple[int, Path]:
-    current = find_imported_recipe(recipe_id, root)
+    try:
+        current = find_imported_recipe(recipe_id, root)
+    except ValueError:
+        if _recipe_status(recipe_id, root) == "approved":
+            raise ValueError("Approved recipes are protected from direct edits")
+        raise
+    if current["status"] == "approved":
+        raise ValueError("Approved recipes are protected from direct edits")
     original_path = Path(current["path"])
     original_text = original_path.read_text(encoding="utf-8")
     metadata, _ = split_recipe(original_path)
@@ -287,6 +323,22 @@ def update_imported_recipe(
         )
         if parsed_id != recipe_id or errors:
             raise ValueError("; ".join(errors))
+        build_recipe_cache(root)
+        write_recipe_audit(
+            action="update",
+            recipe_id=recipe_id,
+            root=root,
+            details={
+                "name_before": current["name"],
+                "name_after": name,
+                "revision_before": current["revision"],
+                "revision_after": revision,
+                "status": metadata["status"],
+                "path_before": original_path.name,
+                "path_after": target_path.name,
+                "change_note": change_note,
+            },
+        )
     except Exception:
         if target_path != original_path:
             target_path.unlink(missing_ok=True)
@@ -385,6 +437,20 @@ def promote_imported_recipe(
         )
         if parsed_id != recipe_id or errors:
             raise ValueError("; ".join(errors))
+        build_recipe_cache(root)
+        write_recipe_audit(
+            action="promote",
+            recipe_id=recipe_id,
+            root=root,
+            details={
+                "revision_before": current["revision"],
+                "revision_after": revision,
+                "status_before": metadata["status"],
+                "status_after": "approved",
+                "actor": actor,
+                "note": note,
+            },
+        )
     except Exception:
         path.write_text(
             original_text,

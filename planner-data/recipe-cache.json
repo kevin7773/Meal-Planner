@@ -1,0 +1,2577 @@
+{
+  "schema_version": 1,
+  "recipes": [
+    {
+      "id": "FDP-0012",
+      "name": "10 Minute Pasta",
+      "revision": 2,
+      "status": "candidate",
+      "protein": "vegetarian",
+      "meal_scope": "complete-meal",
+      "prep_minutes": 5,
+      "cook_minutes": 15,
+      "fiber_grams": 8,
+      "estimated_cost_usd": 5,
+      "kid_friendly_score": 5,
+      "kid_friendly_reason": "Both children like/love it",
+      "cooking_method": "stovetop",
+      "seasons": [
+        "spring",
+        "summer",
+        "fall",
+        "winter"
+      ],
+      "source": "pasted recipe text",
+      "path": "recipes/10-minute-pasta.md",
+      "relative_path": "recipes/10-minute-pasta.md",
+      "filename": "10-minute-pasta.md",
+      "tags": [
+        "fall",
+        "imported",
+        "spring",
+        "stovetop",
+        "summer",
+        "vegetarian",
+        "winter"
+      ],
+      "leftover_recipe_ids": [],
+      "servings": 4,
+      "created": "2026-06-27",
+      "updated": "2026-06-27",
+      "rating_average": 0.0,
+      "ratings_count": 0,
+      "card_sections": {
+        "ingredients": "### Main Ingredients\n\n- 2 cups cooked pasta\n- 1/4 cup olive oil\n- 5 cloves of chopped/sliced garlic\n- 2 tbsp crushed red pepper flakes\n- fresh parsley\n- lots of grated Parmesan\n\n### Seasonings\n\n- Review imported ingredients for seasoning classification",
+        "directions": "1. - coat bottom of deep pan with oil and heat\n2. - stir in garlic and red pepper flakes. Cook til aromatic\n3. - add cooked pasta, parsley, and grated cheese. Stir.\n4. - Serve!"
+      },
+      "image": {
+        "recipe_id": "FDP-0012",
+        "primary": true,
+        "relative_path": "assets/recipes/FDP-0012.jpg",
+        "filename": "FDP-0012.jpg",
+        "source_type": "placeholder-generated",
+        "source": "placeholder-library",
+        "prompt": "Placeholder photo for 10 Minute Pasta",
+        "captured_on": null,
+        "updated": "2026-06-29T02:45:20.271881Z"
+      },
+      "source_size": 2018,
+      "source_mtime_ns": 1782749213611268300
+    },
+    {
+      "id": "FDP-0002",
+      "name": "BBQ Chicken Sliders",
+      "revision": 3,
+      "status": "candidate",
+      "protein": "chicken",
+      "meal_scope": "complete-meal",
+      "prep_minutes": 20,
+      "cook_minutes": 240,
+      "fiber_grams": 11,
+      "estimated_cost_usd": 23.0,
+      "kid_friendly_score": 5,
+      "kid_friendly_reason": "Familiar sliders with mild sweet barbecue flavor and slaw served on the side",
+      "cooking_method": "slow-cooker",
+      "seasons": [
+        "spring",
+        "summer",
+        "fall",
+        "winter"
+      ],
+      "source": "Unknown import source",
+      "path": "recipes/bbq-chicken-sliders.md",
+      "relative_path": "recipes/bbq-chicken-sliders.md",
+      "filename": "bbq-chicken-sliders.md",
+      "tags": [
+        "summer",
+        "poultry",
+        "slow-cooker",
+        "tuesday"
+      ],
+      "leftover_recipe_ids": [],
+      "servings": 4,
+      "created": "2026-06-26",
+      "updated": "2026-06-26",
+      "rating_average": 0.0,
+      "ratings_count": 0,
+      "card_sections": {
+        "ingredients": "### Main Ingredients\n\n- 2 pounds boneless, skinless chicken breasts\n- 1 cup barbecue sauce\n- 8 whole-wheat slider buns\n- 2 (15-ounce) cans vegetarian baked beans\n- 1 (14-ounce) bag coleslaw mix\n- 1 apple, cored and thinly sliced\n- 1 tablespoon olive oil\n- 2 tablespoons apple cider vinegar\n- 1 tablespoon honey\n\n### Seasonings\n\n- 1 1/2 teaspoons smoked paprika\n- 1 teaspoon garlic powder\n- 1 teaspoon onion powder\n- 3/4 teaspoon kosher salt\n- 1/2 teaspoon black pepper\n- 1/2 teaspoon celery seed",
+        "directions": "1. Put the chicken in the slow cooker. Mix the barbecue sauce, smoked paprika,\n   garlic powder, onion powder, kosher salt, and black pepper and pour it over\n   the chicken.\n2. Cover and cook on low for 5-6 hours or high for 3-4 hours, until the chicken\n   reaches 165 F and shreds easily.\n3. Shred the chicken in the sauce.\n4. Whisk the olive oil, apple cider vinegar, honey, and celery seed. Toss with\n   the coleslaw mix and apple.\n5. Warm the baked beans. Fill each bun with BBQ chicken and serve two sliders\n   per person with slaw and beans."
+      },
+      "image": {
+        "recipe_id": "FDP-0002",
+        "primary": true,
+        "relative_path": "assets/recipes/FDP-0002.jpg",
+        "filename": "FDP-0002.jpg",
+        "source_type": "placeholder-generated",
+        "source": "placeholder-library",
+        "prompt": "Placeholder photo for BBQ Chicken Sliders",
+        "captured_on": null,
+        "updated": "2026-06-29T02:45:19.009750Z"
+      },
+      "source_size": 2772,
+      "source_mtime_ns": 1782526974463520100
+    },
+    {
+      "id": "FDP-0020",
+      "name": "Beef Lasagna",
+      "revision": 2,
+      "status": "candidate",
+      "protein": "beef",
+      "meal_scope": "complete-meal",
+      "prep_minutes": 10,
+      "cook_minutes": 45,
+      "fiber_grams": 8,
+      "estimated_cost_usd": 20,
+      "kid_friendly_score": 5,
+      "kid_friendly_reason": "Both children like/love it",
+      "cooking_method": "oven",
+      "seasons": [
+        "spring",
+        "fall",
+        "winter"
+      ],
+      "source": "pasted recipe text",
+      "path": "recipes/beef-lasagna.md",
+      "relative_path": "recipes/beef-lasagna.md",
+      "filename": "beef-lasagna.md",
+      "tags": [
+        "beef",
+        "fall",
+        "imported",
+        "oven",
+        "spring",
+        "winter"
+      ],
+      "leftover_recipe_ids": [],
+      "servings": 4,
+      "created": "2026-06-27",
+      "updated": "2026-06-27",
+      "rating_average": 0.0,
+      "ratings_count": 0,
+      "card_sections": {
+        "ingredients": "### Main Ingredients\n\n- 1 pound ground beef\n- 9 lasagna noodles\n- 2 cups ricotta cheese\n- 2 cups mozzarella cheese, shredded\n- 1/2 cup grated Parmesan cheese\n- 1 jar (24 ounces) marinara sauce\n- 1 egg\n- 2 cloves garlic, minced\n- 1 tablespoon olive oil\n- Salt and pepper to taste\n- Fresh basil for garnish\n\n### Seasonings\n\n- Review imported ingredients for seasoning classification",
+        "directions": "1. Preheat your oven to 375?F (190?C).\n2. In a large skillet, heat olive oil over medium heat. Add minced garlic and saut? until fragrant.\n3. Add ground beef to the skillet, season with salt and pepper, and cook until browned. Drain excess fat.\n4. Stir in marinara sauce and let it simmer for 5 minutes.\n5. In a bowl, mix ricotta cheese, egg, and a pinch of salt.\n6. Cook lasagna noodles according to package instructions; drain.\n7. In a 9x13 inch baking dish, spread a thin layer of meat sauce.\n8. Layer 3 lasagna noodles over the sauce, then spread half of the ricotta mixture, half of the mozzarella, and a third of the meat sauce.\n9. Repeat the layers, ending with noodles and remaining meat sauce.\n10. Sprinkle Parmesan cheese on top.\n11. Cover with foil and bake for 25 minutes. Remove foil and bake for an additional 15 minutes until cheese is bubbly and golden.\n12. Let it cool for 10 minutes before serving. Garnish with fresh basil."
+      },
+      "image": {
+        "recipe_id": "FDP-0020",
+        "primary": true,
+        "relative_path": "assets/recipes/FDP-0020.jpg",
+        "filename": "FDP-0020.jpg",
+        "source_type": "placeholder-generated",
+        "source": "placeholder-library",
+        "prompt": "Placeholder photo for Beef Lasagna",
+        "captured_on": null,
+        "updated": "2026-06-29T02:45:21.340131Z"
+      },
+      "source_size": 2869,
+      "source_mtime_ns": 1782749213613672900
+    },
+    {
+      "id": "FDP-0037",
+      "name": "Beef Stroganoff",
+      "revision": 2,
+      "status": "candidate",
+      "protein": "beef",
+      "meal_scope": "entree",
+      "prep_minutes": 10,
+      "cook_minutes": 25,
+      "fiber_grams": 8,
+      "estimated_cost_usd": 20,
+      "kid_friendly_score": 1,
+      "kid_friendly_reason": "Not kid friendly - for the parents only",
+      "cooking_method": "stovetop",
+      "seasons": [
+        "spring",
+        "fall",
+        "winter"
+      ],
+      "source": "pasted recipe text",
+      "path": "recipes/beef-stroganoff.md",
+      "relative_path": "recipes/beef-stroganoff.md",
+      "filename": "beef-stroganoff.md",
+      "tags": [
+        "beef",
+        "fall",
+        "imported",
+        "spring",
+        "stovetop",
+        "winter"
+      ],
+      "leftover_recipe_ids": [],
+      "servings": 4,
+      "created": "2026-06-27",
+      "updated": "2026-06-27",
+      "rating_average": 0.0,
+      "ratings_count": 0,
+      "card_sections": {
+        "ingredients": "### Main Ingredients\n\n- 1 pound beef sirloin, thinly sliced\n- Salt and pepper to taste\n- 2 tablespoons olive oil\n- 1 onion, chopped\n- 2 cloves garlic, minced\n- 8 ounces mushrooms, sliced\n- 1 cup beef broth\n- 1 cup sour cream\n- 2 tablespoons all-purpose flour\n- 1 tablespoon Dijon mustard\n- 8 ounces egg noodles\n- Fresh parsley for garnish\n\n### Seasonings\n\n- Review imported ingredients for seasoning classification",
+        "directions": "1. Season the beef slices with salt and pepper.\n2. Heat olive oil in a large skillet over medium-high heat.\n3. Add the beef slices and cook until browned, then remove from the skillet and set aside.\n4. In the same skillet, add chopped onion and minced garlic, cooking until the onion is translucent.\n5. Add sliced mushrooms and cook until they are tender.\n6. Stir in beef broth, sour cream, flour, and Dijon mustard, mixing well.\n7. Return the beef to the skillet and simmer for 10-15 minutes, allowing the sauce to thicken.\n8. Meanwhile, cook egg noodles according to package instructions.\n9. Serve the beef stroganoff over the cooked egg noodles, garnished with fresh parsley."
+      },
+      "image": {
+        "recipe_id": "FDP-0037",
+        "primary": true,
+        "relative_path": "assets/recipes/FDP-0037.jpg",
+        "filename": "FDP-0037.jpg",
+        "source_type": "placeholder-generated",
+        "source": "placeholder-library",
+        "prompt": "Placeholder photo for Beef Stroganoff",
+        "captured_on": null,
+        "updated": "2026-06-29T02:45:23.899261Z"
+      },
+      "source_size": 2674,
+      "source_mtime_ns": 1782749213614691500
+    },
+    {
+      "id": "FDP-0041",
+      "name": "Blackstone Breakfast for Dinner",
+      "revision": 1,
+      "status": "candidate",
+      "protein": "turkey",
+      "meal_scope": "complete-meal",
+      "prep_minutes": 15,
+      "cook_minutes": 25,
+      "fiber_grams": 6,
+      "estimated_cost_usd": 20,
+      "kid_friendly_score": 5,
+      "kid_friendly_reason": "Both children like/love it",
+      "cooking_method": "blackstone",
+      "seasons": [
+        "spring",
+        "summer",
+        "fall"
+      ],
+      "source": "Unknown import source",
+      "path": "recipes/blackstone-breakfast-for-dinner.md",
+      "relative_path": "recipes/blackstone-breakfast-for-dinner.md",
+      "filename": "blackstone-breakfast-for-dinner.md",
+      "tags": [
+        "blackstone",
+        "fall",
+        "heat-friendly",
+        "spring",
+        "summer",
+        "turkey"
+      ],
+      "leftover_recipe_ids": [],
+      "servings": 4,
+      "created": "2026-06-27",
+      "updated": "2026-06-27",
+      "rating_average": 0.0,
+      "ratings_count": 0,
+      "card_sections": {
+        "ingredients": "### Main Ingredients\n\n- 2 cups whole-grain pancake mix\n- 1 1/2 cups milk\n- 10 large eggs\n- 12 turkey sausage links\n- 2 cups seasonal fresh fruit\n- 4 tablespoons butter, divided\n- 1/2 cup maple syrup\n\n### Seasonings\n\n- 1/2 teaspoon kosher salt\n- 1/4 teaspoon black pepper",
+        "directions": "1. Prepare the pancake batter with the pancake mix and milk according to the package consistency.\n2. Heat the Blackstone to medium. Cook the turkey sausage for 10 to 12 minutes, turning often, until it reaches 165 F.\n3. Melt 2 tablespoons butter on a clean section of the griddle. Cook eight pancakes, turning when bubbles form and the bottoms are golden.\n4. Whisk the eggs with the kosher salt and black pepper.\n5. Melt the remaining 2 tablespoons butter on the griddle. Scramble the eggs for 3 to 5 minutes until set.\n6. Serve two pancakes, scrambled eggs, and three sausage links per person with fruit and maple syrup."
+      },
+      "image": {
+        "recipe_id": "FDP-0041",
+        "primary": true,
+        "relative_path": "assets/recipes/FDP-0041.jpg",
+        "filename": "FDP-0041.jpg",
+        "source_type": "placeholder-generated",
+        "source": "placeholder-library",
+        "prompt": "Placeholder photo for Blackstone Breakfast for Dinner",
+        "captured_on": null,
+        "updated": "2026-06-29T02:45:24.501933Z"
+      },
+      "source_size": 2448,
+      "source_mtime_ns": 1782749213625903600
+    },
+    {
+      "id": "FDP-0005",
+      "name": "Blackstone Chicken Fajita Soft Tacos",
+      "revision": 1,
+      "status": "candidate",
+      "protein": "chicken",
+      "meal_scope": "complete-meal",
+      "prep_minutes": 20,
+      "cook_minutes": 15,
+      "fiber_grams": 12,
+      "estimated_cost_usd": 24.0,
+      "kid_friendly_score": 5,
+      "kid_friendly_reason": "Familiar soft tacos with mild seasoning and optional vegetables",
+      "cooking_method": "blackstone",
+      "seasons": [
+        "spring",
+        "summer"
+      ],
+      "source": "Unknown import source",
+      "path": "recipes/blackstone-chicken-fajita-soft-tacos.md",
+      "relative_path": "recipes/blackstone-chicken-fajita-soft-tacos.md",
+      "filename": "blackstone-chicken-fajita-soft-tacos.md",
+      "tags": [
+        "summer",
+        "chicken",
+        "mexican-monday",
+        "blackstone"
+      ],
+      "leftover_recipe_ids": [],
+      "servings": 4,
+      "created": "2026-06-26",
+      "updated": "2026-06-26",
+      "rating_average": 0.0,
+      "ratings_count": 0,
+      "card_sections": {
+        "ingredients": "### Main Ingredients\n\n- 1 1/2 pounds boneless, skinless chicken breasts, thinly sliced\n- 3 bell peppers, sliced\n- 1 large yellow onion, sliced\n- 1 tablespoon olive oil\n- 8 small whole-wheat tortillas\n- 1 (15-ounce) can pinto beans, drained and rinsed\n- 1 cup frozen corn, thawed\n\n### Seasonings\n\n- 2 teaspoons chili powder\n- 1 1/2 teaspoons ground cumin\n- 1 teaspoon smoked paprika\n- 1 teaspoon garlic powder\n- 1 teaspoon onion powder\n- 1 teaspoon kosher salt\n- 1/2 teaspoon black pepper\n\n### Toppings and Sides\n\n- 1 cup shredded cheddar cheese\n- 1 cup salsa\n- 1/2 cup sour cream\n- 1 lime, cut into wedges\n- 4 cups watermelon",
+        "directions": "1. Mix the chili powder, ground cumin, smoked paprika, garlic powder, onion\n   powder, kosher salt, and black pepper.\n2. Toss the chicken, bell peppers, and onion with the olive oil and seasoning\n   mixture.\n3. Cook on a medium-high Blackstone for 10-15 minutes, turning regularly, until\n   the chicken reaches 165 F and the vegetables are tender.\n4. Warm the tortillas, pinto beans, and corn separately.\n5. Let everyone build two tacos with chicken, cheddar, salsa, sour cream, and\n   lime. Serve peppers and onions separately when preferred, with pinto beans,\n   corn, and watermelon."
+      },
+      "image": {
+        "recipe_id": "FDP-0005",
+        "primary": true,
+        "relative_path": "assets/recipes/FDP-0005.jpg",
+        "filename": "FDP-0005.jpg",
+        "source_type": "placeholder-generated",
+        "source": "placeholder-library",
+        "prompt": "Placeholder photo for Blackstone Chicken Fajita Soft Tacos",
+        "captured_on": null,
+        "updated": "2026-06-29T02:45:19.399134Z"
+      },
+      "source_size": 2719,
+      "source_mtime_ns": 1782749213637964500
+    },
+    {
+      "id": "FDP-0031",
+      "name": "Blackstone Cowboy Stir Fry",
+      "revision": 2,
+      "status": "candidate",
+      "protein": "other",
+      "meal_scope": "complete-meal",
+      "prep_minutes": 15,
+      "cook_minutes": 20,
+      "fiber_grams": 8,
+      "estimated_cost_usd": 20,
+      "kid_friendly_score": 4,
+      "kid_friendly_reason": "Gray Loves It",
+      "cooking_method": "blackstone",
+      "seasons": [
+        "spring",
+        "summer"
+      ],
+      "source": "pasted recipe text",
+      "path": "recipes/blackstone-cowboy-stir-fry.md",
+      "relative_path": "recipes/blackstone-cowboy-stir-fry.md",
+      "filename": "blackstone-cowboy-stir-fry.md",
+      "tags": [
+        "blackstone",
+        "imported",
+        "other",
+        "spring",
+        "summer"
+      ],
+      "leftover_recipe_ids": [],
+      "servings": 4,
+      "created": "2026-06-27",
+      "updated": "2026-06-27",
+      "rating_average": 0.0,
+      "ratings_count": 0,
+      "card_sections": {
+        "ingredients": "### Main Ingredients\n\n- 3 lb Russet Potatoes, thin sliced\n- 1 Medium White Onion, chopped\n- 4 Garlic Cloves, minced\n- 1 tsp Salt\n- 1 tsp Pepper\n- 1 tsp Paprika\n- 1 tsp Parsley\n- 3 tbsp Oil\n- 2 lbs Kielbasa Sausage, cut into ? inch chunks\n- 2 Medium Zucchinis, cut into ? inch chunks\n- 1 Red Bell Pepper, cut into ? inch chunks\n- ? cup Italian Dressing\n\n### Seasonings\n\n- Review imported ingredients for seasoning classification",
+        "directions": "1. In a large mixing bowl, combine potatoes, onion, garlic, salt, pepper, oil, parsley, and paprika.\n2. In another mixing bowl, combine kielbasa, zucchini, bell pepper, and Italian dressing.\n3. Heat griddle to medium-high heat. Add potato mixture and flatten out to almost a single layer. Cook for 5 minutes, then do your best to flip it all over and cook another 5 minutes.\n4. Add in sausage mixture and combine with potato mixture while spreading back out into a mostly single layer. Let cook for 5 minutes on each side.\n5. Remove from griddle and let sit for a few minutes before serving. Garnish with your favorite hot sauce or maybe a fried egg."
+      },
+      "image": {
+        "recipe_id": "FDP-0031",
+        "primary": true,
+        "relative_path": "assets/recipes/FDP-0031.jpg",
+        "filename": "FDP-0031.jpg",
+        "source_type": "placeholder-generated",
+        "source": "placeholder-library",
+        "prompt": "Placeholder photo for Blackstone Cowboy Stir Fry",
+        "captured_on": null,
+        "updated": "2026-06-29T02:45:23.045321Z"
+      },
+      "source_size": 2618,
+      "source_mtime_ns": 1782749213640040200
+    },
+    {
+      "id": "FDP-0009",
+      "name": "Blackstone Hibachi Chicken Fried Rice",
+      "revision": 1,
+      "status": "candidate",
+      "protein": "chicken",
+      "meal_scope": "complete-meal",
+      "prep_minutes": 20,
+      "cook_minutes": 40,
+      "fiber_grams": 10,
+      "estimated_cost_usd": 24.0,
+      "kid_friendly_score": 4,
+      "kid_friendly_reason": "Familiar chicken and fried rice with sauce served on the side",
+      "cooking_method": "blackstone",
+      "seasons": [
+        "spring",
+        "summer"
+      ],
+      "source": "Unknown import source",
+      "path": "recipes/blackstone-hibachi-chicken-fried-rice.md",
+      "relative_path": "recipes/blackstone-hibachi-chicken-fried-rice.md",
+      "filename": "blackstone-hibachi-chicken-fried-rice.md",
+      "tags": [
+        "summer",
+        "chicken",
+        "blackstone",
+        "whole-grain"
+      ],
+      "leftover_recipe_ids": [],
+      "servings": 4,
+      "created": "2026-06-26",
+      "updated": "2026-06-26",
+      "rating_average": 0.0,
+      "ratings_count": 0,
+      "card_sections": {
+        "ingredients": "### Main Ingredients\n\n- 1 1/2 pounds boneless, skinless chicken breasts, diced\n- 2 cups dry brown rice\n- 3 1/2 cups water\n- 2 large eggs, beaten\n- 2 cups frozen peas and carrots\n- 1 zucchini, finely diced\n- 1 tablespoon canola oil\n- 1/4 cup low-sodium soy sauce\n- 2 teaspoons toasted sesame oil\n- 1 tablespoon honey\n\n### Seasonings\n\n- 1 teaspoon garlic powder\n- 1/2 teaspoon ground ginger\n- 1/2 teaspoon kosher salt\n- 1/2 teaspoon black pepper",
+        "directions": "1. Combine the brown rice, water, and 1/4 teaspoon kosher salt. Bring to a\n   boil, cover, reduce the heat, and simmer for 35-40 minutes.\n2. Whisk the soy sauce, toasted sesame oil, honey, garlic powder, ground ginger,\n   remaining 1/4 teaspoon kosher salt, and black pepper. Reserve half as a\n   table sauce.\n3. Heat the Blackstone to medium-high. Cook the chicken in the canola oil for\n   7-9 minutes until it reaches 165 F.\n4. Add the peas, carrots, and zucchini and cook for 4 minutes. Move everything\n   aside and scramble the eggs until fully set.\n5. Add the rice and half the seasoned soy sauce. Toss for 3-4 minutes. Serve\n   the remaining sauce separately. This recipe intentionally uses no\n   mayonnaise-based hibachi sauce."
+      },
+      "image": {
+        "recipe_id": "FDP-0009",
+        "primary": true,
+        "relative_path": "assets/recipes/FDP-0009.jpg",
+        "filename": "FDP-0009.jpg",
+        "source_type": "placeholder-generated",
+        "source": "placeholder-library",
+        "prompt": "Placeholder photo for Blackstone Hibachi Chicken Fried Rice",
+        "captured_on": null,
+        "updated": "2026-06-29T02:45:19.889723Z"
+      },
+      "source_size": 2686,
+      "source_mtime_ns": 1782749213642052800
+    },
+    {
+      "id": "FDP-0013",
+      "name": "Blackstone Tortellini",
+      "revision": 2,
+      "status": "candidate",
+      "protein": "turkey",
+      "meal_scope": "complete-meal",
+      "prep_minutes": 10,
+      "cook_minutes": 25,
+      "fiber_grams": 8,
+      "estimated_cost_usd": 10,
+      "kid_friendly_score": 4,
+      "kid_friendly_reason": "Gray Loves It",
+      "cooking_method": "blackstone",
+      "seasons": [
+        "summer"
+      ],
+      "source": "pasted recipe text",
+      "path": "recipes/blackstone-tortellini.md",
+      "relative_path": "recipes/blackstone-tortellini.md",
+      "filename": "blackstone-tortellini.md",
+      "tags": [
+        "blackstone",
+        "imported",
+        "summer",
+        "turkey"
+      ],
+      "leftover_recipe_ids": [],
+      "servings": 4,
+      "created": "2026-06-27",
+      "updated": "2026-06-27",
+      "rating_average": 0.0,
+      "ratings_count": 0,
+      "card_sections": {
+        "ingredients": "### Main Ingredients\n\n- 4 Tablespoons extra virgin olive oil divided\n- 2 teaspoons garlic minced\n- 1 pound kielbasa sausage cut into ? inch pieces\n- 19 ounces cooked tortellini from the refrigerated section of the grocery store\n- 10 ounces cherry tomatoes halved\n- 1 teaspoon salt\n- 5 ounces fresh spinach\n- 8 ounces roasted red bell pepper drained, chopped\n- ? cup Italian dressing\n- ? teaspoon dried oregano\n- ? cup Parmesan shredded\n\n### Seasonings\n\n- Review imported ingredients for seasoning classification",
+        "directions": "1. Set your Blackstone griddle on medium-high heat. Drizzle and spread 2 tablespoons of oil on the griddle top with the back of a spatula.\n2. Add minced garlic and kielbasa sausage to hot griddle, stirring until the meat is cooked through.\n3. Mix in the tortellini and tomatoes. Drizzle the rest of the olive oil on top and sprinkle with salt. After mixing together, add the spinach.\n4. Add roasted red bell pepper, Italian dressing, and sprinkle with oregano.\n5. Cook until the tortellini is fully heated through and the spinach is slightly wilted.\n6. Remove from the griddle and pour in a serving pan. Sprinkle with Parmesan cheese and serve."
+      },
+      "image": {
+        "recipe_id": "FDP-0013",
+        "primary": true,
+        "relative_path": "assets/recipes/FDP-0013.jpg",
+        "filename": "FDP-0013.jpg",
+        "source_type": "placeholder-generated",
+        "source": "placeholder-library",
+        "prompt": "Placeholder photo for Blackstone Tortellini",
+        "captured_on": null,
+        "updated": "2026-06-29T02:45:20.398988Z"
+      },
+      "source_size": 2660,
+      "source_mtime_ns": 1782749213644632900
+    },
+    {
+      "id": "FDP-0010",
+      "name": "Chicken Cheesesteak Baked Potatoes",
+      "revision": 1,
+      "status": "candidate",
+      "protein": "chicken",
+      "meal_scope": "complete-meal",
+      "prep_minutes": 20,
+      "cook_minutes": 20,
+      "fiber_grams": 10,
+      "estimated_cost_usd": 23.0,
+      "kid_friendly_score": 4,
+      "kid_friendly_reason": "Cheesy chicken and baked potatoes with vegetables optional",
+      "cooking_method": "blackstone",
+      "seasons": [
+        "spring",
+        "summer"
+      ],
+      "source": "Unknown import source",
+      "path": "recipes/chicken-cheesesteak-baked-potatoes.md",
+      "relative_path": "recipes/chicken-cheesesteak-baked-potatoes.md",
+      "filename": "chicken-cheesesteak-baked-potatoes.md",
+      "tags": [
+        "summer",
+        "chicken",
+        "blackstone"
+      ],
+      "leftover_recipe_ids": [],
+      "servings": 4,
+      "created": "2026-06-26",
+      "updated": "2026-06-26",
+      "rating_average": 0.0,
+      "ratings_count": 0,
+      "card_sections": {
+        "ingredients": "### Main Ingredients\n\n- 1 1/2 pounds boneless, skinless chicken breasts, thinly sliced\n- 4 large russet potatoes\n- 2 bell peppers, sliced\n- 1 large yellow onion, sliced\n- 8 ounces mushrooms, sliced\n- 1 tablespoon olive oil\n- 1 pound green beans, trimmed\n\n### Seasonings\n\n- 1 teaspoon smoked paprika\n- 1 teaspoon garlic powder\n- 1 teaspoon onion powder\n- 1 teaspoon kosher salt\n- 1/2 teaspoon black pepper\n\n### Toppings and Sides\n\n- 4 slices provolone cheese\n- 2 cups mixed berries",
+        "directions": "1. Pierce the potatoes and microwave for 12-16 minutes, turning halfway, until\n   fork-tender.\n2. Mix the smoked paprika, garlic powder, onion powder, kosher salt, and black\n   pepper.\n3. Toss the chicken, bell peppers, onion, and mushrooms with the olive oil and\n   seasoning mixture.\n4. Cook on a medium-high Blackstone for 10-12 minutes until the chicken reaches\n   165 F and the vegetables are tender. Keep vegetables separate when desired.\n5. Steam the green beans for 5-6 minutes. Split each potato, fill with chicken,\n   and top with provolone. Serve with green beans and berries."
+      },
+      "image": {
+        "recipe_id": "FDP-0010",
+        "primary": true,
+        "relative_path": "assets/recipes/FDP-0010.jpg",
+        "filename": "FDP-0010.jpg",
+        "source_type": "placeholder-generated",
+        "source": "placeholder-library",
+        "prompt": "Placeholder photo for Chicken Cheesesteak Baked Potatoes",
+        "captured_on": null,
+        "updated": "2026-06-29T02:45:20.022303Z"
+      },
+      "source_size": 2543,
+      "source_mtime_ns": 1782749213646647900
+    },
+    {
+      "id": "FDP-0015",
+      "name": "Chicken Enchilada",
+      "revision": 3,
+      "status": "candidate",
+      "protein": "chicken",
+      "meal_scope": "complete-meal",
+      "prep_minutes": 15,
+      "cook_minutes": 20,
+      "fiber_grams": 8,
+      "estimated_cost_usd": 20,
+      "kid_friendly_score": 5,
+      "kid_friendly_reason": "Both children like/love it",
+      "cooking_method": "oven",
+      "seasons": [
+        "spring",
+        "summer",
+        "fall",
+        "winter"
+      ],
+      "source": "pasted recipe text",
+      "path": "recipes/chicken-enchilada.md",
+      "relative_path": "recipes/chicken-enchilada.md",
+      "filename": "chicken-enchilada.md",
+      "tags": [
+        "chicken",
+        "fall",
+        "imported",
+        "oven",
+        "spring",
+        "summer",
+        "winter"
+      ],
+      "leftover_recipe_ids": [],
+      "servings": 4,
+      "created": "2026-06-27",
+      "updated": "2026-06-27",
+      "rating_average": 0.0,
+      "ratings_count": 0,
+      "card_sections": {
+        "ingredients": "### Main Ingredients\n\n- 2 cups cooked chicken, shredded\n- 1 cup enchilada sauce\n- 8 corn tortillas\n- 1 cup shredded cheddar cheese\n- 1/2 cup sour cream\n- 1/4 cup chopped green onions\n- 1/4 cup chopped fresh cilantro\n### Seasonings\n\n- 1/2 teaspoon kosher salt\n- 1/4 teaspoon black pepper",
+        "directions": "1. Preheat the oven to 375 F.\n2. In a bowl, mix the shredded chicken with 1/2 cup enchilada sauce, 1/2 teaspoon kosher salt, and 1/4 teaspoon black pepper.\n3. Warm tortillas in a microwave or on a skillet to make them pliable.\n4. Fill each tortilla with the chicken mixture, roll them up, and place seam-side down in a baking dish.\n5. Pour the remaining enchilada sauce over the rolled tortillas and sprinkle with cheese.\n6. Bake in the preheated oven for 20 minutes, or until the cheese is melted and bubbly.\n7. Serve topped with sour cream, green onions, and cilantro."
+      },
+      "image": {
+        "recipe_id": "FDP-0015",
+        "primary": true,
+        "relative_path": "assets/recipes/FDP-0015.jpg",
+        "filename": "FDP-0015.jpg",
+        "source_type": "placeholder-generated",
+        "source": "placeholder-library",
+        "prompt": "Placeholder photo for Chicken Enchilada",
+        "captured_on": null,
+        "updated": "2026-06-29T02:45:20.682204Z"
+      },
+      "source_size": 2601,
+      "source_mtime_ns": 1782749213647920400
+    },
+    {
+      "id": "FDP-0001",
+      "name": "Chicken Fajitas",
+      "revision": 2,
+      "status": "approved",
+      "protein": "chicken",
+      "meal_scope": "complete-meal",
+      "prep_minutes": 20,
+      "cook_minutes": 12,
+      "fiber_grams": 12,
+      "estimated_cost_usd": 24.0,
+      "kid_friendly_score": 5,
+      "kid_friendly_reason": "Familiar soft tacos with mild seasoning and toppings served separately",
+      "cooking_method": "blackstone",
+      "seasons": [
+        "spring",
+        "summer"
+      ],
+      "source": "Unknown import source",
+      "path": "recipes/chicken-fajitas.md",
+      "relative_path": "recipes/chicken-fajitas.md",
+      "filename": "chicken-fajitas.md",
+      "tags": [
+        "summer",
+        "poultry",
+        "mexican-monday",
+        "blackstone"
+      ],
+      "leftover_recipe_ids": [],
+      "servings": 4,
+      "created": "2026-06-26",
+      "updated": "2026-06-28",
+      "rating_average": 5,
+      "ratings_count": 1,
+      "card_sections": {
+        "ingredients": "### Main Ingredients\n\n- 1 1/2 pounds boneless, skinless chicken breasts, sliced\n- 3 bell peppers, sliced\n- 1 large yellow onion, sliced\n- 1 tablespoon olive oil\n- 8 whole-wheat fajita tortillas\n- 1 (15-ounce) can pinto beans, drained and rinsed\n\n### Seasonings\n\n- 2 teaspoons chili powder\n- 2 teaspoons ground cumin\n- 1 teaspoon smoked paprika\n- 1 teaspoon garlic powder\n- 1 teaspoon onion powder\n- 1 teaspoon kosher salt\n- 1/2 teaspoon black pepper\n\n### Toppings and Sides\n\n- 1 cup salsa\n- 1/2 cup plain Greek yogurt\n- 1 lime, cut into wedges\n- 4 cups watermelon wedges",
+        "directions": "1. Mix the chili powder, ground cumin, smoked paprika, garlic powder, onion\n   powder, kosher salt, and black pepper.\n2. Toss the chicken, bell peppers, and onion with the olive oil and seasoning\n   mixture.\n3. Cook on a medium-high Blackstone for 10-12 minutes, turning regularly, until\n   the chicken reaches 165 F and the vegetables are tender.\n4. Warm the pinto beans and whole-wheat tortillas.\n5. Divide the chicken and vegetables among the tortillas. Serve with pinto\n   beans, salsa, Greek yogurt, lime wedges, and watermelon."
+      },
+      "image": {
+        "recipe_id": "FDP-0001",
+        "primary": true,
+        "relative_path": "assets/recipes/FDP-0001.jpg",
+        "filename": "FDP-0001.jpg",
+        "source_type": "placeholder-generated",
+        "source": "placeholder-library",
+        "prompt": "Placeholder photo for Chicken Fajitas",
+        "captured_on": null,
+        "updated": "2026-06-29T02:45:18.883857Z"
+      },
+      "source_size": 2791,
+      "source_mtime_ns": 1782692678273146200
+    },
+    {
+      "id": "FDP-0032",
+      "name": "Chicken Pesto Cavatappi",
+      "revision": 2,
+      "status": "candidate",
+      "protein": "chicken",
+      "meal_scope": "entree",
+      "prep_minutes": 10,
+      "cook_minutes": 25,
+      "fiber_grams": 8,
+      "estimated_cost_usd": 20,
+      "kid_friendly_score": 5,
+      "kid_friendly_reason": "Both children like/love it",
+      "cooking_method": "stovetop",
+      "seasons": [
+        "spring",
+        "summer",
+        "fall",
+        "winter"
+      ],
+      "source": "pasted recipe text",
+      "path": "recipes/chicken-pesto-cavatappi.md",
+      "relative_path": "recipes/chicken-pesto-cavatappi.md",
+      "filename": "chicken-pesto-cavatappi.md",
+      "tags": [
+        "chicken",
+        "fall",
+        "imported",
+        "spring",
+        "stovetop",
+        "summer",
+        "winter"
+      ],
+      "leftover_recipe_ids": [],
+      "servings": 4,
+      "created": "2026-06-27",
+      "updated": "2026-06-27",
+      "rating_average": 0.0,
+      "ratings_count": 0,
+      "card_sections": {
+        "ingredients": "### Main Ingredients\n\n- 2 cups shredded chicken (rotiserie chicken works best)\n- 1 tablespoon Salt\n- 1 pound cavatappi pasta or other small pasta\n- 1 teaspoon olive oil\n- 1 large tomato, cored and diced\n- 4 ounces mushrooms, sliced (optional)\n- 1/4 cup chicken broth or vegetable broth\n- 1/4 cup dry white wine\n- ? cup heavy whipping cream\n- 1 cup homemade or store-bought pesto\n- 1 cup shredded Parmesan cheese\n\n### Seasonings\n\n- Review imported ingredients for seasoning classification",
+        "directions": "1. In a large saucepan or stock pot, bring 4 quarts of water and salt to a boil. Add pasta and cook until al dente, about 10 to 12 minutes. Drain well.\n2. Meanwhile, heat oil in a large skillet over medium-high heat until shimmering. Add tomatoes and mushrooms (if using) and cook for about 5 minutes, until some of the liquid has been released and the tomatoes are heated through.\n3. Stir in the broth, wine, and cream and bring to a boil; reduce heat to medium and cook until the sauce has thickened slightly, about 2 minutes.\n4. Add pesto and stir until heated through, about 2 minutes.\n5. Add pasta and toss until uniformly coated in the sauce. Transfer to a serving dish or individual plates and garnish with Parmesan cheese.\n6. Notes:\n7. - You can substitute rotini, rigatoni, bow-tie, or any small or medium-sized pasta for cavatappi.\n8. - Noodles & Company includes mushrooms, but they are optional.\n9. - Choose a dry white wine such as Pinot Grigio or Chardonnay, or substitute with more chicken broth.\n10. - Homemade pesto can be made with fresh basil, parsley, olive oil, garlic, parmesan cheese, and a nut like pine nuts or walnuts. Store-bought pesto is also fine.\n11. - This recipe yields about 8 cups of pasta, enough for 8 first-course or side dish servings or 4 generous bowls.\n12. - Store leftovers covered in the refrigerator for up to 4 days."
+      },
+      "image": {
+        "recipe_id": "FDP-0032",
+        "primary": true,
+        "relative_path": "assets/recipes/FDP-0032.jpg",
+        "filename": "FDP-0032.jpg",
+        "source_type": "placeholder-generated",
+        "source": "placeholder-library",
+        "prompt": "Placeholder photo for Chicken Pesto Cavatappi",
+        "captured_on": null,
+        "updated": "2026-06-29T02:45:23.192524Z"
+      },
+      "source_size": 3365,
+      "source_mtime_ns": 1782618644602932700
+    },
+    {
+      "id": "FDP-0016",
+      "name": "Chicken Pot Pie Casserole with Biscuits",
+      "revision": 2,
+      "status": "candidate",
+      "protein": "chicken",
+      "meal_scope": "complete-meal",
+      "prep_minutes": 15,
+      "cook_minutes": 30,
+      "fiber_grams": 8,
+      "estimated_cost_usd": 20,
+      "kid_friendly_score": 4,
+      "kid_friendly_reason": "Gray Loves It",
+      "cooking_method": "oven",
+      "seasons": [
+        "spring",
+        "fall",
+        "winter"
+      ],
+      "source": "pasted recipe text",
+      "path": "recipes/chicken-pot-pie-casserole-with-biscuits.md",
+      "relative_path": "recipes/chicken-pot-pie-casserole-with-biscuits.md",
+      "filename": "chicken-pot-pie-casserole-with-biscuits.md",
+      "tags": [
+        "chicken",
+        "fall",
+        "imported",
+        "oven",
+        "spring",
+        "winter"
+      ],
+      "leftover_recipe_ids": [],
+      "servings": 4,
+      "created": "2026-06-27",
+      "updated": "2026-06-27",
+      "rating_average": 0.0,
+      "ratings_count": 0,
+      "card_sections": {
+        "ingredients": "### Main Ingredients\n\n- Filling Ingredients:\n- 1/4 cup butter\n- 1 small yellow onion chopped small, about 1 cup\n- 1/2 cup celery sliced very thin, about 2 ribs\n- 1/2 cup carrots diced small, about 2 carrots\n- 1/3 cup all-purpose flour\n- 1 1/2 cups chicken broth\n- 1 cup milk\n- 1/2 teaspoon kosher salt\n- 1/4 teaspoon black pepper\n- 1/4 teaspoon celery seed\n- 4 cups cooked chicken diced into 1/2-inch pieces\n- 2 cups frozen mixed vegetables\n- Topping Ingredients:\n- 8 count flaky layers canned biscuits approximately 16 ounce package\n- 2 tablespoons melted butter\n- 1 tablespoon chopped fresh Italian parsley optional\n\n### Seasonings\n\n- Review imported ingredients for seasoning classification",
+        "directions": "1. Preheat oven to 425?F. In a large deep oven-safe skillet, over medium-high heat, melt the butter. Add the onions and celery and cook until soft, about 3 minutes. Stir in flour. Slowly stir in chicken broth and whisk to combine.\n2. Add the milk and salt, pepper, and celery seed. Reduce heat and simmer over medium-low heat until thickened, about 5 minutes. Add the chicken and vegetables. Stir to mix throughout.\n3. Split the biscuits in half, by pulling apart the layers. Top the skillet with 16 biscuit halves and bake for 26-32 minutes, until the topping is golden brown, the biscuits are flaky, and the filling is bubbling.\n4. Remove from the oven and brush with melted butter. Sprinkle with parsley, if desired. Cool for at least 10 minutes before serving."
+      },
+      "image": {
+        "recipe_id": "FDP-0016",
+        "primary": true,
+        "relative_path": "assets/recipes/FDP-0016.jpg",
+        "filename": "FDP-0016.jpg",
+        "source_type": "placeholder-generated",
+        "source": "placeholder-library",
+        "prompt": "Placeholder photo for Chicken Pot Pie Casserole with Biscuits",
+        "captured_on": null,
+        "updated": "2026-06-29T02:45:20.808990Z"
+      },
+      "source_size": 2946,
+      "source_mtime_ns": 1782617509876799800
+    },
+    {
+      "id": "FDP-0018",
+      "name": "Chicken Sausage Broccoli Orzo",
+      "revision": 2,
+      "status": "candidate",
+      "protein": "chicken",
+      "meal_scope": "complete-meal",
+      "prep_minutes": 15,
+      "cook_minutes": 25,
+      "fiber_grams": 8,
+      "estimated_cost_usd": 20,
+      "kid_friendly_score": 4,
+      "kid_friendly_reason": "Gray Loves It",
+      "cooking_method": "stovetop",
+      "seasons": [
+        "spring",
+        "fall",
+        "winter"
+      ],
+      "source": "pasted recipe text",
+      "path": "recipes/chicken-sausage-broccoli-orzo.md",
+      "relative_path": "recipes/chicken-sausage-broccoli-orzo.md",
+      "filename": "chicken-sausage-broccoli-orzo.md",
+      "tags": [
+        "chicken",
+        "fall",
+        "imported",
+        "spring",
+        "stovetop",
+        "winter"
+      ],
+      "leftover_recipe_ids": [],
+      "servings": 4,
+      "created": "2026-06-27",
+      "updated": "2026-06-27",
+      "rating_average": 0.0,
+      "ratings_count": 0,
+      "card_sections": {
+        "ingredients": "### Main Ingredients\n\n- 1 tablespoon olive oil\n- 12 oz chicken sausage, sliced into rounds\n- 1 cup orzo pasta\n- 2 cups broccoli florets (fresh or frozen)\n- 2 cloves garlic, minced\n- 2 1/4 cups low-sodium chicken broth\n- 1/3 cup grated Parmesan cheese\n- 1/4 cup heavy cream (optional for creaminess)\n- 1/4 teaspoon crushed red pepper flakes (optional)\n- Salt and black pepper to taste\n- Fresh parsley for garnish (optional)\n\n### Seasonings\n\n- Review imported ingredients for seasoning classification",
+        "directions": "1. In a large skillet, heat olive oil over medium heat. Add chicken sausage and cook until browned, about 4?5 minutes. Remove and set aside.\n2. In the same skillet, add garlic and orzo. Toast the orzo for 1?2 minutes, stirring constantly.\n3. Pour in the chicken broth and bring to a simmer. Stir in the broccoli florets.\n4. Cook uncovered for 8?10 minutes, stirring occasionally, until orzo is tender and most of the liquid is absorbed.\n5. Stir in Parmesan cheese, heavy cream (if using), and red pepper flakes. Return the chicken sausage to the skillet.\n6. Season with salt and black pepper to taste.\n7. Garnish with fresh parsley and serve hot.\n8. Prep Time: 10 minutes | Cooking Time: 15 minutes | Total Time: 25 minutes\n9. Kcal: 420 kcal | Servings: 4 servings"
+      },
+      "image": {
+        "recipe_id": "FDP-0018",
+        "primary": true,
+        "relative_path": "assets/recipes/FDP-0018.jpg",
+        "filename": "FDP-0018.jpg",
+        "source_type": "placeholder-generated",
+        "source": "placeholder-library",
+        "prompt": "Placeholder photo for Chicken Sausage Broccoli Orzo",
+        "captured_on": null,
+        "updated": "2026-06-29T02:45:21.082318Z"
+      },
+      "source_size": 2743,
+      "source_mtime_ns": 1782617559375002700
+    },
+    {
+      "id": "FDP-0004",
+      "name": "Chicken Smash Tacos",
+      "revision": 1,
+      "status": "candidate",
+      "protein": "chicken",
+      "meal_scope": "complete-meal",
+      "prep_minutes": 25,
+      "cook_minutes": 15,
+      "fiber_grams": 12,
+      "estimated_cost_usd": 21.0,
+      "kid_friendly_score": 5,
+      "kid_friendly_reason": "Crispy cheesy tacos with mild seasoning and optional toppings",
+      "cooking_method": "blackstone",
+      "seasons": [
+        "spring",
+        "summer"
+      ],
+      "source": "Unknown import source",
+      "path": "recipes/chicken-smash-tacos.md",
+      "relative_path": "recipes/chicken-smash-tacos.md",
+      "filename": "chicken-smash-tacos.md",
+      "tags": [
+        "summer",
+        "poultry",
+        "mexican-monday",
+        "blackstone"
+      ],
+      "leftover_recipe_ids": [],
+      "servings": 4,
+      "created": "2026-06-26",
+      "updated": "2026-06-26",
+      "rating_average": 0.0,
+      "ratings_count": 0,
+      "card_sections": {
+        "ingredients": "### Main Ingredients\n\n- 1 1/2 pounds ground chicken\n- 8 small whole-wheat tortillas\n- 1 (15-ounce) can refried pinto beans\n- 1 cup shredded cheddar cheese\n- 2 cups shredded romaine lettuce\n- 1 large tomato, diced\n\n### Seasonings\n\n- 2 teaspoons chili powder\n- 1 1/2 teaspoons ground cumin\n- 1 teaspoon garlic powder\n- 1 teaspoon onion powder\n- 1 teaspoon smoked paprika\n- 1 teaspoon kosher salt\n- 1/2 teaspoon black pepper\n\n### Toppings and Sides\n\n- 1 cup salsa\n- 1 avocado, diced\n- 1 lime, cut into wedges\n- 4 cups watermelon wedges",
+        "directions": "1. Mix the chili powder, ground cumin, garlic powder, onion powder, smoked\n   paprika, kosher salt, and black pepper into the ground chicken.\n2. Divide the chicken into eight equal balls. Press one ball thinly across one\n   side of each whole-wheat tortilla.\n3. Put each tortilla chicken-side down on a medium-high Blackstone. Smash with\n   a spatula and cook for 4-5 minutes until the chicken reaches 165 F.\n4. Flip, sprinkle with cheddar, and cook for 1-2 minutes until the tortilla is\n   crisp and the cheese melts.\n5. Warm the refried pinto beans. Top the tacos with romaine, tomato, salsa,\n   avocado, and lime. Serve two tacos per person with beans and watermelon."
+      },
+      "image": {
+        "recipe_id": "FDP-0004",
+        "primary": true,
+        "relative_path": "assets/recipes/FDP-0004.jpg",
+        "filename": "FDP-0004.jpg",
+        "source_type": "placeholder-generated",
+        "source": "placeholder-library",
+        "prompt": "Placeholder photo for Chicken Smash Tacos",
+        "captured_on": null,
+        "updated": "2026-06-29T02:45:19.266530Z"
+      },
+      "source_size": 2519,
+      "source_mtime_ns": 1782526974467831200
+    },
+    {
+      "id": "FDP-0019",
+      "name": "Chicken Stir Fry",
+      "revision": 2,
+      "status": "candidate",
+      "protein": "chicken",
+      "meal_scope": "complete-meal",
+      "prep_minutes": 10,
+      "cook_minutes": 25,
+      "fiber_grams": 8,
+      "estimated_cost_usd": 20,
+      "kid_friendly_score": 5,
+      "kid_friendly_reason": "Both children like/love it",
+      "cooking_method": "stovetop",
+      "seasons": [
+        "spring",
+        "summer",
+        "fall",
+        "winter"
+      ],
+      "source": "pasted recipe text",
+      "path": "recipes/chicken-stir-fry.md",
+      "relative_path": "recipes/chicken-stir-fry.md",
+      "filename": "chicken-stir-fry.md",
+      "tags": [
+        "chicken",
+        "fall",
+        "imported",
+        "spring",
+        "stovetop",
+        "summer",
+        "winter"
+      ],
+      "leftover_recipe_ids": [],
+      "servings": 4,
+      "created": "2026-06-27",
+      "updated": "2026-06-27",
+      "rating_average": 0.0,
+      "ratings_count": 0,
+      "card_sections": {
+        "ingredients": "### Main Ingredients\n\n- 1 lb chicken breast, sliced\n- 2 cups mixed vegetables (bell peppers, broccoli, carrots)\n- 3 tablespoons soy sauce\n- 2 tablespoons olive oil\n- 1 tablespoon ginger, minced\n- 2 cloves garlic, minced\n- 1 tablespoon sesame oil\n- Salt and pepper to taste\n- Cooked rice, to serve\n\n### Seasonings\n\n- Review imported ingredients for seasoning classification",
+        "directions": "1. Heat olive oil in a large skillet over medium-high heat.\n2. Add chicken slices and cook until browned and cooked through, about 5-7 minutes.\n3. Remove chicken from the skillet and set aside.\n4. In the same skillet, add ginger and garlic, saut? for 1 minute.\n5. Add mixed vegetables and stir-fry for 5-7 minutes until tender-crisp.\n6. Return chicken to the skillet, add soy sauce and sesame oil, and stir well to combine.\n7. Season with salt and pepper to taste.\n8. Serve hot over cooked rice."
+      },
+      "image": {
+        "recipe_id": "FDP-0019",
+        "primary": true,
+        "relative_path": "assets/recipes/FDP-0019.jpg",
+        "filename": "FDP-0019.jpg",
+        "source_type": "placeholder-generated",
+        "source": "placeholder-library",
+        "prompt": "Placeholder photo for Chicken Stir Fry",
+        "captured_on": null,
+        "updated": "2026-06-29T02:45:21.219212Z"
+      },
+      "source_size": 2376,
+      "source_mtime_ns": 1782617582009329200
+    },
+    {
+      "id": "FDP-0014",
+      "name": "Copycat Chick-Fil-A Tortilla Soup",
+      "revision": 2,
+      "status": "candidate",
+      "protein": "chicken",
+      "meal_scope": "complete-meal",
+      "prep_minutes": 15,
+      "cook_minutes": 25,
+      "fiber_grams": 8,
+      "estimated_cost_usd": 20,
+      "kid_friendly_score": 5,
+      "kid_friendly_reason": "Both children like/love it",
+      "cooking_method": "stovetop",
+      "seasons": [
+        "fall",
+        "winter"
+      ],
+      "source": "pasted recipe text",
+      "path": "recipes/copycat-chick-fil-a-tortilla-soup.md",
+      "relative_path": "recipes/copycat-chick-fil-a-tortilla-soup.md",
+      "filename": "copycat-chick-fil-a-tortilla-soup.md",
+      "tags": [
+        "chicken",
+        "fall",
+        "imported",
+        "stovetop",
+        "winter"
+      ],
+      "leftover_recipe_ids": [],
+      "servings": 4,
+      "created": "2026-06-27",
+      "updated": "2026-06-27",
+      "rating_average": 0.0,
+      "ratings_count": 0,
+      "card_sections": {
+        "ingredients": "### Main Ingredients\n\n- 3 Tablespoons olive oil\n- 1 medium onion, diced\n- 1 (4-ounce) can diced green chilies\n- 1 taco seasoning packet\n- 4 (14-ounce) cans chicken broth\n- 1 (15 ounce) can black beans, rinsed and drained\n- 3 (15-ounce) cans navy beans, rinsed and drained\n- 1 (15-ounce) can corn, drained\n- 3 cups shredded chicken, cooked\n- 1 cup heavy cream\n\n### Seasonings\n\n- Review imported ingredients for seasoning classification",
+        "directions": "1. In a large pot, saute the onions in olive oil and cook until translucent.\n2. Next, add in the green chilies, taco seasoning packet, chicken broth, black beans, navy beans, corn, and the chicken. Bring to a boil.\n3. Reduce heat and allow the soup to simmer for 10 to 15 minutes. Add in the heavy cream, heat for five more minutes, and serve with tortilla chips, shredded cheese, and all your favorite toppings."
+      },
+      "image": {
+        "recipe_id": "FDP-0014",
+        "primary": true,
+        "relative_path": "assets/recipes/FDP-0014.jpg",
+        "filename": "FDP-0014.jpg",
+        "source_type": "placeholder-generated",
+        "source": "placeholder-library",
+        "prompt": "Placeholder photo for Copycat Chick-Fil-A Tortilla Soup",
+        "captured_on": null,
+        "updated": "2026-06-29T02:45:20.563313Z"
+      },
+      "source_size": 2333,
+      "source_mtime_ns": 1782617465275447900
+    },
+    {
+      "id": "FDP-0021",
+      "name": "Creamy Gnocchi and Chicken Skillet",
+      "revision": 2,
+      "status": "candidate",
+      "protein": "chicken",
+      "meal_scope": "complete-meal",
+      "prep_minutes": 15,
+      "cook_minutes": 30,
+      "fiber_grams": 8,
+      "estimated_cost_usd": 20,
+      "kid_friendly_score": 4,
+      "kid_friendly_reason": "Gray Loves It",
+      "cooking_method": "oven",
+      "seasons": [
+        "spring",
+        "summer",
+        "fall",
+        "winter"
+      ],
+      "source": "pasted recipe text",
+      "path": "recipes/creamy-gnocchi-and-chicken-skillet.md",
+      "relative_path": "recipes/creamy-gnocchi-and-chicken-skillet.md",
+      "filename": "creamy-gnocchi-and-chicken-skillet.md",
+      "tags": [
+        "chicken",
+        "fall",
+        "imported",
+        "oven",
+        "spring",
+        "summer",
+        "winter"
+      ],
+      "leftover_recipe_ids": [],
+      "servings": 4,
+      "created": "2026-06-27",
+      "updated": "2026-06-27",
+      "rating_average": 0.0,
+      "ratings_count": 0,
+      "card_sections": {
+        "ingredients": "### Main Ingredients\n\n- 3 skinless, boneless chicken breasts (about 1 1/2 lb. total)\n- Kosher salt\n- Freshly ground black pepper\n- 2 Tbsp. extra-virgin olive oil, divided\n- 1 small yellow onion, halved and thinly sliced\n- 2 cloves garlic, thinly sliced\n- 1 1/2 cups grape tomatoes, halved\n- 1/4 cup dry white wine\n- 1 cup low-sodium chicken broth\n- 2 Tbsp. heavy cream\n- 1 (17-oz.) package refrigerated or shelf-stable gnocchi\n- 1/2 cup homemade or store-bought pesto, divided\n- 6 oz. mozzarella, torn (optional)\n- Torn fresh basil leaves and lightly toasted pine nuts, for serving\n\n### Seasonings\n\n- Review imported ingredients for seasoning classification",
+        "directions": "1. Preheat oven to 425?. Season chicken on both sides with 3/4 teaspoon salt and 1/4 teaspoon pepper. In a large straight-sided skillet over medium-high heat, heat 1 tablespoon oil. Add chicken and cook, turning occasionally, until golden brown, 4 to 6 minutes per side. Transfer to a plate.\n2. In the same skillet over medium heat, heat remaining 1 tablespoon oil. Add onion and garlic and cook, stirring occasionally, until tender, 3 to 5 minutes. Add tomatoes and wine and cook, stirring and scraping up any brown bits on the bottom of the pan, until wine is mostly evaporated and tomatoes are just starting to wilt, about 2 minutes. Pour in broth and cream and bring to a boil. Stir in gnocchi and nestle chicken back into the pan.\n3. Bake until chicken is cooked through and an instant-read thermometer inserted into the thickest part registers 165?, 8 to 10 minutes. Transfer chicken to a cutting board.\n4. Stir 2 tablespoons pesto into skillet. Top with mozzarella (if using). Continue to bake until pesto is warmed through and cheese is melted, about 4 minutes more. Let cool slightly.\n5. Thinly slice chicken and return to skillet. Dollop top of bake with remaining 6 tablespoons pesto. Sprinkle with basil and pine nuts."
+      },
+      "image": {
+        "recipe_id": "FDP-0021",
+        "primary": true,
+        "relative_path": "assets/recipes/FDP-0021.jpg",
+        "filename": "FDP-0021.jpg",
+        "source_type": "placeholder-generated",
+        "source": "placeholder-library",
+        "prompt": "Placeholder photo for Creamy Gnocchi and Chicken Skillet",
+        "captured_on": null,
+        "updated": "2026-06-29T02:45:21.465287Z"
+      },
+      "source_size": 3394,
+      "source_mtime_ns": 1782618291458283500
+    },
+    {
+      "id": "FDP-0022",
+      "name": "Crock Pot Sesame Chicken",
+      "revision": 2,
+      "status": "candidate",
+      "protein": "chicken",
+      "meal_scope": "complete-meal",
+      "prep_minutes": 10,
+      "cook_minutes": 180,
+      "fiber_grams": 8,
+      "estimated_cost_usd": 20,
+      "kid_friendly_score": 5,
+      "kid_friendly_reason": "Both children like/love it",
+      "cooking_method": "slow-cooker",
+      "seasons": [
+        "spring",
+        "summer",
+        "fall",
+        "winter"
+      ],
+      "source": "pasted recipe text",
+      "path": "recipes/crock-pot-sesame-chicken.md",
+      "relative_path": "recipes/crock-pot-sesame-chicken.md",
+      "filename": "crock-pot-sesame-chicken.md",
+      "tags": [
+        "chicken",
+        "fall",
+        "imported",
+        "slow-cooker",
+        "spring",
+        "summer",
+        "winter"
+      ],
+      "leftover_recipe_ids": [],
+      "servings": 4,
+      "created": "2026-06-27",
+      "updated": "2026-06-27",
+      "rating_average": 0.0,
+      "ratings_count": 0,
+      "card_sections": {
+        "ingredients": "### Main Ingredients\n\n- 1 1/2 pound boneless/skinless chicken breasts\n- 1/2 cup honey\n- 1/4 cup soy sauce\n- 2 tablespoons dried onion\n- 2 tablespoons ketchup\n- 1 tablespoon oil\n- 1/2 teaspoon garlic powder\n- 2 teaspoons cornstarch dissolved in 3 tablespoons water\n- Sesame seeds\n\n### Seasonings\n\n- Review imported ingredients for seasoning classification",
+        "directions": "1. Put the chicken into the crock pot.\n2. Combine honey, soy sauce, onion, ketchup, oil, and garlic in a bowl.\n3. Pour this mixture over the chicken in the crock pot.\n4. Put the lid on and cook on low for 3-4 hours or on high for 1 1/2 ? 2 1/2 hours, or just until the chicken is cooked through.\n5. Remove the chicken from the crock pot, leaving the sauce.\n6. Dissolve 2 teaspoons of cornstarch in 3 tablespoons of water and pour into the crock pot.\n7. Stir to combine with the sauce.\n8. Replace the lid and cook the sauce on high for 10 minutes more or until slightly thickened.\n9. Cut the chicken into bite-size pieces and return to the crock pot.\n10. You can leave the chicken in and simmer on low or serve immediately.\n11. Sprinkle with sesame seeds and serve over rice."
+      },
+      "image": {
+        "recipe_id": "FDP-0022",
+        "primary": true,
+        "relative_path": "assets/recipes/FDP-0022.jpg",
+        "filename": "FDP-0022.jpg",
+        "source_type": "placeholder-generated",
+        "source": "placeholder-library",
+        "prompt": "Placeholder photo for Crock Pot Sesame Chicken",
+        "captured_on": null,
+        "updated": "2026-06-29T02:45:21.640931Z"
+      },
+      "source_size": 2664,
+      "source_mtime_ns": 1782618373615822000
+    },
+    {
+      "id": "FDP-0023",
+      "name": "Eggroll in a Bowl",
+      "revision": 2,
+      "status": "candidate",
+      "protein": "chicken",
+      "meal_scope": "complete-meal",
+      "prep_minutes": 15,
+      "cook_minutes": 25,
+      "fiber_grams": 8,
+      "estimated_cost_usd": 20,
+      "kid_friendly_score": 4,
+      "kid_friendly_reason": "Gray Loves It",
+      "cooking_method": "stovetop",
+      "seasons": [
+        "spring",
+        "summer",
+        "fall",
+        "winter"
+      ],
+      "source": "pasted recipe text",
+      "path": "recipes/eggroll-in-a-bowl.md",
+      "relative_path": "recipes/eggroll-in-a-bowl.md",
+      "filename": "eggroll-in-a-bowl.md",
+      "tags": [
+        "chicken",
+        "fall",
+        "imported",
+        "spring",
+        "stovetop",
+        "summer",
+        "winter"
+      ],
+      "leftover_recipe_ids": [],
+      "servings": 4,
+      "created": "2026-06-27",
+      "updated": "2026-06-27",
+      "rating_average": 0.0,
+      "ratings_count": 0,
+      "card_sections": {
+        "ingredients": "### Main Ingredients\n\n- 1 lb. ground turkey breast (can substitute with ground chicken, ground beef, or ground pork)\n- 1 sweet onion, diced\n- 1 tablespoon sesame oil\n- 1 tablespoon rice vinegar\n- 2 teaspoons minced fresh garlic\n- 1 teaspoon ground ginger\n- 1/4 cup less sodium soy sauce\n- 1 (16 ounce) bag coleslaw mix\n- 1/2 cup grated or \"matchstick\" carrots\n- 2 green onions, thinly sliced\n- Salt and pepper, to taste\n- 1 tablespoon hoisin sauce (optional, but recommended)\n\n### Seasonings\n\n- Review imported ingredients for seasoning classification",
+        "directions": "1. Heat a large skillet over medium-high heat. Add ground meat and cook, stirring, until no longer pink. Drain; return meat to skillet.\n2. Add diced onion, sesame oil, and rice vinegar to the skillet. Cook, stirring, for a few more minutes (until onion is tender).\n3. Add garlic, ginger, soy sauce, hoisin sauce (optional), coleslaw mix, and carrots to the skillet. Cook, stirring, for about 5-7 more minutes, or until cabbage is wilted.\n4. Remove skillet from the heat. Stir in green onions and season with salt and pepper, to taste."
+      },
+      "image": {
+        "recipe_id": "FDP-0023",
+        "primary": true,
+        "relative_path": "assets/recipes/FDP-0023.jpg",
+        "filename": "FDP-0023.jpg",
+        "source_type": "placeholder-generated",
+        "source": "placeholder-library",
+        "prompt": "Placeholder photo for Eggroll in a Bowl",
+        "captured_on": null,
+        "updated": "2026-06-29T02:45:21.771083Z"
+      },
+      "source_size": 2570,
+      "source_mtime_ns": 1782618410220388200
+    },
+    {
+      "id": "FDP-0024",
+      "name": "Garlic Butter Shrimp",
+      "revision": 2,
+      "status": "candidate",
+      "protein": "seafood",
+      "meal_scope": "complete-meal",
+      "prep_minutes": 5,
+      "cook_minutes": 20,
+      "fiber_grams": 8,
+      "estimated_cost_usd": 20,
+      "kid_friendly_score": 1,
+      "kid_friendly_reason": "Not kid friendly - for the parents only",
+      "cooking_method": "stovetop",
+      "seasons": [
+        "spring",
+        "summer",
+        "fall",
+        "winter"
+      ],
+      "source": "pasted recipe text",
+      "path": "recipes/garlic-butter-shrimp.md",
+      "relative_path": "recipes/garlic-butter-shrimp.md",
+      "filename": "garlic-butter-shrimp.md",
+      "tags": [
+        "fall",
+        "imported",
+        "seafood",
+        "spring",
+        "stovetop",
+        "summer",
+        "winter"
+      ],
+      "leftover_recipe_ids": [],
+      "servings": 4,
+      "created": "2026-06-27",
+      "updated": "2026-06-27",
+      "rating_average": 0.0,
+      "ratings_count": 0,
+      "card_sections": {
+        "ingredients": "### Main Ingredients\n\n- 1 pound large shrimp, peeled and deveined\n- 4 tablespoons unsalted butter\n- 4 cloves garlic, minced\n- 1/4 teaspoon red pepper flakes\n- Salt and pepper to taste\n- 2 tablespoons lemon juice\n- 2 tablespoons fresh parsley, chopped\n- Cooked rice or pasta, for serving\n\n### Seasonings\n\n- Review imported ingredients for seasoning classification",
+        "directions": "1. In a large skillet, melt butter over medium heat. Add garlic and red pepper flakes, and saut? for about 1 minute until fragrant.\n2. Add shrimp to the skillet, season with salt and pepper, and cook for 2-3 minutes on each side until pink and opaque.\n3. Stir in lemon juice and parsley, and cook for another minute.\n4. Serve immediately over cooked rice or pasta."
+      },
+      "image": {
+        "recipe_id": "FDP-0024",
+        "primary": true,
+        "relative_path": "assets/recipes/FDP-0024.jpg",
+        "filename": "FDP-0024.jpg",
+        "source_type": "placeholder-generated",
+        "source": "placeholder-library",
+        "prompt": "Placeholder photo for Garlic Butter Shrimp",
+        "captured_on": null,
+        "updated": "2026-06-29T02:45:21.945239Z"
+      },
+      "source_size": 2268,
+      "source_mtime_ns": 1782618434187577400
+    },
+    {
+      "id": "FDP-0025",
+      "name": "Grill Smoked Barbecued Chicken",
+      "revision": 3,
+      "status": "candidate",
+      "protein": "chicken",
+      "meal_scope": "entree",
+      "prep_minutes": 20,
+      "cook_minutes": 120,
+      "fiber_grams": 8,
+      "estimated_cost_usd": 20,
+      "kid_friendly_score": 5,
+      "kid_friendly_reason": "Both children like/love it",
+      "cooking_method": "smoker",
+      "seasons": [
+        "spring",
+        "summer"
+      ],
+      "source": "https://brooklynsupper.com/real-deal-barbecued-chicken/",
+      "path": "recipes/grill-smoked-barbecued-chicken.md",
+      "relative_path": "recipes/grill-smoked-barbecued-chicken.md",
+      "filename": "grill-smoked-barbecued-chicken.md",
+      "tags": [
+        "chicken",
+        "imported",
+        "smoker",
+        "spring",
+        "summer"
+      ],
+      "leftover_recipe_ids": [],
+      "servings": 4,
+      "created": "2026-06-27",
+      "updated": "2026-06-28",
+      "rating_average": 0.0,
+      "ratings_count": 0,
+      "card_sections": {
+        "ingredients": "### Main Ingredients\n\n- 2 tablespoons sea salt\n- 1  whole chicken ((3 - 4 pounds), halved along the spine)\n- 4 cups hickory chips\n- disposable aluminum pan\n- 1/4 cup packed brown sugar\n- 1/4 cup paprika\n- 2 tablespoons garlic powder\n- 2 tablespoons sea salt (or more to taste)\n- 1 teaspoon fresh ground black pepper\n- 1 teaspoon fresh ground cumin seed\n- 1 teaspoon chili powder\n\n### Seasonings\n\n- Review imported ingredients for seasoning classification",
+        "directions": "1. The night before or 8 or more hours ahead of time, rub chicken all over with sea salt. Cover loosely and set in fridge.\n2. One hour before cooking, combine all dry rub ingredients. Set halved chicken skin side up on a tray and rub prepared dry rub into chicken skin (use just about all of the rub \u2013 you may have a few tablespoons leftover). Cover and set in fridge.\n3. In a standard kettle charcoal grill, prepare hot coals in a charcoal chimney (or using your preferred method). While coals are heating, soak 2 handfuls of hickory chips in a bowl of water. Once coals are all gray and very hot, bank them to one side (this creates a zone of indirect heat). Set a small aluminum pan filled with water on the other side. Sprinkle soaked hickory chips on coals and set grill grate in place. Place chicken halves skin side-up on grill grate as far from coals as possible. Cover grill with lid vent half open. When smoke dies down, add a handful of dry hickory chips (likely 1 - 2 more times during cook time). Cook chicken 1 1/2 - 2 hours, checking temperature after 1 hour. To check temperature, insert thermometer into the space where the thigh meets the breast and pull when temp reaches 170 degrees F. Rest chicken a few minutes until it\u2019s cool enough to carve without burning yourself.\n4. To serve, slice the thigh and leg away from the breast. Then slice the drumstick from the thigh at the joint. Cut wing from the breast, chop off wingtip, and discard. If you prefer, cut breasts in half to make each into two small pieces, though you can also leave breasts whole. Serve immediately."
+      },
+      "image": {
+        "recipe_id": "FDP-0025",
+        "primary": true,
+        "relative_path": "assets/recipes/FDP-0025.jpg",
+        "filename": "FDP-0025.jpg",
+        "source_type": "placeholder-generated",
+        "source": "placeholder-library",
+        "prompt": "Placeholder photo for Grill Smoked Barbecued Chicken",
+        "captured_on": null,
+        "updated": "2026-06-29T02:45:22.111324Z"
+      },
+      "source_size": 3678,
+      "source_mtime_ns": 1782694036635237300
+    },
+    {
+      "id": "FDP-0040",
+      "name": "Grilled Chicken Caesar Salad",
+      "revision": 1,
+      "status": "candidate",
+      "protein": "chicken",
+      "meal_scope": "complete-meal",
+      "prep_minutes": 20,
+      "cook_minutes": 15,
+      "fiber_grams": 5,
+      "estimated_cost_usd": 24,
+      "kid_friendly_score": 4,
+      "kid_friendly_reason": "Gray Loves It",
+      "cooking_method": "grill",
+      "seasons": [
+        "spring",
+        "summer",
+        "fall"
+      ],
+      "source": "Unknown import source",
+      "path": "recipes/grilled-chicken-caesar-salad.md",
+      "relative_path": "recipes/grilled-chicken-caesar-salad.md",
+      "filename": "grilled-chicken-caesar-salad.md",
+      "tags": [
+        "chicken",
+        "cold-meal",
+        "fall",
+        "grill",
+        "heat-friendly",
+        "spring",
+        "summer"
+      ],
+      "leftover_recipe_ids": [],
+      "servings": 4,
+      "created": "2026-06-27",
+      "updated": "2026-06-27",
+      "rating_average": 0.0,
+      "ratings_count": 0,
+      "card_sections": {
+        "ingredients": "### Main Ingredients\n\n- 1 1/2 pounds boneless, skinless chicken breasts\n- 2 large romaine hearts, chopped\n- 1 cup whole-grain croutons\n- 1/2 cup grated Parmesan cheese\n- 1/3 cup olive oil\n- 3 tablespoons fresh lemon juice\n- 2 teaspoons Dijon mustard\n- 1 teaspoon Worcestershire sauce\n- 1 garlic clove, finely minced\n\n### Seasonings\n\n- 1 teaspoon garlic powder\n- 3/4 teaspoon kosher salt, divided\n- 1/2 teaspoon black pepper, divided",
+        "directions": "1. Heat the grill to medium-high.\n2. Season the chicken with the garlic powder, 1/2 teaspoon kosher salt, and 1/4 teaspoon black pepper.\n3. Grill the chicken for 5 to 7 minutes per side until it reaches 165 F. Rest for 5 minutes, then slice.\n4. Whisk the olive oil, lemon juice, Dijon mustard, Worcestershire sauce, minced garlic, remaining 1/4 teaspoon kosher salt, and remaining 1/4 teaspoon black pepper.\n5. Toss the romaine with enough dressing to coat lightly. Add the croutons and Parmesan.\n6. Top the salad with sliced grilled chicken. Serve the remaining dressing on the side and prepare one Kid's Cuisine for the son."
+      },
+      "image": {
+        "recipe_id": "FDP-0040",
+        "primary": true,
+        "relative_path": "assets/recipes/FDP-0040.jpg",
+        "filename": "FDP-0040.jpg",
+        "source_type": "placeholder-generated",
+        "source": "placeholder-library",
+        "prompt": "Placeholder photo for Grilled Chicken Caesar Salad",
+        "captured_on": null,
+        "updated": "2026-06-29T02:45:24.358563Z"
+      },
+      "source_size": 2582,
+      "source_mtime_ns": 1782571727857041700
+    },
+    {
+      "id": "FDP-0011",
+      "name": "Grilled Salmon Rice Bowls with Fruit",
+      "revision": 1,
+      "status": "candidate",
+      "protein": "seafood",
+      "meal_scope": "complete-meal",
+      "prep_minutes": 15,
+      "cook_minutes": 40,
+      "fiber_grams": 9,
+      "estimated_cost_usd": 29.0,
+      "kid_friendly_score": 5,
+      "kid_friendly_reason": "Established family-favorite salmon with simple rice and fruit",
+      "cooking_method": "grill",
+      "seasons": [
+        "spring",
+        "summer"
+      ],
+      "source": "Unknown import source",
+      "path": "recipes/grilled-salmon-rice-bowls-with-fruit.md",
+      "relative_path": "recipes/grilled-salmon-rice-bowls-with-fruit.md",
+      "filename": "grilled-salmon-rice-bowls-with-fruit.md",
+      "tags": [
+        "summer",
+        "seafood",
+        "grill",
+        "whole-grain"
+      ],
+      "leftover_recipe_ids": [],
+      "servings": 4,
+      "created": "2026-06-26",
+      "updated": "2026-06-26",
+      "rating_average": 0.0,
+      "ratings_count": 0,
+      "card_sections": {
+        "ingredients": "### Main Ingredients\n\n- 1 1/2 pounds salmon, cut into 4 fillets\n- 1 1/2 cups dry brown rice\n- 2 3/4 cups water\n- 1 (15-ounce) can pinto beans, drained and rinsed\n- 1 1/2 cups frozen corn, thawed\n- 1 tablespoon olive oil\n\n### Seasonings\n\n- 1 teaspoon garlic powder\n- 1 teaspoon dried dill\n- 1 teaspoon kosher salt, divided\n- 1/2 teaspoon black pepper\n\n### Toppings and Sides\n\n- 1 lemon, cut into wedges\n- 2 cups mixed berries\n- 2 cups watermelon",
+        "directions": "1. Combine the brown rice, water, and 1/4 teaspoon kosher salt. Bring to a\n   boil, cover, reduce the heat, and simmer for 35-40 minutes.\n2. Brush the salmon with olive oil. Sprinkle it with garlic powder, dried dill,\n   remaining 3/4 teaspoon kosher salt, and black pepper.\n3. Grill skin-side down over medium heat for 4-6 minutes per side, until the\n   salmon reaches 145 F.\n4. Warm the pinto beans and corn separately.\n5. Build bowls with brown rice and salmon. Offer pinto beans and corn\n   separately, and serve with lemon wedges and fruit."
+      },
+      "image": {
+        "recipe_id": "FDP-0011",
+        "primary": true,
+        "relative_path": "assets/recipes/FDP-0011.jpg",
+        "filename": "FDP-0011.jpg",
+        "source_type": "placeholder-generated",
+        "source": "placeholder-library",
+        "prompt": "Placeholder photo for Grilled Salmon Rice Bowls with Fruit",
+        "captured_on": null,
+        "updated": "2026-06-29T02:45:20.149539Z"
+      },
+      "source_size": 2381,
+      "source_mtime_ns": 1782528227660203300
+    },
+    {
+      "id": "FDP-0026",
+      "name": "Grilled Salmon with Edamame and Rice",
+      "revision": 2,
+      "status": "candidate",
+      "protein": "chicken",
+      "meal_scope": "complete-meal",
+      "prep_minutes": 15,
+      "cook_minutes": 15,
+      "fiber_grams": 8,
+      "estimated_cost_usd": 20,
+      "kid_friendly_score": 4,
+      "kid_friendly_reason": "Gray Loves It",
+      "cooking_method": "grill",
+      "seasons": [
+        "spring",
+        "summer",
+        "fall"
+      ],
+      "source": "pasted recipe text",
+      "path": "recipes/grilled-salmon-with-edamame-and-rice.md",
+      "relative_path": "recipes/grilled-salmon-with-edamame-and-rice.md",
+      "filename": "grilled-salmon-with-edamame-and-rice.md",
+      "tags": [
+        "chicken",
+        "fall",
+        "grill",
+        "imported",
+        "spring",
+        "summer"
+      ],
+      "leftover_recipe_ids": [],
+      "servings": 4,
+      "created": "2026-06-27",
+      "updated": "2026-06-27",
+      "rating_average": 0.0,
+      "ratings_count": 0,
+      "card_sections": {
+        "ingredients": "### Main Ingredients\n\n- 2 salmon fillets (about 6 oz each)\n- 1 cup of jasmine or basmati rice\n- 1 cup of shelled edamame (fresh or frozen)\n- 2 tablespoons of soy sauce\n- 1 tablespoon of olive oil\n- 1 tablespoon of lemon juice\n- 1 teaspoon of honey\n- Salt and pepper to taste\n- Optional: sesame seeds and chopped green onions for garnish\n\n### Seasonings\n\n- Review imported ingredients for seasoning classification",
+        "directions": "1. Start by preparing the rice. Rinse 1 cup of rice under cold water until the water runs clear. In a medium saucepan, combine the rice with 2 cups of water and a pinch of salt. Bring to a boil over high heat, then reduce the heat to low, cover, and simmer for about 15 minutes or until the rice is tender and the water is absorbed. Remove from heat and let it sit, covered, for 5 minutes.\n2. While the rice is cooking, prepare the salmon marinade. In a small bowl, whisk together 2 tablespoons of soy sauce, 1 tablespoon of olive oil, 1 tablespoon of lemon juice, 1 teaspoon of honey, and a pinch of salt and pepper.\n3. Place the salmon fillets in a shallow dish and pour the marinade over them. Let them marinate for about 10 minutes.\n4. Preheat your grill to medium-high heat. Once hot, place the salmon fillets on the grill, skin-side down. Grill for about 4-5 minutes on each side, or until the salmon is cooked through and has nice grill marks.\n5. While the salmon is grilling, cook the edamame. If using frozen edamame, bring a small pot of water to a boil, add the edamame, and cook for about 3-4 minutes until tender. Drain and set aside.\n6. To serve, fluff the rice with a fork and divide it between two plates. Top each serving with a grilled salmon fillet and a portion of edamame.\n7. Optionally, garnish with sesame seeds and chopped green onions. Serve immediately and enjoy your meal!"
+      },
+      "image": {
+        "recipe_id": "FDP-0026",
+        "primary": true,
+        "relative_path": "assets/recipes/FDP-0026.jpg",
+        "filename": "FDP-0026.jpg",
+        "source_type": "placeholder-generated",
+        "source": "placeholder-library",
+        "prompt": "Placeholder photo for Grilled Salmon with Edamame and Rice",
+        "captured_on": null,
+        "updated": "2026-06-29T02:45:22.262363Z"
+      },
+      "source_size": 3297,
+      "source_mtime_ns": 1782618481041812900
+    },
+    {
+      "id": "FDP-0038",
+      "name": "Ground Turkey Hard Shell Tacos with Pinto Beans and Rice",
+      "revision": 1,
+      "status": "candidate",
+      "protein": "turkey",
+      "meal_scope": "complete-meal",
+      "prep_minutes": 15,
+      "cook_minutes": 30,
+      "fiber_grams": 13,
+      "estimated_cost_usd": 22,
+      "kid_friendly_score": 5,
+      "kid_friendly_reason": "Both children like/love it",
+      "cooking_method": "stovetop",
+      "seasons": [
+        "spring",
+        "summer",
+        "fall",
+        "winter"
+      ],
+      "source": "Unknown import source",
+      "path": "recipes/ground-turkey-hard-shell-tacos-with-pinto-beans-and-rice.md",
+      "relative_path": "recipes/ground-turkey-hard-shell-tacos-with-pinto-beans-and-rice.md",
+      "filename": "ground-turkey-hard-shell-tacos-with-pinto-beans-and-rice.md",
+      "tags": [
+        "fall",
+        "mexican-monday",
+        "spring",
+        "stovetop",
+        "summer",
+        "turkey",
+        "winter"
+      ],
+      "leftover_recipe_ids": [],
+      "servings": 4,
+      "created": "2026-06-27",
+      "updated": "2026-06-27",
+      "rating_average": 0.0,
+      "ratings_count": 0,
+      "card_sections": {
+        "ingredients": "### Main Ingredients\n\n- 1 1/4 pounds ground turkey\n- 12 hard corn taco shells\n- 1 can (15 ounces) pinto beans, drained and rinsed\n- 1 cup dry brown rice\n- 1 cup frozen corn\n- 1 cup shredded cheddar cheese\n- 1 cup shredded romaine lettuce\n- 1 medium tomato, diced\n- 1/2 cup mild salsa\n- 1/2 cup sour cream\n- 2 1/4 cups water, divided\n- 1 tablespoon olive oil\n\n### Seasonings\n\n- 2 teaspoons chili powder\n- 1 1/2 teaspoons ground cumin\n- 1 teaspoon garlic powder\n- 1 teaspoon onion powder\n- 1/2 teaspoon smoked paprika\n- 3/4 teaspoon kosher salt\n- 1/4 teaspoon black pepper",
+        "directions": "1. Combine the brown rice, 2 cups water, and 1/4 teaspoon kosher salt in a saucepan. Bring to a boil, cover, reduce the heat to low, and cook for 25 minutes.\n2. Heat the olive oil in a large skillet over medium-high heat. Add the ground turkey and cook for 6 to 8 minutes, breaking it into small pieces, until no pink remains and it reaches 165 F.\n3. Stir the chili powder, ground cumin, garlic powder, onion powder, smoked paprika, remaining 1/2 teaspoon kosher salt, black pepper, and remaining 1/4 cup water into the turkey. Simmer for 3 minutes.\n4. Warm the pinto beans and corn in a small saucepan over medium heat for 5 minutes.\n5. Warm the taco shells according to the package directions.\n6. Serve three shells per person with the turkey, cheddar, lettuce, tomato, salsa, and sour cream arranged separately. Serve the rice, pinto beans, and corn alongside."
+      },
+      "image": {
+        "recipe_id": "FDP-0038",
+        "primary": true,
+        "relative_path": "assets/recipes/FDP-0038.jpg",
+        "filename": "FDP-0038.jpg",
+        "source_type": "placeholder-generated",
+        "source": "placeholder-library",
+        "prompt": "Placeholder photo for Ground Turkey Hard Shell Tacos with Pinto Beans and Rice",
+        "captured_on": null,
+        "updated": "2026-06-29T02:45:24.024948Z"
+      },
+      "source_size": 3008,
+      "source_mtime_ns": 1782568609021779500
+    },
+    {
+      "id": "FDP-0039",
+      "name": "Hot Dogs with Macaroni and Cheese and Baked Beans",
+      "revision": 1,
+      "status": "candidate",
+      "protein": "pork",
+      "meal_scope": "complete-meal",
+      "prep_minutes": 5,
+      "cook_minutes": 20,
+      "fiber_grams": 8,
+      "estimated_cost_usd": 20,
+      "kid_friendly_score": 5,
+      "kid_friendly_reason": "Both children like/love it",
+      "cooking_method": "stovetop",
+      "seasons": [
+        "spring",
+        "summer",
+        "fall",
+        "winter"
+      ],
+      "source": "Unknown import source",
+      "path": "recipes/hot-dogs-with-macaroni-and-cheese-and-baked-beans.md",
+      "relative_path": "recipes/hot-dogs-with-macaroni-and-cheese-and-baked-beans.md",
+      "filename": "hot-dogs-with-macaroni-and-cheese-and-baked-beans.md",
+      "tags": [
+        "fall",
+        "pork",
+        "spring",
+        "stovetop",
+        "summer",
+        "winter"
+      ],
+      "leftover_recipe_ids": [],
+      "servings": 4,
+      "created": "2026-06-27",
+      "updated": "2026-06-27",
+      "rating_average": 0.0,
+      "ratings_count": 0,
+      "card_sections": {
+        "ingredients": "### Main Ingredients\n\n- 8 hot dogs\n- 8 whole-wheat hot dog buns\n- 2 boxes (7.25 ounces each) macaroni and cheese\n- 2 cans (15 ounces each) vegetarian baked beans\n- 1/2 cup milk, or the amount required by the macaroni packages\n- 4 tablespoons butter, or the amount required by the macaroni packages\n\n### Seasonings\n\n- No additional seasoning; prepare each familiar component as packaged",
+        "directions": "1. Bring a large pot of water to a boil and cook the macaroni for the time listed on the package.\n2. While the macaroni cooks, warm the baked beans in a saucepan over medium-low heat for 8 to 10 minutes, stirring occasionally.\n3. Place the hot dogs in a skillet with 1/2 cup water. Cover and simmer over medium heat for 6 minutes, turning once, until heated to 165 F.\n4. Drain the macaroni. Stir in the packaged cheese mix, milk, and butter until smooth.\n5. Place the hot dogs in the buns and serve two per person with macaroni and cheese and baked beans."
+      },
+      "image": {
+        "recipe_id": "FDP-0039",
+        "primary": true,
+        "relative_path": "assets/recipes/FDP-0039.jpg",
+        "filename": "FDP-0039.jpg",
+        "source_type": "placeholder-generated",
+        "source": "placeholder-library",
+        "prompt": "Placeholder photo for Hot Dogs with Macaroni and Cheese and Baked Beans",
+        "captured_on": null,
+        "updated": "2026-06-29T02:45:24.193168Z"
+      },
+      "source_size": 2408,
+      "source_mtime_ns": 1782568609355742300
+    },
+    {
+      "id": "FDP-0028",
+      "name": "Loaded Baked Potato Soup",
+      "revision": 2,
+      "status": "candidate",
+      "protein": "vegetarian",
+      "meal_scope": "entree",
+      "prep_minutes": 15,
+      "cook_minutes": 12,
+      "fiber_grams": 8,
+      "estimated_cost_usd": 20,
+      "kid_friendly_score": 5,
+      "kid_friendly_reason": "Both children like/love it",
+      "cooking_method": "stovetop",
+      "seasons": [
+        "spring",
+        "fall",
+        "winter"
+      ],
+      "source": "pasted recipe text",
+      "path": "recipes/loaded-baked-potato-soup.md",
+      "relative_path": "recipes/loaded-baked-potato-soup.md",
+      "filename": "loaded-baked-potato-soup.md",
+      "tags": [
+        "fall",
+        "imported",
+        "spring",
+        "stovetop",
+        "vegetarian",
+        "winter"
+      ],
+      "leftover_recipe_ids": [],
+      "servings": 4,
+      "created": "2026-06-27",
+      "updated": "2026-06-27",
+      "rating_average": 0.0,
+      "ratings_count": 0,
+      "card_sections": {
+        "ingredients": "### Main Ingredients\n\n- 4 potatoes, scrubbed\n- 8 bacon slices\n- 4 tbsp unsalted butter\n- 2 garlic cloves, minced\n- 1/4 cup yellow onion\n- 1/3 cup all-purpose flour\n- 2 cups low fat milk\n- 1 cup half and half\n- 2 cups chicken stock\n- 1 tsp salt, plus more to taste\n- 1/2 tsp garlic salt, plus more to taste\n- 1/2 tsp black pepper\n- 1 cup mild cheddar cheese\n- 1 cup sharp cheddar cheese\n- 1 cup sour cream\n- Fresh chives, for garnish\n\n### Seasonings\n\n- Review imported ingredients for seasoning classification",
+        "directions": "1. Pierce the potatoes multiple times with a fork, then microwave them for 12 to 15 minutes, or until tender. Once cooled, remove the skins and cut into chunks.\n2. Meanwhile, cook the bacon in a skillet over medium-high heat until crisp. Transfer to a paper towel-lined plate to drain and cool. Reserve up to 1 tablespoon of the bacon fat.\n3. In a large pot, melt the butter over medium-low heat. Add the reserved bacon fat, garlic and onion. Cook for 2 to 3 minutes until the onion is tender.\n4. Slowly whisk the flour into the pot and stir for 1 to 2 minutes.\n5. Whisk in the milk and half-and-half, then gradually add the chicken stock.\n6. Bring to a light simmer and whisk in the kosher salt, garlic salt, and pepper. Keep at a light simmer until thickened, 5 to 7 minutes.\n7. Stir in the remaining cheeses, bacon, and sour cream. Remove from heat.\n8. Add potato chunks into the pot, breaking them into small pieces or leaving them chunky.\n9. Serve hot, topped with cheese, bacon, and chives."
+      },
+      "image": {
+        "recipe_id": "FDP-0028",
+        "primary": true,
+        "relative_path": "assets/recipes/FDP-0028.jpg",
+        "filename": "FDP-0028.jpg",
+        "source_type": "placeholder-generated",
+        "source": "placeholder-library",
+        "prompt": "Placeholder photo for Loaded Baked Potato Soup",
+        "captured_on": null,
+        "updated": "2026-06-29T02:45:22.524388Z"
+      },
+      "source_size": 3000,
+      "source_mtime_ns": 1782618523508875900
+    },
+    {
+      "id": "FDP-0030",
+      "name": "Marry me chicken",
+      "revision": 2,
+      "status": "candidate",
+      "protein": "chicken",
+      "meal_scope": "entree",
+      "prep_minutes": 15,
+      "cook_minutes": 25,
+      "fiber_grams": 8,
+      "estimated_cost_usd": 20,
+      "kid_friendly_score": 5,
+      "kid_friendly_reason": "Both children like/love it",
+      "cooking_method": "stovetop",
+      "seasons": [
+        "spring",
+        "summer",
+        "fall",
+        "winter"
+      ],
+      "source": "pasted recipe text",
+      "path": "recipes/marry-me-chicken.md",
+      "relative_path": "recipes/marry-me-chicken.md",
+      "filename": "marry-me-chicken.md",
+      "tags": [
+        "chicken",
+        "fall",
+        "imported",
+        "spring",
+        "stovetop",
+        "summer",
+        "winter"
+      ],
+      "leftover_recipe_ids": [],
+      "servings": 4,
+      "created": "2026-06-27",
+      "updated": "2026-06-27",
+      "rating_average": 0.0,
+      "ratings_count": 0,
+      "card_sections": {
+        "ingredients": "### Main Ingredients\n\n- For the Chicken\n- 1/2 pound bacon\n- 3 large skinless, boneless chicken breasts\n- 1/2 teaspoon salt\n- 1/4 teaspoon pepper\n- 3 tablespoons butter\n- 3 cloves garlic, minced\n- 1/2 teaspoon dried oregano\n- 1/4 teaspoon ground thyme\n- 1 (16-ounce) package angel hair pasta\n- For the Sauce\n- 1 cup chicken broth, divided\n- 1 1/2 tablespoons all-purpose flour\n- 1/2 cup heavy cream\n- 3/4 cups freshly grated Parmesan cheese\n- 1/2 cup chopped sun-dried tomatoes\n- 1/2 teaspoon red pepper flakes\n\n### Seasonings\n\n- Review imported ingredients for seasoning classification",
+        "directions": "1. Arrange the bacon in a large, cold skillet in a single layer. Turn the heat to medium and cook, flipping halfway, until crisp.\n2. While the bacon cooks, slice the chicken breasts in half lengthwise and pound them to even thickness. Season both sides with salt and pepper.\n3. Remove the bacon from the skillet and set aside. In the same skillet, melt the butter, add the chicken, and cook until browned and cooked through, about 4-5 minutes on each side.\n4. Cook the pasta in boiling salted water until al dente. Drain and set aside.\n5. Remove the chicken and cover loosely with foil.\n6. Add the garlic, oregano, and thyme to the skillet. Pour in half of the chicken broth and scrape the brown bits.\n7. Sprinkle the flour over the broth and whisk until smooth. Slowly pour in the remaining broth, followed by the cream, whisking constantly until smooth and thick.\n8. Add the Parmesan in small handfuls, stirring well to melt.\n9. Add the sun-dried tomatoes and red pepper flakes. Return the chicken and crumbled bacon to the pan. Stir until coated and cook for 1-2 minutes.\n10. Serve the chicken and sauce over the pasta with chopped parsley for garnish."
+      },
+      "image": {
+        "recipe_id": "FDP-0030",
+        "primary": true,
+        "relative_path": "assets/recipes/FDP-0030.jpg",
+        "filename": "FDP-0030.jpg",
+        "source_type": "placeholder-generated",
+        "source": "placeholder-library",
+        "prompt": "Placeholder photo for Marry me chicken",
+        "captured_on": null,
+        "updated": "2026-06-29T02:45:22.881129Z"
+      },
+      "source_size": 3242,
+      "source_mtime_ns": 1782618572676734100
+    },
+    {
+      "id": "FDP-0029",
+      "name": "Mom's Wonton Soup",
+      "revision": 2,
+      "status": "candidate",
+      "protein": "chicken",
+      "meal_scope": "entree",
+      "prep_minutes": 5,
+      "cook_minutes": 15,
+      "fiber_grams": 8,
+      "estimated_cost_usd": 20,
+      "kid_friendly_score": 4,
+      "kid_friendly_reason": "Gray Loves It",
+      "cooking_method": "stovetop",
+      "seasons": [
+        "spring",
+        "fall",
+        "winter"
+      ],
+      "source": "pasted recipe text",
+      "path": "recipes/mom-s-wonton-soup.md",
+      "relative_path": "recipes/mom-s-wonton-soup.md",
+      "filename": "mom-s-wonton-soup.md",
+      "tags": [
+        "chicken",
+        "fall",
+        "imported",
+        "spring",
+        "stovetop",
+        "winter"
+      ],
+      "leftover_recipe_ids": [],
+      "servings": 4,
+      "created": "2026-06-27",
+      "updated": "2026-06-27",
+      "rating_average": 0.0,
+      "ratings_count": 0,
+      "card_sections": {
+        "ingredients": "### Main Ingredients\n\n- 4 cups chicken broth\n- 2 cups water\n- 2 teaspoons Garlic Better Than Bouillon\n- 1 tablespoon soy sauce\n- 1 tablespoon rice vinegar\n- 1 teaspoon sesame oil\n- 1 teaspoon grated fresh ginger\n- 1 bag of frozen chicken/vegetable mini wontons\n- 2 baby bok choy, chopped\n\n### Seasonings\n\n- Review imported ingredients for seasoning classification",
+        "directions": "1. Bring the chicken broth and water to a boil.\n2. Turn down the heat to a simmer.\n3. Add the mini wontons and chopped bok choy.\n4. Cook for 5-6 minutes.\n5. Garnish with sliced green onions before serving."
+      },
+      "image": {
+        "recipe_id": "FDP-0029",
+        "primary": true,
+        "relative_path": "assets/recipes/FDP-0029.jpg",
+        "filename": "FDP-0029.jpg",
+        "source_type": "placeholder-generated",
+        "source": "placeholder-library",
+        "prompt": "Placeholder photo for Mom's Wonton Soup",
+        "captured_on": null,
+        "updated": "2026-06-29T02:45:22.691672Z"
+      },
+      "source_size": 2017,
+      "source_mtime_ns": 1782618545877889800
+    },
+    {
+      "id": "FDP-0008",
+      "name": "No-Cook Chicken and Cheese Roll-Up Plates",
+      "revision": 1,
+      "status": "candidate",
+      "protein": "chicken",
+      "meal_scope": "complete-meal",
+      "prep_minutes": 15,
+      "cook_minutes": 0,
+      "fiber_grams": 9,
+      "estimated_cost_usd": 20.0,
+      "kid_friendly_score": 5,
+      "kid_friendly_reason": "Snack-plate format with simple roll-ups, whole-grain crackers, and fruit",
+      "cooking_method": "no-cook",
+      "seasons": [
+        "spring",
+        "summer"
+      ],
+      "source": "Unknown import source",
+      "path": "recipes/no-cook-chicken-and-cheese-roll-up-plates.md",
+      "relative_path": "recipes/no-cook-chicken-and-cheese-roll-up-plates.md",
+      "filename": "no-cook-chicken-and-cheese-roll-up-plates.md",
+      "tags": [
+        "summer",
+        "chicken",
+        "no-cook",
+        "thursday"
+      ],
+      "leftover_recipe_ids": [],
+      "servings": 4,
+      "created": "2026-06-26",
+      "updated": "2026-06-26",
+      "rating_average": 0.0,
+      "ratings_count": 0,
+      "card_sections": {
+        "ingredients": "### Main Ingredients\n\n- 3 cups shredded rotisserie chicken\n- 8 small high-fiber whole-wheat tortillas\n- 8 slices cheddar cheese\n- 8 ounces whole-grain crackers\n- 1 cucumber, sliced\n- 2 cups baby carrots\n- 4 apples, sliced\n- 2 cups seedless grapes\n\n### Seasonings\n\n- No additional seasonings",
+        "directions": "1. Lay out the tortillas and divide the rotisserie chicken and cheddar among\n   them.\n2. Roll each tortilla tightly and cut it into pinwheels.\n3. Build four plates with two roll-ups, whole-grain crackers, cucumber, baby\n   carrots, apple, and grapes. Serve every component separately."
+      },
+      "image": {
+        "recipe_id": "FDP-0008",
+        "primary": true,
+        "relative_path": "assets/recipes/FDP-0008.jpg",
+        "filename": "FDP-0008.jpg",
+        "source_type": "placeholder-generated",
+        "source": "placeholder-library",
+        "prompt": "Placeholder photo for No-Cook Chicken and Cheese Roll-Up Plates",
+        "captured_on": null,
+        "updated": "2026-06-29T02:45:19.766294Z"
+      },
+      "source_size": 1993,
+      "source_mtime_ns": 1782528194403895000
+    },
+    {
+      "id": "FDP-0043",
+      "name": "One-Pot Sausage and Fennel Rigatoni",
+      "revision": 3,
+      "status": "candidate",
+      "protein": "chicken",
+      "meal_scope": "complete-meal",
+      "prep_minutes": 0,
+      "cook_minutes": 8,
+      "fiber_grams": 8,
+      "estimated_cost_usd": 20,
+      "kid_friendly_score": 1,
+      "kid_friendly_reason": "Not kid friendly - for the parents only",
+      "cooking_method": "stovetop",
+      "seasons": [
+        "spring",
+        "summer",
+        "fall",
+        "winter"
+      ],
+      "source": "https://heresyourbite.substack.com/p/ina-inspired-sausage-and-fennel-rigatoni",
+      "path": "recipes/one-pot-sausage-and-fennel-rigatoni.md",
+      "relative_path": "recipes/one-pot-sausage-and-fennel-rigatoni.md",
+      "filename": "one-pot-sausage-and-fennel-rigatoni.md",
+      "tags": [
+        "chicken",
+        "fall",
+        "imported",
+        "spring",
+        "stovetop",
+        "summer",
+        "winter"
+      ],
+      "leftover_recipe_ids": [],
+      "servings": 4,
+      "created": "2026-06-27",
+      "updated": "2026-06-28",
+      "rating_average": 3.5,
+      "ratings_count": 2,
+      "card_sections": {
+        "ingredients": "### Main Ingredients\n\n- 1 pound sweet Italian sausage, casings removed and torn into pieces\n- 1 large fennel bulb, diced\n- \u00bd large yellow onion, diced\n- Kosher salt and freshly ground black pepper\n- 6 cloves garlic, finely minced, to taste\n- \u00bd teaspoon crushed fennel seeds (or 1 teaspoon for a stronger fennel flavor)\n- \u00bd teaspoon red pepper flakes\n- 2 tablespoons tomato paste\n- \u00bd cup dry white wine\n- 5\u20136 cups chicken broth\n- 1 pound rigatoni\n- \u00bd cup heavy cream\n- 1 teaspoon Dijon mustard (optional)\n- 1 cup freshly grated Parmesan cheese, plus more for serving\n- Zest of 1 lemon\n- 1 tablespoon unsalted butter, optional\n- \u00bd cup chopped fresh parsley, plus more for serving\n\n### Seasonings\n\n- Review imported ingredients for seasoning classification",
+        "directions": "1. Heat the olive oil in a large Dutch oven or deep saut\u00e9 pan over medium-high heat. Add the sausage and cook, breaking it into bite-sized pieces, until deeply browned and cooked through, about 8 to 10 minutes. Reduce the heat as needed throughout the cooking process if the pan begins to get too hot. Transfer the sausage to a plate and set aside.\n2. Reduce the heat to medium and add the fennel and onion to the pot. Season with a pinch of salt and pepper and cook, stirring occasionally, until softened and lightly caramelized, about 10 minutes.\n3. Stir in the garlic, crushed fennel seeds, and red pepper flakes. Cook until fragrant, about 1 minute.\n4. Push the vegetables to one side of the pot. Add the tomato paste and cook, stirring constantly, until it darkens slightly, about 2 minutes. Stir everything together.\n5. Pour in the white wine, scraping up any browned bits from the bottom of the pot. Simmer until reduced by about half, 3 to 5 minutes.\n6. Add 5 cups of the chicken broth and bring to a simmer. Add the uncooked rigatoni, stir well, and bring to a gentle boil.\n7. Reduce the heat to maintain a steady simmer. Cook uncovered, stirring frequently, until the pasta is al dente and most of the liquid has been absorbed, about 15 minutes. If needed, add additional broth a splash at a time to keep the sauce loose.\n8. Once the pasta is tender, stir in the heavy cream and Dijon mustard. Simmer for 1 to 2 minutes, until slightly thickened.\n9. Add the reserved sausage, Parmesan cheese, lemon zest, and parsley. Stir until the cheese has melted and the sauce is silky and glossy. If desired, stir in 1 tablespoon of butter for extra richness.\n10. Taste and adjust the seasoning with additional salt and pepper as needed.\n11. Divide among bowls and serve topped with extra Parmesan, parsley, and freshly cracked black pepper."
+      },
+      "image": {
+        "recipe_id": "FDP-0043",
+        "primary": true,
+        "relative_path": "assets/recipes/FDP-0043.jpg",
+        "filename": "FDP-0043.jpg",
+        "source_type": "placeholder-generated",
+        "source": "placeholder-library",
+        "prompt": "Placeholder photo for One-Pot Sausage and Fennel Rigatoni",
+        "captured_on": null,
+        "updated": "2026-06-29T02:45:24.762452Z"
+      },
+      "source_size": 4738,
+      "source_mtime_ns": 1782667969104297100
+    },
+    {
+      "id": "FDP-0033",
+      "name": "Roasted Butternut and Chicken Harvest Soup",
+      "revision": 2,
+      "status": "candidate",
+      "protein": "chicken",
+      "meal_scope": "complete-meal",
+      "prep_minutes": 10,
+      "cook_minutes": 30,
+      "fiber_grams": 8,
+      "estimated_cost_usd": 20,
+      "kid_friendly_score": 4,
+      "kid_friendly_reason": "Gray Loves It",
+      "cooking_method": "stovetop",
+      "seasons": [
+        "fall",
+        "winter"
+      ],
+      "source": "pasted recipe text",
+      "path": "recipes/roasted-butternut-and-chicken-harvest-soup.md",
+      "relative_path": "recipes/roasted-butternut-and-chicken-harvest-soup.md",
+      "filename": "roasted-butternut-and-chicken-harvest-soup.md",
+      "tags": [
+        "chicken",
+        "fall",
+        "imported",
+        "stovetop",
+        "winter"
+      ],
+      "leftover_recipe_ids": [],
+      "servings": 4,
+      "created": "2026-06-27",
+      "updated": "2026-06-27",
+      "rating_average": 0.0,
+      "ratings_count": 0,
+      "card_sections": {
+        "ingredients": "### Main Ingredients\n\n- 2 lb butternut squash, peeled, seeded, cut into 1-inch cubes\n- 2 tbsp extra-virgin olive oil\n- 1/2 tsp freshly ground black pepper\n- 2 cups small dry pasta (ditalini or small shells)\n- 1 lb chicken Italian sweet sausage, casings removed\n- 2 tbsp butter\n- 2 cups diced leeks, white parts only, rinsed well\n- 1 cup diced carrots\n- 1/2 cup diced celery (about 1 large stalk)\n- 1 tbsp minced garlic\n- 1 tsp dried thyme\n- 1/4 tsp crushed red pepper flakes (optional)\n- 1 tsp dried sage (or poultry seasoning)\n- 6 cups hot chicken stock\n- 3 cups baby spinach, roughly chopped\n- 1/2 cup finely grated parmesan, plus more for serving\n- 1 cup heavy cream\n- Kosher salt, to taste\n\n### Seasonings\n\n- Review imported ingredients for seasoning classification",
+        "directions": "1. **Roast the squash**: Preheat oven to 450?F (230?C). Line a sheet pan with foil. Toss squash with 1 tbsp olive oil and black pepper. Roast for 10 minutes, flip, and roast for another 10 minutes until tender and caramelized at the edges. Set aside.\n2. **Cook the pasta**: Bring a large pot of salted water to a boil. Cook pasta to package instructions until al dente. Drain and rinse briefly with cold water. Set aside.\n3. **Brown the sausage**: Film the bottom of a medium soup pot with 1 tbsp olive oil over medium-high heat. Add the chicken sausage, break it up, and cook until browned, about 5 minutes.\n4. **Build the flavor base**: Push sausage to the edges of the pot. Add butter, then leeks, carrots, and celery. Cook, stirring, for 3 minutes until they begin to soften. Stir in garlic, thyme, red pepper flakes, and sage; cook for 2 minutes until fragrant.\n5. **Simmer**: Pour in the hot chicken stock, scraping up any browned bits. Bring to a gentle simmer and cook for about 10 minutes until the vegetables are tender.\n6. **Finish the soup**: Stir in the roasted squash, spinach, parmesan, and cream. Cook until the spinach is wilted and the soup is heated through. Season with salt to taste.\n7. **Serve**: Ladle the soup over the cooked pasta in bowls. Top with additional parmesan if desired."
+      },
+      "image": {
+        "recipe_id": "FDP-0033",
+        "primary": true,
+        "relative_path": "assets/recipes/FDP-0033.jpg",
+        "filename": "FDP-0033.jpg",
+        "source_type": "placeholder-generated",
+        "source": "placeholder-library",
+        "prompt": "Placeholder photo for Roasted Butternut and Chicken Harvest Soup",
+        "captured_on": null,
+        "updated": "2026-06-29T02:45:23.332209Z"
+      },
+      "source_size": 3554,
+      "source_mtime_ns": 1782618664097792500
+    },
+    {
+      "id": "FDP-0034",
+      "name": "Sheet Pan Lemon Herb Chicken and Roasted Vegetables",
+      "revision": 2,
+      "status": "candidate",
+      "protein": "chicken",
+      "meal_scope": "complete-meal",
+      "prep_minutes": 15,
+      "cook_minutes": 25,
+      "fiber_grams": 8,
+      "estimated_cost_usd": 20,
+      "kid_friendly_score": 4,
+      "kid_friendly_reason": "Gray Loves It",
+      "cooking_method": "stovetop",
+      "seasons": [
+        "spring",
+        "fall",
+        "winter"
+      ],
+      "source": "pasted recipe text",
+      "path": "recipes/sheet-pan-lemon-herb-chicken-and-roasted-vegetables.md",
+      "relative_path": "recipes/sheet-pan-lemon-herb-chicken-and-roasted-vegetables.md",
+      "filename": "sheet-pan-lemon-herb-chicken-and-roasted-vegetables.md",
+      "tags": [
+        "chicken",
+        "fall",
+        "imported",
+        "spring",
+        "stovetop",
+        "winter"
+      ],
+      "leftover_recipe_ids": [],
+      "servings": 4,
+      "created": "2026-06-27",
+      "updated": "2026-06-27",
+      "rating_average": 0.0,
+      "ratings_count": 0,
+      "card_sections": {
+        "ingredients": "### Main Ingredients\n\n- 2.5 lbs boneless, skinless chicken thighs or breasts, cut into 1.5-inch pieces\n- 2 lbs small red potatoes, quartered\n- 2 bell peppers (any color), cut into 1-inch pieces\n- 1 large red onion, cut into wedges\n- 2 cups broccoli florets\n- 1/4 cup olive oil\n- 2 lemons, one thinly sliced, one juiced\n- 4 cloves garlic, minced\n- 2 tsp dried oregano\n- 1.5 tsp dried thyme\n- 1 tsp paprika\n- Salt and freshly ground black pepper to taste\n- Fresh parsley, chopped, for garnish (optional)\n\n### Seasonings\n\n- Review imported ingredients for seasoning classification",
+        "directions": "1. Preheat oven to 400?F (200?C).\n2. In a large bowl, combine the olive oil, lemon juice, minced garlic, oregano, thyme, paprika, salt, and pepper. Whisk to combine.\n3. Add the chicken pieces, potatoes, bell peppers, and red onion to the bowl. Toss until everything is evenly coated with the herb mixture.\n4. Spread the chicken and vegetables in a single layer on a large baking sheet (you may need two baking sheets to avoid overcrowding, which can steam the vegetables instead of roasting them).\n5. Arrange the lemon slices among the chicken and vegetables.\n6. Roast for 20 minutes.\n7. Remove the baking sheet(s) from the oven, stir the ingredients, and add the broccoli florets. Toss gently to coat the broccoli.\n8. Return to the oven and roast for another 15-20 minutes, or until the chicken is cooked through (internal temperature of 165?F/74?C) and the vegetables are tender and slightly caramelized.\n9. Garnish with fresh parsley if desired, and serve immediately."
+      },
+      "image": {
+        "recipe_id": "FDP-0034",
+        "primary": true,
+        "relative_path": "assets/recipes/FDP-0034.jpg",
+        "filename": "FDP-0034.jpg",
+        "source_type": "placeholder-generated",
+        "source": "placeholder-library",
+        "prompt": "Placeholder photo for Sheet Pan Lemon Herb Chicken and Roasted Vegetables",
+        "captured_on": null,
+        "updated": "2026-06-29T02:45:23.469635Z"
+      },
+      "source_size": 3073,
+      "source_mtime_ns": 1782618688390649400
+    },
+    {
+      "id": "FDP-0006",
+      "name": "Slow-Cooker BBQ Chicken Baked Potato Bar",
+      "revision": 1,
+      "status": "candidate",
+      "protein": "chicken",
+      "meal_scope": "complete-meal",
+      "prep_minutes": 15,
+      "cook_minutes": 240,
+      "fiber_grams": 11,
+      "estimated_cost_usd": 22.0,
+      "kid_friendly_score": 4,
+      "kid_friendly_reason": "Familiar barbecue chicken with customizable potato toppings",
+      "cooking_method": "slow-cooker",
+      "seasons": [
+        "spring",
+        "summer",
+        "fall",
+        "winter"
+      ],
+      "source": "Unknown import source",
+      "path": "recipes/slow-cooker-bbq-chicken-baked-potato-bar.md",
+      "relative_path": "recipes/slow-cooker-bbq-chicken-baked-potato-bar.md",
+      "filename": "slow-cooker-bbq-chicken-baked-potato-bar.md",
+      "tags": [
+        "summer",
+        "chicken",
+        "slow-cooker",
+        "tuesday"
+      ],
+      "leftover_recipe_ids": [],
+      "servings": 4,
+      "created": "2026-06-26",
+      "updated": "2026-06-26",
+      "rating_average": 0.0,
+      "ratings_count": 0,
+      "card_sections": {
+        "ingredients": "### Main Ingredients\n\n- 2 pounds boneless, skinless chicken breasts\n- 1 cup barbecue sauce\n- 4 large russet potatoes\n- 1 (15-ounce) can vegetarian baked beans\n- 2 cups broccoli florets\n\n### Seasonings\n\n- 1 1/2 teaspoons smoked paprika\n- 1 teaspoon garlic powder\n- 1 teaspoon onion powder\n- 3/4 teaspoon kosher salt\n- 1/2 teaspoon black pepper\n\n### Toppings and Sides\n\n- 1 cup shredded cheddar cheese",
+        "directions": "1. Put the chicken in the slow cooker. Mix the barbecue sauce, smoked paprika,\n   garlic powder, onion powder, kosher salt, and black pepper and pour it over\n   the chicken.\n2. Cover and cook on low for 5-6 hours or high for 4 hours, until the chicken\n   reaches 165 F and shreds easily.\n3. During the final 20 minutes, pierce the potatoes and microwave them for\n   12-16 minutes, turning halfway, until fork-tender.\n4. Steam the broccoli for 5-6 minutes and warm the baked beans.\n5. Shred the chicken. Split each potato and let everyone add BBQ chicken,\n   cheddar, broccoli, and baked beans as desired."
+      },
+      "image": {
+        "recipe_id": "FDP-0006",
+        "primary": true,
+        "relative_path": "assets/recipes/FDP-0006.jpg",
+        "filename": "FDP-0006.jpg",
+        "source_type": "placeholder-generated",
+        "source": "placeholder-library",
+        "prompt": "Placeholder photo for Slow-Cooker BBQ Chicken Baked Potato Bar",
+        "captured_on": null,
+        "updated": "2026-06-29T02:45:19.521096Z"
+      },
+      "source_size": 2411,
+      "source_mtime_ns": 1782528194400869100
+    },
+    {
+      "id": "FDP-0027",
+      "name": "Slow Cooker Pot Roast with Vegetables",
+      "revision": 2,
+      "status": "candidate",
+      "protein": "beef",
+      "meal_scope": "complete-meal",
+      "prep_minutes": 20,
+      "cook_minutes": 300,
+      "fiber_grams": 8,
+      "estimated_cost_usd": 20,
+      "kid_friendly_score": 1,
+      "kid_friendly_reason": "Not kid friendly - for the parents only",
+      "cooking_method": "slow-cooker",
+      "seasons": [
+        "spring",
+        "summer",
+        "fall",
+        "winter"
+      ],
+      "source": "pasted recipe text",
+      "path": "recipes/slow-cooker-pot-roast-with-vegetables.md",
+      "relative_path": "recipes/slow-cooker-pot-roast-with-vegetables.md",
+      "filename": "slow-cooker-pot-roast-with-vegetables.md",
+      "tags": [
+        "beef",
+        "fall",
+        "imported",
+        "slow-cooker",
+        "spring",
+        "summer",
+        "winter"
+      ],
+      "leftover_recipe_ids": [],
+      "servings": 4,
+      "created": "2026-06-27",
+      "updated": "2026-06-27",
+      "rating_average": 0.0,
+      "ratings_count": 0,
+      "card_sections": {
+        "ingredients": "### Main Ingredients\n\n- 3 pounds boneless beef chuck roast\n- 1 ? teaspoons kosher salt, with extra for seasoning\n- 1 teaspoon black pepper, ground\n- Olive oil, as needed\n- 2 large yellow onions, peeled and sliced\n- 6 minced garlic cloves\n- 2 tablespoons tomato pur?e\n- 1 cup red wine (or use beef broth as an alternative)\n- 2 to 3 cups beef broth, with more if necessary\n- 2 teaspoons Worcestershire sauce\n- 4 fresh thyme sprigs\n- 2 fresh rosemary sprigs\n- 2 dried bay leaves\n- 1 pound small carrots\n- 1 ? pounds small yellow potatoes\n- Chopped fresh Italian parsley for garnish, if desired\n\n### Seasonings\n\n- Review imported ingredients for seasoning classification",
+        "directions": "1. **Prepare and Sear the Meat**\n2. - Preheat your oven to 300 degrees F.\n3. - Generously season the meat with about 1 ? teaspoons of Kosher salt and 1 teaspoon of ground black pepper on all sides.\n4. - Heat about 2 tablespoons of olive oil in a large 7-8 quart Dutch oven over medium-high heat.\n5. - Sear the meat on each side until golden brown, about 5-6 minutes per side.\n6. - Remove the meat from the pot and set it aside.\n7. - Remember not to wipe the Dutch oven clean, as the flavor from the searing will enhance the dish.\n8. **Saute Onions and Garlic**\n9. - Reduce the heat to medium and add the onions to the Dutch oven.\n10. - Saute them until they start to brown, about 3 minutes.\n11. - Scrape the bottom and sides of the pot to deglaze it with the moisture from the onions.\n12. - If the brown bits are burning too fast, add a few splashes of broth to help deglaze.\n13. - Stir in the minced garlic and cook for another minute until fragrant.\n14. - Use a wooden spoon to avoid scratching the cast iron surface.\n15. **Create the Sauce**\n16. - Add red wine (or substitute with beef broth) to the pot and quickly deglaze the brown bits from the bottom and sides.\n17. - Then, add 2 cups of beef broth, Worcestershire sauce, tomato paste, fresh thyme sprigs, fresh rosemary sprigs, and bay leaves.\n18. - Stir until everything is evenly combined, and bring the mixture to a low boil.\n19. **Slow Cook the Meat**\n20. - Return the seared meat back to the pot, along with any juices.\n21. - The liquid should cover about half of the meat?add more beef broth if necessary.\n22. - Cover the pot securely with the lid and bake in the oven at 300 degrees F for 1.5 hours.\n23. **Add Vegetables and Continue Cooking**\n24. - Remove the pot from the oven and add baby carrots and potatoes.\n25. - At this stage, you can also adjust the seasoning with additional salt and pepper if needed.\n26. - Place the lid back on and return the pot to the oven.\n27. - Cook for another 2 hours, or until the meat is fork-tender and falls apart, and the vegetables are tender.\n28. - For even more tender meat, consider cooking for an additional 15-30 minutes.\n29. **Garnish and Serve**\n30. - If desired, garnish the dish with fresh parsley for added flavor and color.\n31. - To serve, you can transfer the meat and vegetables to a large platter or serve directly from the Dutch oven.\n32. - Enjoy your meal!"
+      },
+      "image": {
+        "recipe_id": "FDP-0027",
+        "primary": true,
+        "relative_path": "assets/recipes/FDP-0027.jpg",
+        "filename": "FDP-0027.jpg",
+        "source_type": "placeholder-generated",
+        "source": "placeholder-library",
+        "prompt": "Placeholder photo for Slow Cooker Pot Roast with Vegetables",
+        "captured_on": null,
+        "updated": "2026-06-29T02:45:22.389527Z"
+      },
+      "source_size": 4626,
+      "source_mtime_ns": 1782618505441403900
+    },
+    {
+      "id": "FDP-0017",
+      "name": "Spaghetti Carbonara",
+      "revision": 2,
+      "status": "candidate",
+      "protein": "other",
+      "meal_scope": "complete-meal",
+      "prep_minutes": 10,
+      "cook_minutes": 15,
+      "fiber_grams": 8,
+      "estimated_cost_usd": 20,
+      "kid_friendly_score": 5,
+      "kid_friendly_reason": "Both children like/love it",
+      "cooking_method": "stovetop",
+      "seasons": [
+        "spring",
+        "summer",
+        "fall",
+        "winter"
+      ],
+      "source": "pasted recipe text",
+      "path": "recipes/spaghetti-carbonara.md",
+      "relative_path": "recipes/spaghetti-carbonara.md",
+      "filename": "spaghetti-carbonara.md",
+      "tags": [
+        "fall",
+        "imported",
+        "other",
+        "spring",
+        "stovetop",
+        "summer",
+        "winter"
+      ],
+      "leftover_recipe_ids": [],
+      "servings": 4,
+      "created": "2026-06-27",
+      "updated": "2026-06-27",
+      "rating_average": 0.0,
+      "ratings_count": 0,
+      "card_sections": {
+        "ingredients": "### Main Ingredients\n\n- 400g spaghetti\n- 200g pancetta or guanciale, diced\n- 4 large eggs\n- 100g grated Parmesan cheese\n- 2 cloves garlic, minced\n- Salt and freshly ground black pepper\n- Fresh parsley, chopped (optional)\n\n### Seasonings\n\n- Review imported ingredients for seasoning classification",
+        "directions": "1. Cook the spaghetti in a large pot of boiling salted water until al dente. Reserve 1 cup of pasta water and then drain the pasta.\n2. In a large skillet over medium heat, cook the pancetta or guanciale until crispy. Add the minced garlic and saut? for about 1 minute.\n3. In a bowl, whisk together the eggs and Parmesan cheese. Season with a pinch of salt and a generous amount of black pepper.\n4. Add the cooked spaghetti to the skillet with the pancetta and garlic. Toss to combine.\n5. Remove the skillet from the heat and quickly pour the egg and cheese mixture over the pasta, tossing quickly to coat the pasta and create a creamy sauce. Add reserved pasta water a little at a time if needed to reach desired consistency.\n6. Serve immediately, garnished with chopped parsley if desired."
+      },
+      "image": {
+        "recipe_id": "FDP-0017",
+        "primary": true,
+        "relative_path": "assets/recipes/FDP-0017.jpg",
+        "filename": "FDP-0017.jpg",
+        "source_type": "placeholder-generated",
+        "source": "placeholder-library",
+        "prompt": "Placeholder photo for Spaghetti Carbonara",
+        "captured_on": null,
+        "updated": "2026-06-29T02:45:20.946110Z"
+      },
+      "source_size": 2597,
+      "source_mtime_ns": 1782617538797772900
+    },
+    {
+      "id": "FDP-0042",
+      "name": "Turkey and Cheese Deli Sandwich Night",
+      "revision": 1,
+      "status": "candidate",
+      "protein": "turkey",
+      "meal_scope": "complete-meal",
+      "prep_minutes": 15,
+      "cook_minutes": 0,
+      "fiber_grams": 7,
+      "estimated_cost_usd": 20,
+      "kid_friendly_score": 5,
+      "kid_friendly_reason": "Both children like/love it",
+      "cooking_method": "no-cook",
+      "seasons": [
+        "spring",
+        "summer",
+        "fall",
+        "winter"
+      ],
+      "source": "Unknown import source",
+      "path": "recipes/turkey-and-cheese-deli-sandwich-night.md",
+      "relative_path": "recipes/turkey-and-cheese-deli-sandwich-night.md",
+      "filename": "turkey-and-cheese-deli-sandwich-night.md",
+      "tags": [
+        "cold-meal",
+        "fall",
+        "heat-friendly",
+        "no-cook",
+        "spring",
+        "summer",
+        "turkey",
+        "winter"
+      ],
+      "leftover_recipe_ids": [],
+      "servings": 4,
+      "created": "2026-06-27",
+      "updated": "2026-06-27",
+      "rating_average": 0.0,
+      "ratings_count": 0,
+      "card_sections": {
+        "ingredients": "### Main Ingredients\n\n- 8 slices whole-grain sandwich bread\n- 12 ounces deli turkey\n- 8 slices cheddar or provolone cheese\n- 8 ounces potato chips\n- 4 cups chopped romaine lettuce\n- 1 cucumber, sliced\n- 2 medium tomatoes, cut into wedges\n- 2 cups baby carrots\n- 2 tablespoons olive oil\n- 1 tablespoon apple cider vinegar\n- 2 tablespoons yellow mustard, served on the side\n\n### Seasonings\n\n- 1/2 teaspoon dried oregano\n- 1/2 teaspoon kosher salt\n- 1/4 teaspoon black pepper",
+        "directions": "1. Arrange the bread, deli turkey, cheese, and yellow mustard so everyone can assemble a sandwich without mayonnaise.\n2. Combine the romaine, cucumber, tomatoes, and baby carrots in a serving bowl.\n3. Whisk the olive oil, apple cider vinegar, dried oregano, kosher salt, and black pepper.\n4. Serve the vinaigrette on the side of the garden salad.\n5. Serve each sandwich with potato chips and garden salad."
+      },
+      "image": {
+        "recipe_id": "FDP-0042",
+        "primary": true,
+        "relative_path": "assets/recipes/FDP-0042.jpg",
+        "filename": "FDP-0042.jpg",
+        "source_type": "placeholder-generated",
+        "source": "placeholder-library",
+        "prompt": "Placeholder photo for Turkey and Cheese Deli Sandwich Night",
+        "captured_on": null,
+        "updated": "2026-06-29T02:45:24.630548Z"
+      },
+      "source_size": 2374,
+      "source_mtime_ns": 1782571727863032000
+    },
+    {
+      "id": "FDP-0003",
+      "name": "Turkey Cheesesteak Bowls",
+      "revision": 1,
+      "status": "candidate",
+      "protein": "turkey",
+      "meal_scope": "complete-meal",
+      "prep_minutes": 20,
+      "cook_minutes": 30,
+      "fiber_grams": 10,
+      "estimated_cost_usd": 22.0,
+      "kid_friendly_score": 4,
+      "kid_friendly_reason": "Cheesy turkey and rice-style bowl with vegetables that can be served separately",
+      "cooking_method": "blackstone",
+      "seasons": [
+        "spring",
+        "summer"
+      ],
+      "source": "Unknown import source",
+      "path": "recipes/turkey-cheesesteak-bowls.md",
+      "relative_path": "recipes/turkey-cheesesteak-bowls.md",
+      "filename": "turkey-cheesesteak-bowls.md",
+      "tags": [
+        "summer",
+        "poultry",
+        "blackstone",
+        "whole-grain"
+      ],
+      "leftover_recipe_ids": [],
+      "servings": 4,
+      "created": "2026-06-26",
+      "updated": "2026-06-26",
+      "rating_average": 0.0,
+      "ratings_count": 0,
+      "card_sections": {
+        "ingredients": "### Main Ingredients\n\n- 1 1/2 pounds 93%-lean ground turkey\n- 1 cup dry farro, rinsed\n- 3 cups water\n- 2 bell peppers, sliced\n- 1 large yellow onion, sliced\n- 8 ounces mushrooms, sliced\n- 1 tablespoon olive oil\n- 4 slices provolone cheese\n\n### Seasonings\n\n- 1 teaspoon smoked paprika\n- 1 teaspoon garlic powder\n- 1 teaspoon onion powder\n- 1 teaspoon kosher salt, divided\n- 1/2 teaspoon black pepper\n\n### Toppings and Sides\n\n- 2 cups mixed berries",
+        "directions": "1. Combine the farro, water, and 1/4 teaspoon kosher salt. Simmer uncovered for\n   25-30 minutes until tender, then drain.\n2. Mix the smoked paprika, garlic powder, onion powder, remaining 3/4 teaspoon\n   kosher salt, and black pepper.\n3. Heat the Blackstone to medium-high. Cook the turkey in the olive oil with\n   half the seasoning mixture until it reaches 165 F, 7-9 minutes.\n4. Add the bell peppers, onion, mushrooms, and remaining seasoning mixture.\n   Cook for 6-8 minutes until tender, then combine with the turkey.\n5. Divide the farro and turkey mixture among four bowls. Top each with one\n   provolone slice and cover briefly to melt. Serve with mixed berries."
+      },
+      "image": {
+        "recipe_id": "FDP-0003",
+        "primary": true,
+        "relative_path": "assets/recipes/FDP-0003.jpg",
+        "filename": "FDP-0003.jpg",
+        "source_type": "placeholder-generated",
+        "source": "placeholder-library",
+        "prompt": "Placeholder photo for Turkey Cheesesteak Bowls",
+        "captured_on": null,
+        "updated": "2026-06-29T02:45:19.141999Z"
+      },
+      "source_size": 2511,
+      "source_mtime_ns": 1782526974465831400
+    },
+    {
+      "id": "FDP-0007",
+      "name": "Turkey Cheesesteak Brown Rice Bowls",
+      "revision": 1,
+      "status": "candidate",
+      "protein": "turkey",
+      "meal_scope": "complete-meal",
+      "prep_minutes": 20,
+      "cook_minutes": 40,
+      "fiber_grams": 10,
+      "estimated_cost_usd": 23.0,
+      "kid_friendly_score": 4,
+      "kid_friendly_reason": "Cheesy turkey bowl with peppers served separately when preferred",
+      "cooking_method": "blackstone",
+      "seasons": [
+        "spring",
+        "summer"
+      ],
+      "source": "Unknown import source",
+      "path": "recipes/turkey-cheesesteak-brown-rice-bowls.md",
+      "relative_path": "recipes/turkey-cheesesteak-brown-rice-bowls.md",
+      "filename": "turkey-cheesesteak-brown-rice-bowls.md",
+      "tags": [
+        "summer",
+        "turkey",
+        "blackstone",
+        "whole-grain"
+      ],
+      "leftover_recipe_ids": [],
+      "servings": 4,
+      "created": "2026-06-26",
+      "updated": "2026-06-26",
+      "rating_average": 0.0,
+      "ratings_count": 0,
+      "card_sections": {
+        "ingredients": "### Main Ingredients\n\n- 1 1/2 pounds 93%-lean ground turkey\n- 1 1/2 cups dry brown rice\n- 2 3/4 cups water\n- 2 bell peppers, sliced\n- 1 large yellow onion, sliced\n- 8 ounces mushrooms, sliced\n- 1 tablespoon olive oil\n- 1 pound green beans, trimmed\n\n### Seasonings\n\n- 1 teaspoon smoked paprika\n- 1 teaspoon garlic powder\n- 1 teaspoon onion powder\n- 1 teaspoon kosher salt, divided\n- 1/2 teaspoon black pepper\n\n### Toppings and Sides\n\n- 4 slices provolone cheese\n- 2 cups mixed berries",
+        "directions": "1. Combine the brown rice, water, and 1/4 teaspoon kosher salt. Bring to a\n   boil, cover, reduce the heat, and simmer for 35-40 minutes.\n2. Mix the smoked paprika, garlic powder, onion powder, remaining 3/4 teaspoon\n   kosher salt, and black pepper.\n3. Cook the turkey in the olive oil on a medium-high Blackstone with half the\n   seasoning mixture until it reaches 165 F, 7-9 minutes.\n4. Add the bell peppers, onion, mushrooms, and remaining seasoning mixture.\n   Cook for 6-8 minutes. Keep some vegetables separate when preferred.\n5. Steam the green beans for 5-6 minutes. Divide rice and turkey among bowls,\n   top each with provolone, and serve with green beans and berries."
+      },
+      "image": {
+        "recipe_id": "FDP-0007",
+        "primary": true,
+        "relative_path": "assets/recipes/FDP-0007.jpg",
+        "filename": "FDP-0007.jpg",
+        "source_type": "placeholder-generated",
+        "source": "placeholder-library",
+        "prompt": "Placeholder photo for Turkey Cheesesteak Brown Rice Bowls",
+        "captured_on": null,
+        "updated": "2026-06-29T02:45:19.645328Z"
+      },
+      "source_size": 2579,
+      "source_mtime_ns": 1782528194401893100
+    },
+    {
+      "id": "FDP-0035",
+      "name": "Unstuffed Pepper Skillet",
+      "revision": 2,
+      "status": "candidate",
+      "protein": "turkey",
+      "meal_scope": "complete-meal",
+      "prep_minutes": 10,
+      "cook_minutes": 25,
+      "fiber_grams": 8,
+      "estimated_cost_usd": 20,
+      "kid_friendly_score": 1,
+      "kid_friendly_reason": "Not kid friendly - for the parents only",
+      "cooking_method": "stovetop",
+      "seasons": [
+        "spring",
+        "fall",
+        "winter"
+      ],
+      "source": "pasted recipe text",
+      "path": "recipes/unstuffed-pepper-skillet.md",
+      "relative_path": "recipes/unstuffed-pepper-skillet.md",
+      "filename": "unstuffed-pepper-skillet.md",
+      "tags": [
+        "fall",
+        "imported",
+        "spring",
+        "stovetop",
+        "turkey",
+        "winter"
+      ],
+      "leftover_recipe_ids": [],
+      "servings": 4,
+      "created": "2026-06-27",
+      "updated": "2026-06-27",
+      "rating_average": 0.0,
+      "ratings_count": 0,
+      "card_sections": {
+        "ingredients": "### Main Ingredients\n\n- 1 1/2 pounds ground beef\n- 1 teaspoon Italian seasoning\n- 1 teaspoon Onion powder\n- 1 teaspoon Garlic powder\n- Salt & black pepper to taste\n- 1 green bell pepper, diced\n- 1 red bell pepper, diced\n- ? yellow onion, diced\n- 1 tablespoon olive oil\n- 1 tablespoon minced garlic\n- 14.5 ounce petite diced tomatoes, drained\n- 15 ounces tomato sauce\n- 2 cups instant white rice\n- Beef broth (salted kind)\n\n### Seasonings\n\n- Review imported ingredients for seasoning classification",
+        "directions": "1. In a large skillet over medium-high heat, add the olive oil, diced peppers, and onions. Stir until pieces are coated in oil and allow them to saut? for 5 minutes, occasionally stirring.\n2. Add the ground beef and cook until no pink is visible within the meat.\n3. Add the minced garlic and allow it to cook for an additional 30-45 seconds.\n4. Drain off any excess grease and season with onion powder, garlic powder, Italian seasoning, salt, and black pepper.\n5. Add drained petite diced tomatoes, tomato sauce, instant rice, and beef broth. (Follow the rice to water ratio on the box for how much broth to add).\n6. Bring to a boil and reduce heat to low, cover, and allow to simmer until rice is cooked thoroughly and the broth is absorbed.\n7. Serve & enjoy!"
+      },
+      "image": {
+        "recipe_id": "FDP-0035",
+        "primary": true,
+        "relative_path": "assets/recipes/FDP-0035.jpg",
+        "filename": "FDP-0035.jpg",
+        "source_type": "placeholder-generated",
+        "source": "placeholder-library",
+        "prompt": "Placeholder photo for Unstuffed Pepper Skillet",
+        "captured_on": null,
+        "updated": "2026-06-29T02:45:23.596380Z"
+      },
+      "source_size": 2778,
+      "source_mtime_ns": 1782618711855829500
+    },
+    {
+      "id": "FDP-0036",
+      "name": "Zuppa Toscana Soup - Olive Garden Copycat",
+      "revision": 2,
+      "status": "candidate",
+      "protein": "chicken",
+      "meal_scope": "complete-meal",
+      "prep_minutes": 10,
+      "cook_minutes": 25,
+      "fiber_grams": 8,
+      "estimated_cost_usd": 20,
+      "kid_friendly_score": 5,
+      "kid_friendly_reason": "Both children like/love it",
+      "cooking_method": "stovetop",
+      "seasons": [
+        "spring",
+        "fall",
+        "winter"
+      ],
+      "source": "pasted recipe text",
+      "path": "recipes/zuppa-toscana-soup-olive-garden-copycat.md",
+      "relative_path": "recipes/zuppa-toscana-soup-olive-garden-copycat.md",
+      "filename": "zuppa-toscana-soup-olive-garden-copycat.md",
+      "tags": [
+        "chicken",
+        "fall",
+        "imported",
+        "spring",
+        "stovetop",
+        "winter"
+      ],
+      "leftover_recipe_ids": [],
+      "servings": 4,
+      "created": "2026-06-27",
+      "updated": "2026-06-27",
+      "rating_average": 0.0,
+      "ratings_count": 0,
+      "card_sections": {
+        "ingredients": "### Main Ingredients\n\n- 4 strips of thick bacon, chopped\n- 1 pound ground sweet Italian sausage\n- 1 large yellow onion, diced\n- 3 garlic cloves, minced\n- 4 large potatoes, diced\n- Pinch red pepper chili flakes, optional\n- Salt and pepper to taste\n- 6 cups chicken broth\n- 4 cups kale, chopped\n- 1 cup heavy cream\n- 1 teaspoon white wine vinegar\n- Side of Olive Garden breadsticks or Tuscan bread, optional\n\n### Seasonings\n\n- Review imported ingredients for seasoning classification",
+        "directions": "1. In a large pot or Dutch oven on medium-high heat, cook the bacon until crispy. Transfer to a paper towel-lined plate and set aside.\n2. In the bacon grease, brown the sweet Italian sausage on medium heat, about 5 to 10 minutes. Transfer to the same plate as the bacon and set aside.\n3. In the bacon and sausage grease, add the onions. Cook until they start to soften and the onions become translucent. Stir occasionally for about 5 to 8 minutes.\n4. Add the garlic and potatoes to the onions. Stir while cooking for 1 minute.\n5. Season the onions, garlic, and potatoes with red pepper chili flakes, salt, and pepper.\n6. Pour in the chicken broth and bring to a boil. Once boiling, reduce the heat and simmer for about 15 minutes. Potatoes should be fork-tender.\n7. Stir in the kale, heavy cream, cooked bacon, and cooked sweet Italian sausage. Continue to simmer until the kale has wilted. About 5 minutes.\n8. Stir in white wine vinegar and serve with a side of Olive Garden breadsticks or Tuscan bread. Mangia!"
+      },
+      "image": {
+        "recipe_id": "FDP-0036",
+        "primary": true,
+        "relative_path": "assets/recipes/FDP-0036.jpg",
+        "filename": "FDP-0036.jpg",
+        "source_type": "placeholder-generated",
+        "source": "placeholder-library",
+        "prompt": "Placeholder photo for Zuppa Toscana Soup - Olive Garden Copycat",
+        "captured_on": null,
+        "updated": "2026-06-29T02:45:23.733119Z"
+      },
+      "source_size": 3024,
+      "source_mtime_ns": 1782618736650232600
+    }
+  ],
+  "sources": [
+    {
+      "filename": "10-minute-pasta.md",
+      "size": 2018,
+      "mtime_ns": 1782749213611268300
+    },
+    {
+      "filename": "bbq-chicken-sliders.md",
+      "size": 2772,
+      "mtime_ns": 1782526974463520100
+    },
+    {
+      "filename": "beef-lasagna.md",
+      "size": 2869,
+      "mtime_ns": 1782749213613672900
+    },
+    {
+      "filename": "beef-stroganoff.md",
+      "size": 2674,
+      "mtime_ns": 1782749213614691500
+    },
+    {
+      "filename": "blackstone-breakfast-for-dinner.md",
+      "size": 2448,
+      "mtime_ns": 1782749213625903600
+    },
+    {
+      "filename": "blackstone-chicken-fajita-soft-tacos.md",
+      "size": 2719,
+      "mtime_ns": 1782749213637964500
+    },
+    {
+      "filename": "blackstone-cowboy-stir-fry.md",
+      "size": 2618,
+      "mtime_ns": 1782749213640040200
+    },
+    {
+      "filename": "blackstone-hibachi-chicken-fried-rice.md",
+      "size": 2686,
+      "mtime_ns": 1782749213642052800
+    },
+    {
+      "filename": "blackstone-tortellini.md",
+      "size": 2660,
+      "mtime_ns": 1782749213644632900
+    },
+    {
+      "filename": "chicken-cheesesteak-baked-potatoes.md",
+      "size": 2543,
+      "mtime_ns": 1782749213646647900
+    },
+    {
+      "filename": "chicken-enchilada.md",
+      "size": 2601,
+      "mtime_ns": 1782749213647920400
+    },
+    {
+      "filename": "chicken-fajitas.md",
+      "size": 2791,
+      "mtime_ns": 1782692678273146200
+    },
+    {
+      "filename": "chicken-pesto-cavatappi.md",
+      "size": 3365,
+      "mtime_ns": 1782618644602932700
+    },
+    {
+      "filename": "chicken-pot-pie-casserole-with-biscuits.md",
+      "size": 2946,
+      "mtime_ns": 1782617509876799800
+    },
+    {
+      "filename": "chicken-sausage-broccoli-orzo.md",
+      "size": 2743,
+      "mtime_ns": 1782617559375002700
+    },
+    {
+      "filename": "chicken-smash-tacos.md",
+      "size": 2519,
+      "mtime_ns": 1782526974467831200
+    },
+    {
+      "filename": "chicken-stir-fry.md",
+      "size": 2376,
+      "mtime_ns": 1782617582009329200
+    },
+    {
+      "filename": "copycat-chick-fil-a-tortilla-soup.md",
+      "size": 2333,
+      "mtime_ns": 1782617465275447900
+    },
+    {
+      "filename": "creamy-gnocchi-and-chicken-skillet.md",
+      "size": 3394,
+      "mtime_ns": 1782618291458283500
+    },
+    {
+      "filename": "crock-pot-sesame-chicken.md",
+      "size": 2664,
+      "mtime_ns": 1782618373615822000
+    },
+    {
+      "filename": "eggroll-in-a-bowl.md",
+      "size": 2570,
+      "mtime_ns": 1782618410220388200
+    },
+    {
+      "filename": "garlic-butter-shrimp.md",
+      "size": 2268,
+      "mtime_ns": 1782618434187577400
+    },
+    {
+      "filename": "grill-smoked-barbecued-chicken.md",
+      "size": 3678,
+      "mtime_ns": 1782694036635237300
+    },
+    {
+      "filename": "grilled-chicken-caesar-salad.md",
+      "size": 2582,
+      "mtime_ns": 1782571727857041700
+    },
+    {
+      "filename": "grilled-salmon-rice-bowls-with-fruit.md",
+      "size": 2381,
+      "mtime_ns": 1782528227660203300
+    },
+    {
+      "filename": "grilled-salmon-with-edamame-and-rice.md",
+      "size": 3297,
+      "mtime_ns": 1782618481041812900
+    },
+    {
+      "filename": "ground-turkey-hard-shell-tacos-with-pinto-beans-and-rice.md",
+      "size": 3008,
+      "mtime_ns": 1782568609021779500
+    },
+    {
+      "filename": "hot-dogs-with-macaroni-and-cheese-and-baked-beans.md",
+      "size": 2408,
+      "mtime_ns": 1782568609355742300
+    },
+    {
+      "filename": "loaded-baked-potato-soup.md",
+      "size": 3000,
+      "mtime_ns": 1782618523508875900
+    },
+    {
+      "filename": "marry-me-chicken.md",
+      "size": 3242,
+      "mtime_ns": 1782618572676734100
+    },
+    {
+      "filename": "mom-s-wonton-soup.md",
+      "size": 2017,
+      "mtime_ns": 1782618545877889800
+    },
+    {
+      "filename": "no-cook-chicken-and-cheese-roll-up-plates.md",
+      "size": 1993,
+      "mtime_ns": 1782528194403895000
+    },
+    {
+      "filename": "one-pot-sausage-and-fennel-rigatoni.md",
+      "size": 4738,
+      "mtime_ns": 1782667969104297100
+    },
+    {
+      "filename": "roasted-butternut-and-chicken-harvest-soup.md",
+      "size": 3554,
+      "mtime_ns": 1782618664097792500
+    },
+    {
+      "filename": "sheet-pan-lemon-herb-chicken-and-roasted-vegetables.md",
+      "size": 3073,
+      "mtime_ns": 1782618688390649400
+    },
+    {
+      "filename": "slow-cooker-bbq-chicken-baked-potato-bar.md",
+      "size": 2411,
+      "mtime_ns": 1782528194400869100
+    },
+    {
+      "filename": "slow-cooker-pot-roast-with-vegetables.md",
+      "size": 4626,
+      "mtime_ns": 1782618505441403900
+    },
+    {
+      "filename": "spaghetti-carbonara.md",
+      "size": 2597,
+      "mtime_ns": 1782617538797772900
+    },
+    {
+      "filename": "turkey-and-cheese-deli-sandwich-night.md",
+      "size": 2374,
+      "mtime_ns": 1782571727863032000
+    },
+    {
+      "filename": "turkey-cheesesteak-bowls.md",
+      "size": 2511,
+      "mtime_ns": 1782526974465831400
+    },
+    {
+      "filename": "turkey-cheesesteak-brown-rice-bowls.md",
+      "size": 2579,
+      "mtime_ns": 1782528194401893100
+    },
+    {
+      "filename": "unstuffed-pepper-skillet.md",
+      "size": 2778,
+      "mtime_ns": 1782618711855829500
+    },
+    {
+      "filename": "zuppa-toscana-soup-olive-garden-copycat.md",
+      "size": 3024,
+      "mtime_ns": 1782618736650232600
+    }
+  ],
+  "errors": []
+}

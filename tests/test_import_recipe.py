@@ -109,6 +109,9 @@ Directions
         self.assertTrue(path.exists())
         self.assertEqual(validate_recipe(path)[3], [])
         self.assertEqual(validate_inventory(self.root), [])
+        self.assertTrue(
+            any((self.root / "audit" / "recipe-actions").rglob("*.json"))
+        )
 
     def test_pasted_text_import_creates_candidate(self) -> None:
         recipe_id, path = import_recipe(

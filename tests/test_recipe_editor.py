@@ -12,6 +12,7 @@ from planner.recipe_editor import (
     promote_imported_recipe,
     update_imported_recipe,
 )
+from planner.recipe_images import build_recipe_image_metadata
 from scripts.validate_recipes import split_recipe, validate_recipe
 
 
@@ -56,6 +57,9 @@ class RecipeEditorTests(unittest.TestCase):
             ROOT / "recipes" / "index.md",
             root / "recipes" / "index.md",
         )
+        shutil.copytree(ROOT / "assets" / "recipes", root / "assets" / "recipes")
+        (root / "planner-data").mkdir()
+        build_recipe_image_metadata(root)
         return temporary, root
 
     def test_lists_editable_recipes_and_flags_legacy_reason(self) -> None:
@@ -108,6 +112,35 @@ class RecipeEditorTests(unittest.TestCase):
             recipes = imported_recipes(root)
 
         self.assertEqual(recipes, [])
+
+    def test_approved_recipe_update_is_rejected_directly(self) -> None:
+        temporary = tempfile.TemporaryDirectory()
+        with temporary:
+            root = Path(temporary.name)
+            (root / "recipes").mkdir()
+            shutil.copy2(
+                ROOT / "recipes" / "chicken-fajitas.md",
+                root / "recipes" / "chicken-fajitas.md",
+            )
+            shutil.copy2(ROOT / "recipes" / "index.md", root / "recipes" / "index.md")
+            shutil.copytree(ROOT / "assets" / "recipes", root / "assets" / "recipes")
+            (root / "planner-data").mkdir()
+            build_recipe_image_metadata(root)
+            with self.assertRaisesRegex(ValueError, "protected"):
+                update_imported_recipe(
+                    "FDP-0001",
+                    name="Chicken Fajitas",
+                    protein="chicken",
+                    meal_scope="complete-meal",
+                    prep_minutes=20,
+                    cook_minutes=25,
+                    fiber_grams=8,
+                    estimated_cost_usd=18,
+                    kid_friendly_reason="Gray Loves It",
+                    cooking_method="stovetop",
+                    seasons=["spring", "summer", "fall", "winter"],
+                    root=root,
+                )
 
     def test_malformed_card_does_not_break_recipe_list(self) -> None:
         temporary, root = self.make_root()
@@ -489,20 +522,42 @@ class RecipeEditorTests(unittest.TestCase):
             index = (root / "recipes" / "index.md").read_text(
                 encoding="utf-8"
             )
+            self.assertEqual(errors, [])
+            self.assertEqual(revision, starting_revision + 1)
+            self.assertEqual(metadata["status"], "approved")
+            self.assertEqual(metadata["revision"], revision)
+            self.assertIn(
+                "Promoted to approved by Kevin: Manual family decision",
+                body,
+            )
+            self.assertIn(
+                f"| FDP-0012 | [10 Minute Pasta](10-minute-pasta.md) | "
+                f"{revision} | approved |",
+                index,
+            )
+            audit_root = root / "audit" / "recipe-actions"
+            self.assertTrue(any(audit_root.rglob("*.json")))
 
-        self.assertEqual(errors, [])
-        self.assertEqual(revision, starting_revision + 1)
-        self.assertEqual(metadata["status"], "approved")
-        self.assertEqual(metadata["revision"], revision)
-        self.assertIn(
-            "Promoted to approved by Kevin: Manual family decision",
-            body,
-        )
-        self.assertIn(
-            f"| FDP-0012 | [10 Minute Pasta](10-minute-pasta.md) | "
-            f"{revision} | approved |",
-            index,
-        )
+    def test_update_writes_audit_record(self) -> None:
+        temporary, root = self.make_root()
+        with temporary:
+            update_imported_recipe(
+                "FDP-0012",
+                name="10 Minute Pasta",
+                protein="vegetarian",
+                meal_scope="complete-meal",
+                prep_minutes=5,
+                cook_minutes=10,
+                fiber_grams=8,
+                estimated_cost_usd=6,
+                kid_friendly_reason="Both children like/love it",
+                cooking_method="stovetop",
+                seasons=["spring", "summer", "fall", "winter"],
+                change_note="Audit this edit",
+                root=root,
+            )
+            audit_files = list((root / "audit" / "recipe-actions").rglob("*.json"))
+            self.assertEqual(len(audit_files), 1)
 
     def test_promotion_validation_failure_rolls_back_recipe_and_index(
         self,

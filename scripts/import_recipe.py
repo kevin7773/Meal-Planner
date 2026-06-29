@@ -16,9 +16,13 @@ from html.parser import HTMLParser
 from pathlib import Path
 
 try:
+    from planner.recipe_audit import write_recipe_audit
+    from planner.recipe_cache import build_recipe_cache
     from scripts.inventory import validate_inventory
     from scripts.validate_recipes import validate_recipe
 except ModuleNotFoundError:
+    from planner.recipe_audit import write_recipe_audit
+    from planner.recipe_cache import build_recipe_cache
     from inventory import validate_inventory
     from validate_recipes import validate_recipe
 
@@ -418,6 +422,21 @@ source = {toml_string(preview["source"])}
         inventory_errors = validate_inventory(root)
         if recipe_errors or inventory_errors:
             raise ValueError("; ".join([*recipe_errors, *inventory_errors]))
+        build_recipe_cache(root)
+        write_recipe_audit(
+            action="import",
+            recipe_id=recipe_id,
+            root=root,
+            details={
+                "name": name,
+                "protein": protein,
+                "meal_scope": meal_scope,
+                "cooking_method": cooking_method,
+                "source": str(preview["source"]),
+                "parser": str(preview["parser"]),
+                "path": path.name,
+            },
+        )
     except Exception:
         path.unlink(missing_ok=True)
         index_path.write_text(original_index, encoding="utf-8", newline="\n")

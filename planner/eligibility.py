@@ -6,8 +6,8 @@ import re
 from pathlib import Path
 
 from planner.constants import DAYS, LOW_EFFORT_METHODS, ROOT
+from planner.recipe_cache import load_recipe_cache
 from scripts.inventory import assess_inventory, load_inventory
-from scripts.validate_recipes import split_recipe
 
 
 def season_for(date: dt.date) -> str:
@@ -26,13 +26,20 @@ def load_recipes(root: Path = ROOT) -> dict[str, dict]:
         _, _, requirement_sets = load_inventory(root)
     except (OSError, KeyError, ValueError):
         requirement_sets = {}
-    for path in sorted((root / "recipes").glob("*.md")):
-        if path.name.startswith("_") or path.name in {"README.md", "index.md"}:
-            continue
-        metadata, _ = split_recipe(path)
-        record = dict(metadata)
-        record["path"] = path
-        record["filename"] = path.name
+    for cached in load_recipe_cache(root).get("recipes", []):
+        record = {
+            key: value
+            for key, value in cached.items()
+            if key
+            not in {
+                "card_sections",
+                "prep_minutes",
+                "relative_path",
+                "source_size",
+                "source_mtime_ns",
+            }
+        }
+        record["path"] = root / cached["relative_path"]
         record.setdefault("meal_scope", "complete-meal")
         record["inventory_requirements"] = requirement_sets.get(record["id"], [])
         recipes[record["id"]] = record
